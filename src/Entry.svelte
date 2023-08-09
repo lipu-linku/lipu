@@ -29,9 +29,7 @@
 	<sp>{sp}</sp>
 	<word_main>
 		<word_info>
-			<span>
-				<word>{word['word']}</word>
-			</span>
+			<word>{word['word']}</word>
 			<span style="height: 100%;">{word['usage_category']} · {word['book']} · {#if sound}<button class="audio_button" on:click={play_sound}>🔊</button> · {/if}more</span>
 		</word_info>
 		<definition>{word['def']['en']}</definition>
@@ -42,7 +40,7 @@
 	entry {
 		display: flex;
 		flex-direction: row;
-		padding: 10px 10px 10px 0px;
+		padding: 7px 7px 7px 0px;
 		border-left-width: 2px;
 		border-left-style: solid;
 		margin: 10px 0px;
