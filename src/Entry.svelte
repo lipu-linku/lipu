@@ -1,26 +1,10 @@
 <script>
     export let word;
 
+    import AudioButton from './AudioButton.svelte';
+
     const sp = word['sitelen_pona'] ? word['sitelen_pona'].split(' ')[0] : "";
-
-    const sound = (() => {
-		if (!word['audio']) {
-			return
-		}
-		if (word['audio']['jan_lakuse']) {
-			return new Audio(word['audio']['jan_lakuse'])
-		}
-		if (word['audio']['kala_asi']) {
-			return new Audio(word['audio']['kala_asi'])
-		}
-		return
-    })()
-
-    const play_sound = () => {
-		if (sound) {
-			sound.play();
-		}
-    }
+    const audio = word['audio'];
 
 </script>
 
@@ -30,7 +14,7 @@
 	<word_main>
 		<word_info>
 			<word>{word['word']}</word>
-			<span style="height: 100%;">{word['usage_category']} · {word['book']} · {#if sound}<button class="audio_button" on:click={play_sound}>🔊</button> · {/if}more</span>
+			<span style="height: 100%;">{word['usage_category']} · {word['book']} · {#if word['audio']}<AudioButton {audio}/> · {/if}more</span>
 		</word_info>
 		<definition>{word['def']['en']}</definition>
 	</word_main>
@@ -91,10 +75,5 @@
 		font-weight: bold;
 		font-style: italic;
 		vertical-align: middle;
-	}
-	.audio_button {
-		background-color: inherit;
-		border: none;
-		font-size: inherit;
 	}
 </style>
