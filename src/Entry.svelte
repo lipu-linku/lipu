@@ -3,9 +3,28 @@
 
     const sp = word['sitelen_pona'] ? word['sitelen_pona'].split(' ')[0] : "";
 
+    const sound = (() => {
+		if (!word['audio']) {
+			return
+		}
+		if (word['audio']['jan_lakuse']) {
+			return new Audio(word['audio']['jan_lakuse'])
+		}
+		if (word['audio']['kala_asi']) {
+			return new Audio(word['audio']['kala_asi'])
+		}
+		return
+    })()
+
+    const play_sound = () => {
+		if (sound) {
+			sound.play();
+		}
+    }
+
 </script>
 
-<entry class={word["usage_category"]}>
+<entry class={word['usage_category']}>
 
 	<sp>{sp}</sp>
 	<word_main>
@@ -13,7 +32,7 @@
 			<span>
 				<word>{word['word']}</word>
 			</span>
-			<span style="height: 100%;">{word['usage_category']} · {word['book']} · 🔊 · more</span>
+			<span style="height: 100%;">{word['usage_category']} · {word['book']} · {#if sound}<button class="audio_button" on:click={play_sound}>🔊</button> · {/if}more</span>
 		</word_info>
 		<definition>{word['def']['en']}</definition>
 	</word_main>
@@ -75,7 +94,9 @@
 		font-style: italic;
 		vertical-align: middle;
 	}
-	definition {
-		display: block;
+	.audio_button {
+		background-color: inherit;
+		border: none;
+		font-size: inherit;
 	}
 </style>
