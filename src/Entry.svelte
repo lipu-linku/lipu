@@ -3,8 +3,8 @@
 
     import AudioButton from './AudioButton.svelte';
 
-    const sp = word['sitelen_pona'] ? word['sitelen_pona'].split(' ')[0] : "";
-    const audio = word['audio'];
+    $: sp = word['sitelen_pona'] ? word['sitelen_pona'].split(' ')[0] : "";
+    $: audio = word['audio'];
 
 </script>
 

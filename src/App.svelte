@@ -2,6 +2,8 @@
 	import Entry from './Entry.svelte';
 	import Navbar from './Navbar.svelte';
 
+	import search from './search.js';
+
 	function Get(yourUrl) {
 		var Httpreq = new XMLHttpRequest();
 		Httpreq.open("GET", yourUrl, false);
@@ -14,12 +16,15 @@
 	const dictionary = bundle["data"];
 	const languages = bundle["languages"];
 
+	let query = "";
+	$: sorted_filtered_dictionary = search(dictionary, query)
+
 </script>
 
 <main>
-	<Navbar />
+	<Navbar bind:query/>
 	<width_limiter>
-		{#each Object.entries(dictionary) as [key, word]}
+		{#each Object.entries(sorted_filtered_dictionary) as [key, word], key}
 			<!--{#if word["usage_category"] != "obscure"}-->
 			<Entry {word}/>
 			<!--<entry class={word["usage_category"]}>

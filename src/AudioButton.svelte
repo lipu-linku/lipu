@@ -1,7 +1,7 @@
 <script>
     export let audio;
 
-    const sound = (() => {
+    $: sound = (() => {
 		if (audio['jan_lakuse']) {
 			return new Audio(audio['jan_lakuse'])
 		}

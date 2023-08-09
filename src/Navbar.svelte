@@ -1,4 +1,7 @@
 <script>
+export let query;
+
+$: console.log("query changed to", query)
 </script>
 
 <nav>
@@ -12,11 +15,11 @@
           id="searchbar"
           class="searchbar main_input"
           placeholder="nimi"
-          onkeyup="search_changed(this)"
           autocapitalize="off"
           autocomplete="off"
           autocorrect="off"
           spellcheck="false"
+          bind:value="{query}"
         />
         <button id="normal_mode_button" onclick="normal_mode()">
           Back to Dictionary
