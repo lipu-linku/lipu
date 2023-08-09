@@ -2,66 +2,70 @@
     export let word;
 
     const sp = word['sitelen_pona'] ? word['sitelen_pona'].split(' ')[0] : "";
-    const book_src =
-    {
-        "pu": "./assets/pu.svg",
-        "ku suli": "./assets/ku-suli.svg",
-        "ku lili": "./assets/ku-lili.svg",
-        "none": "./assets/lipu-ala.svg",
-    }[word['book']]
+
 </script>
 
 <entry class={word["usage_category"]}>
-    <entry_text>
-        <word>{word['word']}</word>
-        <definition>{word['def']['en']}</definition>
-    </entry_text>
-    <icon_container>
-        {#if sp}
-        <icon>
-            {sp}
-        </icon>
-        {/if}
-        <icon>
-            <img src={book_src}>
-        </icon>
-        <icon>
-            <img src="./assets/kalama.svg">
-        </icon>
-        <icon>
-            <img src="./assets/sona-mute.svg">
-        </icon>
-    </icon_container>
+
+	<sp>{sp}</sp>
+	<word_main>
+		<word_info>
+			<span>
+				<word>{word['word']}</word>
+			</span>
+			<span style="height: 100%;">{word['usage_category']} · {word['book']} · 🔊 · more</span>
+		</word_info>
+		<definition>{word['def']['en']}</definition>
+	</word_main>
 </entry>
 
 <style>
 	entry {
 		display: flex;
 		flex-direction: row;
-		justify-content: space-between;
-		padding: 5px 15px;
-		border-left-width: 5px;
+		padding: 10px 10px 10px 0px;
+		border-left-width: 2px;
 		border-left-style: solid;
 		margin: 10px 0px;
 		border-top: 1px solid var(--border-color);
 	}
+	word_info {
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		align-items: baseline;
+	}
+	word_main {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+	}
 	.core {
-		border-left-color: #fead76;
+		border-left-color: #dedede;
 	}
 	.widespread {
-		border-left-color: #f97b5d;
+		border-left-color: #b5b5b5;
 	}
 	.common {
-		border-left-color: #e75362;
+		border-left-color: #949494;
 	}
 	.uncommon {
-		border-left-color: #b63679;
+		border-left-color: #6b6a6b;
 	}
 	.rare {
-		border-left-color: #7f2481;
+		border-left-color: #4a4a4a;
 	}
 	.obscure {
-		border-left-color: #50127b;
+		border-left-color: #292929;
+	}
+	sp {
+		display: inline-block;
+        font-family: "sitelen seli kiwen";
+        font-size: 50px;
+        width: 60px;
+        text-align: center;
+		vertical-align: middle;
+		margin: 0px 10px;
 	}
 	word {
 		display: inline-block;
@@ -69,26 +73,7 @@
 		color: var(--highlight-color);
 		font-weight: bold;
 		font-style: italic;
-	}
-	icon_container {
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-	}
-	icon {
-        font-family: "sitelen seli kiwen";
-        font-size: 46px;
-        text-align: center;
-		width: 40px;
-		height: 40px;
-		margin: 2px;
-		/*background-color: var(--border-color);
-		border-radius: 5px;*/
-	}
-	icon > img {
-        height: 100%;
-        width: 100%;
-        margin: auto;
+		vertical-align: middle;
 	}
 	definition {
 		display: block;
