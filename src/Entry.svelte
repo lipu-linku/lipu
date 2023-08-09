@@ -4,10 +4,10 @@
     const sp = word['sitelen_pona'] ? word['sitelen_pona'].split(' ')[0] : "";
     const book_src =
     {
-        "pu": "/assets/pu.svg",
-        "ku suli": "/assets/ku-suli.svg",
-        "ku lili": "/assets/ku-lili.svg",
-        "none": "/assets/lipu-ala.svg",
+        "pu": "./assets/pu.svg",
+        "ku suli": "./assets/ku-suli.svg",
+        "ku lili": "./assets/ku-lili.svg",
+        "none": "./assets/lipu-ala.svg",
     }[word['book']]
 </script>
 
@@ -26,10 +26,10 @@
             <img src={book_src}>
         </icon>
         <icon>
-            <img src="/assets/kalama.svg">
+            <img src="./assets/kalama.svg">
         </icon>
         <icon>
-            <img src="/assets/sona-mute.svg">
+            <img src="./assets/sona-mute.svg">
         </icon>
     </icon_container>
 </entry>
