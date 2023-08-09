@@ -1,5 +1,6 @@
 <script>
 	import Entry from './Entry.svelte';
+	import Navbar from './Navbar.svelte';
 
 	function Get(yourUrl) {
 		var Httpreq = new XMLHttpRequest();
@@ -16,24 +17,27 @@
 </script>
 
 <main>
-	{#each Object.entries(dictionary) as [key, word]}
-		<!--{#if word["usage_category"] != "obscure"}-->
-		<Entry {word}/>
-		<!--<entry class={word["usage_category"]}>
-			<entry_title>
-				<word>{word['word']}</word>
-				<icon_container>
-					<icon></icon>
-					<icon></icon>
-					<icon></icon>
-					<icon></icon>
-				</icon_container>
-			</entry_title>
-			<definition>{word['def']['en']}</definition>
-		</entry>-->
+	<Navbar />
+	<width_limiter>
+		{#each Object.entries(dictionary) as [key, word]}
+			<!--{#if word["usage_category"] != "obscure"}-->
+			<Entry {word}/>
+			<!--<entry class={word["usage_category"]}>
+				<entry_title>
+					<word>{word['word']}</word>
+					<icon_container>
+						<icon></icon>
+						<icon></icon>
+						<icon></icon>
+						<icon></icon>
+					</icon_container>
+				</entry_title>
+				<definition>{word['def']['en']}</definition>
+			</entry>-->
 
-		<!--{/if}-->
-	{/each}
+			<!--{/if}-->
+		{/each}
+	</width_limiter>
 </main>
 
 <style>
@@ -46,6 +50,10 @@
 	main {
 		margin: 0 auto;
 		padding: 0 10px;
+	}
+	width_limiter {
+		display: block;
+		margin: auto;
 		max-width: 840px;
 	}
 </style>
