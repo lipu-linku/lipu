@@ -14,7 +14,17 @@
 	<word_main>
 		<word_info>
 			<word>{word['word']}</word>
-			<span style="height: 100%;">{word['usage_category']} · {word['book']} · {#if word['audio']}<AudioButton {audio}/> · {/if}more</span>
+			<span>
+				<span>{word['usage_category']}</span>
+				<span> · </span>
+				<span>{word['book']}</span>
+				{#if word['audio']}
+				<span> · </span>
+				<AudioButton {audio}/>
+				{/if}
+				<span> · </span>
+				<span>more</span>
+			</span>
 		</word_info>
 		<definition>{word['def']['en']}</definition>
 	</word_main>
