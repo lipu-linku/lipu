@@ -19,6 +19,8 @@
 	let query = "";
 	$: sorted_filtered_dictionary = search(dictionary, query)
 
+	let selected_language = "en";
+
 	let lightmode = false;
 	$: if (lightmode) {
 		document.documentElement.classList.add("lightmode");
@@ -28,11 +30,11 @@
 </script>
 
 <div class="app">
-	<Navbar bind:query bind:lightmode/>
+	<Navbar bind:query bind:lightmode bind:selected_language {languages}/>
 	<div class="width_limiter">
 		{#each Object.entries(sorted_filtered_dictionary) as [key, word], key}
 			<!--{#if word["usage_category"] != "obscure"}-->
-			<Entry {word}/>
+			<Entry {word} {selected_language}/>
 			<!--<entry class={word["usage_category"]}>
 				<entry_title>
 					<word>{word['word']}</word>

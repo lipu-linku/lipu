@@ -1,12 +1,18 @@
 <script>
+    export let selected_language;
+    export let languages;
 </script>
 
 <label id="language_selector_wrapper" title="Select Language">
     <select
         id="language_selector"
         class="main_input"
-        onchange="language_select_changed(this)"
-    ></select>
+        bind:value={selected_language}
+    >
+        {#each Object.entries(languages) as [key, language]}
+            <option value={key}>{language['name_endonym']}</option>
+        {/each}
+    </select>
     <img src="./assets/world.png" alt="Select language" />
 </label>
 

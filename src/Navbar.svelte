@@ -1,6 +1,8 @@
 <script>
     export let query;
     export let lightmode;
+    export let selected_language;
+    export let languages;
 
     import Searchbar from './Searchbar.svelte';
     import LightmodeCheckbox from './LightmodeCheckbox.svelte';
@@ -22,8 +24,8 @@
 
     <div>
         <LightmodeCheckbox bind:lightmode />
+        <LanguageSelector bind:selected_language {languages} />
 
-        <LanguageSelector />
         <a href="about" title="About Linku">
             <img src="./assets/ijo-a.png" alt="About Linku" />
         </a>

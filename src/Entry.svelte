@@ -1,11 +1,18 @@
 <script>
     export let word;
+    export let selected_language;
+
+    $: console.log(word['word'], selected_language);
 
     import AudioButton from './AudioButton.svelte';
 
     $: sp = word['sitelen_pona'] ? word['sitelen_pona'].split(' ')[0] : "";
     $: audio = word['audio'];
 
+	$: definition_available = word['def'][selected_language]
+    $: definition = definition_available ? word['def'][selected_language] : "(en) " + word['def']['en'];
+
+	$: console.log(definition);
 </script>
 
 <div class={"entry " + word['usage_category']}>
@@ -26,7 +33,7 @@
 				<span>more</span>
 			</span>
 		</div>
-		<dd>{word['def']['en']}</dd>
+		<dd class={definition_available ? "" : "shaded"}>{definition}</dd>
 	</div>
 </div>
 
@@ -88,5 +95,8 @@
 	}
 	dd {
 		margin: unset;
+	}
+	.shaded {
+		color: var(--shade-color);
 	}
 </style>
