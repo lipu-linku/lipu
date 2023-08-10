@@ -4,6 +4,7 @@
 
     import Searchbar from './Searchbar.svelte';
     import LightmodeCheckbox from './LightmodeCheckbox.svelte';
+    import LanguageSelector from './LanguageSelector.svelte';
 </script>
 
 <nav>
@@ -22,14 +23,7 @@
     <div>
         <LightmodeCheckbox bind:lightmode />
 
-        <label id="language_selector_wrapper" title="Select Language">
-            <select
-                id="language_selector"
-                class="main_input"
-                onchange="language_select_changed(this)"
-            ></select>
-            <img src="./assets/world.png" alt="Select language" />
-        </label>
+        <LanguageSelector />
         <a href="about" title="About Linku">
             <img src="./assets/ijo-a.png" alt="About Linku" />
         </a>
@@ -76,35 +70,6 @@
         flex-shrink: 0;
     }
 
-    #language_selector {
-        font: inherit;
-        background-color: var(--bg-color);
-        color: var(--txt-color);
-
-        cursor: pointer;
-        position: absolute;
-
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-
-        opacity: 0;
-    }
-
-    #language_selector + img {
-        pointer-events: none;
-        border-radius: 100%;
-    }
-    #language_selector:focus + img {
-        outline: 2px solid var(--highlight-color);
-        outline-offset: 2px;
-    }
-
-    #language_selector_wrapper {
-        position: relative;
-    }
-
     #normal_mode_button {
         font: inherit;
         color: inherit;
@@ -142,5 +107,4 @@
             max-width: 100%;
         }
     }
-
 </style>
