@@ -1,15 +1,14 @@
 <script>
     import Checkbox from './Checkbox.svelte';
+
+    export let categories;
 </script>
 
 <div id="checkbox_container">
     <div id="usage_selector">
-        <Checkbox name="core"/>
-        <Checkbox name="widespread"/>
-        <Checkbox name="common"/>
-        <Checkbox name="uncommon"/>
-        <Checkbox name="rare"/>
-        <Checkbox name="obscure"/>
+        {#each categories as category}
+        <Checkbox name={category.name} bind:checked={category.checked}/>
+        {/each}
     </div>
 </div>
 

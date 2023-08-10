@@ -5,6 +5,13 @@
 
 	import search from './search.js';
 
+	let lightmode = false;
+	$: if (lightmode) {
+		document.documentElement.classList.add("lightmode");
+	} else {
+		document.documentElement.classList.remove("lightmode");
+	}
+
 	function Get(yourUrl) {
 		var Httpreq = new XMLHttpRequest();
 		Httpreq.open("GET", yourUrl, false);
@@ -18,16 +25,21 @@
 	const languages = bundle["languages"];
 
 	let query = "";
-	$: sorted_filtered_dictionary = search(dictionary, query)
 
 	let selected_language = "en";
 
-	let lightmode = false;
-	$: if (lightmode) {
-		document.documentElement.classList.add("lightmode");
-	} else {
-		document.documentElement.classList.remove("lightmode");
-	}
+    let categories = [
+        {"name": "core", "checked": true},
+        {"name": "widespread", "checked": true},
+        {"name": "common", "checked": false},
+        {"name": "uncommon", "checked": false},
+        {"name": "rare", "checked": false},
+        {"name": "obscure", "checked": false},
+    ]
+
+    $: categories_short = Object.fromEntries(Array.from(categories, (item) => {return [item.name, item.checked]}))
+
+	$: sorted_filtered_dictionary = search(dictionary, query, categories_short)
 </script>
 
 <div class="app">
@@ -37,7 +49,7 @@
 			2023 Word Survey:
 			Let&nbsp;us&nbsp;know&nbsp;what&nbsp;words&nbsp;you&nbsp;use!
         </a>
-		<Filter />
+		<Filter bind:categories/>
 		{#each Object.entries(sorted_filtered_dictionary) as [key, word], key}
 			<!--{#if word["usage_category"] != "obscure"}-->
 			<Entry {word} {selected_language}/>

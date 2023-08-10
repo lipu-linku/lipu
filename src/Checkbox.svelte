@@ -1,5 +1,6 @@
 <script>
     export let name;
+    export let checked;
 </script>
 
 <label class="container">
@@ -8,6 +9,7 @@
         type="checkbox"
         id={"checkbox_" + name}
         autocomplete="off"
+        bind:checked
     >
     <span class="checkmark"></span>
 </label>
