@@ -27,7 +27,7 @@
 	}
 </script>
 
-<div>
+<div class="app">
 	<Navbar bind:query bind:lightmode/>
 	<div class="width_limiter">
 		{#each Object.entries(sorted_filtered_dictionary) as [key, word], key}
