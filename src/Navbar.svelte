@@ -1,203 +1,202 @@
 <script>
-export let query;
+    export let query;
 
-$: console.log("query changed to", query)
+    $: console.log("query changed to", query)
 </script>
 
 <nav>
-      <div class="logo">
+    <div class="logo">
         <img src="./assets/icon.png" alt="lipu Linku" />
         lipu Linku
-      </div>
+    </div>
 
-      <div class="search_container">
+    <div class="search_container">
         <input
-          id="searchbar"
-          class="searchbar main_input"
-          placeholder="nimi"
-          autocapitalize="off"
-          autocomplete="off"
-          autocorrect="off"
-          spellcheck="false"
-          bind:value="{query}"
+            id="searchbar"
+            class="searchbar main_input"
+            placeholder="nimi"
+            autocapitalize="off"
+            autocomplete="off"
+            autocorrect="off"
+            spellcheck="false"
+            bind:value="{query}"
         />
         <button id="normal_mode_button" onclick="normal_mode()">
-          Back to Dictionary
+            Back to Dictionary
         </button>
-      </div>
+    </div>
 
-      <div>
+    <div>
         <label id="checkbox_lightmode_wrapper">
-          <input type="checkbox" id="checkbox_lightmode" />
-          <img src="./assets/suno.png" alt="Light Mode" />
+            <input type="checkbox" id="checkbox_lightmode" />
+            <img src="./assets/suno.png" alt="Light Mode" />
         </label>
 
         <label id="language_selector_wrapper" title="Select Language">
-          <select
-            id="language_selector"
-            class="main_input"
-            onchange="language_select_changed(this)"
-          ></select>
-          <img src="./assets/world.png" alt="Select language" />
+            <select
+                id="language_selector"
+                class="main_input"
+                onchange="language_select_changed(this)"
+            ></select>
+            <img src="./assets/world.png" alt="Select language" />
         </label>
         <a href="about" title="About Linku">
-          <img src="./assets/ijo-a.png" alt="About Linku" />
+            <img src="./assets/ijo-a.png" alt="About Linku" />
         </a>
-      </div>
-    </nav>
+    </div>
+</nav>
 
 <style>
+    nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 1rem;
+        position: sticky;
+        padding: 0.5rem 1rem;
+        top: 0;
+        z-index: 1;
+        background-color: var(--bg-color);
+        border-bottom: 1px solid var(--border-color);
+    }
 
-nav {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 1rem;
-  position: sticky;
-  padding: 0.5rem 1rem;
-  top: 0;
-  z-index: 1;
-  background-color: var(--bg-color);
-  border-bottom: 1px solid var(--border-color);
-}
+    nav > div {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+    }
 
-nav > div {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
+    nav > :last-child {
+        justify-content: end;
+    }
 
-nav > :last-child {
-  justify-content: end;
-}
+    nav img {
+        width: 2rem;
+        height: 2rem;
+        display: block;
+    }
+    .lightmode nav img {
+        filter: invert(100%);
+    }
 
-nav img {
-  width: 2rem;
-  height: 2rem;
-  display: block;
-}
-.lightmode nav img {
-  filter: invert(100%);
-}
+    .search_container {
+        max-width: 20rem;
+        flex-basis: 100%;
+        flex-shrink: 0;
+    }
 
-.search_container {
-  max-width: 20rem;
-  flex-basis: 100%;
-  flex-shrink: 0;
-}
+    .searchbar {
+        text-align: center;
+        font-size: 150%;
+        font-family: inherit;
+        font-weight: bold;
+        font-style: italic;
+        width: 100%;
+        background-color: var(--bg-alt-color);
+        color: var(--highlight-color);
+        border: 1px solid var(--border-color);
+        border-radius: 0.25rem;
+        padding: 0.25rem 0;
+    }
 
-.searchbar {
-  text-align: center;
-  font-size: 150%;
-  font-family: inherit;
-  font-weight: bold;
-  font-style: italic;
-  width: 100%;
-  background-color: var(--bg-alt-color);
-  color: var(--highlight-color);
-  border: 1px solid var(--border-color);
-  border-radius: 0.25rem;
-  padding: 0.25rem 0;
-}
+    #checkbox_lightmode {
+        cursor: pointer;
+        position: absolute;
 
-#checkbox_lightmode {
-  cursor: pointer;
-  position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 10;
 
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 10;
+        opacity: 0;
+    }
 
-  opacity: 0;
-}
+    #checkbox_lightmode_wrapper {
+        position: relative;
+    }
 
-#checkbox_lightmode_wrapper {
-  position: relative;
-}
+    #language_selector {
+        font: inherit;
+        background-color: var(--bg-color);
+        color: var(--txt-color);
 
-#language_selector {
-  font: inherit;
-  background-color: var(--bg-color);
-  color: var(--txt-color);
+        cursor: pointer;
+        position: absolute;
 
-  cursor: pointer;
-  position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
 
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+        opacity: 0;
+    }
 
-  opacity: 0;
-}
+    #language_selector + img {
+        pointer-events: none;
+        border-radius: 100%;
+    }
+    #language_selector:focus + img {
+        outline: 2px solid var(--highlight-color);
+        outline-offset: 2px;
+    }
 
-#language_selector + img {
-  pointer-events: none;
-  border-radius: 100%;
-}
-#language_selector:focus + img {
-  outline: 2px solid var(--highlight-color);
-  outline-offset: 2px;
-}
+    #language_selector_wrapper {
+        position: relative;
+    }
 
-#language_selector_wrapper {
-  position: relative;
-}
+    .main_input {
+        border: 1px solid var(--border-color);
+        border-radius: 0.25rem;
+        transition: box-shadow 0.2s, border 0.2s;
+    }
+    .main_input:focus {
+        outline: none;
+        box-shadow: 0 0 0 1px var(--highlight-color);
+        border-color: var(--highlight-color);
+    }
 
-.main_input {
-  border: 1px solid var(--border-color);
-  border-radius: 0.25rem;
-  transition: box-shadow 0.2s, border 0.2s;
-}
-.main_input:focus {
-  outline: none;
-  box-shadow: 0 0 0 1px var(--highlight-color);
-  border-color: var(--highlight-color);
-}
+    #normal_mode_button {
+        font: inherit;
+        color: inherit;
+        display: none;
+        background: var(--bg-alt-color);
+        border: 1px solid var(--border-color);
+        border-radius: 0.25rem;
+        margin: 0 auto;
+        padding: 0.25rem 0.5rem;
+        cursor: pointer;
+        transition: background 0.2s, color 0.2s, border-color 0.2s;
+    }
+    #normal_mode_button:hover {
+        background: var(--highlight-color);
+        border-color: var(--highlight-color);
+        color: var(--bg-color);
+    }
 
-#normal_mode_button {
-  font: inherit;
-  color: inherit;
-  display: none;
-  background: var(--bg-alt-color);
-  border: 1px solid var(--border-color);
-  border-radius: 0.25rem;
-  margin: 0 auto;
-  padding: 0.25rem 0.5rem;
-  cursor: pointer;
-  transition: background 0.2s, color 0.2s, border-color 0.2s;
-}
-#normal_mode_button:hover {
-  background: var(--highlight-color);
-  border-color: var(--highlight-color);
-  color: var(--bg-color);
-}
+    @media screen and (max-width: 640px) {
+        nav {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-areas: "logo" "buttons" "search";
+            gap: 0.5rem;
+            top: -3rem;
+        }
 
-@media screen and (max-width: 640px) {
-  nav {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas: "logo" "buttons" "search";
-    gap: 0.5rem;
-    top: -3rem;
-  }
+        nav > :first-child {
+            white-space: nowrap;
+        }
 
-  nav > :first-child {
-    white-space: nowrap;
-  }
+        nav > .search_container {
+            grid-area: search;
+            grid-column: 1 / -1;
+            max-width: 100%;
+        }
+    }
 
-  nav > .search_container {
-    grid-area: search;
-    grid-column: 1 / -1;
-    max-width: 100%;
-  }
-}
-
-::placeholder {
-  color: var(--shade-color);
-  opacity: 0.5;
-}
+    ::placeholder {
+        color: var(--shade-color);
+        opacity: 0.5;
+    }
 </style>
