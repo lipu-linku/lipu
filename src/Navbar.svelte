@@ -1,6 +1,8 @@
 <script>
     export let query;
 
+    import Searchbar from './Searchbar.svelte';
+
     $: console.log("query changed to", query)
 </script>
 
@@ -11,16 +13,7 @@
     </div>
 
     <div class="search_container">
-        <input
-            id="searchbar"
-            class="searchbar main_input"
-            placeholder="nimi"
-            autocapitalize="off"
-            autocomplete="off"
-            autocorrect="off"
-            spellcheck="false"
-            bind:value="{query}"
-        />
+        <Searchbar bind:query />
         <button id="normal_mode_button" onclick="normal_mode()">
             Back to Dictionary
         </button>
@@ -86,20 +79,6 @@
         flex-shrink: 0;
     }
 
-    .searchbar {
-        text-align: center;
-        font-size: 150%;
-        font-family: inherit;
-        font-weight: bold;
-        font-style: italic;
-        width: 100%;
-        background-color: var(--bg-alt-color);
-        color: var(--highlight-color);
-        border: 1px solid var(--border-color);
-        border-radius: 0.25rem;
-        padding: 0.25rem 0;
-    }
-
     #checkbox_lightmode {
         cursor: pointer;
         position: absolute;
@@ -146,17 +125,6 @@
         position: relative;
     }
 
-    .main_input {
-        border: 1px solid var(--border-color);
-        border-radius: 0.25rem;
-        transition: box-shadow 0.2s, border 0.2s;
-    }
-    .main_input:focus {
-        outline: none;
-        box-shadow: 0 0 0 1px var(--highlight-color);
-        border-color: var(--highlight-color);
-    }
-
     #normal_mode_button {
         font: inherit;
         color: inherit;
@@ -195,8 +163,4 @@
         }
     }
 
-    ::placeholder {
-        color: var(--shade-color);
-        opacity: 0.5;
-    }
 </style>
