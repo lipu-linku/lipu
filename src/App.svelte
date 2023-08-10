@@ -19,10 +19,16 @@
 	let query = "";
 	$: sorted_filtered_dictionary = search(dictionary, query)
 
+	let lightmode = false;
+	$: if (lightmode) {
+		document.documentElement.classList.add("lightmode");
+	} else {
+		document.documentElement.classList.remove("lightmode");
+	}
 </script>
 
-<div class="app">
-	<Navbar bind:query/>
+<div>
+	<Navbar bind:query bind:lightmode/>
 	<div class="width_limiter">
 		{#each Object.entries(sorted_filtered_dictionary) as [key, word], key}
 			<!--{#if word["usage_category"] != "obscure"}-->

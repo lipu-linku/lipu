@@ -1,9 +1,9 @@
 <script>
     export let query;
+    export let lightmode;
 
     import Searchbar from './Searchbar.svelte';
-
-    $: console.log("query changed to", query)
+    import LightmodeCheckbox from './LightmodeCheckbox.svelte';
 </script>
 
 <nav>
@@ -20,10 +20,7 @@
     </div>
 
     <div>
-        <label id="checkbox_lightmode_wrapper">
-            <input type="checkbox" id="checkbox_lightmode" />
-            <img src="./assets/suno.png" alt="Light Mode" />
-        </label>
+        <LightmodeCheckbox bind:lightmode />
 
         <label id="language_selector_wrapper" title="Select Language">
             <select
@@ -69,7 +66,7 @@
         height: 2rem;
         display: block;
     }
-    .lightmode nav img {
+    :global(.lightmode) img {
         filter: invert(100%);
     }
 
@@ -77,23 +74,6 @@
         max-width: 20rem;
         flex-basis: 100%;
         flex-shrink: 0;
-    }
-
-    #checkbox_lightmode {
-        cursor: pointer;
-        position: absolute;
-
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        z-index: 10;
-
-        opacity: 0;
-    }
-
-    #checkbox_lightmode_wrapper {
-        position: relative;
     }
 
     #language_selector {
