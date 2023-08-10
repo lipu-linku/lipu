@@ -21,7 +21,7 @@
 
 </script>
 
-<main>
+<div class="app">
 	<Navbar bind:query/>
 	<div class="width_limiter">
 		{#each Object.entries(sorted_filtered_dictionary) as [key, word], key}
@@ -43,7 +43,7 @@
 			<!--{/if}-->
 		{/each}
 	</div>
-</main>
+</div>
 
 <style>
 	@font-face {
@@ -52,13 +52,14 @@
 		font-weight: 400;
 		src: url(https://raw.githubusercontent.com/lipu-linku/nasin-sitelen/main/sitelenselikiwenasuki.ttf);
 	}
-	main {
+	.app {
 		margin: 0 auto;
-		padding: 0 10px;
+		padding: 0;
 	}
 	.width_limiter {
 		display: block;
 		margin: auto;
+		padding: 0 10px;
 		max-width: 840px;
 	}
 </style>
