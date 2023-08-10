@@ -23,7 +23,7 @@
 
 <main>
 	<Navbar bind:query/>
-	<width_limiter>
+	<div class="width_limiter">
 		{#each Object.entries(sorted_filtered_dictionary) as [key, word], key}
 			<!--{#if word["usage_category"] != "obscure"}-->
 			<Entry {word}/>
@@ -42,7 +42,7 @@
 
 			<!--{/if}-->
 		{/each}
-	</width_limiter>
+	</div>
 </main>
 
 <style>
@@ -56,7 +56,7 @@
 		margin: 0 auto;
 		padding: 0 10px;
 	}
-	width_limiter {
+	.width_limiter {
 		display: block;
 		margin: auto;
 		max-width: 840px;

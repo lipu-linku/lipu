@@ -8,12 +8,12 @@
 
 </script>
 
-<entry class={word['usage_category']}>
+<div class={"entry " + word['usage_category']}>
 
-	<sp>{sp}</sp>
-	<word_main>
-		<word_info>
-			<word>{word['word']}</word>
+	<div class="sp">{sp}</div>
+	<div class="word_main">
+		<div class="word_info">
+			<dt>{word['word']}</dt>
 			<span>
 				<span>{word['usage_category']}</span>
 				<span> · </span>
@@ -25,13 +25,13 @@
 				<span> · </span>
 				<span>more</span>
 			</span>
-		</word_info>
-		<definition>{word['def']['en']}</definition>
-	</word_main>
-</entry>
+		</div>
+		<dd>{word['def']['en']}</dd>
+	</div>
+</div>
 
 <style>
-	entry {
+	.entry {
 		display: flex;
 		flex-direction: row;
 		padding: 7px 7px 7px 0px;
@@ -40,13 +40,13 @@
 		margin: 10px 0px;
 		border-top: 1px solid var(--border-color);
 	}
-	word_info {
+	.word_info {
 		display: flex;
 		flex-direction: row;
 		justify-content: space-between;
 		align-items: baseline;
 	}
-	word_main {
+	.word_main {
 		display: flex;
 		flex-direction: column;
 		width: 100%;
@@ -69,7 +69,7 @@
 	.obscure {
 		border-left-color: #292929;
 	}
-	sp {
+	.sp {
 		display: inline-block;
         font-family: "sitelen seli kiwen";
         font-size: 50px;
@@ -78,12 +78,15 @@
 		vertical-align: middle;
 		margin: 0px 10px;
 	}
-	word {
+	dt {
 		display: inline-block;
 		font-size: 150%;
 		color: var(--highlight-color);
 		font-weight: bold;
 		font-style: italic;
 		vertical-align: middle;
+	}
+	dd {
+		margin: unset;
 	}
 </style>
