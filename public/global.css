@@ -26,3 +26,7 @@ body {
 	--border-color: hsl(222, 28%, 75%);
 	--bg-alt-color: hsl(222, 0%, 93%);
 }
+a {
+	color: var(--link-color);
+	text-decoration: none;
+}

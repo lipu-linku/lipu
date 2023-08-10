@@ -1,6 +1,7 @@
 <script>
 	import Entry from './Entry.svelte';
 	import Navbar from './Navbar.svelte';
+	import Filter from './Filter.svelte';
 
 	import search from './search.js';
 
@@ -32,6 +33,11 @@
 <div class="app">
 	<Navbar bind:query bind:lightmode bind:selected_language {languages}/>
 	<div class="width_limiter">
+		<a id="survey" href="https://linku.la/wile/">
+			2023 Word Survey:
+			Let&nbsp;us&nbsp;know&nbsp;what&nbsp;words&nbsp;you&nbsp;use!
+        </a>
+		<Filter />
 		{#each Object.entries(sorted_filtered_dictionary) as [key, word], key}
 			<!--{#if word["usage_category"] != "obscure"}-->
 			<Entry {word} {selected_language}/>
@@ -69,5 +75,12 @@
 		margin: auto;
 		padding: 0 10px;
 		max-width: 840px;
+	}
+	#survey {
+		display: block;
+		text-align: center;
+		font-size: 1.2em;
+		font-weight: bold;
+		margin-top: 1rem;
 	}
 </style>
