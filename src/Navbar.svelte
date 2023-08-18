@@ -93,7 +93,7 @@
         color: var(--bg-color);
     }
 
-    @media screen and (max-width: 640px) {
+    @media screen and (max-width: 680px) {
         nav {
             display: grid;
             grid-template-columns: 1fr 1fr;
