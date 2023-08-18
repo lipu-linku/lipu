@@ -1,4 +1,5 @@
 <script>
+	import Card from './Card.svelte';
 	import Entry from './Entry.svelte';
 	import Navbar from './Navbar.svelte';
 	import Filter from './Filter.svelte';
@@ -28,6 +29,8 @@
 
 	let selected_language = "en";
 
+	let selected_view = "basic";
+
     let categories = [
         {"name": "core", "checked": true},
         {"name": "widespread", "checked": true},
@@ -40,33 +43,29 @@
     $: categories_short = Object.fromEntries(Array.from(categories, (item) => {return [item.name, item.checked]}))
 
 	$: sorted_filtered_dictionary = search(dictionary, query, categories_short)
+
 </script>
 
 <div class="app">
-	<Navbar bind:query bind:lightmode bind:selected_language {languages}/>
-	<div class="width_limiter">
-		<a id="survey" href="https://linku.la/wile/">
-			2023 Word Survey:
-			Let&nbsp;us&nbsp;know&nbsp;what&nbsp;words&nbsp;you&nbsp;use!
-        </a>
-		<Filter bind:categories/>
+	<Navbar
+		bind:query
+		bind:lightmode
+		bind:selected_language
+		bind:selected_view
+		{languages}
+	/>
+	<a id="survey" href="https://linku.la/wile/">
+		2023 Word Survey:
+		Let&nbsp;us&nbsp;know&nbsp;what&nbsp;words&nbsp;you&nbsp;use!
+	</a>
+	<Filter bind:categories/>
+	<div class={"view_" + selected_view}>
 		{#each Object.entries(sorted_filtered_dictionary) as [key, word], key}
-			<!--{#if word["usage_category"] != "obscure"}-->
+			{#if selected_view == "basic"}
 			<Entry {word} {selected_language}/>
-			<!--<entry class={word["usage_category"]}>
-				<entry_title>
-					<word>{word['word']}</word>
-					<icon_container>
-						<icon></icon>
-						<icon></icon>
-						<icon></icon>
-						<icon></icon>
-					</icon_container>
-				</entry_title>
-				<definition>{word['def']['en']}</definition>
-			</entry>-->
-
-			<!--{/if}-->
+			{:else}
+			<Card {word} {selected_language}/>
+			{/if}
 		{/each}
 	</div>
 </div>
@@ -82,11 +81,15 @@
 		margin: 0 auto;
 		padding: 0;
 	}
-	.width_limiter {
+	.view_basic {
 		display: block;
 		margin: auto;
 		padding: 0 10px;
 		max-width: 840px;
+	}
+	.view_grid {
+		display: grid;
+		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
 	}
 	#survey {
 		display: block;
