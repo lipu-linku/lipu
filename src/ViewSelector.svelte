@@ -13,7 +13,7 @@
 
 </script>
 
-<label id="view_selector_wrapper" title="Select Language">
+<label id="view_selector_wrapper" title="Select View">
     <select
         id="view_selector"
         class="main_input"
@@ -23,7 +23,7 @@
             <option value={key}>{view['name']}</option>
         {/each}
     </select>
-    <img src={views[selected_view]['icon']} alt="Select view" />
+    <img src={views[selected_view]['icon']} alt="Select View" />
 </label>
 
 <style>
