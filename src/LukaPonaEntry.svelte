@@ -2,37 +2,31 @@
     export let word;
     export let selected_language;
 
-    import AudioButton from './AudioButton.svelte';
-
-    $: sp = word['sitelen_pona'] ? word['sitelen_pona'].split(' ')[0] : "";
-    $: audio = word['audio'];
-
 	$: definition_available = word['def'][selected_language]
     $: definition = definition_available ? word['def'][selected_language] : "(en) " + word['def']['en'];
 
-    // temporary hack: reduce definitions by chopping off "| ALT"s
-    $: definition = definition.split("|")[0].trim()
+	$: link = word['luka_pona'] ? word['luka_pona']['mp4'] : ""
 
 </script>
 
 <div class={"card " + word['usage_category']}>
 
-	<div class="sp">{sp}</div>
 	<dt>{word['word']}</dt>
 	<div class="shaded">{word['usage_category']} · {word['book']}</div>
 	<dd class={definition_available ? "" : "shaded"}>{definition}</dd>
+	<video
+		onerror="this.style.display='none'"
+		src={link}
+		preload="metadata"
+		controls="controls"
+		onclick="this.play()"
+		style="display: block;"
+	></video>
 </div>
 
 <style>
 	.card {
 		text-align: center;
-	}
-	.sp {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		font-family: "sitelen seli kiwen";
-		font-size: 530%;
 	}
 	dt {
 		display: inline-block;
@@ -47,5 +41,10 @@
 	}
 	.shaded {
 		color: var(--shade-color);
+	}
+	video {
+		margin: 10px auto;
+		max-width: 100%;
+		/*height: 160px;*/
 	}
 </style>

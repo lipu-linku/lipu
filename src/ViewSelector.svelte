@@ -9,6 +9,10 @@
             "name": "Grid view",
             "icon": "./assets/grid.png",
         },
+        "luka-pona": {
+            "name": "luka pona view",
+            "icon": "./assets/luka-pona.png",
+        }
     }
 
 </script>

@@ -1,6 +1,7 @@
 <script>
 	import Card from './Card.svelte';
 	import Entry from './Entry.svelte';
+	import LukaPonaEntry from './LukaPonaEntry.svelte';
 	import Navbar from './Navbar.svelte';
 	import Filter from './Filter.svelte';
 
@@ -59,12 +60,14 @@
 		Let&nbsp;us&nbsp;know&nbsp;what&nbsp;words&nbsp;you&nbsp;use!
 	</a>
 	<Filter bind:categories/>
-	<div class={"view_" + selected_view}>
+	<div class={selected_view == "grid" ? "view_grid" : "view_basic"}>
 		{#each Object.entries(sorted_filtered_dictionary) as [key, word] (key)}
 			{#if selected_view == "basic"}
 			<Entry {word} {selected_language}/>
-			{:else}
+			{:else if selected_view == "grid"}
 			<Card {word} {selected_language}/>
+			{:else}
+			<LukaPonaEntry {word} {selected_language}/>
 			{/if}
 		{/each}
 	</div>
