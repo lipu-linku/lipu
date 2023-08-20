@@ -60,7 +60,7 @@
 	</a>
 	<Filter bind:categories/>
 	<div class={"view_" + selected_view}>
-		{#each Object.entries(sorted_filtered_dictionary) as [key, word], key}
+		{#each Object.entries(sorted_filtered_dictionary) as [key, word] (key)}
 			{#if selected_view == "basic"}
 			<Entry {word} {selected_language}/>
 			{:else}
