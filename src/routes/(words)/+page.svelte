@@ -1,28 +1,27 @@
 <script lang="ts">
 	import type { PageData } from './$types';
 
-	import Card from './Card.svelte';
-	import Entry from './Entry.svelte';
-	import LukaPonaEntry from './LukaPonaEntry.svelte';
-	import Navbar from './Navbar.svelte';
-	import Filter from './Filter.svelte';
+	import Card from '$lib/components/Card.svelte';
+	import Entry from '$lib/components/Entry.svelte';
+	import LukaPonaEntry from '$lib/components/LukaPonaEntry.svelte';
+	import Navbar from '$lib/components/Navbar.svelte';
+	import Filter from '$lib/components/Filter.svelte';
 
 	import search from '$lib/components/search.js';
 
 	export let data: PageData;
 
-	let lightmode = false;
-	$: if (lightmode) {
-		document.documentElement.classList.add('lightmode');
-	} else {
-		document.documentElement.classList.remove('lightmode');
-	}
+	let lightmode = false; // TODO
+	// $: if (lightmode) {
+	// 	document.documentElement.classList.add('lightmode');
+	// } else {
+	// 	document.documentElement.classList.remove('lightmode');
+	// }
 
 	const dictionary = data.data;
 	const languages = data.languages;
 
 	let query = '';
-
 	let selected_language = 'en';
 
 	let selected_view = 'basic';

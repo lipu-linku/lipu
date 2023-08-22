@@ -9,11 +9,14 @@
     import LightmodeCheckbox from './LightmodeCheckbox.svelte';
     import LanguageSelector from './LanguageSelector.svelte';
     import ViewSelector from './ViewSelector.svelte';
+
+    import ijo_a from '$lib/assets/ijo-a.png';
+    import icon from '$lib/assets/icon.png';
 </script>
 
 <nav>
     <div class="logo">
-        <img src="./assets/icon.png" alt="lipu Linku" />
+        <img src={icon} alt="lipu Linku" />
         lipu Linku
     </div>
 
@@ -30,7 +33,7 @@
         <LanguageSelector bind:selected_language {languages} />
 
         <a href="about" title="About Linku">
-            <img src="./assets/ijo-a.png" alt="About Linku" />
+            <img src={ijo_a} alt="About Linku" />
         </a>
     </div>
 </nav>
