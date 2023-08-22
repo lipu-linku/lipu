@@ -2,11 +2,13 @@
     export let query;
     export let lightmode;
     export let selected_language;
+    export let selected_view;
     export let languages;
 
     import Searchbar from './Searchbar.svelte';
     import LightmodeCheckbox from './LightmodeCheckbox.svelte';
     import LanguageSelector from './LanguageSelector.svelte';
+    import ViewSelector from './ViewSelector.svelte';
 </script>
 
 <nav>
@@ -24,6 +26,7 @@
 
     <div>
         <LightmodeCheckbox bind:lightmode />
+        <ViewSelector bind:selected_view />
         <LanguageSelector bind:selected_language {languages} />
 
         <a href="about" title="About Linku">
@@ -90,7 +93,7 @@
         color: var(--bg-color);
     }
 
-    @media screen and (max-width: 640px) {
+    @media screen and (max-width: 680px) {
         nav {
             display: grid;
             grid-template-columns: 1fr 1fr;
