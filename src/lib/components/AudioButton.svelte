@@ -1,21 +1,21 @@
-<script>
-    export let audio;
+<script lang="ts">
+	export let audio;
 
-    $: sound = (() => {
+	$: sound = (() => {
 		if (audio['jan_lakuse']) {
-			return new Audio(audio['jan_lakuse'])
+			return new Object();
 		}
 		if (audio['kala_asi']) {
-			return new Audio(audio['kala_asi'])
+			return new Object();
 		}
-		return
-    })()
+		return;
+	})();
 
-    const play = () => {
+	const play = () => {
 		if (sound) {
 			sound.play();
 		}
-    }
+	};
 </script>
 
 <button on:click={play}>🔊</button>

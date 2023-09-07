@@ -1,10 +1,12 @@
-<script>
-    export let lightmode;
+<script lang="ts">
+    import suno from "$lib/assets/suno.png";
+
+    export let lightmode: boolean;
 </script>
 
 <label id="checkbox_lightmode_wrapper">
     <input type="checkbox" id="checkbox_lightmode" bind:checked={lightmode}/>
-    <img src="./assets/suno.png" alt="Light Mode" />
+    <img src={suno} alt="Light Mode" />
 </label>
 
 <style>

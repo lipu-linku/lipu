@@ -1,17 +1,21 @@
-<script>
-    export let selected_view;
+<script lang="ts">
+    import basic from '$lib/assets/basic.png'
+    import grid from '$lib/assets/grid.png'
+    import lukapona from '$lib/assets/luka-pona.png'
+
+    export let selected_view: string;
     const views = {
         "basic": {
             "name": "Basic view",
-            "icon": "./assets/basic.png",
+            "icon": basic,
         },
         "grid": {
             "name": "Grid view",
-            "icon": "./assets/grid.png",
+            "icon": grid,
         },
         "luka-pona": {
             "name": "luka pona view",
-            "icon": "./assets/luka-pona.png",
+            "icon": lukapona,
         }
     }
 

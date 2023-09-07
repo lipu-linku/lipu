@@ -1,5 +1,7 @@
-<script>
-    export let selected_language;
+<script lang="ts">
+    import world from '$lib/assets/world.png';
+
+    export let selected_language: string;
     export let languages;
 </script>
 
@@ -13,7 +15,7 @@
             <option value={key}>{language['name_endonym']}</option>
         {/each}
     </select>
-    <img src="./assets/world.png" alt="Select language" />
+    <img src={world} alt="Select language" />
 </label>
 
 <style>
