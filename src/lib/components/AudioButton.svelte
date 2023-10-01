@@ -1,29 +1,23 @@
 <script lang="ts">
-	export let audio;
+    export let audio: Record<string, string>;
 
-	$: sound = (() => {
-		if (audio['jan_lakuse']) {
-			return new Object();
-		}
-		if (audio['kala_asi']) {
-			return new Object();
-		}
-		return;
-	})();
+    let audio_elem: HTMLAudioElement | null = null;
 
-	const play = () => {
-		if (sound) {
-			sound.play();
-		}
-	};
+    function play() {
+        audio_elem?.play();
+    }
 </script>
 
-<button on:click={play}>🔊</button>
+{#if audio?.kala_asi}
+    <audio src={audio['kala_asi']} bind:this={audio_elem} />
+    <button class="interactible" on:click={play}> 🔊 </button>
+{/if}
 
 <style>
-	button {
-		background-color: inherit;
-		border: none;
-		font-size: inherit;
-	}
+    button {
+        background-color: inherit;
+        border: none;
+        font-size: inherit;
+    }
 </style>
+
