@@ -50,7 +50,7 @@
 		</span>
 	</li>
 </ul>
-<p>
+<!-- <p>
 	See also <a href="/sitelen">sitelen Linku</a>, a small experimental page that displays existing
 	sitelen pona, with short etymologies.
-</p>
+</p> -->
