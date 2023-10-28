@@ -1,23 +1,17 @@
 <script lang="ts">
-    export let audio: Record<string, string>;
+	import { Button } from "$lib/components/ui/button";
+	import type { Word } from "$lib/types";
+	import SpeakerIcon from "~icons/lucide/volume-2";
 
-    let audio_elem: HTMLAudioElement | null = null;
+	export let audio: Word["audio"];
 
-    function play() {
-        audio_elem?.play();
-    }
+	function play() {
+		new Audio(audio!.kala_asi).play();
+	}
 </script>
 
 {#if audio?.kala_asi}
-    <audio src={audio['kala_asi']} bind:this={audio_elem} />
-    <button class="interactible" on:click={play}> 🔊 </button>
+	<Button size="icon" variant="outline" class="align-middle" on:click={play}>
+		<SpeakerIcon />
+	</Button>
 {/if}
-
-<style>
-    button {
-        background-color: inherit;
-        border: none;
-        font-size: inherit;
-    }
-</style>
-

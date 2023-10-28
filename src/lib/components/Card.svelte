@@ -1,51 +1,23 @@
-<script>
-    export let word;
-    export let selected_language;
+<script lang="ts">
+	import AudioButton from "./AudioButton.svelte";
+	import { Card, CardHeader, CardTitle } from "$lib/components/ui/card";
+	import type { Word } from "$lib/types";
+	import { siteLanguage } from "$lib/state";
+	import CardDescription from "./ui/card/card-description.svelte";
 
-    import AudioButton from './AudioButton.svelte';
+	export let word: Word;
 
-    $: sp = word['sitelen_pona'] ? word['sitelen_pona'].split(' ')[0] : "";
-    $: audio = word['audio'];
+	$: sitelenPona = word.sitelen_pona?.split(" ")?.[0] ?? "";
+	$: audio = word.audio;
 
-	$: definition_available = word['def'][selected_language]
-    $: definition = definition_available ? word['def'][selected_language] : "(en) " + word['def']['en'];
-
-    // temporary hack: reduce definitions by chopping off "| ALT"s
-    $: definition = definition.split("|")[0].trim()
-
+	$: definition_available = word.def[$siteLanguage];
+	$: definition = word.def[$siteLanguage] ?? "(en) " + word.def["en"];
 </script>
 
-<div class={"card " + word['usage_category']}>
-
-	<div class="sp">{sp}</div>
-	<dt>{word['word']}</dt>
-	<div class="shaded">{word['usage_category']} · {word['book']}</div>
-	<dd class={definition_available ? "" : "shaded"}>{definition}</dd>
-</div>
-
-<style>
-	.card {
-		text-align: center;
-	}
-	.sp {
-		display: flex;
-		justify-content: center;
-		align-items: center;
-		font-family: "sitelen seli kiwen";
-		font-size: 530%;
-	}
-	dt {
-		display: inline-block;
-		font-size: 150%;
-		color: var(--highlight-color);
-		font-weight: bold;
-		font-style: italic;
-		vertical-align: middle;
-	}
-	dd {
-		margin: unset;
-	}
-	.shaded {
-		color: var(--shade-color);
-	}
-</style>
+<Card>
+	<CardHeader>
+		<CardTitle>{word.word}</CardTitle>
+		<!-- temporary hack: reduce definitions by chopping off "| ALT"s -->
+		<CardDescription>{definition.split("|")[0].trim()}</CardDescription>
+	</CardHeader>
+</Card>

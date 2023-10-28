@@ -2,37 +2,86 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+	font-family: "sitelen seli kiwen";
+	font-style: normal;
+	font-weight: 400;
+	src: url("https://raw.githubusercontent.com/lipu-linku/nasin-sitelen/main/sitelenselikiwenasuki.ttf");
+}
 
 @layer base {
-  body {
-    margin: 0;
-    padding: 0;
-    scroll-padding-top: 5rem;
-    scroll-behavior: smooth;
-    font-family: "Noto Serif", Verdana, "Lucida Sans Unicode", sans-serif;
-    background-color: var(--bg-color);
-    color: var(--txt-color);
-  }
-  :root {
-    --bg-color: #000000;
-    --txt-color: hsl(222, 100%, 99%);
-    --highlight-color: hsl(34, 100%, 63%);
-    --link-color: hsl(172, 100%, 26%);
-    --shade-color: hsl(222, 12%, 60%);
-    --border-color: hsl(222, 12%, 20%);
-    --bg-alt-color: hsl(222, 0%, 7%);
-  }
-  .lightmode {
-    --bg-color: #ffffff;
-    --txt-color: hsl(222, 12%, 8%);
-    --highlight-color: hsl(34, 92%, 50%);
-    --link-color: hsl(172, 100%, 26%);
-    --shade-color: hsl(222, 28%, 45%);
-    --border-color: hsl(222, 28%, 75%);
-    --bg-alt-color: hsl(222, 0%, 93%);
-  }
-  a {
-    color: var(--link-color);
-    text-decoration: none;
-  }
+	:root {
+		--background: 0 0% 100%;
+		--foreground: 240 10% 3.9%;
+
+		--muted: 240 4.8% 95.9%;
+		--muted-foreground: 240 3.8% 46.1%;
+
+		--popover: 0 0% 100%;
+		--popover-foreground: 240 10% 3.9%;
+
+		--card: 0 0% 100%;
+		--card-foreground: 240 10% 3.9%;
+
+		--border: 240 5.9% 90%;
+		--input: 240 5.9% 90%;
+
+		--primary: 240 5.9% 10%;
+		--primary-foreground: 0 0% 98%;
+
+		--secondary: 240 4.8% 95.9%;
+		--secondary-foreground: 240 5.9% 10%;
+
+		--accent: 240 4.8% 95.9%;
+		--accent-foreground: 240 5.9% 10%;
+
+		--destructive: 0 84.2% 60.2%;
+		--destructive-foreground: 0 0% 98%;
+
+		--ring: 240 10% 3.9%;
+
+		--radius: 0.5rem;
+	}
+
+	@media (prefers-color-scheme: dark) {
+		:root {
+			--background: 240 10% 3.9%;
+			--foreground: 0 0% 98%;
+
+			--muted: 240 3.7% 15.9%;
+			--muted-foreground: 240 5% 64.9%;
+
+			--popover: 240 10% 3.9%;
+			--popover-foreground: 0 0% 98%;
+
+			--card: 240 10% 3.9%;
+			--card-foreground: 0 0% 98%;
+
+			--border: 240 3.7% 15.9%;
+			--input: 240 3.7% 15.9%;
+
+			--primary: 0 0% 98%;
+			--primary-foreground: 240 5.9% 10%;
+
+			--secondary: 240 3.7% 15.9%;
+			--secondary-foreground: 0 0% 98%;
+
+			--accent: 240 3.7% 15.9%;
+			--accent-foreground: 0 0% 98%;
+
+			--destructive: 0 62.8% 30.6%;
+			--destructive-foreground: 0 0% 98%;
+
+			--ring: 240 4.9% 83.9%;
+		}
+	}
+}
+
+@layer base {
+	* {
+		@apply border-border;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
 }

@@ -1,26 +1,71 @@
-<script>
-    import Checkbox from './Checkbox.svelte';
+<script lang="ts">
+	import { Checkbox } from "$lib/components/ui/checkbox";
+	import { Label } from "$lib/components/ui/label";
+	import {
+		Select,
+		SelectContent,
+		SelectInput,
+		SelectItem,
+		SelectTrigger,
+		SelectValue,
+	} from "$lib/components/ui/select";
+	import { siteLanguage } from "$lib/state";
+	import type { BookName, Linku, UsageCategory } from "$lib/types";
+	import { keys } from "$lib/utils";
+	import InfoIcon from "~icons/lucide/info";
+	import LanguagesIcon from "~icons/lucide/languages";
+	import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 
-    export let categories;
+	export let languages: Linku["languages"];
+	export let books: Record<BookName, boolean>;
+	export let categories: Record<UsageCategory, boolean>;
 </script>
 
-<div id="checkbox_container">
-    <div id="usage_selector">
-        {#each categories as category}
-        <Checkbox name={category.name} bind:checked={category.checked}/>
-        {/each}
-    </div>
-</div>
+<section class="flex flex-col gap-4 items-center justify-center">
+	<h2 class="text-2xl font-semibold">Search options:</h2>
 
+	<Label class="self-stretch flex-1 flex items-center justify-center gap-2 mx-6">
+		<LanguagesIcon /> Definitions language:
+		<Select positioning={{ placement: "right-end" }}>
+			<SelectTrigger class="max-w-[30ch] self-stretch flex-1">
+				<SelectValue class="pr-2" placeholder={languages[$siteLanguage].name_endonym} />
+			</SelectTrigger>
+			<SelectContent class="max-h-64 overflow-y-auto">
+				{#each Object.entries(languages) as [key, language] (key)}
+					<SelectItem value={key}>{language.name_endonym}</SelectItem>
+				{/each}
+			</SelectContent>
+			<SelectInput bind:value={$siteLanguage} />
+		</Select>
+	</Label>
 
-<style>
+	<div class="flex items-center gap-4">
+		{#each keys(books) as book}
+			<Label class="flex items-center gap-2">
+				<Checkbox bind:checked={books[book]} />
+				{book}
+			</Label>
+		{/each}
 
-    #checkbox_container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1rem;
-    }
+		{#if books.none}
+			<Tooltip positioning={{ placement: "right" }}>
+				<TooltipTrigger>
+					<InfoIcon />
+				</TooltipTrigger>
+				<TooltipContent class="max-w-[55ch]">
+					Most words in the "none" book category are obscure or rare, so don't forget to enable the
+					filter options for those!
+				</TooltipContent>
+			</Tooltip>
+		{/if}
+	</div>
 
-</style>
+	<div class="flex items-center gap-4">
+		{#each keys(categories) as category}
+			<Label class="flex items-center gap-2">
+				<Checkbox bind:checked={categories[category]} />
+				{category}
+			</Label>
+		{/each}
+	</div>
+</section>

@@ -1,15 +1,19 @@
 <script lang="ts">
-	import type { PageData } from './$types';
+	import type { PageData } from "./$types";
 
-	import Card from '$lib/components/Card.svelte';
-	import Entry from '$lib/components/Entry.svelte';
-	import LukaPonaEntry from '$lib/components/LukaPonaEntry.svelte';
-	import Navbar from '$lib/components/Navbar.svelte';
-	import Filter from '$lib/components/Filter.svelte';
+	import Card from "$lib/components/Card.svelte";
+	import Entry from "$lib/components/Entry.svelte";
+	import Filter from "$lib/components/Filter.svelte";
+	import LukaPonaEntry from "$lib/components/LukaPonaEntry.svelte";
+	import Navbar from "$lib/components/Navbar.svelte";
 
-	import search from '$lib/components/search.js';
+	import { search } from "$lib/components/search";
+	import type { BookName, UsageCategory } from "$lib/types";
 
 	export let data: PageData;
+	$: ({
+		linku: { data: dictionary, languages },
+	} = data);
 
 	let lightmode = false; // TODO
 	// $: if (lightmode) {
@@ -18,76 +22,58 @@
 	// 	document.documentElement.classList.remove('lightmode');
 	// }
 
-	const dictionary = data.data;
-	const languages = data.languages;
+	let query = "";
+	let selected_language = "en";
 
-	let query = '';
-	let selected_language = 'en';
+	let selected_view: "basic" | "grid" = "basic";
+	let categories: Record<UsageCategory, boolean> = {
+		core: true,
+		widespread: true,
+		common: false,
+		uncommon: false,
+		rare: false,
+		obscure: false,
+	};
 
-	let selected_view = 'basic';
-	let categories = [
-		{ name: 'core', checked: true },
-		{ name: 'widespread', checked: true },
-		{ name: 'common', checked: false },
-		{ name: 'uncommon', checked: false },
-		{ name: 'rare', checked: false },
-		{ name: 'obscure', checked: false }
-	];
+	let books: Record<BookName, boolean> = {
+		pu: true,
+		"ku suli": true,
+		"ku lili": false,
+		none: false,
+	};
 
-	$: categories_short = Object.fromEntries(
-		Array.from(categories, (item) => {
-			return [item.name, item.checked];
-		})
-	);
-
-	$: sorted_filtered_dictionary = search(dictionary, query, categories_short);
+	$: sorted_filtered_dictionary = Object.entries(search(dictionary, query, categories, books));
 </script>
 
-<div class="app">
-	<Navbar bind:query bind:lightmode bind:selected_language bind:selected_view {languages} />
-	<a id="survey" href="https://linku.la/wile/">
-		2023 Word Survey: Let&nbsp;us&nbsp;know&nbsp;what&nbsp;words&nbsp;you&nbsp;use!
-	</a>
-	<Filter bind:categories />
-	<div class={selected_view == 'grid' ? 'view_grid' : 'view_basic'}>
-		{#each Object.entries(sorted_filtered_dictionary) as [key, word] (key)}
-			{#if selected_view == 'basic'}
-				<Entry {word} {selected_language} />
-			{:else if selected_view == 'grid'}
-				<Card {word} {selected_language} />
-			{:else}
-				<LukaPonaEntry {word} {selected_language} />
-			{/if}
-		{/each}
-	</div>
+<div class="my-0 mx-auto p-0 flex flex-col gap-6">
+	<Navbar bind:query words={Object.values(dictionary).map((w) => w.word)} />
+
+	<Filter bind:categories bind:books {languages} />
+
+	<main class="my-2 {selected_view === 'grid' ? 'view_grid' : 'view_basic'}">
+		<ul>
+			{#each sorted_filtered_dictionary as [key, word] (key)}
+				<li>
+					{#if selected_view === "basic"}
+						<Entry {word} />
+					{:else if selected_view === "grid"}
+						<Card {word} />
+					{:else}
+						<LukaPonaEntry {word} {selected_language} />
+					{/if}
+				</li>
+			{/each}
+		</ul>
+	</main>
 </div>
 
 <style>
-	@font-face {
-		font-family: 'sitelen seli kiwen';
-		font-style: normal;
-		font-weight: 400;
-		src: url(https://raw.githubusercontent.com/lipu-linku/nasin-sitelen/main/sitelenselikiwenasuki.ttf);
+	.view_basic ul {
+		@apply flex flex-col items-stretch justify-center gap-2 mx-auto max-w-[60%];
 	}
-	.app {
-		margin: 0 auto;
-		padding: 0;
-	}
-	.view_basic {
-		display: block;
-		margin: auto;
-		padding: 0 10px;
-		max-width: 840px;
-	}
+
 	.view_grid {
 		display: grid;
 		grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-	}
-	#survey {
-		display: block;
-		text-align: center;
-		font-size: 1.2em;
-		font-weight: bold;
-		margin-top: 1rem;
 	}
 </style>
