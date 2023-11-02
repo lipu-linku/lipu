@@ -5,9 +5,9 @@
 	import Entry from "$lib/components/Entry.svelte";
 	import Filter from "$lib/components/Filter.svelte";
 	import LukaPonaEntry from "$lib/components/LukaPonaEntry.svelte";
-	import Navbar from "$lib/components/Navbar.svelte";
 
-	import { search } from "$lib/components/search";
+	import { wordSearch } from "$lib/components/search";
+	import { searchQuery } from "$lib/state";
 	import type { BookName, UsageCategory } from "$lib/types";
 
 	export let data: PageData;
@@ -22,7 +22,6 @@
 	// 	document.documentElement.classList.remove('lightmode');
 	// }
 
-	let query = "";
 	let selected_language = "en";
 
 	let selected_view: "basic" | "grid" = "basic";
@@ -42,34 +41,35 @@
 		none: false,
 	};
 
-	$: sorted_filtered_dictionary = Object.entries(search(dictionary, query, categories, books));
+	$: sorted_filtered_dictionary = wordSearch(
+		$searchQuery,
+		Object.values(dictionary),
+		books,
+		categories
+	);
 </script>
 
-<div class="my-0 mx-auto p-0 flex flex-col gap-6">
-	<Navbar bind:query words={Object.values(dictionary).map((w) => w.word)} />
+<Filter bind:categories bind:books {languages} />
 
-	<Filter bind:categories bind:books {languages} />
-
-	<main class="my-2 {selected_view === 'grid' ? 'view_grid' : 'view_basic'}">
-		<ul>
-			{#each sorted_filtered_dictionary as [key, word] (key)}
-				<li>
-					{#if selected_view === "basic"}
-						<Entry {word} />
-					{:else if selected_view === "grid"}
-						<Card {word} />
-					{:else}
-						<LukaPonaEntry {word} {selected_language} />
-					{/if}
-				</li>
-			{/each}
-		</ul>
-	</main>
-</div>
+<main class="flex-1 my-2 {selected_view === 'grid' ? 'view_grid' : 'view_basic'}">
+	<ul>
+		{#each sorted_filtered_dictionary as word (word.id)}
+			<li>
+				{#if selected_view === "basic"}
+					<Entry {word} />
+				{:else if selected_view === "grid"}
+					<Card {word} />
+				{:else}
+					<LukaPonaEntry {word} {selected_language} />
+				{/if}
+			</li>
+		{/each}
+	</ul>
+</main>
 
 <style>
 	.view_basic ul {
-		@apply flex flex-col items-stretch justify-center gap-2 mx-auto max-w-[60%];
+		@apply flex-1 flex flex-col items-stretch gap-2 mx-auto max-w-[60%];
 	}
 
 	.view_grid {

@@ -15,6 +15,7 @@
 	import InfoIcon from "~icons/lucide/info";
 	import LanguagesIcon from "~icons/lucide/languages";
 	import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+	import { Button } from "./ui/button";
 
 	export let languages: Linku["languages"];
 	export let books: Record<BookName, boolean>;
@@ -49,8 +50,8 @@
 
 		{#if books.none}
 			<Tooltip positioning={{ placement: "right" }}>
-				<TooltipTrigger>
-					<InfoIcon />
+				<TooltipTrigger asChild let:builder>
+					<Button builders={[builder]} variant="ghost" size="icon"><InfoIcon /></Button>
 				</TooltipTrigger>
 				<TooltipContent class="max-w-[55ch]">
 					Most words in the "none" book category are obscure or rare, so don't forget to enable the

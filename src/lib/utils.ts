@@ -7,6 +7,13 @@ export function keys<T extends object>(o: T): (keyof T)[] {
 	return Object.keys(o) as (keyof T)[];
 }
 
+export const normalize = (str: string) =>
+	str
+		.normalize("NFD")
+		.replace(/[\u0300-\u036f]/g, "")
+		.toLocaleLowerCase()
+		.trim();
+
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
 }

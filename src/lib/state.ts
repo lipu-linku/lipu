@@ -20,3 +20,5 @@ export const viewTypes = {
 	},
 } as const;
 export const viewType = persisted<keyof typeof viewTypes>("view_type", "basic");
+
+export const searchQuery = persisted("query", "")
