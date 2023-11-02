@@ -2,6 +2,8 @@ import { redirect } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { wordSearch } from "$lib/components/search";
 
+export const prerender = false
+
 export const load: PageServerLoad = async ({ url, parent }) => {
 	const query = url.searchParams.get("q");
 
