@@ -49,7 +49,7 @@
 		</Button>
 	</form>
 
-	<a href="about" title="About Linku">
+	<a href="/about" title="About Linku">
 		<InfoIcon class="w-8 h-8" />
 	</a>
 </nav>

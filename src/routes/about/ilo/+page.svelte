@@ -2,7 +2,7 @@
 </script>
 
 <div class="page_width_limiter">
-	<a class="navlink" href="about">Go back</a>
+	<a class="navlink" href="/about">Go back</a>
 	<h1>
 		ilo Linku (the <a href="https://github.com/lipu-linku/ilo">bot</a>)
 	</h1>

@@ -2,7 +2,7 @@
 </script>
 
 <div class="page_width_limiter">
-	<a class="navlink" href="about">Go back</a>
+	<a class="navlink" href="/about">Go back</a>
 	<h1>
 		lipu Linku (the <a href="https://linku.la">website</a>)
 	</h1>
@@ -12,7 +12,7 @@
 	</p>
 	<p>
 		The data is loaded from the
-		<a href="about/jasima">mirror / database</a>.
+		<a href="/about/jasima">mirror / database</a>.
 	</p>
 	<p>
 		You may choose the language you want definitions to use, and filter by the words' appearances in
