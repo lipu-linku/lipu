@@ -23,15 +23,14 @@
 	<a href="/words/{word.word}" class="flex-1">
 		<CardHeader>
 			<CardTitle>{word.word}</CardTitle>
-			<CardDescription>{definition}</CardDescription>
+			<CardDescription class="text-foreground">
+				{definition}
+			</CardDescription>
 			<CardDescription>
 				{word.usage_category} · {word.book} ·
-				<abbr
-					class="no-underline"
-					title="{usageScore}% of toki pona speakers will recognize this word"
-				>
+				<span title="{usageScore}% of toki pona speakers will recognize this word">
 					{usageScore}%
-				</abbr>
+				</span>
 			</CardDescription>
 		</CardHeader>
 	</a>

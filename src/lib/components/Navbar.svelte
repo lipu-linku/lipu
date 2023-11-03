@@ -7,10 +7,10 @@
 	import { Button } from "$lib/components/ui/button";
 	import { Input } from "$lib/components/ui/input";
 	import { Skeleton } from "$lib/components/ui/skeleton";
-	import type { Linku } from "$lib/types";
+	import type { Word } from "$lib/types";
 	import SearchIcon from "~icons/lucide/search";
 
-	export let words: Linku["data"][string]["word"][];
+	export let words: Word[];
 	export let query = "";
 </script>
 

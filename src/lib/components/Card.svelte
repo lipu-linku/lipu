@@ -3,7 +3,7 @@
 	import { Card, CardHeader, CardTitle } from "$lib/components/ui/card";
 	import type { Word } from "$lib/types";
 	import { siteLanguage } from "$lib/state";
-	import CardDescription from "./ui/card/card-description.svelte";
+	import CardDescription from "$lib/components/ui/card/card-description.svelte";
 
 	export let word: Word;
 
