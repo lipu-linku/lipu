@@ -12,6 +12,7 @@
 		CardTitle,
 	} from "$lib/components/ui/card";
 	import AudioButton from "./AudioButton.svelte";
+	import { Button } from "./ui/button";
 
 	$: sp = word.sitelen_pona?.split(" ")?.[0] ?? "";
 
@@ -26,6 +27,16 @@
 			<CardDescription class="text-foreground">
 				{definition}
 			</CardDescription>
+			{#if word.see_also}
+				{@const others = word.see_also.split(", ")}
+				<CardDescription>
+					See also:
+					{#each others as other, i}
+						<a class="underline" href="/words/{other}">{other}</a
+						>{#if i < others.length - 1},&nbsp;{/if}
+					{/each}
+				</CardDescription>
+			{/if}
 			<CardDescription>
 				{word.usage_category} · {word.book} ·
 				<span title="{usageScore}% of toki pona speakers will recognize this word">

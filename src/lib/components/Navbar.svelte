@@ -12,7 +12,16 @@
 
 	export let words: Word[];
 	export let query = "";
+
+	const focusSearch = (e: KeyboardEvent) => {
+		if (e.key === "/" && document.activeElement?.id !== "search-input") {
+			e.preventDefault();
+			document.getElementById("search-input")!.focus();
+		}
+	};
 </script>
+
+<svelte:window on:keydown={focusSearch} />
 
 <nav class="flex items-center justify-between gap-4 p-4 border-b border-b-border">
 	<header class="max-sm:mx-auto">
@@ -37,6 +46,7 @@
 			type="search"
 			required
 			bind:value={query}
+			id="search-input"
 		/>
 		<datalist id="word-search-options">
 			{#each words as word}

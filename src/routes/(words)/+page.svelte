@@ -1,10 +1,8 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
 
-	import Card from "$lib/components/Card.svelte";
 	import Entry from "$lib/components/Entry.svelte";
 	import Filter from "$lib/components/Filter.svelte";
-	import LukaPonaEntry from "$lib/components/LukaPonaEntry.svelte";
 
 	import { wordSearch } from "$lib/components/search";
 	import { searchQuery } from "$lib/state";
@@ -55,13 +53,7 @@
 	<ul>
 		{#each sorted_filtered_dictionary as word (word.id)}
 			<li>
-				{#if selected_view === "basic"}
-					<Entry {word} />
-				{:else if selected_view === "grid"}
-					<Card {word} />
-				{:else}
-					<LukaPonaEntry {word} {selected_language} />
-				{/if}
+				<Entry {word} />
 			</li>
 		{/each}
 	</ul>

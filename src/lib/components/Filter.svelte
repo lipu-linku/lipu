@@ -9,13 +9,12 @@
 		SelectTrigger,
 		SelectValue,
 	} from "$lib/components/ui/select";
+	import { Tooltip, TooltipContent, TooltipTrigger } from "$lib/components/ui/tooltip";
 	import { siteLanguage } from "$lib/state";
 	import type { BookName, Language, UsageCategory } from "$lib/types";
 	import { keys } from "$lib/utils";
 	import InfoIcon from "~icons/lucide/info";
 	import LanguagesIcon from "~icons/lucide/languages";
-	import { Button } from "$lib/components/ui/button";
-	import { Tooltip, TooltipContent, TooltipTrigger } from "$lib/components/ui/tooltip";
 
 	export let languages: Record<string, Language>;
 	export let books: Record<BookName, boolean>;
