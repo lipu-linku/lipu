@@ -23,7 +23,9 @@
 
 <svelte:window on:keydown={focusSearch} />
 
-<nav class="flex items-center justify-between gap-4 p-4 border-b border-b-border">
+<nav
+	class="sticky top-0 flex items-center bg-background justify-between gap-4 p-4 border-b border-b-border"
+>
 	<header class="max-sm:mx-auto">
 		<h1 class="flex items-center gap-4 my-0 sm:ml-auto">
 			<Avatar class="rounded-none max-sm:hidden">
@@ -50,7 +52,7 @@
 		/>
 		<datalist id="word-search-options">
 			{#each words as word}
-				<option value={word} />
+				<option value={word.word} />
 			{/each}
 		</datalist>
 
