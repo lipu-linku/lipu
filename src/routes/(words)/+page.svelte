@@ -2,11 +2,9 @@
 	import type { PageData } from "./$types";
 
 	import Entry from "$lib/components/Entry.svelte";
-	import Filter from "$lib/components/Filter.svelte";
-
+	
 	import { wordSearch } from "$lib/components/search";
-	import { searchQuery } from "$lib/state";
-	import type { BookName, UsageCategory } from "$lib/types";
+	import { books, categories, searchQuery } from "$lib/state";
 
 	export let data: PageData;
 	$: ({
@@ -23,31 +21,14 @@
 	let selected_language = "en";
 
 	let selected_view: "basic" | "grid" = "basic";
-	let categories: Record<UsageCategory, boolean> = {
-		core: true,
-		widespread: true,
-		common: false,
-		uncommon: false,
-		rare: false,
-		obscure: false,
-	};
-
-	let books: Record<BookName, boolean> = {
-		pu: true,
-		"ku suli": true,
-		"ku lili": false,
-		none: false,
-	};
 
 	$: sorted_filtered_dictionary = wordSearch(
 		$searchQuery,
 		Object.values(dictionary),
-		books,
-		categories
+		$books,
+		$categories
 	);
 </script>
-
-<Filter bind:categories bind:books {languages} />
 
 <main class="flex-1 my-2 {selected_view === 'grid' ? 'view_grid' : 'view_basic'}">
 	<ul>

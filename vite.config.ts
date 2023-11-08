@@ -10,4 +10,7 @@ export default defineConfig({
 			defaultClass: "icon",
 		}),
 	],
+	build: {
+		cssMinify: "lightningcss",
+	},
 });

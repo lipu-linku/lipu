@@ -1,8 +1,8 @@
 {
-  "recommendations": [
-    "antfu.iconify",
-    "svelte.svelte-vscode",
-    "esbenp.prettier-vscode",
-    "dbaeumer.vscode-eslint"
-  ]
+	"recommendations": [
+		"antfu.iconify",
+		"svelte.svelte-vscode",
+		"esbenp.prettier-vscode",
+		"dbaeumer.vscode-eslint"
+	]
 }

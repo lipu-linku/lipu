@@ -1,7 +1,8 @@
 <script lang="ts">
+	import { page } from "$app/stores";
 	import Navbar from "$lib/components/Navbar.svelte";
 	import { Button } from "$lib/components/ui/button";
-	import { searchQuery } from "$lib/state.js";
+	import { searchQuery } from "$lib/state";
 	import UpArrowIcon from "~icons/lucide/arrow-up";
 
 	export let data;
@@ -15,11 +16,19 @@
 
 	<slot />
 
-	<Button
-		class="fixed bottom-4 right-4 flex items-center gap-2"
-		variant="outline"
-		on:click={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-	>
-		<UpArrowIcon /> Scroll to Top
-	</Button>
+	{#if !$page.params.word}
+		<Button
+			class="fixed bottom-4 right-4 flex items-center gap-2"
+			variant="outline"
+			on:click={() =>
+				window.scrollTo({
+					top: 0,
+					behavior: window.matchMedia("(prefers-reduced-motion: no-preference)").matches
+						? "smooth"
+						: "auto",
+				})}
+		>
+			<UpArrowIcon /> Scroll to Top
+		</Button>
+	{/if}
 </div>

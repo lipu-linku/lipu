@@ -93,7 +93,7 @@ export type Word = {
 	 * A human-readable description of the word's etymology(ies), including the original word(s), definition(s), and other metadata.
 	 */
 	etymology?: string;
-	etymology_data: {
+	etymology_data?: {
 		/**
 		 * List of languages the word derives from, split on `;`.
 		 */

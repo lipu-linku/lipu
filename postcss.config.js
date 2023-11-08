@@ -1,5 +1,6 @@
 import tailwindcss from "tailwindcss";
+import tailwindNesting from "tailwindcss/nesting";
 
 export default {
-	plugins: [tailwindcss()],
+	plugins: [tailwindNesting("postcss-nesting"), tailwindcss()],
 };

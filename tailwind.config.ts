@@ -2,8 +2,9 @@ import { Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
 export default {
-	darkMode: "media",
+	darkMode: ["class"],
 	content: ["./src/**/*.{html,js,svelte,ts}"],
+	safelist: ["dark"],
 	theme: {
 		container: {
 			center: true,

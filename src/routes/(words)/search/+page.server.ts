@@ -1,8 +1,8 @@
 import { redirect } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
+import type { Actions, PageServerLoad } from "./$types";
 import { wordSearch } from "$lib/components/search";
 
-export const prerender = false
+export const prerender = false;
 
 export const load: PageServerLoad = async ({ url, parent }) => {
 	const query = url.searchParams.get("q");
@@ -37,4 +37,13 @@ export const load: PageServerLoad = async ({ url, parent }) => {
 		),
 		query,
 	};
+};
+
+export const actions: Actions = {
+	search: async ({ url }) => {
+		const searchPage = new URL(url);
+		searchPage.pathname = "/search";
+
+		throw redirect(300, searchPage);
+	},
 };

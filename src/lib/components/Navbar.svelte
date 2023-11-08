@@ -1,14 +1,31 @@
 <script lang="ts">
-	import icon from "$lib/assets/icon.png";
-	import InfoIcon from "~icons/lucide/info";
+	import { books, categories } from "$lib/state";
+	import type { Word } from "$lib/types";
+	import { keys } from "$lib/utils";
 
-	import { goto } from "$app/navigation";
 	import { Avatar, AvatarFallback, AvatarImage } from "$lib/components/ui/avatar";
 	import { Button } from "$lib/components/ui/button";
+	import {
+		DropdownMenu,
+		DropdownMenuCheckboxItem,
+		DropdownMenuContent,
+		DropdownMenuGroup,
+		DropdownMenuLabel,
+		DropdownMenuSeparator,
+		DropdownMenuTrigger,
+	} from "$lib/components/ui/dropdown-menu";
 	import { Input } from "$lib/components/ui/input";
 	import { Skeleton } from "$lib/components/ui/skeleton";
-	import type { Word } from "$lib/types";
+	import { mode, toggleMode } from "mode-watcher";
+
+	import icon from "$lib/assets/icon.png";
+	import BookIcon from "~icons/lucide/book-marked";
+	import InfoIcon from "~icons/lucide/info";
+	import CategoriesIcon from "~icons/lucide/layout-dashboard";
 	import SearchIcon from "~icons/lucide/search";
+	import SettingsIcon from "~icons/lucide/settings";
+	import DarkModeIcon from "~icons/lucide/moon";
+	import LightModeIcon from "~icons/lucide/sun";
 
 	export let words: Word[];
 	export let query = "";
@@ -24,28 +41,25 @@
 <svelte:window on:keydown={focusSearch} />
 
 <nav
-	class="sticky top-0 flex items-center bg-background justify-between gap-4 p-4 border-b border-b-border"
+	class="sticky top-0 flex items-center justify-between gap-2 bg-background p-4 border-b border-b-border"
 >
-	<header class="max-sm:mx-auto">
+	<header class="max-sm:mx-auto mr-2">
 		<h1 class="flex items-center gap-4 my-0 sm:ml-auto">
 			<Avatar class="rounded-none max-sm:hidden">
-				<AvatarImage src={icon} alt="lipu Linku" />
+				<AvatarImage src={icon} class="invert dark:invert-0" alt="lipu Linku" />
 				<AvatarFallback><Skeleton class="w-10 h-10 rounded-full" /></AvatarFallback>
 			</Avatar>
 			<a class="text-current font-semibold" href="/">lipu Linku</a>
 		</h1>
 	</header>
 
-	<form
-		on:submit|preventDefault={() => goto(`/search?q=${encodeURIComponent(query)}`)}
-		class="flex-1 flex items-center gap-2"
-		role="search"
-	>
+	<form class="flex-1 flex items-center gap-2" role="search" action="/search?/search">
 		<Input
 			class="flex-1"
 			placeholder="o lukin e nimi"
 			list="word-search-options"
 			type="search"
+			name="q"
 			required
 			bind:value={query}
 			id="search-input"
@@ -56,12 +70,76 @@
 			{/each}
 		</datalist>
 
+		<DropdownMenu>
+			<DropdownMenuTrigger asChild let:builder>
+				<Button builders={[builder]} variant="outline" size="icon" aria-label="Search Options">
+					<SettingsIcon />
+				</Button>
+			</DropdownMenuTrigger>
+
+			<DropdownMenuContent>
+				<DropdownMenuLabel class="text-center">Search Options</DropdownMenuLabel>
+
+				<DropdownMenuSeparator />
+
+				<DropdownMenuGroup>
+					<DropdownMenuLabel>
+						<BookIcon class="inline mr-1 w-4 h-4" />
+						<span>Books</span>
+					</DropdownMenuLabel>
+					{#each keys($books) as book}
+						<DropdownMenuCheckboxItem bind:checked={$books[book]}>{book}</DropdownMenuCheckboxItem>
+					{/each}
+				</DropdownMenuGroup>
+
+				<DropdownMenuSeparator />
+
+				<DropdownMenuGroup>
+					<DropdownMenuLabel>
+						<CategoriesIcon class="inline mr-1 w-4 h-4" />
+						<span>Usage Categories</span>
+					</DropdownMenuLabel>
+					{#each keys($categories) as category}
+						<DropdownMenuCheckboxItem bind:checked={$categories[category]}>
+							{category}
+						</DropdownMenuCheckboxItem>
+					{/each}
+				</DropdownMenuGroup>
+			</DropdownMenuContent>
+		</DropdownMenu>
+
+		<input
+			type="hidden"
+			name="filter-books"
+			value={Object.entries($books)
+				.filter((_) => _[1])
+				.map((_) => _[0].replace(/\s/g, "-"))
+				.join(",")}
+		/>
+
+		<input
+			type="hidden"
+			name="filter-categories"
+			value={Object.entries($categories)
+				.filter((_) => _[1])
+				.map((_) => _[0])
+				.join(",")}
+		/>
+
 		<Button type="submit" variant="outline" size="icon">
 			<SearchIcon />
 		</Button>
 	</form>
 
-	<a href="/about" title="About Linku">
-		<InfoIcon class="w-8 h-8" />
-	</a>
+	<Button variant="outline" size="icon" on:click={toggleMode} aria-label="Toggle theme">
+		{#if $mode === "light"}
+			<DarkModeIcon />
+		{:else}
+			<LightModeIcon />
+		{/if}
+	</Button>
+
+	<Button variant="outline" size="icon" href="/about" aria-label="About Linku">
+		<InfoIcon />
+	</Button>
 </nav>

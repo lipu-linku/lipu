@@ -48,8 +48,10 @@
 							<h3 class="flex items-center gap-2 font-medium text-xl">
 								ku definitions
 								<Tooltip>
-									<TooltipTrigger>
-										<InfoIcon class="w-4 h-4" />
+									<TooltipTrigger
+										class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
+									>
+										<InfoIcon class="w-4 h-4 " />
 									</TooltipTrigger>
 									<TooltipContent class="max-w-[55ch]">
 										Each ku definition is assigned a frequency index from ½ to 5, which describes
@@ -114,9 +116,14 @@
 
 					{#if word.ucsur}
 						<div class="flex flex-col justify-center gap-2">
-							<h3 class="font-medium text-xl">
-								<a href="https://www.kreativekorp.com/ucsur/charts/sitelen.html" target="_blank">
-									UCSUR Codepoint
+							<h3 class="flex items-center gap-2 first-letter:font-medium text-xl">
+								<span>UCSUR Codepoint</span>
+								<a
+									class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colorsx"
+									href="https://www.kreativekorp.com/ucsur/charts/sitelen.html"
+									target="_blank"
+								>
+									<InfoIcon class="align-middle w-4 h-4" />
 								</a>
 							</h3>
 
@@ -132,7 +139,7 @@
 					{#if word.luka_pona}
 						<div class="flex flex-col justify-center gap-2">
 							<h3 class="font-medium text-xl">luka pona</h3>
-							<video controls muted playsinline>
+							<video class="rounded-md" controls muted playsinline preload="metadata">
 								<source src={word.luka_pona.mp4} type="video/mp4" />
 								<source src={word.luka_pona.gif} type="video/gif" />
 							</video>
@@ -151,33 +158,37 @@
 						<p>{word.commentary}</p>
 					{/if}
 
-					<div class="flex flex-col justify-center gap-2">
-						<h3 class="font-medium text-xl">Origin</h3>
-						<ul class="flex flex-col justify-center gap-2">
-							<li>
-								<span class="text-muted-foreground">Derived from: </span>
-								{listFormat.format(word.etymology_data.langs.split(";"))}
-							</li>
-							{#if word.etymology}
-								<li>
-									<span class="text-muted-foreground">Etymology: </span>
-									{word.etymology}
-								</li>
-							{/if}
-							{#if word.creator}
-								<li>
-									<span class="text-muted-foreground">Created by: </span>
-									{word.creator}
-								</li>
-							{/if}
-							{#if word.coined_year || word.coined_era}
-								<li>
-									<span class="text-muted-foreground">Coined in:</span>
-									{[word.coined_year, word.coined_era].filter(Boolean).join(", ")}
-								</li>
-							{/if}
-						</ul>
-					</div>
+					{#if word.etymology_data || word.etymology || word.creator || word.coined_year || word.coined_era}
+						<div class="flex flex-col justify-center gap-2">
+							<h3 class="font-medium text-xl">Origin</h3>
+							<ul class="flex flex-col justify-center gap-2">
+								{#if word.etymology_data}
+									<li>
+										<span class="text-muted-foreground">Derived from: </span>
+										{listFormat.format(word.etymology_data.langs.split(";"))}
+									</li>
+								{/if}
+								{#if word.etymology}
+									<li>
+										<span class="text-muted-foreground">Etymology: </span>
+										{word.etymology}
+									</li>
+								{/if}
+								{#if word.creator}
+									<li>
+										<span class="text-muted-foreground">Created by: </span>
+										{word.creator}
+									</li>
+								{/if}
+								{#if word.coined_year || word.coined_era}
+									<li>
+										<span class="text-muted-foreground">Coined in:</span>
+										{[word.coined_year, word.coined_era].filter(Boolean).join(", ")}
+									</li>
+								{/if}
+							</ul>
+						</div>
+					{/if}
 
 					<div class="flex flex-col justify-center gap-2">
 						<h3 class="font-medium text-xl">Usage Data</h3>
