@@ -65,6 +65,8 @@
 			type="search"
 			name="q"
 			required
+			autocapitalize="off"
+			autocomplete="off"
 			bind:value={query}
 			id="search-input"
 		/>
