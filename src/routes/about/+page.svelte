@@ -19,11 +19,13 @@
 
 <h1 class="font-medium text-4xl">About Linku</h1>
 
-<p>
-	Linku is a <a href="/about/nimi">sheet</a>, a
-	<a href="/about/ilo">bot</a>, a <a href="/about/jasima">database</a> and a
-	<a href="/about/lipu">website</a>, put together by kala Asi for the purpose of displaying toki
-	pona dictionary information.
+<p class="[&>button]:underline">
+	Linku is a <button on:click={() => (openAccordion = "sheet")}>sheet</button>, a
+	<button on:click={() => (openAccordion = "bot")}>bot</button>, a
+	<button on:click={() => (openAccordion = "database")}>database</button>
+	and a
+	<button on:click={() => (openAccordion = "website")}>website</button>, put together by kala Asi
+	for the purpose of displaying toki pona dictionary information.
 </p>
 
 <p>
