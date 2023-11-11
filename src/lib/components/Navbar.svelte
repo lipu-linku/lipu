@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { books, categories } from "$lib/state";
+	import { books, categories, writingSystem } from "$lib/state";
 	import type { Word } from "$lib/types";
 	import { keys } from "$lib/utils";
 
@@ -11,6 +11,8 @@
 		DropdownMenuContent,
 		DropdownMenuGroup,
 		DropdownMenuLabel,
+		DropdownMenuRadioGroup,
+		DropdownMenuRadioItem,
 		DropdownMenuSeparator,
 		DropdownMenuTrigger,
 	} from "$lib/components/ui/dropdown-menu";
@@ -22,10 +24,12 @@
 	import BookIcon from "~icons/lucide/book-marked";
 	import InfoIcon from "~icons/lucide/info";
 	import CategoriesIcon from "~icons/lucide/layout-dashboard";
+	import WritingSystemIcon from "~icons/lucide/pen-tool";
 	import SearchIcon from "~icons/lucide/search";
 	import SettingsIcon from "~icons/lucide/settings";
 	import DarkModeIcon from "~icons/lucide/moon";
 	import LightModeIcon from "~icons/lucide/sun";
+	import { page } from "$app/stores";
 
 	export let words: Word[];
 	export let query = "";
@@ -41,7 +45,7 @@
 <svelte:window on:keydown={focusSearch} />
 
 <nav
-	class="sticky top-0 flex items-center justify-between gap-2 bg-background p-4 border-b border-b-border"
+	class="z-10 sticky top-0 flex items-center justify-between gap-2 bg-background p-4 border-b border-b-border"
 >
 	<header class="max-sm:mx-auto mr-2">
 		<h1 class="flex items-center gap-4 my-0 sm:ml-auto">
@@ -87,6 +91,7 @@
 						<BookIcon class="inline mr-1 w-4 h-4" />
 						<span>Books</span>
 					</DropdownMenuLabel>
+
 					{#each keys($books) as book}
 						<DropdownMenuCheckboxItem bind:checked={$books[book]}>{book}</DropdownMenuCheckboxItem>
 					{/each}
@@ -99,11 +104,40 @@
 						<CategoriesIcon class="inline mr-1 w-4 h-4" />
 						<span>Usage Categories</span>
 					</DropdownMenuLabel>
+
 					{#each keys($categories) as category}
 						<DropdownMenuCheckboxItem bind:checked={$categories[category]}>
 							{category}
 						</DropdownMenuCheckboxItem>
 					{/each}
+				</DropdownMenuGroup>
+
+				<DropdownMenuSeparator />
+
+				<DropdownMenuGroup>
+					<DropdownMenuLabel
+						class={$page.route.id === "/(words)/words/[word]"
+							? `opacity-50 pointer-events-none`
+							: ""}
+					>
+						<WritingSystemIcon class="inline mr-1 w-4 h-4" />
+						<span>Writing System</span>
+					</DropdownMenuLabel>
+
+					<DropdownMenuRadioGroup bind:value={$writingSystem}>
+						<DropdownMenuRadioItem
+							disabled={$page.route.id === "/(words)/words/[word]"}
+							value="sitelen_pona"
+						>
+							sitelen pona
+						</DropdownMenuRadioItem>
+						<DropdownMenuRadioItem
+							disabled={$page.route.id === "/(words)/words/[word]"}
+							value="sitelen_sitelen"
+						>
+							sitelen sitelen
+						</DropdownMenuRadioItem>
+					</DropdownMenuRadioGroup>
 				</DropdownMenuGroup>
 			</DropdownMenuContent>
 		</DropdownMenu>

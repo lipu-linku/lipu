@@ -1,12 +1,22 @@
 <script lang="ts">
+	import { page } from "$app/stores";
 	import AudioButton from "$lib/components/AudioButton.svelte";
 	import Collapsible from "$lib/components/Collapsible.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
+	import {
+		DropdownMenu,
+		DropdownMenuContent,
+		DropdownMenuItem,
+		DropdownMenuLabel,
+		DropdownMenuSeparator,
+		DropdownMenuTrigger,
+	} from "$lib/components/ui/dropdown-menu";
 	import { Tooltip, TooltipContent, TooltipTrigger } from "$lib/components/ui/tooltip";
 	import BackIcon from "~icons/lucide/arrow-left";
 	import CopyIcon from "~icons/lucide/copy";
 	import InfoIcon from "~icons/lucide/info";
+	import ShareButton from "~icons/lucide/share-2";
 
 	export let data;
 
@@ -21,16 +31,47 @@
 	};
 </script>
 
+<svelte:head>
+	<title>lipu Linku &middot; {word.word}</title>
+	<meta property="og:image" content="https://sitelen.nimi.li/img/{word.word}.png" />
+</svelte:head>
+
 <div class="flex-1 grid grid-cols-[min-content_1fr] p-4 pb-2 gap-4">
 	<Button href="/" class="justify-self-end" variant="ghost" size="icon">
 		<BackIcon />
 	</Button>
 
 	<main class="flex-1 flex flex-col gap-4">
-		<h1 class="font-semibold text-4xl flex items-center gap-4">
-			{word.word}
-			{#if word.audio}<AudioButton audio={word.audio} /> {/if}
-		</h1>
+		<header class="flex-1 flex items-center gap-4">
+			<h1 class="font-semibold text-4xl">{word.word}</h1>
+
+			<div class="ml-auto flex items-center gap-2">
+				{#if word.audio}
+					<AudioButton audio={word.audio} />
+				{/if}
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild let:builder>
+						<Button builders={[builder]} variant="outline" size="icon">
+							<ShareButton />
+						</Button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent>
+						<DropdownMenuLabel>Share word</DropdownMenuLabel>
+						<DropdownMenuSeparator />
+
+						<DropdownMenuItem on:click={() => navigator.clipboard.writeText($page.url.toString())}>
+							<CopyIcon class="inline mr-2 w-4 h-4" />
+							Copy URL
+						</DropdownMenuItem>
+
+						<DropdownMenuItem on:click={copyCodepoint}>
+							<span class="text-2xl -ml-1 mr-2 font-sitelen-pona">sitelen-pona</span>
+							sitelen pona
+						</DropdownMenuItem>
+					</DropdownMenuContent>
+				</DropdownMenu>
+			</div>
+		</header>
 
 		<div class="flex-1 grid grid-cols-3 gap-2 justify-stretch">
 			<Card>

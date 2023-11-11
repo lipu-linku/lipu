@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { siteLanguage } from "$lib/state";
+	import { siteLanguage, writingSystem } from "$lib/state";
 	import type { Word } from "$lib/types";
 
 	export let word: Word;
@@ -12,7 +12,6 @@
 		CardTitle,
 	} from "$lib/components/ui/card";
 	import AudioButton from "./AudioButton.svelte";
-	import { Button } from "./ui/button";
 
 	$: sp = word.sitelen_pona?.split(" ")?.[0] ?? "";
 
@@ -50,6 +49,16 @@
 		{#if word.audio}
 			<AudioButton audio={word.audio} />
 		{/if}
-		<span title={sp} class="font-sitelen-pona">{sp}</span>
+
+		{#if $writingSystem === "sitelen_pona"}
+			<span title={sp} class="font-sitelen-pona">{sp}</span>
+		{:else if $writingSystem === "sitelen_sitelen"}
+			<img
+				src={word.sitelen_sitelen}
+				alt="{word.word} in sitelen sitelen format"
+				class="dark:invert w-16 h-16"
+				loading="lazy"
+			/>
+		{/if}
 	</CardContent>
 </Card>

@@ -12,9 +12,9 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"@iconify/json": "^2.2.139",
+		"@iconify/json": "^2.2.140",
 		"@sveltejs/adapter-auto": "^2.1.1",
-		"@sveltejs/kit": "^1.27.3",
+		"@sveltejs/kit": "^1.27.4",
 		"@typescript-eslint/eslint-plugin": "^6.10.0",
 		"@typescript-eslint/parser": "^6.10.0",
 		"clsx": "^2.0.0",
@@ -26,20 +26,21 @@
 		"mode-watcher": "^0.0.7",
 		"postcss-nesting": "^12.0.1",
 		"prettier": "^3.0.3",
-		"prettier-plugin-svelte": "^3.0.3",
-		"svelte": "^4.2.2",
-		"svelte-check": "^3.5.2",
+		"prettier-plugin-svelte": "^3.1.0",
+		"svelte": "^4.2.3",
+		"svelte-check": "^3.6.0",
 		"svelte-persisted-store": "^0.7.0",
 		"tailwind-merge": "^2.0.0",
 		"tailwind-variants": "^0.1.18",
 		"tailwindcss": "^3.3.5",
 		"tslib": "^2.6.2",
 		"typescript": "^5.2.2",
+		"unocss": "^0.57.3",
 		"unplugin-icons": "^0.17.3",
 		"vite": "^4.5.0"
 	},
 	"type": "module",
 	"dependencies": {
-		"bits-ui": "^0.9.1"
+		"bits-ui": "^0.9.3"
 	}
 }
