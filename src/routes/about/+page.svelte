@@ -153,8 +153,29 @@
 				accessible json format. It can be imported by anyone for their own needs.
 			</p>
 			<p>To import the database on your website, use this in a javascript file:</p>
-			<pre><code
-					>const bundle = await fetch("https://linku.la/jasima/data.json").then(r => r.json())</code
+			<!-- we could use a library to highlight this dynamically when the page is loaded -->
+			<!-- but this is way faster, even if a bit uglier -->
+			<pre
+				class="inline-block pointer-events-none rounded-lg p-4"
+				style="background-color: #292D3E"><code
+					><span class="line"
+						><span style="color: #C792EA">const</span><span
+							style="color: #A6ACCD"> bundle </span><span style="color: #89DDFF">=</span><span
+							style="color: #A6ACCD">&nbsp;</span
+						><span style="color: #89DDFF; font-style: italic">await</span><span
+							style="color: #A6ACCD">&nbsp;</span
+						><span style="color: #82AAFF">fetch</span><span style="color: #A6ACCD">(</span><span
+							style="color: #89DDFF">"</span
+						><span style="color: #C3E88D">https://linku.la/jasima/data.json</span><span
+							style="color: #89DDFF">"</span
+						><span style="color: #A6ACCD">)</span><span style="color: #89DDFF">.</span><span
+							style="color: #82AAFF">then</span
+						><span style="color: #A6ACCD">(r </span><span style="color: #C792EA">=&gt;</span><span
+							style="color: #A6ACCD"> r</span
+						><span style="color: #89DDFF">.</span><span style="color: #82AAFF">json</span><span
+							style="color: #A6ACCD">())</span
+						></span
+					></code
 				></pre>
 			<p>
 				Note that any changes made in the
