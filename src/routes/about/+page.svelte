@@ -1,9 +1,4 @@
 <script lang="ts">
-	import TableIcon from "~icons/lucide/table-2";
-	import RobotIcon from "~icons/mdi/robot-excited";
-	import DatabaseIcon from "~icons/lucide/database";
-	import WebIcon from "~icons/lucide/globe";
-	import DiscordIcon from "~icons/simple-icons/discord";
 	import {
 		Accordion,
 		AccordionContent,
@@ -12,10 +7,18 @@
 	} from "$lib/components/ui/accordion";
 	import { Button } from "$lib/components/ui/button";
 	import Separator from "$lib/components/ui/separator/separator.svelte";
-	import { page } from "$app/stores";
+	import DatabaseIcon from "~icons/lucide/database";
+	import WebIcon from "~icons/lucide/globe";
+	import TableIcon from "~icons/lucide/table-2";
+	import RobotIcon from "~icons/mdi/robot-excited";
+	import DiscordIcon from "~icons/simple-icons/discord";
 
 	let openAccordion: "sheet" | "bot" | "database" | "website" | undefined;
 </script>
+
+<svelte:head>
+	<title>lipu Linku &middot; About Linku</title>
+</svelte:head>
 
 <h1 class="font-medium text-4xl">About Linku</h1>
 
