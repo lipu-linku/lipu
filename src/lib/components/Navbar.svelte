@@ -76,9 +76,15 @@
 			{/each}
 		</datalist>
 
-		<DropdownMenu>
+		<DropdownMenu preventScroll={false}>
 			<DropdownMenuTrigger asChild let:builder>
-				<Button form="" builders={[builder]} variant="outline" size="icon" aria-label="Search Options">
+				<Button
+					form=""
+					builders={[builder]}
+					variant="outline"
+					size="icon"
+					aria-label="Search Options"
+				>
 					<SettingsIcon />
 				</Button>
 			</DropdownMenuTrigger>
