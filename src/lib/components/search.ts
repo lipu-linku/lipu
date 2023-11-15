@@ -8,13 +8,12 @@ import { distance } from "fastest-levenshtein";
 export const wordSearch = (
 	query: string,
 	words: Word[],
-	books: Record<BookName, boolean>,
 	categories: Record<UsageCategory, boolean>,
 	language: string = "en",
 ): Word[] => {
 	query = normalize(query);
 
-	const initialFilteredWords = words.filter((w) => books[w.book] && categories[w.usage_category]);
+	const initialFilteredWords = words.filter((w) => categories[w.usage_category]);
 
 	if (query === "") return initialFilteredWords;
 

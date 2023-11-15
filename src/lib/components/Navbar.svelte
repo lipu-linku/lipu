@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { books, categories, writingSystem } from "$lib/state";
+	import { categories, searchQuery, writingSystem } from "$lib/state";
 	import type { Word } from "$lib/types";
 	import { keys } from "$lib/utils";
 
@@ -14,25 +14,23 @@
 		DropdownMenuRadioGroup,
 		DropdownMenuRadioItem,
 		DropdownMenuSeparator,
-		DropdownMenuTrigger,
+		DropdownMenuTrigger
 	} from "$lib/components/ui/dropdown-menu";
 	import { Input } from "$lib/components/ui/input";
 	import { Skeleton } from "$lib/components/ui/skeleton";
 	import { mode, toggleMode } from "mode-watcher";
 
+	import { page } from "$app/stores";
 	import icon from "$lib/assets/icon.png";
-	import BookIcon from "~icons/lucide/book-marked";
 	import InfoIcon from "~icons/lucide/info";
 	import CategoriesIcon from "~icons/lucide/layout-dashboard";
+	import DarkModeIcon from "~icons/lucide/moon";
 	import WritingSystemIcon from "~icons/lucide/pen-tool";
 	import SearchIcon from "~icons/lucide/search";
 	import SettingsIcon from "~icons/lucide/settings";
-	import DarkModeIcon from "~icons/lucide/moon";
 	import LightModeIcon from "~icons/lucide/sun";
-	import { page } from "$app/stores";
 
 	export let words: Word[];
-	export let query = "";
 
 	const focusSearch = (e: KeyboardEvent) => {
 		if (e.key === "/" && document.activeElement?.id !== "search-input") {
@@ -67,7 +65,7 @@
 			required
 			autocapitalize="off"
 			autocomplete="off"
-			bind:value={query}
+			bind:value={$searchQuery}
 			id="search-input"
 		/>
 		<datalist id="word-search-options">
@@ -91,19 +89,6 @@
 
 			<DropdownMenuContent>
 				<DropdownMenuLabel class="text-center">Search Options</DropdownMenuLabel>
-
-				<DropdownMenuSeparator />
-
-				<DropdownMenuGroup>
-					<DropdownMenuLabel>
-						<BookIcon class="inline mr-1 w-4 h-4" />
-						<span>Books</span>
-					</DropdownMenuLabel>
-
-					{#each keys($books) as book}
-						<DropdownMenuCheckboxItem bind:checked={$books[book]}>{book}</DropdownMenuCheckboxItem>
-					{/each}
-				</DropdownMenuGroup>
 
 				<DropdownMenuSeparator />
 
@@ -149,15 +134,6 @@
 				</DropdownMenuGroup>
 			</DropdownMenuContent>
 		</DropdownMenu>
-
-		<input
-			type="hidden"
-			name="filter-books"
-			value={Object.entries($books)
-				.filter((_) => _[1])
-				.map((_) => _[0].replace(/\s/g, "-"))
-				.join(",")}
-		/>
 
 		<input
 			type="hidden"

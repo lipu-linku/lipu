@@ -4,7 +4,7 @@
 	import Entry from "$lib/components/Entry.svelte";
 
 	import { wordSearch } from "$lib/components/search";
-	import { books, categories, searchQuery } from "$lib/state";
+	import { categories, searchQuery } from "$lib/state";
 
 	export let data: PageData;
 	$: ({
@@ -14,7 +14,6 @@
 	$: sorted_filtered_dictionary = wordSearch(
 		$searchQuery,
 		Object.values(dictionary),
-		$books,
 		$categories
 	);
 </script>

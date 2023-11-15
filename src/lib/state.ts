@@ -1,17 +1,10 @@
 import { persisted } from "svelte-persisted-store/dist/index.mjs";
 import { writable } from "svelte/store";
-import type { BookName, UsageCategory } from "./types";
+import type { UsageCategory } from "./types";
 
 export const siteLanguage = persisted("langauge", "en");
 
 export const searchQuery = writable("");
-
-export const books = persisted<Record<BookName, boolean>>("books", {
-	pu: true,
-	"ku suli": true,
-	"ku lili": false,
-	none: false,
-});
 
 export const categories = persisted<Record<UsageCategory, boolean>>("usage_categories", {
 	core: true,
