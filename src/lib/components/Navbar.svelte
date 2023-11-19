@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { categories, searchQuery, writingSystem } from "$lib/state";
 	import type { Word } from "$lib/types";
-	import { keys } from "$lib/utils";
+	import { debounce, keys } from "$lib/utils";
 
 	import { Avatar, AvatarFallback, AvatarImage } from "$lib/components/ui/avatar";
 	import { Button } from "$lib/components/ui/button";
@@ -14,13 +14,15 @@
 		DropdownMenuRadioGroup,
 		DropdownMenuRadioItem,
 		DropdownMenuSeparator,
-		DropdownMenuTrigger
+		DropdownMenuTrigger,
 	} from "$lib/components/ui/dropdown-menu";
-	import { Input } from "$lib/components/ui/input";
+	import { Input, type InputEvents } from "$lib/components/ui/input";
 	import { Skeleton } from "$lib/components/ui/skeleton";
-	import { mode, toggleMode } from "mode-watcher";
 
+	import { mode, toggleMode } from "mode-watcher";
+	import { browser } from "$app/environment";
 	import { page } from "$app/stores";
+
 	import icon from "$lib/assets/icon.png";
 	import InfoIcon from "~icons/lucide/info";
 	import CategoriesIcon from "~icons/lucide/layout-dashboard";
@@ -29,6 +31,7 @@
 	import SearchIcon from "~icons/lucide/search";
 	import SettingsIcon from "~icons/lucide/settings";
 	import LightModeIcon from "~icons/lucide/sun";
+	import { goto } from "$app/navigation";
 
 	export let words: Word[];
 
@@ -36,6 +39,27 @@
 		if (e.key === "/" && document.activeElement?.id !== "search-input") {
 			e.preventDefault();
 			document.getElementById("search-input")!.focus();
+		}
+	};
+
+	const updateSearchParam = (e: InputEvents["input"]) => {
+		if (browser && window.history) {
+			const searchParams = new URLSearchParams(window.location.search);
+
+			if ($searchQuery) searchParams.set("q", $searchQuery);
+			else searchParams.delete("q");
+
+			const newUrl =
+				window.location.pathname + (searchParams.size > 0 ? "?" + searchParams.toString() : "");
+			window.history.replaceState(null, "", newUrl);
+		}
+	};
+
+	const redirectToWord = (e: SubmitEvent) => {
+		const minWordLength = 5;
+		if ($searchQuery.length >= minWordLength && words.some((w) => w.word === $searchQuery)) {
+			e.preventDefault();
+			goto(`/words/${$searchQuery}`);
 		}
 	};
 </script>
@@ -55,7 +79,12 @@
 		</h1>
 	</header>
 
-	<form class="flex-1 flex items-center gap-2" role="search" action="/search?/search">
+	<form
+		on:submit={redirectToWord}
+		class="flex-1 flex items-center gap-2"
+		role="search"
+		action="/?/search"
+	>
 		<Input
 			class="flex-1"
 			placeholder="o lukin e nimi"
@@ -66,6 +95,7 @@
 			autocapitalize="off"
 			autocomplete="off"
 			bind:value={$searchQuery}
+			on:input={debounce(updateSearchParam)}
 			id="search-input"
 		/>
 		<datalist id="word-search-options">
@@ -135,14 +165,7 @@
 			</DropdownMenuContent>
 		</DropdownMenu>
 
-		<input
-			type="hidden"
-			name="filter-categories"
-			value={Object.entries($categories)
-				.filter((_) => _[1])
-				.map((_) => _[0])
-				.join(",")}
-		/>
+		<input type="hidden" name="categories" value={JSON.stringify($categories)} />
 
 		<Button type="submit" variant="outline" size="icon">
 			<SearchIcon />

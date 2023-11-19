@@ -11,11 +11,7 @@
 		linku: { data: dictionary },
 	} = data);
 
-	$: sorted_filtered_dictionary = wordSearch(
-		$searchQuery,
-		Object.values(dictionary),
-		$categories
-	);
+	$: sorted_filtered_dictionary = wordSearch($searchQuery, Object.values(dictionary), $categories);
 </script>
 
 <svelte:head>

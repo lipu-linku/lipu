@@ -1,8 +1,8 @@
 import type { Linku } from "$lib/types";
-import { error, redirect } from "@sveltejs/kit";
+import { error } from "@sveltejs/kit";
 import type { LayoutServerLoad } from "./$types";
 
-export const load = (async ({ fetch, url, setHeaders }) => {
+export const load = (async ({ fetch }) => {
 	try {
 		const rawData = await fetch("/data").then<Linku>((res) => res.json());
 		const dictWithIds = Object.fromEntries(

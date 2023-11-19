@@ -6,7 +6,6 @@ export default {
 	content: ["./src/**/*.{html,js,svelte,ts}"],
 	safelist: ["dark"],
 	theme: {
-		
 		container: {
 			center: true,
 			padding: "2rem",
