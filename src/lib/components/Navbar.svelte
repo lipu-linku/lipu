@@ -54,14 +54,6 @@
 			window.history.replaceState(null, "", newUrl);
 		}
 	};
-
-	const redirectToWord = (e: SubmitEvent) => {
-		const minWordLength = 5;
-		if ($searchQuery.length >= minWordLength && words.some((w) => w.word === $searchQuery)) {
-			e.preventDefault();
-			goto(`/words/${$searchQuery}`);
-		}
-	};
 </script>
 
 <svelte:window on:keydown={focusSearch} />
@@ -79,12 +71,7 @@
 		</h1>
 	</header>
 
-	<form
-		on:submit={redirectToWord}
-		class="flex-1 flex items-center gap-2"
-		role="search"
-		action="/?/search"
-	>
+	<form class="flex-1 flex items-center gap-2" role="search" action="/?/search">
 		<Input
 			class="flex-1"
 			placeholder="o lukin e nimi"
