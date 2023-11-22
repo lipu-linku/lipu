@@ -1,6 +1,7 @@
 import { error } from "@sveltejs/kit";
 import type { PageServerLoad } from "./$types";
 import { distance } from "fastest-levenshtein";
+import type { Linku } from "$lib/types";
 
 export const load: PageServerLoad = async ({ params: { word }, parent }) => {
 	const {
@@ -29,4 +30,10 @@ export const load: PageServerLoad = async ({ params: { word }, parent }) => {
 	return {
 		word: wordData,
 	};
+};
+
+export const entries = async () => {
+	const rawData = await fetch("https://linku.la/jasima/data.json").then<Linku>((res) => res.json());
+
+	return Object.keys(rawData.data).map((word) => ({ word }));
 };
