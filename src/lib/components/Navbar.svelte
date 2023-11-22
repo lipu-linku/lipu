@@ -19,9 +19,9 @@
 	import { Input, type InputEvents } from "$lib/components/ui/input";
 	import { Skeleton } from "$lib/components/ui/skeleton";
 
-	import { mode, toggleMode } from "mode-watcher";
 	import { browser } from "$app/environment";
 	import { page } from "$app/stores";
+	import { mode, toggleMode } from "mode-watcher";
 
 	import icon from "$lib/assets/icon.png";
 	import InfoIcon from "~icons/lucide/info";
@@ -31,7 +31,6 @@
 	import SearchIcon from "~icons/lucide/search";
 	import SettingsIcon from "~icons/lucide/settings";
 	import LightModeIcon from "~icons/lucide/sun";
-	import { goto } from "$app/navigation";
 
 	export let words: Word[];
 

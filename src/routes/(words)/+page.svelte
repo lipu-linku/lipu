@@ -5,13 +5,20 @@
 
 	import { wordSearch } from "$lib/components/search";
 	import { categories, searchQuery } from "$lib/state";
+	import { page } from "$app/stores";
 
 	export let data: PageData;
 	$: ({
 		linku: { data: dictionary },
 	} = data);
 
-	$: sorted_filtered_dictionary = wordSearch($searchQuery, Object.values(dictionary), $categories);
+	$: wordList = $page.url.searchParams.get("list")?.split(",");
+	$: sorted_filtered_dictionary = wordSearch(
+		$searchQuery,
+		Object.values(dictionary),
+		$categories,
+		wordList
+	);
 </script>
 
 <svelte:head>

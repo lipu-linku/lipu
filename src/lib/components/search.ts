@@ -9,11 +9,14 @@ export const wordSearch = (
 	query: string,
 	words: Word[],
 	categories: Record<UsageCategory, boolean>,
+	wordList: string[] | undefined = undefined,
 	language: string = "en",
 ): Word[] => {
 	query = normalize(query);
 
-	const initialFilteredWords = words.filter((w) => categories[w.usage_category]);
+	const initialFilteredWords = words
+		.filter((w) => categories[w.usage_category])
+		.filter((w) => wordList?.includes(w.word) ?? true);
 
 	if (query === "") return initialFilteredWords;
 
