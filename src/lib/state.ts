@@ -2,12 +2,13 @@ import { persisted } from "svelte-persisted-store/dist/index.mjs";
 import { writable } from "svelte/store";
 import { localUrlStore } from "./localUrlStore";
 import type { UsageCategory } from "./types";
-import { fromEntries, keys } from "./utils";
 import { browser } from "$app/environment";
 
 export const siteLanguage = persisted("langauge", "en");
 
-export const searchQuery = writable("");
+export const searchQuery = writable(
+	browser ? new URLSearchParams(window.location.search).get("q") ?? "" : "",
+);
 
 const defaultCategories: Record<UsageCategory, boolean> = {
 	core: true,
