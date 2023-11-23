@@ -31,9 +31,3 @@ export const load: PageServerLoad = async ({ params: { word }, parent }) => {
 		word: wordData,
 	};
 };
-
-export const entries = async () => {
-	const rawData = await fetch("https://linku.la/jasima/data.json").then<Linku>((res) => res.json());
-
-	return Object.keys(rawData.data).map((word) => ({ word }));
-};
