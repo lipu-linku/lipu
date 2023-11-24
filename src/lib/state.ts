@@ -25,3 +25,5 @@ export const writingSystem = persisted<"sitelen_pona" | "sitelen_sitelen">(
 	"writing_system",
 	"sitelen_pona",
 );
+
+export const fontSentence = persisted("font_sentence", "jan li pana e moku tawa sina");

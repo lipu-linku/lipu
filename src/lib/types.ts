@@ -166,12 +166,13 @@ export type Font = {
 	writing_system: string;
 	links: {
 		fontfile: string;
-		webpage: string;
+		repo?: string;
+		webpage?: string;
 	};
-	creator: string;
-	license: string;
+	creator?: string;
+	license?: string;
 	version: string;
-	last_updated: string;
+	last_updated?: string;
 	filename: string;
 	style: string;
 	features: string;

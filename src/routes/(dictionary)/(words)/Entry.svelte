@@ -11,7 +11,7 @@
 		CardHeader,
 		CardTitle,
 	} from "$lib/components/ui/card";
-	import AudioButton from "./AudioButton.svelte";
+	import AudioButton from "$lib/components/AudioButton.svelte";
 
 	$: sp = word.sitelen_pona?.split(" ")?.[0] ?? "";
 

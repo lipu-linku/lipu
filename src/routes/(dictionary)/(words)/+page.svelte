@@ -1,7 +1,7 @@
 <script lang="ts">
 	import type { PageData } from "./$types";
 
-	import Entry from "$lib/components/Entry.svelte";
+	import Entry from "./Entry.svelte";
 
 	import { wordSearch } from "$lib/components/search";
 	import { categories, searchQuery } from "$lib/state";
@@ -17,7 +17,7 @@
 		$searchQuery,
 		Object.values(dictionary),
 		$categories,
-		wordList
+		wordList,
 	);
 </script>
 
