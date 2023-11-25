@@ -33,13 +33,13 @@
 <nav
 	class="z-10 h-16 sticky top-0 flex items-center justify-between gap-2 bg-background p-4 border-b border-b-border"
 >
-	<header class="max-sm:mx-auto">
-		<Button class="px-3 py-3" variant="ghost" href="/">
+	<header class="mx-3 max-sm:mx-auto">
+		<a href="/">
 			<h1 class="flex items-center gap-4 my-0 sm:ml-auto">
 				<img src={icon} class="h-8 invert dark:invert-0" alt="lipu Linku" />
 				<span class="text-current font-semibold">lipu Linku</span>
 			</h1>
-		</Button>
+		</a>
 	</header>
 
 	<Separator orientation="vertical" />

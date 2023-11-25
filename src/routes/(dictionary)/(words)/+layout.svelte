@@ -53,7 +53,7 @@
 <svelte:window on:keydown={focusSearch} />
 
 <Navbar>
-	<form class="w-full flex items-center gap-2" role="search" action="/?/search">
+	<form class="ml-auto flex items-center gap-2" role="search" action="/?/search">
 		<Input
 			class="flex-1"
 			placeholder="o lukin e nimi"
