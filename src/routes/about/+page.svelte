@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { browser } from "$app/environment";
 	import {
 		Accordion,
 		AccordionContent,
@@ -14,6 +15,16 @@
 	import DiscordIcon from "~icons/simple-icons/discord";
 
 	let openAccordion: "sheet" | "bot" | "database" | "website" | undefined;
+
+	$: {
+		if (openAccordion && browser)
+			window.scrollTo({
+				top: 0,
+				behavior: window.matchMedia("(prefers-reduced-motion: no-preference)").matches
+					? "smooth"
+					: "auto",
+			});
+	}
 </script>
 
 <svelte:head>

@@ -7,7 +7,7 @@ export function keys<T extends object>(o: T): (keyof T)[] {
 	return Object.keys(o) as (keyof T)[];
 }
 
-export function entries<K extends PropertyKey, V>(obj: Record<K, V>): [K, V][] {
+export function entries<K extends string, V>(obj: Record<K, V>): [K, V][] {
 	return Object.entries(obj) as [K, V][];
 }
 

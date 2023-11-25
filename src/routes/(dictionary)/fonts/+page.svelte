@@ -7,6 +7,7 @@
 	import { Button } from "$lib/components/ui/button";
 
 	import CloseIcon from "~icons/lucide/x";
+	import { entries } from "$lib/utils";
 
 	export let data;
 	$: ({
@@ -23,7 +24,7 @@
 
 	<main class="w-full p-4 grid grid-cols-[70%_30%] gap-2">
 		<ul class="flex flex-col gap-2">
-			{#each Object.entries(fonts) as [name, font] (name)}
+			{#each entries(fonts) as [name, font] (name)}
 				<li>
 					<FontEntry fontName={name} {font} />
 				</li>

@@ -7,13 +7,14 @@
 		CardHeader,
 		CardTitle,
 	} from "$lib/components/ui/card";
-	import type { Font } from "$lib/types";
 	import { fontSentence } from "$lib/state";
-  import IntersectionObserver from "svelte-intersection-observer"l
+	import type { Font } from "$lib/types";
+	import { flyAndScale } from "$lib/utils";
+	import IntersectionObserver from "svelte-intersection-observer";
 
-	import WebIcon from "~icons/lucide/globe";
-	import RepoIcon from "~icons/lucide/file-code";
 	import DownloadIcon from "~icons/lucide/download";
+	import RepoIcon from "~icons/lucide/file-code";
+	import WebIcon from "~icons/lucide/globe";
 
 	export let fontName: string;
 	export let font: Font;
@@ -32,18 +33,20 @@
 		.filter((s) => !s.includes("undefined"))
 		.join(" · ");
 
+	let cardElement: HTMLDivElement;
+
 	const loadFont = async () => {
 		const fontFace = new FontFace(
 			font.name_short,
-			await fetch(font.links.fontfile).then((r) => r.arrayBuffer()),
+			`url(https://raw.githubusercontent.com/lipu-linku/nasin-sitelen/main/${font.filename})`,
 		);
 		await fontFace.load();
 		document.fonts.add(fontFace);
 	};
 </script>
 
-<IntersectionObserver>
-	<Card>
+<IntersectionObserver once element={cardElement} let:intersecting>
+	<Card bind:thisEl={cardElement}>
 		<CardHeader class="relative">
 			<CardTitle>{fontName}</CardTitle>
 			<CardDescription>{fontDescription}</CardDescription>
@@ -76,12 +79,20 @@
 			</nav>
 		</CardHeader>
 
-		<CardContent class="text-4xl" style="font-family: '{font.name_short}'">
-			{#await loadFont() then _}
-				{$fontSentence}
-			{:catch}
-				The font failed to load.
-			{/await}
+		<CardContent class="text-3xl">
+			{#if intersecting}
+				{#await loadFont()}
+					Loading...
+				{:then}
+					<span transition:flyAndScale={{ y: 10 }} style="font-family: '{font.name_short}'">
+						{$fontSentence}
+					</span>
+				{:catch}
+					The font failed to load.
+				{/await}
+			{:else}
+				Loading...
+			{/if}
 		</CardContent>
 	</Card>
 </IntersectionObserver>
