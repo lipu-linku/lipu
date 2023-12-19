@@ -24,7 +24,7 @@ export const load: PageServerLoad = async ({ params: { word }, parent }) => {
 		// prioritize kijetesantakalu for long queries
 		if (word.length >= 15) closest.push("kijetesantakalu");
 
-		throw error(404, { message: `Word not found!`, closest });
+		error(404, { message: `Word not found!`, closest });
 	}
 
 	return {

@@ -11,7 +11,7 @@ export const load = (async ({ fetch }) => {
 
 		return { linku: { ...rawData, data: dictWithIds } };
 	} catch {
-		throw error(500, {
+		error(500, {
 			message: "Dictionary data could not be receieved!",
 		});
 	}
