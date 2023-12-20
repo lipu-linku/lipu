@@ -3,7 +3,7 @@
 	import { Button } from "$lib/components/ui/button";
 </script>
 
-<main class="min-h-screen flex flex-col items-center justify-center gap-4 max-w-[33%] mx-auto">
+<main class="min-h-dvh flex flex-col items-center justify-center gap-4 max-w-[33%] mx-auto">
 	<h1 class="text-5xl font-semibold">Error {$page.status}</h1>
 	<p class="text-xl">{$page.error?.message}</p>
 

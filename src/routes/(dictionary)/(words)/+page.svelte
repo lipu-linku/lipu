@@ -26,7 +26,9 @@
 </svelte:head>
 
 <main class="flex-1 my-2">
-	<ul class="flex-1 flex flex-col items-stretch gap-2 mx-auto max-w-[60%]">
+	<ul
+		class="flex-1 flex flex-col items-stretch gap-2 mx-auto max-w-[min(1000px,clamp(60%,400px,100%_-_3rem))]"
+	>
 		{#each sorted_filtered_dictionary as word (word.id)}
 			<li>
 				<Entry {word} />

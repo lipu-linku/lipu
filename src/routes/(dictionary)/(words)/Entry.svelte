@@ -19,7 +19,7 @@
 	$: usageScore = Object.values(word.recognition ?? {}).at(-1) ?? "0";
 </script>
 
-<Card class="flex justify-between [&:has(a:hover)]:border-zinc-300 transition-colors">
+<Card class="flex justify-between has-[a:hover]:border-zinc-300 transition-colors">
 	<a href="/words/{word.word}" class="flex-1">
 		<CardHeader>
 			<CardTitle>{word.word}</CardTitle>
@@ -56,7 +56,7 @@
 			<img
 				src={word.sitelen_sitelen}
 				alt="{word.word} in sitelen sitelen format"
-				class="dark:invert w-16 h-16"
+				class="dark:invert size-16"
 				loading="lazy"
 			/>
 		{/if}
