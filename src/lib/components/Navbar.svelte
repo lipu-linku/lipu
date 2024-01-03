@@ -1,19 +1,17 @@
 <script lang="ts">
-	import { Avatar, AvatarFallback, AvatarImage } from "$lib/components/ui/avatar";
 	import { Button } from "$lib/components/ui/button";
-	import { Skeleton } from "$lib/components/ui/skeleton";
+	import { Separator } from "$lib/components/ui/separator";
 
 	import { mode, toggleMode } from "mode-watcher";
 	import type { SvelteComponent } from "svelte";
 	import type { SvelteHTMLElements } from "svelte/elements";
 
 	import icon from "$lib/assets/icon.png";
+	import { entries } from "$lib/utils";
 	import InfoIcon from "~icons/lucide/info";
 	import DarkModeIcon from "~icons/lucide/moon";
 	import LightModeIcon from "~icons/lucide/sun";
 	import FontsIcon from "~icons/mdi/format-font";
-	import { entries } from "$lib/utils";
-	import { Separator } from "./ui/separator";
 
 	type NavbarLink = {
 		href: string;

@@ -7,7 +7,7 @@
 		AccordionTrigger,
 	} from "$lib/components/ui/accordion";
 	import { Button } from "$lib/components/ui/button";
-	import Separator from "$lib/components/ui/separator/separator.svelte";
+	import { Separator } from "$lib/components/ui/separator";
 	import TableIcon from "~icons/lucide/table-2";
 	import WebIcon from "~icons/lucide/globe";
 	import LanguagesIcon from "~icons/lucide/languages";

@@ -13,6 +13,7 @@
 		DropdownMenuTrigger,
 	} from "$lib/components/ui/dropdown-menu";
 	import { Tooltip, TooltipContent, TooltipTrigger } from "$lib/components/ui/tooltip";
+	import { language } from "$lib/state";
 	import BackIcon from "~icons/lucide/arrow-left";
 	import CopyIcon from "~icons/lucide/copy";
 	import InfoIcon from "~icons/lucide/info";
@@ -80,7 +81,7 @@
 			<CardContent class="flex flex-col gap-3">
 				<div class="flex flex-col justify-center gap-2">
 					<h3 class="font-medium text-xl">Common Definition</h3>
-					<p>{word.def.en}</p>
+					<p>{word.def[$language]}</p>
 				</div>
 
 				{#if word.ku_data}
@@ -109,13 +110,12 @@
 					<div class="flex flex-col justify-center gap-2">
 						<h3 class="font-medium text-xl">pu definition</h3>
 						<ul>
-							{#each word.pu_verbatim.en.split("\n") as line}
-								{@const partOfSpeech = line.split(" ")[0]}
-								{@const definition = line.slice(partOfSpeech.length + 1)}
+							{#each word.pu_verbatim[$language].split("\n") as line}
+								{@const [partOfSpeech, ...definition] = line.split(" ")}
 
 								<li>
 									<span class="text-muted-foreground">{partOfSpeech}</span>
-									{definition}
+									{definition.join(" ")}
 								</li>
 							{/each}
 						</ul>

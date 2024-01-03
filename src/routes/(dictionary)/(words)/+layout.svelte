@@ -3,6 +3,7 @@
 	import { page } from "$app/stores";
 
 	import Navbar from "$lib/components/Navbar.svelte";
+	import LanguageSwitch from "$lib/components/LanguageSwitch.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import {
 		DropdownMenu,
@@ -26,7 +27,7 @@
 
 	export let data;
 	$: ({
-		linku: { data: dictionary },
+		linku: { data: dictionary, languages },
 	} = data);
 
 	const focusSearch = (e: KeyboardEvent) => {
@@ -140,6 +141,8 @@
 			<SearchIcon />
 		</Button>
 	</form>
+
+	<LanguageSwitch localeList={languages} />
 </Navbar>
 
 <slot />

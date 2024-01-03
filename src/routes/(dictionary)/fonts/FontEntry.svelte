@@ -22,7 +22,7 @@
 	$: lastUpdatedDate = font.last_updated
 		? Intl.DateTimeFormat("en", { month: "long", year: "numeric" }).format(
 				new Date(font.last_updated),
-		  )
+			)
 		: undefined;
 
 	$: fontDescription = [
@@ -85,7 +85,7 @@
 					Loading...
 				{:then}
 					<span transition:flyAndScale={{ y: 10 }} style="font-family: '{font.name_short}'">
-						{$fontSentence}
+						{$fontSentence.trim()}
 					</span>
 				{:catch}
 					The font failed to load.

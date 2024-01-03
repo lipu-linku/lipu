@@ -4,7 +4,7 @@
 	import Entry from "./Entry.svelte";
 
 	import { wordSearch } from "$lib/components/search";
-	import { categories, searchQuery } from "$lib/state";
+	import { categories, language, searchQuery } from "$lib/state";
 	import { page } from "$app/stores";
 
 	export let data: PageData;
@@ -18,6 +18,7 @@
 		Object.values(dictionary),
 		$categories,
 		wordList,
+		$language,
 	);
 </script>
 

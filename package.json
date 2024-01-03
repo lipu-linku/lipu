@@ -12,13 +12,13 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"@iconify/json": "^2.2.160",
+		"@iconify/json": "^2.2.163",
 		"@sveltejs/adapter-auto": "^3.0.1",
-		"@sveltejs/kit": "^2.0.4",
+		"@sveltejs/kit": "^2.0.6",
 		"@sveltejs/vite-plugin-svelte": "^3.0.1",
-		"@typescript-eslint/eslint-plugin": "^6.15.0",
-		"@typescript-eslint/parser": "^6.15.0",
-		"clsx": "^2.0.0",
+		"@typescript-eslint/eslint-plugin": "^6.17.0",
+		"@typescript-eslint/parser": "^6.17.0",
+		"clsx": "^2.1.0",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.35.1",
@@ -32,7 +32,7 @@
 		"svelte-check": "^3.6.2",
 		"svelte-intersection-observer": "^0.10.1",
 		"svelte-persisted-store": "^0.8.0",
-		"tailwind-merge": "^2.1.0",
+		"tailwind-merge": "^2.2.0",
 		"tailwind-variants": "^0.1.19",
 		"tailwindcss": "^3.4.0",
 		"tslib": "^2.6.2",
@@ -42,6 +42,6 @@
 	},
 	"type": "module",
 	"dependencies": {
-		"bits-ui": "^0.11.8"
+		"bits-ui": "^0.13.0"
 	}
 }

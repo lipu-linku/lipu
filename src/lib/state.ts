@@ -4,7 +4,14 @@ import { localUrlStore } from "./localUrlStore";
 import type { UsageCategory } from "./types";
 import { browser } from "$app/environment";
 
-export const siteLanguage = persisted("langauge", "en");
+export const language = localUrlStore(
+	"lang",
+	browser ? navigator.language || navigator.languages[0] : "en",
+	{
+		encode: (l) => l,
+		decode: (l) => l,
+	},
+);
 
 export const searchQuery = writable(
 	browser ? new URLSearchParams(window.location.search).get("q") ?? "" : "",

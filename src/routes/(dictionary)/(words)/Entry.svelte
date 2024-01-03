@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { siteLanguage, writingSystem } from "$lib/state";
+	import { language, writingSystem } from "$lib/state";
 	import type { Word } from "$lib/types";
 
 	export let word: Word;
@@ -15,11 +15,11 @@
 
 	$: sp = word.sitelen_pona?.split(" ")?.[0] ?? "";
 
-	$: definition = word.def[$siteLanguage] ?? "(en) " + word.def["en"];
+	$: definition = word.def[$language] ?? "(en) " + word.def["en"];
 	$: usageScore = Object.values(word.recognition ?? {}).at(-1) ?? "0";
 </script>
 
-<Card class="flex justify-between has-[a:hover]:border-zinc-300 transition-colors">
+<Card id={word.id} class="flex justify-between has-[a:hover]:border-zinc-300 transition-colors">
 	<a href="/words/{word.word}" class="flex-1">
 		<CardHeader>
 			<CardTitle>{word.word}</CardTitle>

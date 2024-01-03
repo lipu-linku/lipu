@@ -1,7 +1,6 @@
 import { error } from "@sveltejs/kit";
-import type { PageServerLoad } from "./$types";
 import { distance } from "fastest-levenshtein";
-import type { Linku } from "$lib/types";
+import type { PageServerLoad } from "./$types";
 
 export const load: PageServerLoad = async ({ params: { word }, parent }) => {
 	const {
