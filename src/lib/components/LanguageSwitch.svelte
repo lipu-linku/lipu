@@ -14,7 +14,7 @@
 		buttonVariants.base,
 		buttonVariants.variants.variant.outline,
 		buttonVariants.variants.size.default,
-		"w-48 overflow-ellipsis"
+		"w-48 overflow-ellipsis",
 	)}
 	bind:value={$language}
 >
@@ -22,7 +22,3 @@
 		<option value={locale}>{language.name_endonym}</option>
 	{/each}
 </select>
-
-<Button variant="outline" size="icon" aria-label="Select language">
-	<LanguagesIcon aria-label="Languages icon" />
-</Button>
