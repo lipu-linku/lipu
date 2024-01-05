@@ -1,24 +1,43 @@
 <script lang="ts">
-	import { Button, buttonVariants } from "$lib/components/ui/button";
+	import * as Select from "$lib/components/ui/select";
 	import { language } from "$lib/state";
-	import type { Linku } from "$lib/types";
 	import { entries } from "$lib/utils";
-	import clsx from "clsx";
+	import type { Linku } from "$lib/types";
 	import LanguagesIcon from "~icons/lucide/languages";
 
 	export let localeList: Linku["languages"];
+
+	$: items = Object.entries(localeList).map(([locale, lang]) => ({
+		value: locale,
+		label: lang.name_endonym,
+	}));
+
+	$: selected = items.find(({ value }) => value === $language)!;
 </script>
 
-<select
-	class={clsx(
-		buttonVariants.base,
-		buttonVariants.variants.variant.outline,
-		buttonVariants.variants.size.default,
-		"w-48 overflow-ellipsis",
-	)}
-	bind:value={$language}
+<Select.Root
+	{items}
+	{selected}
+	onSelectedChange={(item) => {
+		if (item) {
+			$language = item.value;
+		}
+	}}
 >
-	{#each entries(localeList) as [locale, language] (locale)}
-		<option value={locale}>{language.name_endonym}</option>
-	{/each}
-</select>
+	<Select.Trigger class="max-w-48 w-auto justify-start gap-2">
+		<LanguagesIcon class="size-4" />
+		<Select.Value class="line-clamp-1 overflow-ellipsis">
+			{localeList[$language].name_endonym}
+		</Select.Value>
+	</Select.Trigger>
+
+	<Select.Content sameWidth={false} class="max-h-[50dvh] overflow-y-scroll">
+		{#each entries(localeList) as [locale, language] (locale)}
+			<Select.Item label={language.name_endonym} value={locale}>
+				{language.name_endonym}
+			</Select.Item>
+		{/each}
+	</Select.Content>
+
+	<Select.Input />
+</Select.Root>
