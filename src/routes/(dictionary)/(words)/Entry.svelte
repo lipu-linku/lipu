@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { language, writingSystem } from "$lib/state";
-	import type { Word } from "$lib/types";
+	import type { UsageCategory, Word } from "$lib/types";
 
 	export let word: Word;
 
@@ -17,9 +17,25 @@
 
 	$: definition = word.def[$language] ?? "(en) " + word.def["en"];
 	$: usageScore = Object.values(word.recognition ?? {}).at(-1) ?? "0";
+
+	const categoryColors = {
+		core: "oklch(93.29% 0.137 106.54)",
+		widespread: "oklch(76.59% 0.169 65.75)",
+		common: "oklch(61.15% 0.177 30.62)",
+		uncommon: "oklch(46.87% 0.159 351.1)",
+		rare: "oklch(32.72% 0.149 311.74)",
+		obscure: "oklch(20.55% 0.052 284.53)",
+	} as const satisfies Record<UsageCategory, string>;
 </script>
 
-<Card id={word.id} class="flex justify-between has-[a:hover]:border-zinc-300 transition-colors">
+<Card
+	id={word.id}
+	class="
+		flex justify-between border-2 has-[a:hover]:border-zinc-300 transition-colors
+		relative before:absolute before:w-1 before:transition-[width] has-[a:hover]:before:w-2 before:rounded-s-md before:inset-y-0 before:bg-[--category-color]
+	"
+	--category-color={categoryColors[word.usage_category]}
+>
 	<a href="/words/{word.word}" class="flex-1">
 		<CardHeader>
 			<CardTitle>{word.word}</CardTitle>
