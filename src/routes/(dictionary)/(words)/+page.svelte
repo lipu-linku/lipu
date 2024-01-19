@@ -12,13 +12,15 @@
 		linku: { data: dictionary },
 	} = data);
 
+	$: categoriesParam = $page.url.searchParams.get("categories");
+
 	$: wordList = $page.url.searchParams.get("list")?.split(",");
 	$: sorted_filtered_dictionary = wordSearch(
-		$searchQuery,
+		$page.url.searchParams.get("q") ?? $searchQuery,
 		Object.values(dictionary),
-		$categories,
+		categoriesParam ? JSON.parse(categoriesParam) : $categories,
 		wordList,
-		$language,
+		$page.url.searchParams.get("lang") ?? $language,
 	);
 </script>
 

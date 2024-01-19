@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { browser } from "$app/environment";
 	import { page } from "$app/stores";
 
 	import LanguageSwitch from "$lib/components/LanguageSwitch.svelte";
@@ -10,20 +9,24 @@
 		DropdownMenuCheckboxItem,
 		DropdownMenuContent,
 		DropdownMenuGroup,
+		DropdownMenuItem,
 		DropdownMenuLabel,
 		DropdownMenuRadioGroup,
 		DropdownMenuRadioItem,
 		DropdownMenuSeparator,
 		DropdownMenuTrigger,
-	} from "$lib/components/ui/dropdown-menu/index";
-	import { Input, type InputEvents } from "$lib/components/ui/input";
-	import { categories, searchQuery, writingSystem } from "$lib/state";
-	import { debounce, keys } from "$lib/utils";
+	} from "$lib/components/ui/dropdown-menu";
+	import { Input } from "$lib/components/ui/input";
+	import { categories, defaultCategories, searchQuery, writingSystem } from "$lib/state";
+	import { keys } from "$lib/utils";
 
+	import CheckIcon from "~icons/lucide/check";
 	import CategoriesIcon from "~icons/lucide/layout-dashboard";
+	import LinkIcon from "~icons/lucide/link";
 	import WritingSystemIcon from "~icons/lucide/pen-tool";
 	import SearchIcon from "~icons/lucide/search";
 	import SettingsIcon from "~icons/lucide/settings";
+	import ResetIcon from "~icons/lucide/undo-2";
 
 	export let data;
 	$: ({
@@ -37,17 +40,25 @@
 		}
 	};
 
-	const updateSearchParam = (e: InputEvents["input"]) => {
-		if (browser && window.history) {
-			const searchParams = new URLSearchParams(window.location.search);
+	let hasCopied = false;
+	const copyLinkWithParams = () => {
+		const url = $page.url;
+		url.searchParams.set("categories", JSON.stringify($categories));
+		url.searchParams.set("q", $searchQuery);
 
-			if ($searchQuery) searchParams.set("q", $searchQuery);
-			else searchParams.delete("q");
+		navigator.clipboard.writeText(url.toString());
+		hasCopied = true;
+	};
 
-			const newUrl =
-				window.location.pathname + (searchParams.size > 0 ? "?" + searchParams.toString() : "");
-			window.history.replaceState(null, "", newUrl);
+	$: {
+		if (hasCopied) {
+			setTimeout(() => (hasCopied = false), 2.5 * 1000);
 		}
+	}
+
+	const resetOptions = () => {
+		$searchQuery = "";
+		$categories = defaultCategories;
 	};
 </script>
 
@@ -64,7 +75,6 @@
 			autocapitalize="off"
 			autocomplete="off"
 			bind:value={$searchQuery}
-			on:input={debounce(updateSearchParam)}
 			id="search-input"
 		/>
 
@@ -88,7 +98,7 @@
 
 				<DropdownMenuGroup>
 					<DropdownMenuLabel>
-						<CategoriesIcon class="inline mr-1 w-4 h-4" />
+						<CategoriesIcon class="inline mr-1 size-4" />
 						<span>Usage Categories</span>
 					</DropdownMenuLabel>
 
@@ -107,7 +117,7 @@
 							? `opacity-50 pointer-events-none`
 							: ""}
 					>
-						<WritingSystemIcon class="inline mr-1 w-4 h-4" />
+						<WritingSystemIcon class="inline mr-1 size-4" />
 						<span>Writing System</span>
 					</DropdownMenuLabel>
 
@@ -126,6 +136,18 @@
 						</DropdownMenuRadioItem>
 					</DropdownMenuRadioGroup>
 				</DropdownMenuGroup>
+
+				<DropdownMenuSeparator />
+
+				<DropdownMenuItem class="font-semibold" on:click={copyLinkWithParams}>
+					<svelte:component this={!hasCopied ? LinkIcon : CheckIcon} class="inline mr-2 size-4" />
+					<span>Copy Permalink</span>
+				</DropdownMenuItem>
+
+				<DropdownMenuItem class="font-semibold" on:click={resetOptions}>
+					<ResetIcon class="inline mr-2 size-4" />
+					<span>Reset Options</span>
+				</DropdownMenuItem>
 			</DropdownMenuContent>
 		</DropdownMenu>
 

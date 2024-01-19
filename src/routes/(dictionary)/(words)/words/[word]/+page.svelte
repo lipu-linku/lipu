@@ -60,7 +60,7 @@
 					<DropdownMenuSeparator />
 
 					<DropdownMenuItem on:click={() => navigator.clipboard.writeText($page.url.toString())}>
-						<CopyIcon class="inline mr-2 w-4 h-4" />
+						<CopyIcon class="inline mr-2 size-4" />
 						Copy URL
 					</DropdownMenuItem>
 
@@ -92,7 +92,7 @@
 								<TooltipTrigger
 									class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
 								>
-									<InfoIcon class="w-4 h-4 " />
+									<InfoIcon class="size-4 " />
 								</TooltipTrigger>
 								<TooltipContent class="max-w-[min(55ch,80%)]">
 									Each ku definition is assigned a frequency index from ½ to 5, which describes how
@@ -163,7 +163,7 @@
 								href="https://www.kreativekorp.com/ucsur/charts/sitelen.html"
 								target="_blank"
 							>
-								<InfoIcon class="align-middle w-4 h-4" />
+								<InfoIcon class="align-middle size-4" />
 							</a>
 						</h3>
 

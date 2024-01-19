@@ -7,7 +7,7 @@ export function keys<T extends object>(o: T): (keyof T)[] {
 	return Object.keys(o) as (keyof T)[];
 }
 
-export function entries<K extends string, V>(obj: Record<K, V>): [K, V][] {
+export function entries<K extends PropertyKey, V>(obj: Record<K, V>): [K, V][] {
 	return Object.entries(obj) as [K, V][];
 }
 
@@ -28,15 +28,6 @@ export const normalize = (str: string) =>
 		.replace(/[\u0300-\u036f]/g, "")
 		.toLocaleLowerCase()
 		.trim();
-
-export const debounce = <T extends (...args: any[]) => any>(callback: T, wait = 300) => {
-	let timeout: ReturnType<typeof setTimeout>;
-
-	return (...args: Parameters<T>) => {
-		clearTimeout(timeout);
-		timeout = setTimeout(() => callback(...args), wait);
-	};
-};
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
