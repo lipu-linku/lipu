@@ -54,9 +54,9 @@
 <svelte:window on:keydown={focusSearch} />
 
 <Navbar>
-	<form class="ml-auto flex items-center gap-2" role="search" action="/?/search">
+	<form class="ml-auto flex items-center gap-2 flex-1" role="search" action="/?/search">
 		<Input
-			class="flex-1"
+			class="w-auto mx-auto"
 			placeholder="o lukin e nimi"
 			type="search"
 			name="q"
@@ -68,7 +68,7 @@
 			id="search-input"
 		/>
 
-		<DropdownMenu preventScroll={false}>
+		<DropdownMenu closeOnItemClick={false} preventScroll={false}>
 			<DropdownMenuTrigger asChild let:builder>
 				<Button
 					form=""
