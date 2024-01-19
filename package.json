@@ -13,7 +13,7 @@
 	},
 	"devDependencies": {
 		"@iconify/json": "^2.2.166",
-		"@sveltejs/adapter-auto": "^3.1.0",
+		"@sveltejs/adapter-cloudflare": "^4.1.0",
 		"@sveltejs/kit": "^2.0.6",
 		"@sveltejs/vite-plugin-svelte": "^3.0.1",
 		"@typescript-eslint/eslint-plugin": "^6.18.0",
