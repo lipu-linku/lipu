@@ -1,6 +1,6 @@
+import tailwindcss from "tailwindcss";
+import tailwindNesting from "tailwindcss/nesting/index.js";
+
 export default {
-  plugins: {
-    tailwindcss: {},
-    autoprefixer: {},
-  },
-}
+	plugins: [tailwindNesting("postcss-nesting"), tailwindcss()],
+};

@@ -1,118 +1,71 @@
-<script>
-    export let query;
-    export let lightmode;
-    export let selected_language;
-    export let selected_view;
-    export let languages;
+<script lang="ts">
+	import { Button } from "$lib/components/ui/button";
+	import { Separator } from "$lib/components/ui/separator";
 
-    import Searchbar from './Searchbar.svelte';
-    import LightmodeCheckbox from './LightmodeCheckbox.svelte';
-    import LanguageSelector from './LanguageSelector.svelte';
-    import ViewSelector from './ViewSelector.svelte';
+	import { mode, toggleMode } from "mode-watcher";
+	import type { SvelteComponent } from "svelte";
+	import type { SvelteHTMLElements } from "svelte/elements";
 
-    import ijo_a from '$lib/assets/ijo-a.png';
-    import icon from '$lib/assets/icon.png';
+	import icon from "$lib/assets/icon.png";
+	import { entries } from "$lib/utils";
+	import InfoIcon from "~icons/lucide/info";
+	import DarkModeIcon from "~icons/lucide/moon";
+	import LightModeIcon from "~icons/lucide/sun";
+	import FontsIcon from "~icons/mdi/format-font";
+
+	type NavbarLink = {
+		href: string;
+		label: string;
+		icon: typeof SvelteComponent<SvelteHTMLElements["svg"]>;
+	};
+
+	const links: Record<string, NavbarLink> = {
+		fonts: {
+			href: "/fonts",
+			label: "Fonts",
+			icon: FontsIcon,
+		},
+	} as const;
 </script>
 
-<nav>
-    <div class="logo">
-        <img src={icon} alt="lipu Linku" />
-        lipu Linku
-    </div>
+<nav
+	class="z-10 h-16 sticky top-0 flex items-center justify-between gap-2 bg-background p-4 border-b border-b-border"
+>
+	<header class="mx-3 max-sm:mx-auto">
+		<a href="/">
+			<h1 class="flex items-center gap-4 my-0 sm:ml-auto">
+				<img src={icon} class="h-8 invert dark:invert-0" alt="lipu Linku" />
+				<span class="text-current font-semibold">lipu Linku</span>
+			</h1>
+		</a>
+	</header>
 
-    <div class="search_container">
-        <Searchbar bind:query />
-        <button id="normal_mode_button" onclick="normal_mode()">
-            Back to Dictionary
-        </button>
-    </div>
+	<Separator orientation="vertical" />
 
-    <div>
-        <LightmodeCheckbox bind:lightmode />
-        <ViewSelector bind:selected_view />
-        <LanguageSelector bind:selected_language {languages} />
+	<ul>
+		{#each entries(links) as [id, link] (id)}
+			<li>
+				<Button class="flex items-center gap-[1ch]" variant="ghost" href={link.href}>
+					<svelte:component this={link.icon} />
+					<span>{link.label}</span>
+				</Button>
+			</li>
+		{/each}
+	</ul>
 
-        <a href="about" title="About Linku">
-            <img src={ijo_a} alt="About Linku" />
-        </a>
-    </div>
+	<div class="flex-1 flex items-center gap-2">
+		<slot />
+	</div>
+
+	<Button variant="outline" size="icon" on:click={toggleMode} aria-label="Toggle theme">
+		{#if $mode === "light"}
+			<DarkModeIcon />
+		{:else}
+			<LightModeIcon />
+		{/if}
+	</Button>
+
+	<Button variant="outline" size="icon" href="/about" aria-label="About Linku">
+		<InfoIcon />
+	</Button>
 </nav>
-
-<style>
-    nav {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        gap: 1rem;
-        position: sticky;
-        padding: 0.5rem 1rem;
-        top: 0;
-        z-index: 1;
-        background-color: var(--bg-color);
-        border-bottom: 1px solid var(--border-color);
-    }
-
-    nav > div {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-
-    nav > :last-child {
-        justify-content: end;
-    }
-
-    nav img {
-        width: 2rem;
-        height: 2rem;
-        display: block;
-    }
-    :global(.lightmode) img {
-        filter: invert(100%);
-    }
-
-    .search_container {
-        max-width: 20rem;
-        flex-basis: 100%;
-        flex-shrink: 0;
-    }
-
-    #normal_mode_button {
-        font: inherit;
-        color: inherit;
-        display: none;
-        background: var(--bg-alt-color);
-        border: 1px solid var(--border-color);
-        border-radius: 0.25rem;
-        margin: 0 auto;
-        padding: 0.25rem 0.5rem;
-        cursor: pointer;
-        transition: background 0.2s, color 0.2s, border-color 0.2s;
-    }
-    #normal_mode_button:hover {
-        background: var(--highlight-color);
-        border-color: var(--highlight-color);
-        color: var(--bg-color);
-    }
-
-    @media screen and (max-width: 680px) {
-        nav {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-areas: "logo" "buttons" "search";
-            gap: 0.5rem;
-            top: -3rem;
-        }
-
-        nav > :first-child {
-            white-space: nowrap;
-        }
-
-        nav > .search_container {
-            grid-area: search;
-            grid-column: 1 / -1;
-            max-width: 100%;
-        }
-    }
-</style>
