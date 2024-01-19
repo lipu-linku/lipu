@@ -107,10 +107,11 @@
 				{/if}
 
 				{#if word.pu_verbatim}
+					{@const puLanguage = word.pu_verbatim[$language] ? $language : "en"}
 					<div class="flex flex-col justify-center gap-2">
 						<h3 class="font-medium text-xl">pu definition</h3>
 						<ul>
-							{#each word.pu_verbatim[$language].split("\n") as line}
+							{#each word.pu_verbatim[puLanguage].split("\n") as line}
 								{@const [partOfSpeech, ...definition] = line.split(" ")}
 
 								<li>
