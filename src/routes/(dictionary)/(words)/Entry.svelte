@@ -66,15 +66,17 @@
 			<AudioButton audio={word.audio} />
 		{/if}
 
-		{#if $writingSystem === "sitelen_pona"}
-			<span title={sp} class="font-sitelen-pona">{sp}</span>
-		{:else if $writingSystem === "sitelen_sitelen"}
+		{#if $writingSystem === "sitelen_pona" && word.sitelen_pona}
+			<span title={sp} class="text-center min-w-14 font-sitelen-pona">{sp}</span>
+		{:else if $writingSystem === "sitelen_sitelen" && word.sitelen_sitelen}
 			<img
 				src={word.sitelen_sitelen}
 				alt="{word.word} in sitelen sitelen format"
 				class="dark:invert size-16"
 				loading="lazy"
 			/>
+		{:else}
+			<span class="min-w-14" aria-hidden="true"></span>
 		{/if}
 	</CardContent>
 </Card>

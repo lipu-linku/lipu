@@ -2,8 +2,8 @@
 	import { browser } from "$app/environment";
 	import { page } from "$app/stores";
 
-	import Navbar from "$lib/components/Navbar.svelte";
 	import LanguageSwitch from "$lib/components/LanguageSwitch.svelte";
+	import Navbar from "$lib/components/Navbar.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import {
 		DropdownMenu,
@@ -27,7 +27,7 @@
 
 	export let data;
 	$: ({
-		linku: { data: dictionary, languages },
+		linku: { languages },
 	} = data);
 
 	const focusSearch = (e: KeyboardEvent) => {
@@ -58,7 +58,6 @@
 		<Input
 			class="flex-1"
 			placeholder="o lukin e nimi"
-			list="word-search-options"
 			type="search"
 			name="q"
 			required
@@ -68,11 +67,6 @@
 			on:input={debounce(updateSearchParam)}
 			id="search-input"
 		/>
-		<datalist id="word-search-options">
-			{#each Object.values(dictionary) as word}
-				<option value={word.word} />
-			{/each}
-		</datalist>
 
 		<DropdownMenu preventScroll={false}>
 			<DropdownMenuTrigger asChild let:builder>
