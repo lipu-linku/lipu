@@ -12,36 +12,36 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"@iconify/json": "^2.2.166",
+		"@iconify/json": "^2.2.177",
 		"@sveltejs/adapter-cloudflare": "^4.1.0",
-		"@sveltejs/kit": "^2.0.6",
-		"@sveltejs/vite-plugin-svelte": "^3.0.1",
-		"@typescript-eslint/eslint-plugin": "^6.18.0",
-		"@typescript-eslint/parser": "^6.18.0",
+		"@sveltejs/kit": "^2.5.0",
+		"@sveltejs/vite-plugin-svelte": "^3.0.2",
+		"@typescript-eslint/eslint-plugin": "^6.20.0",
+		"@typescript-eslint/parser": "^6.20.0",
 		"clsx": "^2.1.0",
 		"eslint": "^8.56.0",
 		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-svelte": "^2.35.1",
 		"fastest-levenshtein": "^1.0.16",
-		"lightningcss": "^1.22.1",
-		"mode-watcher": "^0.1.2",
+		"lightningcss": "^1.23.0",
+		"mode-watcher": "^0.2.0",
 		"postcss-nesting": "^12.0.2",
-		"prettier": "^3.1.1",
+		"prettier": "^3.2.4",
 		"prettier-plugin-svelte": "^3.1.2",
-		"svelte": "^4.2.8",
-		"svelte-check": "^3.6.2",
+		"svelte": "^4.2.9",
+		"svelte-check": "^3.6.3",
 		"svelte-intersection-observer": "^1.0.0",
-		"svelte-persisted-store": "^0.8.1",
-		"tailwind-merge": "^2.2.0",
+		"svelte-persisted-store": "^0.9.0",
+		"tailwind-merge": "^2.2.1",
 		"tailwind-variants": "^0.1.20",
 		"tailwindcss": "^3.4.1",
 		"tslib": "^2.6.2",
 		"typescript": "^5.3.3",
-		"unplugin-icons": "^0.18.1",
-		"vite": "^5.0.11"
+		"unplugin-icons": "^0.18.3",
+		"vite": "^5.0.12"
 	},
 	"type": "module",
 	"dependencies": {
-		"bits-ui": "^0.13.3"
+		"bits-ui": "^0.16.0"
 	}
 }
