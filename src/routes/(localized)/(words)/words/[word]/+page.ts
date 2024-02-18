@@ -1,16 +1,14 @@
 import { error } from "@sveltejs/kit";
 import { distance } from "fastest-levenshtein";
-import type { PageServerLoad } from "./$types";
+import type { PageLoad } from "./$types";
 
-export const load: PageServerLoad = async ({ params: { word }, parent }) => {
-	const {
-		linku: { data: dictionary },
-	} = await parent();
+export const load: PageLoad = async ({ params: { word }, parent }) => {
+	const { words, language } = await parent();
 
-	const wordData = dictionary[word];
+	const wordData = words[word];
 
 	if (!wordData) {
-		const closest = Object.keys(dictionary)
+		const closest = Object.keys(words)
 			.map((key) => ({ key, distance: distance(key, word) }))
 			.filter(({ key, distance }) => distance < 3 || key.startsWith(word))
 			.sort((a, b) => a.distance - b.distance)
@@ -27,6 +25,7 @@ export const load: PageServerLoad = async ({ params: { word }, parent }) => {
 	}
 
 	return {
+		language,
 		word: wordData,
 	};
 };

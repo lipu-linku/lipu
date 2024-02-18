@@ -2,6 +2,7 @@ import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
 import { cubicOut } from "svelte/easing";
 import type { TransitionConfig } from "svelte/transition";
+import type { Languages, Words } from "@kulupu-linku/sona";
 
 export function keys<T extends object>(o: T): (keyof T)[] {
 	return Object.keys(o) as (keyof T)[];
@@ -15,11 +16,27 @@ export function fromEntries<K extends PropertyKey, V>(arr: [K, V][]): Record<K, 
 	return Object.fromEntries(arr) as Record<K, V>;
 }
 
+export function filterValues<K extends PropertyKey, V>(
+	obj: Record<K, V>,
+	func: (key: K, value: V) => boolean,
+): Record<K, V> {
+	return fromEntries(entries(obj).filter(([k, v]) => func(k, v)));
+}
+
 export function mapValues<K extends PropertyKey, V, R>(
 	obj: Record<K, V>,
 	func: (value: V) => R,
 ): Record<K, R> {
 	return fromEntries(entries(obj).map(([k, v]) => [k, func(v)]));
+}
+
+export function getTranslatedData<K extends keyof Words[string]["translations"][string]>(
+	word: Words[string],
+	key: K,
+	language: keyof Languages,
+	defaultLang: keyof Languages = "en",
+): Words[string]["translations"][string][K] {
+	return (word.translations[language] ?? word.translations[defaultLang])[key];
 }
 
 export const normalize = (str: string) =>

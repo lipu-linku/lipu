@@ -13,6 +13,9 @@ devDependencies:
   '@iconify/json':
     specifier: ^2.2.177
     version: 2.2.177
+  '@kulupu-linku/sona':
+    specifier: ^0.1.7
+    version: 0.1.7
   '@sveltejs/adapter-cloudflare':
     specifier: ^4.1.0
     version: 4.1.0(@sveltejs/kit@2.5.0)
@@ -495,6 +498,14 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
+
+  /@kulupu-linku/sona@0.1.7:
+    resolution: {integrity: sha512-KA+S2SJsYk6lT+whAoC2QMP5rk4N/nhGydica24TCt6/JLcUOlvPqcBN0gOUwWxcs86uYzXNE/AsRVOvahZQaQ==}
+    engines: {pnpm: '>=8'}
+    dependencies:
+      hono: 3.12.9
+      zod: 3.22.4
+    dev: true
 
   /@melt-ui/svelte@0.68.0(svelte@4.2.9):
     resolution: {integrity: sha512-/QvA98hnYEodZtHJ71+ocum/WWp30hVNt3F8uiZKnNYwZDaiQYjlyR9AaGKYcZLCe6R68op1mfCzc0kTzJilyA==}
@@ -1582,6 +1593,11 @@ packages:
     engines: {node: '>= 0.4'}
     dependencies:
       function-bind: 1.1.2
+    dev: true
+
+  /hono@3.12.9:
+    resolution: {integrity: sha512-JhurtI3+VspowZoP3dv6BylhUPIpTWNRlBsVfb5UbI/tmMGqd6RpeexGO7RjnrSG9Vqwb1ydKp7HHTTcYJU5Zw==}
+    engines: {node: '>=16.0.0'}
     dev: true
 
   /human-signals@2.1.0:
@@ -2988,4 +3004,8 @@ packages:
   /yocto-queue@0.1.0:
     resolution: {integrity: sha512-rVksvsnNCdJ/ohGc6xgPwyN8eheCxsiLM8mxuE/t/mOVqJewPuO1miLpTHQiRgTKCLexL4MeAFVagts7HmNZ2Q==}
     engines: {node: '>=10'}
+    dev: true
+
+  /zod@3.22.4:
+    resolution: {integrity: sha512-iC+8Io04lddc+mVqQ9AZ7OQ2MrUKGN+oIQyq1vemgt46jwCwLfhq7/pwnBnNXXXZb8VTVLKwp9EDkx+ryxIWmg==}
     dev: true

@@ -1,5 +1,13 @@
-import type { BookName, UsageCategory, Word } from "$lib/types";
-import { normalize } from "$lib/utils";
+import {
+	entries,
+	filterValues,
+	fromEntries,
+	getTranslatedData,
+	mapValues,
+	normalize,
+} from "$lib/utils";
+import type { Words } from "@kulupu-linku/sona";
+import type { UsageCategory } from "@kulupu-linku/sona/utils";
 import { distance } from "fastest-levenshtein";
 
 // adapted directly from jan Tani's excellent nimi.li project with their permission:
@@ -7,45 +15,49 @@ import { distance } from "fastest-levenshtein";
 
 export const wordSearch = (
 	query: string,
-	words: Word[],
+	words: Words,
 	categories: Record<UsageCategory, boolean>,
 	wordList: string[] | undefined = undefined,
 	language: string = "en",
-): Word[] => {
+): Words => {
 	query = normalize(query);
 
-	const initialFilteredWords = words
-		.filter((w) => categories[w.usage_category])
-		.filter((w) => wordList?.includes(w.word) ?? true);
+	const initialFilteredWords = filterValues(
+		words,
+		(_, w) => categories[w.usage_category] && (wordList?.includes(w.word) ?? true),
+	);
 
 	if (query === "") return initialFilteredWords;
 
-	const scoreFilter = (word: Word) =>
-		basicScore(word.word, query) ||
-		basicScore(word.def[language] ?? word.def.en, query) ||
-		basicScore(word.ku_data, query) ||
-		basicScore(word.etymology, query) ||
-		basicScore(word.source_language, query) ||
-		basicScore(word.creator, query) ||
-		basicScore(word.commentary, query);
+	const scoreFilter = (word: Words[string]) =>
+		Boolean(
+			basicScore(word.word, query) ||
+				basicScore(getTranslatedData(word, "definitions", language), query) ||
+				basicScore(word.ku_data ? Object.keys(word.ku_data).join(", ") : "", query) ||
+				basicScore(getTranslatedData(word, "etymology", language).join(", "), query) ||
+				basicScore(word.source_language, query) ||
+				basicScore(word.creator.join(", "), query) ||
+				basicScore(getTranslatedData(word, "commentary", language), query),
+		);
 
-	return initialFilteredWords
-		.filter(scoreFilter)
-		.map((w) => [w, wordScore(w, query, language)] as [Word, number])
-		.sort(([_, a], [_1, b]) => b - a)
-		.map(([w, _]) => w);
+	const filtered = filterValues(initialFilteredWords, (_, w) => scoreFilter(w));
+	const scored = mapValues(filtered, (w) => [w, wordScore(w, query, language)] as const);
+	const sorted = fromEntries(entries(scored).sort(([, [, a]], [, [, b]]) => b - a));
+	const onlyWords = mapValues(sorted, ([w]) => w);
+
+	return onlyWords;
 };
 
-const wordScore = (word: Word, query: string, language: string) => {
+const wordScore = (word: Words[string], query: string, language: string) => {
 	let score = 0;
 
 	score += basicScore(word.word, query) * 100;
-	score += basicScore(word.def[language] ?? word.def.en, query) * 50;
-	score += basicScore(word.ku_data, query) * 40;
-	score += basicScore(word.etymology, query) * 30;
+	score += basicScore(getTranslatedData(word, "definitions", language), query) * 50;
+	score += basicScore(word.ku_data ? Object.keys(word.ku_data).join(", ") : "", query) * 40;
+	score += basicScore(getTranslatedData(word, "etymology", language).join(", "), query) * 30;
 	score += basicScore(word.source_language, query) * 20;
-	score += basicScore(word.creator, query) * 10;
-	score += basicScore(word.commentary, query) * 5;
+	score += basicScore(word.creator.join(", "), query) * 10;
+	score += basicScore(getTranslatedData(word, "commentary", language), query) * 5;
 
 	return score;
 };

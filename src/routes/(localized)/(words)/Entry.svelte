@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { language, writingSystem } from "$lib/state";
-	import type { UsageCategory, Word } from "$lib/types";
+	import { writingSystem } from "$lib/state";
+	import type { Languages, Words } from "@kulupu-linku/sona";
+	import type { UsageCategory } from "@kulupu-linku/sona/utils";
 
-	export let word: Word;
-
+	import AudioButton from "$lib/components/AudioButton.svelte";
 	import {
 		Card,
 		CardContent,
@@ -11,12 +11,15 @@
 		CardHeader,
 		CardTitle,
 	} from "$lib/components/ui/card";
-	import AudioButton from "$lib/components/AudioButton.svelte";
+	import { getTranslatedData } from "$lib/utils";
 
-	$: sp = word.sitelen_pona?.split(" ")?.[0] ?? "";
+	export let id: string;
+	export let word: Words[string];
+	export let language: keyof Languages;
 
-	$: definition = word.def[$language] ?? "(en) " + word.def["en"];
-	$: usageScore = Object.values(word.recognition ?? {}).at(-1) ?? "0";
+	$: sp = word.representations.sitelen_pona.at(0) ?? "";
+	$: definition = getTranslatedData(word, "definitions", language);
+	$: usageScore = Object.values(word.usage).at(-1) ?? 0;
 
 	const categoryColors = {
 		core: "oklch(93.29% 0.137 106.54)",
@@ -29,7 +32,7 @@
 </script>
 
 <Card
-	id={word.id}
+	{id}
 	class="
 		flex justify-between border-2 has-[a:hover]:border-zinc-300 transition-colors
 		relative before:absolute before:w-1 before:transition-[width] has-[a:hover]:before:w-2 before:rounded-s-md before:inset-y-0 before:bg-[--category-color]
@@ -43,12 +46,13 @@
 				{definition}
 			</CardDescription>
 			{#if word.see_also}
-				{@const others = word.see_also.split(", ")}
 				<CardDescription>
 					See also:
-					{#each others as other, i}
-						<a class="underline" href="/words/{other}">{other}</a
-						>{#if i < others.length - 1},&nbsp;{/if}
+					{#each word.see_also as other, i}
+						<a class="underline" href="/words/{other}">{other}</a>
+						{#if i < word.see_also.length - 1}
+							,&nbsp;
+						{/if}
 					{/each}
 				</CardDescription>
 			{/if}
@@ -66,11 +70,11 @@
 			<AudioButton audio={word.audio} />
 		{/if}
 
-		{#if $writingSystem === "sitelen_pona" && word.sitelen_pona}
+		{#if $writingSystem === "sitelen_pona" && word.representations.sitelen_pona.length > 0}
 			<span title={sp} class="text-center min-w-14 font-sitelen-pona">{sp}</span>
-		{:else if $writingSystem === "sitelen_sitelen" && word.sitelen_sitelen}
+		{:else if $writingSystem === "sitelen_sitelen" && word.representations.sitelen_sitelen}
 			<img
-				src={word.sitelen_sitelen}
+				src={word.representations.sitelen_sitelen}
 				alt="{word.word} in sitelen sitelen format"
 				class="dark:invert size-16"
 				loading="lazy"

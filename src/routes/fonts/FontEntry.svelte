@@ -8,7 +8,7 @@
 		CardTitle,
 	} from "$lib/components/ui/card";
 	import { fontSentence } from "$lib/state";
-	import type { Font } from "$lib/types";
+	import type { Font } from "@kulupu-linku/sona";
 	import { flyAndScale } from "$lib/utils";
 	import IntersectionObserver from "svelte-intersection-observer";
 
@@ -16,7 +16,6 @@
 	import RepoIcon from "~icons/lucide/file-code";
 	import WebIcon from "~icons/lucide/globe";
 
-	export let fontName: string;
 	export let font: Font;
 
 	$: lastUpdatedDate = font.last_updated
@@ -37,8 +36,8 @@
 
 	const loadFont = async () => {
 		const fontFace = new FontFace(
-			font.name_short,
-			`url(https://raw.githubusercontent.com/lipu-linku/nasin-sitelen/main/${font.filename})`,
+			font.name,
+			`url(https://raw.githubusercontent.com/lipu-linku/ijo/main/nasinsitelen/${font.filename})`,
 		);
 		await fontFace.load();
 		document.fonts.add(fontFace);
@@ -48,7 +47,7 @@
 <IntersectionObserver once element={cardElement} let:intersecting>
 	<Card bind:thisEl={cardElement}>
 		<CardHeader class="relative">
-			<CardTitle>{fontName}</CardTitle>
+			<CardTitle>{font.name}</CardTitle>
 			<CardDescription>{fontDescription}</CardDescription>
 			<nav class="absolute top-2 right-4 flex items-center gap-2">
 				{#if font.links.repo}
@@ -84,7 +83,10 @@
 				{#await loadFont()}
 					Loading...
 				{:then}
-					<span transition:flyAndScale={{ y: 10 }} style="font-family: '{font.name_short}'">
+					<span transition:flyAndScale={{ y: 10 }} style="font-family: '{font.name}'">
+						{#if $fontSentence.match(/[\u{F1900}-\u{F19FF}]/gu)}
+							
+						{/if}
 						{$fontSentence.trim()}
 					</span>
 				{:catch}

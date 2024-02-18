@@ -20,11 +20,12 @@
 	};
 
 	const links: Record<string, NavbarLink> = {
-		fonts: {
-			href: "/fonts",
-			label: "Fonts",
-			icon: FontsIcon,
-		},
+		// TODO: fix the fonts page
+		// fonts: {
+		// 	href: "/fonts",
+		// 	label: "Fonts",
+		// 	icon: FontsIcon,
+		// },
 	} as const;
 </script>
 
@@ -59,13 +60,13 @@
 
 	<Button variant="outline" size="icon" on:click={toggleMode} aria-label="Toggle theme">
 		{#if $mode === "light"}
-			<DarkModeIcon />
+			<DarkModeIcon aria-label="Moon icon" />
 		{:else}
-			<LightModeIcon />
+			<LightModeIcon aria-label="Sun icon" />
 		{/if}
 	</Button>
 
 	<Button variant="outline" size="icon" href="/about" aria-label="About Linku">
-		<InfoIcon />
+		<InfoIcon aria-label="Information icon" />
 	</Button>
 </nav>

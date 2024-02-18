@@ -30,7 +30,7 @@
 							: "auto",
 					})}
 			>
-				<UpArrowIcon /> Scroll to Top
+				<UpArrowIcon aria-label="Up arrow icon" /> Scroll to Top
 			</Button>
 		</div>
 	{/if}
