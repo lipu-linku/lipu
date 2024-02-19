@@ -30,15 +30,6 @@ export function mapValues<K extends PropertyKey, V, R>(
 	return fromEntries(entries(obj).map(([k, v]) => [k, func(v)]));
 }
 
-export function getTranslatedData<K extends keyof Words[string]["translations"][string]>(
-	word: Words[string],
-	key: K,
-	language: keyof Languages,
-	defaultLang: keyof Languages = "en",
-): Words[string]["translations"][string][K] {
-	return (word.translations[language] ?? word.translations[defaultLang])[key];
-}
-
 export const normalize = (str: string) =>
 	str
 		.normalize("NFD")

@@ -29,9 +29,9 @@
 	<ul
 		class="flex-1 flex flex-col items-stretch gap-2 mx-auto max-w-[min(1000px,clamp(60%,400px,100%_-_3rem))]"
 	>
-		{#each entries(sorted_filtered_dictionary) as [id, word] (id)}
+		{#each sorted_filtered_dictionary as word (word.id)}
 			<li>
-				<Entry {language} {id} {word} />
+				<Entry {language} {word} />
 			</li>
 		{/each}
 	</ul>

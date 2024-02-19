@@ -13,7 +13,7 @@
 		DropdownMenuTrigger,
 	} from "$lib/components/ui/dropdown-menu";
 	import { Tooltip, TooltipContent, TooltipTrigger } from "$lib/components/ui/tooltip";
-	import { getTranslatedData } from "$lib/utils.js";
+	import { getTranslatedData } from "@kulupu-linku/sona/utils";
 	import BackIcon from "~icons/lucide/arrow-left";
 	import CopyIcon from "~icons/lucide/copy";
 	import InfoIcon from "~icons/lucide/info";
@@ -23,7 +23,7 @@
 	$: ({ word, language } = data);
 
 	$: recognitionScore = Object.values(word.usage).at(-1) ?? 0;
-	$: definition = getTranslatedData(word, "definitions", language);
+	$: definition = getTranslatedData(word, "definition", language);
 	$: commentary = getTranslatedData(word, "commentary", language);
 	$: etymology = getTranslatedData(word, "etymology", language);
 	$: sitelenPonaEtymology = getTranslatedData(word, "sp_etymology", language);
@@ -35,13 +35,23 @@
 				: ("en" as const)
 		];
 
-	$: etym_string = etymology.map((it, i) => {
-		const constant = word.etymology[i];
+	$: etym_string = etymology
+		.map((it, i) => {
+			const constant = word.etymology[i];
 
-		return `${constant.word ?? ""} ${constant.alt ? `(${constant.alt})` : ""}`.trim();
-	});
+			return `${constant.word ?? ""} ${constant.alt ? `(${constant.alt})` : ""} ${it.definition ? `- ${it.definition}` : ""} ${it.language ? `[${it.language}]` : ""}`.trim();
+		})
+		.join(" ⇐ ");
 
-	const listFormat = new Intl.ListFormat("en");
+	let listFormat = new Intl.ListFormat("en");
+	$: {
+		try {
+			listFormat = new Intl.ListFormat(language);
+		} catch {
+			// this is here to allow for proper formatting,
+			// except for languages browsers don't support
+		}
+	}
 
 	const usageToIndex = (usage: number) => {
 		if (usage > 80) return "⁵";
@@ -54,7 +64,7 @@
 
 	const copyCodepoint = () => {
 		navigator.clipboard.writeText(
-			String.fromCodePoint(parseInt(word.representations.ucsur!.slice(2), 16)),
+			String.fromCodePoint(parseInt(word.representations!.ucsur!.slice(2), 16)),
 		);
 	};
 </script>
@@ -162,12 +172,12 @@
 				<CardTitle class="text-2xl" tag="h2">Usage</CardTitle>
 			</CardHeader>
 			<CardContent class="flex flex-col gap-3">
-				{#if word.representations.sitelen_pona.length > 0}
+				{#if word.representations?.ligatures && word.representations?.ligatures?.length > 0}
 					<div class="flex flex-col justify-center gap-2">
 						<h3 class="font-medium text-xl">sitelen pona</h3>
 						<p>
 							<span class="text-7xl font-sitelen-pona">
-								{word.representations.sitelen_pona.join(" ")}
+								{word.representations?.ligatures?.join(" ")}
 							</span>
 						</p>
 						{#if sitelenPonaEtymology}
@@ -176,7 +186,7 @@
 					</div>
 				{/if}
 
-				{#if word.representations.sitelen_sitelen}
+				{#if word.representations?.sitelen_sitelen}
 					<div class="flex flex-col justify-center gap-2">
 						<h3 class="font-medium text-xl">sitelen sitelen</h3>
 						<img
@@ -187,7 +197,7 @@
 					</div>
 				{/if}
 
-				{#if word.representations.ucsur}
+				{#if word.representations?.ucsur}
 					<div class="flex flex-col justify-center gap-2">
 						<h3 class="flex items-center gap-2 first-letter:font-medium text-xl">
 							<span>UCSUR Codepoint</span>
@@ -245,12 +255,7 @@
 							{#if word.etymology.length > 0}
 								<li>
 									<span class="text-muted-foreground">Etymology: </span>
-									{#each word.etymology as data, i}
-										{@const localized_data = etymology[i]}
-										{data.word ?? ""}
-										<span class="font-semibold">{data.alt ? `(${data.alt})` : ""}</span>
-										<span class="italic">{localized_data?.definition ?? ""}</span>
-									{/each}
+									{etym_string}
 								</li>
 							{/if}
 							{#if word.creator}

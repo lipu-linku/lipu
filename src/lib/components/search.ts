@@ -1,13 +1,6 @@
-import {
-	entries,
-	filterValues,
-	fromEntries,
-	getTranslatedData,
-	mapValues,
-	normalize,
-} from "$lib/utils";
-import type { Words } from "@kulupu-linku/sona";
-import type { UsageCategory } from "@kulupu-linku/sona/utils";
+import { normalize } from "$lib/utils";
+import { type LocalizedWord, type Words } from "@kulupu-linku/sona";
+import { getTranslatedData, type UsageCategory } from "@kulupu-linku/sona/utils";
 import { distance } from "fastest-levenshtein";
 
 // adapted directly from jan Tani's excellent nimi.li project with their permission:
@@ -19,20 +12,19 @@ export const wordSearch = (
 	categories: Record<UsageCategory, boolean>,
 	wordList: string[] | undefined = undefined,
 	language: string = "en",
-): Words => {
+): LocalizedWord[] => {
 	query = normalize(query);
 
-	const initialFilteredWords = filterValues(
-		words,
-		(_, w) => categories[w.usage_category] && (wordList?.includes(w.word) ?? true),
+	const initialFilteredWords = Object.values(words).filter(
+		(w) => categories[w.usage_category] && (wordList?.includes(w.word) ?? true),
 	);
 
 	if (query === "") return initialFilteredWords;
 
-	const scoreFilter = (word: Words[string]) =>
+	const scoreFilter = (word: LocalizedWord) =>
 		Boolean(
 			basicScore(word.word, query) ||
-				basicScore(getTranslatedData(word, "definitions", language), query) ||
+				basicScore(getTranslatedData(word, "definition", language), query) ||
 				basicScore(word.ku_data ? Object.keys(word.ku_data).join(", ") : "", query) ||
 				basicScore(getTranslatedData(word, "etymology", language).join(", "), query) ||
 				basicScore(word.source_language, query) ||
@@ -40,19 +32,19 @@ export const wordSearch = (
 				basicScore(getTranslatedData(word, "commentary", language), query),
 		);
 
-	const filtered = filterValues(initialFilteredWords, (_, w) => scoreFilter(w));
-	const scored = mapValues(filtered, (w) => [w, wordScore(w, query, language)] as const);
-	const sorted = fromEntries(entries(scored).sort(([, [, a]], [, [, b]]) => b - a));
-	const onlyWords = mapValues(sorted, ([w]) => w);
+	const filtered = initialFilteredWords.filter((w) => scoreFilter(w));
+	const scored = filtered.map((w) => [w, wordScore(w, query, language)] as const);
+	const sorted = scored.sort(([, a], [, b]) => b - a);
+	const onlyWords = sorted.map(([w]) => w);
 
 	return onlyWords;
 };
 
-const wordScore = (word: Words[string], query: string, language: string) => {
+const wordScore = (word: LocalizedWord, query: string, language: string) => {
 	let score = 0;
 
 	score += basicScore(word.word, query) * 100;
-	score += basicScore(getTranslatedData(word, "definitions", language), query) * 50;
+	score += basicScore(getTranslatedData(word, "definition", language), query) * 50;
 	score += basicScore(word.ku_data ? Object.keys(word.ku_data).join(", ") : "", query) * 40;
 	score += basicScore(getTranslatedData(word, "etymology", language).join(", "), query) * 30;
 	score += basicScore(word.source_language, query) * 20;

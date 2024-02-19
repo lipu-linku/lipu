@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { writingSystem } from "$lib/state";
-	import type { Languages, Words } from "@kulupu-linku/sona";
+	import { type Languages, type LocalizedWord } from "@kulupu-linku/sona";
+	import { getTranslatedData } from "@kulupu-linku/sona/utils";
 	import type { UsageCategory } from "@kulupu-linku/sona/utils";
 
 	import AudioButton from "$lib/components/AudioButton.svelte";
@@ -11,14 +12,11 @@
 		CardHeader,
 		CardTitle,
 	} from "$lib/components/ui/card";
-	import { getTranslatedData } from "$lib/utils";
 
-	export let id: string;
-	export let word: Words[string];
+	export let word: LocalizedWord;
 	export let language: keyof Languages;
 
-	$: sp = word.representations.sitelen_pona.at(0) ?? "";
-	$: definition = getTranslatedData(word, "definitions", language);
+	$: definition = getTranslatedData(word, "definition", language);
 	$: usageScore = Object.values(word.usage).at(-1) ?? 0;
 
 	const categoryColors = {
@@ -32,7 +30,7 @@
 </script>
 
 <Card
-	{id}
+	id={word.id}
 	class="
 		flex justify-between border-2 has-[a:hover]:border-zinc-300 transition-colors
 		relative before:absolute before:w-1 before:transition-[width] has-[a:hover]:before:w-2 before:rounded-s-md before:inset-y-0 before:bg-[--category-color]
@@ -70,9 +68,11 @@
 			<AudioButton audio={word.audio} />
 		{/if}
 
-		{#if $writingSystem === "sitelen_pona" && word.representations.sitelen_pona.length > 0}
-			<span title={sp} class="text-center min-w-14 font-sitelen-pona">{sp}</span>
-		{:else if $writingSystem === "sitelen_sitelen" && word.representations.sitelen_sitelen}
+		{#if $writingSystem === "sitelen_pona" && word.representations?.ligatures}
+			<span class="text-center min-w-14 font-sitelen-pona">
+				{word.representations?.ligatures.slice(0, 3).join(" ")}
+			</span>
+		{:else if $writingSystem === "sitelen_sitelen" && word.representations?.sitelen_sitelen}
 			<img
 				src={word.representations.sitelen_sitelen}
 				alt="{word.word} in sitelen sitelen format"
