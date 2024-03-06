@@ -11,9 +11,10 @@ export const load: LayoutLoad = async ({ url, fetch }) => {
 
 	const localLanguage =
 		languages[
-			param ?? browser
-				? localStorage.getItem("lang") ?? (navigator.language || navigator.languages[0])
-				: "en"
+			param ??
+				(browser
+					? localStorage.getItem("lang") ?? (navigator.language || navigator.languages[0])
+					: "en")
 		];
 
 	const currentLanguage = await client({ fetch })
@@ -21,7 +22,8 @@ export const load: LayoutLoad = async ({ url, fetch }) => {
 		.then((r) => r.json());
 
 	if (!currentLanguage.ok) error(400, currentLanguage);
-	if (browser && !localStorage.getItem("lang")) localStorage.setItem("lang", localLanguage.id);
+	if (browser && !localStorage.getItem("lang"))
+		localStorage.setItem("lang", currentLanguage.data.id);
 
 	return {
 		languages,
