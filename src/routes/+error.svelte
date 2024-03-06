@@ -19,5 +19,5 @@
 		</ul>
 	{/if}
 
-  <Button href="/" variant="outline">Go Home</Button>
+	<Button href="/" variant="outline">Go Home</Button>
 </main>

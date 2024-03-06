@@ -9,11 +9,10 @@ export const searchQuery = writable(
 
 export const defaultCategories: Record<UsageCategory, boolean> = {
 	core: true,
-	widespread: true,
 	common: false,
 	uncommon: false,
-	rare: false,
 	obscure: false,
+	sandbox: false,
 };
 
 export const categories = persisted("categories", defaultCategories);

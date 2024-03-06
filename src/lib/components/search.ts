@@ -1,5 +1,5 @@
 import { normalize } from "$lib/utils";
-import { type LocalizedWord, type Words } from "@kulupu-linku/sona";
+import type { Language, LocalizedWord, Words } from "@kulupu-linku/sona";
 import { getTranslatedData, type UsageCategory } from "@kulupu-linku/sona/utils";
 import { distance } from "fastest-levenshtein";
 
@@ -11,7 +11,7 @@ export const wordSearch = (
 	words: Words,
 	categories: Record<UsageCategory, boolean>,
 	wordList: string[] | undefined = undefined,
-	language: string = "en",
+	language: Language["id"] = "en",
 ): LocalizedWord[] => {
 	query = normalize(query);
 

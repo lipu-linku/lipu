@@ -23,30 +23,29 @@
 	$: ({ word, language } = data);
 
 	$: recognitionScore = Object.values(word.usage).at(-1) ?? 0;
-	$: definition = getTranslatedData(word, "definition", language);
-	$: commentary = getTranslatedData(word, "commentary", language);
-	$: etymology = getTranslatedData(word, "etymology", language);
-	$: sitelenPonaEtymology = getTranslatedData(word, "sp_etymology", language);
+	$: definition = getTranslatedData(word, "definition", language.id);
+	$: commentary = getTranslatedData(word, "commentary", language.id);
+	$: etymology = getTranslatedData(word, "etymology", language.id);
+	$: sitelenPonaEtymology = getTranslatedData(word, "sp_etymology", language.id);
 
 	$: pu_verbatim =
 		word.pu_verbatim?.[
-			language in word.pu_verbatim
-				? (language as keyof NonNullable<typeof word.pu_verbatim>)
+			language.id in word.pu_verbatim
+				? (language.id as keyof (typeof word)["pu_verbatim"])
 				: ("en" as const)
 		];
 
-	$: etym_string = etymology
-		.map((it, i) => {
-			const constant = word.etymology[i];
+	$: etym_string = etymology.map((it, i) => {
+		const constant = word.etymology[i];
 
-			return `${constant.word ?? ""} ${constant.alt ? `(${constant.alt})` : ""} ${it.definition ? `- ${it.definition}` : ""} ${it.language ? `[${it.language}]` : ""}`.trim();
-		})
-		.join(" ⇐ ");
+		return `${i > 0 ? " ⇐ " : ""}${constant.word ?? ""} ${constant.alt ? `(${constant.alt})` : ""} ${it.definition ? `- ${it.definition}` : ""} ${it.language ? `[${it.language}]` : ""}`.trim();
+	});
 
+	const englishFormat = new Intl.ListFormat("en", { style: "narrow" });
 	let listFormat = new Intl.ListFormat("en");
 	$: {
 		try {
-			listFormat = new Intl.ListFormat(language);
+			listFormat = new Intl.ListFormat(language.locale);
 		} catch {
 			// this is here to allow for proper formatting,
 			// except for languages browsers don't support
@@ -121,7 +120,7 @@
 			<CardContent class="flex flex-col gap-3">
 				<div class="flex flex-col justify-center gap-2">
 					<h3 class="font-medium text-xl">Common Definition</h3>
-					<p>{definition}</p>
+					<p dir={language.direction}>{definition}</p>
 				</div>
 
 				{#if word.ku_data}
@@ -145,7 +144,7 @@
 							</Tooltip>
 						</h3>
 
-						<Collapsible content={listFormat.format(kuString)} />
+						<Collapsible content={englishFormat.format(kuString)} />
 					</div>
 				{/if}
 
@@ -181,7 +180,7 @@
 							</span>
 						</p>
 						{#if sitelenPonaEtymology}
-							<p>{sitelenPonaEtymology}</p>
+							<p dir={language.direction}>{sitelenPonaEtymology}</p>
 						{/if}
 					</div>
 				{/if}
@@ -239,24 +238,26 @@
 			<CardContent class="flex flex-col gap-3">
 				{#if commentary}
 					<h3 class="font-medium text-xl">Commentary</h3>
-					<p>{commentary}</p>
+					<p dir={language.direction}>{commentary}</p>
 				{/if}
 
 				{#if etymology.length > 0 || word.creator || word.coined_year || word.coined_era}
 					<div class="flex flex-col justify-center gap-2">
 						<h3 class="font-medium text-xl">Origin</h3>
 						<ul class="flex flex-col justify-center gap-2">
-							{#if etymology.length > 0}
-								<li>
-									<span class="text-muted-foreground">Derived from: </span>
-									{listFormat.format(etymology.map((e) => e.language))}
-								</li>
-							{/if}
-							{#if word.etymology.length > 0}
-								<li>
-									<span class="text-muted-foreground">Etymology: </span>
-									{etym_string}
-								</li>
+							{#if word.etymology.length > 0 && etymology.length > 0}
+								{#each word.etymology as etym, i}
+									{@const local_etym = etymology[i]}
+									<li
+										dir={language.direction}
+										class:text-left={language.direction === "ltr"}
+										class:text-right={language.direction === "rtl"}
+									>
+										{local_etym.language}{etym.word ? `: ${etym.word}` : ""}{etym.alt
+											? ` (${etym.alt})`
+											: ""}{local_etym.definition ? `; ${local_etym.definition}` : ""}
+									</li>
+								{/each}
 							{/if}
 							{#if word.creator}
 								<li>

@@ -1,8 +1,7 @@
 <script lang="ts">
 	import { writingSystem } from "$lib/state";
-	import { type Languages, type LocalizedWord } from "@kulupu-linku/sona";
-	import { getTranslatedData } from "@kulupu-linku/sona/utils";
-	import type { UsageCategory } from "@kulupu-linku/sona/utils";
+	import type { Language, LocalizedWord } from "@kulupu-linku/sona";
+	import { getTranslatedData, type UsageCategory } from "@kulupu-linku/sona/utils";
 
 	import AudioButton from "$lib/components/AudioButton.svelte";
 	import {
@@ -14,18 +13,17 @@
 	} from "$lib/components/ui/card";
 
 	export let word: LocalizedWord;
-	export let language: keyof Languages;
+	export let language: Language;
 
-	$: definition = getTranslatedData(word, "definition", language);
+	$: definition = getTranslatedData(word, "definition", language.id);
 	$: usageScore = Object.values(word.usage).at(-1) ?? 0;
 
 	const categoryColors = {
 		core: "oklch(93.29% 0.137 106.54)",
-		widespread: "oklch(76.59% 0.169 65.75)",
 		common: "oklch(61.15% 0.177 30.62)",
 		uncommon: "oklch(46.87% 0.159 351.1)",
-		rare: "oklch(32.72% 0.149 311.74)",
-		obscure: "oklch(20.55% 0.052 284.53)",
+		obscure: "oklch(32.72% 0.149 311.74)",
+		sandbox: "oklch(20.55% 0.052 284.53)",
 	} as const satisfies Record<UsageCategory, string>;
 </script>
 

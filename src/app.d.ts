@@ -13,7 +13,7 @@ declare global {
 		// interface PageData {}
 		// interface Platform {}
 		interface PageState {
-			words?: Words
+			words?: Words;
 		}
 	}
 }

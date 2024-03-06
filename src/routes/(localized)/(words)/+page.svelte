@@ -4,7 +4,6 @@
 	import { page } from "$app/stores";
 	import { wordSearch } from "$lib/components/search";
 	import { categories, searchQuery } from "$lib/state";
-	import { entries } from "$lib/utils";
 
 	export let data;
 	$: ({ words, language } = data);
@@ -17,7 +16,7 @@
 		words,
 		categoriesParam ? JSON.parse(categoriesParam) : $categories,
 		wordList,
-		language,
+		language.id,
 	);
 </script>
 

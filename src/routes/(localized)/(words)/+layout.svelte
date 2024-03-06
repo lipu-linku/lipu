@@ -56,7 +56,7 @@
 	<form class="ml-auto flex items-center gap-2 flex-1" role="search" action="/?/search">
 		<Input
 			class="w-auto mx-auto"
-			placeholder="o lukin e nimi"
+			placeholder="o alasa e nimi"
 			type="search"
 			name="q"
 			required
@@ -150,7 +150,7 @@
 		</Button>
 	</form>
 
-	<LanguageSwitch selected={language} localeList={languages} />
+	<LanguageSwitch selected={language.id} localeList={languages} />
 </Navbar>
 
 <slot />
