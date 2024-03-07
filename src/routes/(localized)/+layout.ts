@@ -13,7 +13,7 @@ export const load: LayoutLoad = async ({ url, fetch }) => {
 		languages[
 			param ??
 				(browser
-					? localStorage.getItem("lang") ?? (navigator.language || navigator.languages[0])
+					? localStorage.getItem("lang") ?? (navigator.language || navigator.languages[0]).substring(0, 2)
 					: "en")
 		];
 
