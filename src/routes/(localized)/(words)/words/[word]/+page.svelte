@@ -22,7 +22,7 @@
 	export let data;
 	$: ({ word, language } = data);
 
-	$: recognitionScore = Object.values(word.usage).at(-1) ?? 0;
+	$: usageScore = Object.values(word.usage).at(-1) ?? 0;
 	$: definition = getTranslatedData(word, "definition", language.id);
 	$: commentary = getTranslatedData(word, "commentary", language.id);
 	$: etymology = getTranslatedData(word, "etymology", language.id);
@@ -283,8 +283,8 @@
 							{word.usage_category}
 						</li>
 						<li>
-							<span class="text-muted-foreground">Recognition Score:</span>
-							{recognitionScore}%
+							<span class="text-muted-foreground">Usage:</span>
+							{usageScore}%
 						</li>
 						<li>
 							<span class="text-muted-foreground">Book:</span>

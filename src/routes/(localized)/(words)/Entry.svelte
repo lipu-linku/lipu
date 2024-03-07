@@ -41,7 +41,7 @@
 			<CardDescription dir={language.direction} class="text-foreground">
 				{definition}
 			</CardDescription>
-			{#if word.see_also}
+			{#if word.see_also.length > 0}
 				<CardDescription>
 					See also:
 					{#each word.see_also as other, i}
@@ -62,7 +62,7 @@
 	</a>
 
 	<CardContent class="flex items-center justify-center gap-4 py-0 text-6xl my-auto">
-		{#if word.audio}
+		{#if word.audio.length > 0}
 			<AudioButton audio={word.audio} />
 		{/if}
 

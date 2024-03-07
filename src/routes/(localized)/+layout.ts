@@ -12,24 +12,28 @@ export const load: LayoutLoad = async ({ url, fetch }) => {
 			? localStorage.getItem("lang") ?? (navigator.language || navigator.languages[0])
 			: "en");
 
-	const currentLanguage = await client({ fetch })
+	let currentLanguage = await client({ fetch })
 		.v1.languages[":language"].$get({ param: { language: localLanguage } })
 		.then((r) => r.json());
 
 	if (!currentLanguage.ok) {
 		console.error(currentLanguage.message);
+
+		currentLanguage = await client({ fetch })
+			.v1.languages[":language"].$get({ param: { language: "en" } })
+			.then((r) => r.json());
+
+		if (!currentLanguage.ok)
+			error(400, `Could not recover from wrong language code: ${localLanguage}`);
 	}
+
 	if (browser && !localStorage.getItem("lang"))
-		localStorage.setItem("lang", currentLanguage.ok ? currentLanguage.data.id : "en");
+		localStorage.setItem("lang", currentLanguage.data.id);
 
 	return {
 		languages: await client({ fetch })
 			.v1.languages.$get()
 			.then((r) => r.json()),
-		language: currentLanguage.ok
-			? currentLanguage.data
-			: await client({ fetch })
-					.v1.languages[":language"].$get({ param: { language: "en" } })
-					.then((r) => r.json()),
+		language: currentLanguage.data,
 	};
 };

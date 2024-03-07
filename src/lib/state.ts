@@ -7,12 +7,11 @@ export const searchQuery = writable(
 	browser ? new URLSearchParams(window.location.search).get("q") ?? "" : "",
 );
 
-export const defaultCategories: Record<UsageCategory, boolean> = {
+export const defaultCategories: Record<Exclude<UsageCategory, "sandbox">, boolean> = {
 	core: true,
 	common: true,
 	uncommon: false,
 	obscure: false,
-	sandbox: false,
 };
 
 export const categories = persisted("categories", defaultCategories);

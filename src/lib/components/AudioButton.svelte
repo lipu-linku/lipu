@@ -4,7 +4,7 @@
 	import SpeakerIcon from "~icons/lucide/volume-2";
 
 	export let audio: WordAudio;
-	$: kalaAsi = audio.find((it) => it.author === "kala_asi");
+	$: kalaAsi = audio.find((it) => it.author === "kala Asi");
 
 	function play() {
 		new Audio(kalaAsi?.link).play();
