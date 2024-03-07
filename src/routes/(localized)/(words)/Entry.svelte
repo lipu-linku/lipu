@@ -38,7 +38,7 @@
 	<a href="/words/{word.word}" class="flex-1">
 		<CardHeader>
 			<CardTitle>{word.word}</CardTitle>
-			<CardDescription class="text-foreground">
+			<CardDescription dir={language.direction} class="text-foreground">
 				{definition}
 			</CardDescription>
 			{#if word.see_also}
