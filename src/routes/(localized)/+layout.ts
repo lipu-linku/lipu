@@ -4,21 +4,17 @@ import { error } from "@sveltejs/kit";
 import type { LayoutLoad } from "./$types";
 
 export const load: LayoutLoad = async ({ url, fetch }) => {
-	const languages = await client({ fetch })
-		.v1.languages.$get()
-		.then((r) => r.json());
 	const param = url.searchParams.get("lang");
 
 	const localLanguage =
-		languages[
-			param ??
-				(browser
-					? localStorage.getItem("lang") ?? (navigator.language || navigator.languages[0]).substring(0, 2)
-					: "en")
-		];
+		param ??
+		(browser
+			? localStorage.getItem("lang") ??
+				(navigator.language || navigator.languages[0])
+			: "en");
 
 	const currentLanguage = await client({ fetch })
-		.v1.languages[":language"].$get({ param: { language: localLanguage.id } })
+		.v1.languages[":language"].$get({ param: { language: localLanguage } })
 		.then((r) => r.json());
 
 	if (!currentLanguage.ok) error(400, currentLanguage);
@@ -26,7 +22,9 @@ export const load: LayoutLoad = async ({ url, fetch }) => {
 		localStorage.setItem("lang", currentLanguage.data.id);
 
 	return {
-		languages,
+		languages: await client({ fetch })
+			.v1.languages.$get()
+			.then((r) => r.json()),
 		language: currentLanguage.data ?? localLanguage,
 	};
 };
