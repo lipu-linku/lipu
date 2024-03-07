@@ -56,12 +56,7 @@ export default {
 			},
 			fontFamily: {
 				sans: [...fontFamily.sans],
-				"sitelen-pona": [
-					"sitelen seli kiwen",
-					{
-						fontFeatureSettings: `"rand"`,
-					},
-				],
+				"sitelen-pona": "sitelen seli kiwen mono asuki",
 			},
 		},
 	},
