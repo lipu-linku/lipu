@@ -4,14 +4,13 @@
 	import SpeakerIcon from "~icons/lucide/volume-2";
 
 	export let audio: WordAudio;
-	$: kalaAsi = audio.find((it) => it.author === "kala Asi");
 
 	function play() {
-		new Audio(kalaAsi?.link).play();
+		new Audio(audio[Math.floor(Math.random() * audio.length)].link).play();
 	}
 </script>
 
-{#if kalaAsi}
+{#if audio.length > 0}
 	<Button size="icon" variant="outline" class="align-middle" on:click={play}>
 		<SpeakerIcon aria-label="Speaker icon" />
 	</Button>
