@@ -53,9 +53,9 @@
 <svelte:window on:keydown={focusSearch} />
 
 <Navbar>
-	<form class="ml-auto flex items-center gap-2 flex-1" role="search" action="/?/search">
+	<form class="mx-auto flex items-center gap-2" role="search" action="/?/search">
 		<Input
-			class="w-auto mx-auto"
+			class="w-auto"
 			placeholder="o alasa e nimi"
 			type="search"
 			name="q"
