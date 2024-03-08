@@ -1,23 +1,16 @@
 import { browser } from "$app/environment";
+import type { UsageCategory } from "@kulupu-linku/sona/utils";
 import { persisted } from "svelte-persisted-store/dist/index.mjs";
 import { writable } from "svelte/store";
-import type { UsageCategory } from "./types";
-
-export const language = persisted(
-	"lang",
-	browser ? navigator.language || navigator.languages[0] : "en",
-);
 
 export const searchQuery = writable(
 	browser ? new URLSearchParams(window.location.search).get("q") ?? "" : "",
 );
 
-export const defaultCategories: Record<UsageCategory, boolean> = {
+export const defaultCategories: Record<Exclude<UsageCategory, "sandbox">, boolean> = {
 	core: true,
-	widespread: true,
-	common: false,
+	common: true,
 	uncommon: false,
-	rare: false,
 	obscure: false,
 };
 

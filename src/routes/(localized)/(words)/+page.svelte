@@ -1,26 +1,22 @@
 <script lang="ts">
-	import type { PageData } from "./$types";
-
 	import Entry from "./Entry.svelte";
 
-	import { wordSearch } from "$lib/components/search";
-	import { categories, language, searchQuery } from "$lib/state";
 	import { page } from "$app/stores";
+	import { wordSearch } from "$lib/components/search";
+	import { categories, searchQuery } from "$lib/state";
 
-	export let data: PageData;
-	$: ({
-		linku: { data: dictionary },
-	} = data);
+	export let data;
+	$: ({ words, language } = data);
 
 	$: categoriesParam = $page.url.searchParams.get("categories");
 
 	$: wordList = $page.url.searchParams.get("list")?.split(",");
 	$: sorted_filtered_dictionary = wordSearch(
 		$page.url.searchParams.get("q") ?? $searchQuery,
-		Object.values(dictionary),
+		words,
 		categoriesParam ? JSON.parse(categoriesParam) : $categories,
 		wordList,
-		$page.url.searchParams.get("lang") ?? $language,
+		language.id,
 	);
 </script>
 
@@ -34,7 +30,7 @@
 	>
 		{#each sorted_filtered_dictionary as word (word.id)}
 			<li>
-				<Entry {word} />
+				<Entry {language} {word} />
 			</li>
 		{/each}
 	</ul>

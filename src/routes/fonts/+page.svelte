@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { fontSentence } from "$lib/state";
-	import type { Font } from "$lib/types";
 	import { entries } from "$lib/utils";
 	import { fly } from "svelte/transition";
 	import FontEntry from "./FontEntry.svelte";
@@ -10,43 +9,15 @@
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
 
-	import {
-		Select,
-		SelectContent,
-		SelectInput,
-		SelectItem,
-		SelectTrigger,
-		SelectValue,
-	} from "$lib/components/ui/select";
+	import { Checkbox } from "$lib/components/ui/checkbox";
 	import CloseIcon from "~icons/lucide/x";
 
 	export let data;
-	$: ({
-		linku: { fonts },
-	} = data);
+	$: ({ fonts } = data);
 
-	type SortingMethod = {
-		label: string;
-		method: (a: Font, b: Font) => number;
-	};
+	let ucsur = false;
 
-	const sortingMethods = {
-		last_updated: {
-			label: "Last Updated",
-			method: (a, b) =>
-				(b.last_updated ? new Date(b.last_updated).getTime() : 0) -
-				(a.last_updated ? new Date(a.last_updated).getTime() : 0),
-		},
-		alphabetical: {
-			label: "Alphabetically",
-			method: (a, b) => a.name_short.localeCompare(b.name_short),
-		},
-	} as const satisfies Record<string, SortingMethod>;
-	let sortingMethod: keyof typeof sortingMethods = "last_updated";
-
-	$: sortedFonts = entries(fonts).sort(([_, a], [_1, b]) =>
-		sortingMethods[sortingMethod].method(a, b),
-	);
+	$: filtered = entries(fonts).filter(([, f]) => (ucsur ? f.ucsur : true));
 
 	let sidebarOpen = true;
 </script>
@@ -62,9 +33,9 @@
 
 	<main class="w-full p-4 grid grid-cols-[70%_30%] gap-2">
 		<ul class="flex flex-col gap-2">
-			{#each sortedFonts as [name, font] (name)}
+			{#each filtered as [id, font] (id)}
 				<li>
-					<FontEntry fontName={name} {font} />
+					<FontEntry {font} />
 				</li>
 			{/each}
 		</ul>
@@ -86,20 +57,10 @@
 
 					<CardContent class="flex flex-col gap-4">
 						<div class="flex flex-col gap-2">
-							<Label for="sort-by-input" id="sort-by-label">Sort By</Label>
-							<Select>
-								<SelectTrigger><SelectValue /></SelectTrigger>
-								<SelectContent>
-									{#each entries(sortingMethods) as [id, { label }] (id)}
-										<SelectItem value={id}>{label}</SelectItem>
-									{/each}
-								</SelectContent>
-								<SelectInput
-									id="sort-by-input"
-									aria-labelledby="sort-by-label"
-									bind:value={sortingMethod}
-								/>
-							</Select>
+							<div class="flex items-center space-x-2">
+								<Checkbox id="ucsur-input" aria-labelledby="ucsur-label" bind:checked={ucsur} />
+								<Label for="ucsur-input" id="ucsur-label">Only Show UCSUR Fonts</Label>
+							</div>
 						</div>
 					</CardContent>
 				</Card>

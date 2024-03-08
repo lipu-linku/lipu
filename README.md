@@ -5,7 +5,9 @@
 Built using [SvelteKit](https://kit.svelte.dev/), hosted on [Cloudflare](https://cloudflare.com/).
 
 ## How to contribute
+
 Requirements:
+
 - [Node.js](https://nodejs.org/) 18+ (v20 is recommended!)
 - [pnpm](https://pnpm.io/) v8
 - A GitHub account (of course)

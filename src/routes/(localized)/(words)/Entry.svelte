@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { language, writingSystem } from "$lib/state";
-	import type { UsageCategory, Word } from "$lib/types";
+	import { writingSystem } from "$lib/state";
+	import type { Language, LocalizedWord } from "@kulupu-linku/sona";
+	import { getTranslatedData, type UsageCategory } from "@kulupu-linku/sona/utils";
 
-	export let word: Word;
-
+	import AudioButton from "$lib/components/AudioButton.svelte";
 	import {
 		Card,
 		CardContent,
@@ -11,20 +11,19 @@
 		CardHeader,
 		CardTitle,
 	} from "$lib/components/ui/card";
-	import AudioButton from "$lib/components/AudioButton.svelte";
 
-	$: sp = word.sitelen_pona?.split(" ")?.[0] ?? "";
+	export let word: LocalizedWord;
+	export let language: Language;
 
-	$: definition = word.def[$language] ?? "(en) " + word.def["en"];
-	$: usageScore = Object.values(word.recognition ?? {}).at(-1) ?? "0";
+	$: definition = getTranslatedData(word, "definition", language.id);
+	$: usageScore = Object.values(word.usage).at(-1) ?? 0;
 
 	const categoryColors = {
 		core: "oklch(93.29% 0.137 106.54)",
-		widespread: "oklch(76.59% 0.169 65.75)",
 		common: "oklch(61.15% 0.177 30.62)",
 		uncommon: "oklch(46.87% 0.159 351.1)",
-		rare: "oklch(32.72% 0.149 311.74)",
-		obscure: "oklch(20.55% 0.052 284.53)",
+		obscure: "oklch(32.72% 0.149 311.74)",
+		sandbox: "oklch(20.55% 0.052 284.53)",
 	} as const satisfies Record<UsageCategory, string>;
 </script>
 
@@ -39,16 +38,17 @@
 	<a href="/words/{word.word}" class="flex-1">
 		<CardHeader>
 			<CardTitle>{word.word}</CardTitle>
-			<CardDescription class="text-foreground">
+			<CardDescription dir={language.direction} class="text-foreground">
 				{definition}
 			</CardDescription>
-			{#if word.see_also}
-				{@const others = word.see_also.split(", ")}
+			{#if word.see_also.length > 0}
 				<CardDescription>
 					See also:
-					{#each others as other, i}
-						<a class="underline" href="/words/{other}">{other}</a
-						>{#if i < others.length - 1},&nbsp;{/if}
+					{#each word.see_also as other, i}
+						<a class="underline" href="/words/{other}">{other}</a>
+						{#if i < word.see_also.length - 1}
+							,&nbsp;
+						{/if}
 					{/each}
 				</CardDescription>
 			{/if}
@@ -62,15 +62,17 @@
 	</a>
 
 	<CardContent class="flex items-center justify-center gap-4 py-0 text-6xl my-auto">
-		{#if word.audio}
+		{#if word.audio.length > 0}
 			<AudioButton audio={word.audio} />
 		{/if}
 
-		{#if $writingSystem === "sitelen_pona" && word.sitelen_pona}
-			<span title={sp} class="text-center min-w-14 font-sitelen-pona">{sp}</span>
-		{:else if $writingSystem === "sitelen_sitelen" && word.sitelen_sitelen}
+		{#if $writingSystem === "sitelen_pona" && word.representations?.ligatures}
+			<span class="text-center min-w-14 font-sitelen-pona">
+				{word.representations?.ligatures.slice(0, 3).join(" ")}
+			</span>
+		{:else if $writingSystem === "sitelen_sitelen" && word.representations?.sitelen_sitelen}
 			<img
-				src={word.sitelen_sitelen}
+				src={word.representations.sitelen_sitelen}
 				alt="{word.word} in sitelen sitelen format"
 				class="dark:invert size-16"
 				loading="lazy"

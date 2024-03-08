@@ -1,4 +1,4 @@
-import { Config } from "tailwindcss";
+import type { Config } from "tailwindcss";
 import { fontFamily } from "tailwindcss/defaultTheme";
 
 export default {
@@ -56,7 +56,7 @@ export default {
 			},
 			fontFamily: {
 				sans: [...fontFamily.sans],
-				"sitelen-pona": "sitelen seli kiwen",
+				"sitelen-pona": "sitelen seli kiwen mono asuki",
 			},
 		},
 	},

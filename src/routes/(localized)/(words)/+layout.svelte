@@ -1,22 +1,11 @@
 <script lang="ts">
-	import { page } from "$app/stores";
-
+	import { Button } from "$lib/components/ui/button";
+	import { Input } from "$lib/components/ui/input";
+	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import LanguageSwitch from "$lib/components/LanguageSwitch.svelte";
 	import Navbar from "$lib/components/Navbar.svelte";
-	import { Button } from "$lib/components/ui/button";
-	import {
-		DropdownMenu,
-		DropdownMenuCheckboxItem,
-		DropdownMenuContent,
-		DropdownMenuGroup,
-		DropdownMenuItem,
-		DropdownMenuLabel,
-		DropdownMenuRadioGroup,
-		DropdownMenuRadioItem,
-		DropdownMenuSeparator,
-		DropdownMenuTrigger,
-	} from "$lib/components/ui/dropdown-menu";
-	import { Input } from "$lib/components/ui/input";
+
+	import { page } from "$app/stores";
 	import { categories, defaultCategories, searchQuery, writingSystem } from "$lib/state";
 	import { keys } from "$lib/utils";
 
@@ -29,9 +18,8 @@
 	import ResetIcon from "~icons/lucide/undo-2";
 
 	export let data;
-	$: ({
-		linku: { languages },
-	} = data);
+
+	$: ({ languages, language } = data);
 
 	const focusSearch = (e: KeyboardEvent) => {
 		if (e.key === "/" && document.activeElement?.id !== "search-input") {
@@ -68,7 +56,7 @@
 	<form class="ml-auto flex items-center gap-2 flex-1" role="search" action="/?/search">
 		<Input
 			class="w-auto mx-auto"
-			placeholder="o lukin e nimi"
+			placeholder="o alasa e nimi"
 			type="search"
 			name="q"
 			required
@@ -78,8 +66,8 @@
 			id="search-input"
 		/>
 
-		<DropdownMenu closeOnItemClick={false} preventScroll={false}>
-			<DropdownMenuTrigger asChild let:builder>
+		<DropdownMenu.Root closeOnItemClick={false} preventScroll={false}>
+			<DropdownMenu.Trigger asChild let:builder>
 				<Button
 					form=""
 					builders={[builder]}
@@ -87,69 +75,73 @@
 					size="icon"
 					aria-label="Search Options"
 				>
-					<SettingsIcon />
+					<SettingsIcon aria-label="Settings icon" />
 				</Button>
-			</DropdownMenuTrigger>
+			</DropdownMenu.Trigger>
 
-			<DropdownMenuContent>
-				<DropdownMenuLabel class="text-center">Search Options</DropdownMenuLabel>
+			<DropdownMenu.Content>
+				<DropdownMenu.Label class="text-center">Search Options</DropdownMenu.Label>
 
-				<DropdownMenuSeparator />
+				<DropdownMenu.Separator />
 
-				<DropdownMenuGroup>
-					<DropdownMenuLabel>
-						<CategoriesIcon class="inline mr-1 size-4" />
+				<DropdownMenu.Group>
+					<DropdownMenu.Label>
+						<CategoriesIcon aria-label="Categories icon" class="inline mr-1 size-4" />
 						<span>Usage Categories</span>
-					</DropdownMenuLabel>
+					</DropdownMenu.Label>
 
 					{#each keys($categories) as category}
-						<DropdownMenuCheckboxItem bind:checked={$categories[category]}>
+						<DropdownMenu.CheckboxItem bind:checked={$categories[category]}>
 							{category}
-						</DropdownMenuCheckboxItem>
+						</DropdownMenu.CheckboxItem>
 					{/each}
-				</DropdownMenuGroup>
+				</DropdownMenu.Group>
 
-				<DropdownMenuSeparator />
+				<DropdownMenu.Separator />
 
-				<DropdownMenuGroup>
-					<DropdownMenuLabel
+				<DropdownMenu.Group>
+					<DropdownMenu.Label
 						class={$page.route.id === "/(words)/words/[word]"
 							? `opacity-50 pointer-events-none`
 							: ""}
 					>
-						<WritingSystemIcon class="inline mr-1 size-4" />
+						<WritingSystemIcon aria-label="Fountain pen icon" class="inline mr-1 size-4" />
 						<span>Writing System</span>
-					</DropdownMenuLabel>
+					</DropdownMenu.Label>
 
-					<DropdownMenuRadioGroup bind:value={$writingSystem}>
-						<DropdownMenuRadioItem
+					<DropdownMenu.RadioGroup bind:value={$writingSystem}>
+						<DropdownMenu.RadioItem
 							disabled={$page.route.id === "/(words)/words/[word]"}
 							value="sitelen_pona"
 						>
 							sitelen pona
-						</DropdownMenuRadioItem>
-						<DropdownMenuRadioItem
+						</DropdownMenu.RadioItem>
+						<DropdownMenu.RadioItem
 							disabled={$page.route.id === "/(words)/words/[word]"}
 							value="sitelen_sitelen"
 						>
 							sitelen sitelen
-						</DropdownMenuRadioItem>
-					</DropdownMenuRadioGroup>
-				</DropdownMenuGroup>
+						</DropdownMenu.RadioItem>
+					</DropdownMenu.RadioGroup>
+				</DropdownMenu.Group>
 
-				<DropdownMenuSeparator />
+				<DropdownMenu.Separator />
 
-				<DropdownMenuItem class="font-semibold" on:click={copyLinkWithParams}>
-					<svelte:component this={!hasCopied ? LinkIcon : CheckIcon} class="inline mr-2 size-4" />
+				<DropdownMenu.Item class="font-semibold" on:click={copyLinkWithParams}>
+					<svelte:component
+						this={!hasCopied ? LinkIcon : CheckIcon}
+						aria-hidden
+						class="inline mr-2 size-4"
+					/>
 					<span>Copy Permalink</span>
-				</DropdownMenuItem>
+				</DropdownMenu.Item>
 
-				<DropdownMenuItem class="font-semibold" on:click={resetOptions}>
-					<ResetIcon class="inline mr-2 size-4" />
+				<DropdownMenu.Item class="font-semibold" on:click={resetOptions}>
+					<ResetIcon aria-hidden class="inline mr-2 size-4" />
 					<span>Reset Options</span>
-				</DropdownMenuItem>
-			</DropdownMenuContent>
-		</DropdownMenu>
+				</DropdownMenu.Item>
+			</DropdownMenu.Content>
+		</DropdownMenu.Root>
 
 		<input type="hidden" name="categories" value={JSON.stringify($categories)} />
 
@@ -158,7 +150,7 @@
 		</Button>
 	</form>
 
-	<LanguageSwitch localeList={languages} />
+	<LanguageSwitch selected={language.id} localeList={languages} />
 </Navbar>
 
 <slot />
