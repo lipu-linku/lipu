@@ -31,9 +31,9 @@ const links: Record<string, NavbarLink> = {
 </script>
 
 <header
-	class="sticky top-0 z-50 flex items-center justify-between gap-2 border-b border-border/40 bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+	class="sticky top-0 z-50 border-b border-border/40 bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60"
 >
-	<div class="container mx-0 flex h-10 max-w-screen-2xl items-center gap-2 px-2">
+	<div class="container mx-auto flex h-10 items-center gap-2 px-2">
 		<DesktopNav links={links}>
 			<slot />
 		</DesktopNav>
