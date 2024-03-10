@@ -1,59 +1,59 @@
 <script lang="ts">
-	import { Button } from "$lib/components/ui/button";
-	import { Input } from "$lib/components/ui/input";
-	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-	import LanguageSwitch from "$lib/components/LanguageSwitch.svelte";
-	import Navbar from "$lib/components/Navbar.svelte";
+import { Button } from "$lib/components/ui/button";
+import { Input } from "$lib/components/ui/input";
+import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+import LanguageSwitch from "$lib/components/LanguageSwitch.svelte";
+import Navbar from "$lib/components/Navbar.svelte";
 
-	import { page } from "$app/stores";
-	import { categories, defaultCategories, searchQuery, writingSystem } from "$lib/state";
-	import { keys } from "$lib/utils";
+import { page } from "$app/stores";
+import { categories, defaultCategories, searchQuery, writingSystem } from "$lib/state";
+import { keys } from "$lib/utils";
 
-	import CheckIcon from "~icons/lucide/check";
-	import CategoriesIcon from "~icons/lucide/layout-dashboard";
-	import LinkIcon from "~icons/lucide/link";
-	import WritingSystemIcon from "~icons/lucide/pen-tool";
-	import SearchIcon from "~icons/lucide/search";
-	import SettingsIcon from "~icons/lucide/settings";
-	import ResetIcon from "~icons/lucide/undo-2";
+import CheckIcon from "~icons/lucide/check";
+import CategoriesIcon from "~icons/lucide/layout-dashboard";
+import LinkIcon from "~icons/lucide/link";
+import WritingSystemIcon from "~icons/lucide/pen-tool";
+import SearchIcon from "~icons/lucide/search";
+import SettingsIcon from "~icons/lucide/settings";
+import ResetIcon from "~icons/lucide/undo-2";
 
-	export let data;
+export let data;
 
-	$: ({ languages, language } = data);
+$: ({ languages, language } = data);
 
-	const focusSearch = (e: KeyboardEvent) => {
-		if (e.key === "/" && document.activeElement?.id !== "search-input") {
-			e.preventDefault();
-			document.getElementById("search-input")!.focus();
-		}
-	};
-
-	let hasCopied = false;
-	const copyLinkWithParams = () => {
-		const url = $page.url;
-		url.searchParams.set("categories", JSON.stringify($categories));
-		url.searchParams.set("q", $searchQuery);
-
-		navigator.clipboard.writeText(url.toString());
-		hasCopied = true;
-	};
-
-	$: {
-		if (hasCopied) {
-			setTimeout(() => (hasCopied = false), 2.5 * 1000);
-		}
+const focusSearch = (e: KeyboardEvent) => {
+	if (e.key === "/" && document.activeElement?.id !== "search-input") {
+		e.preventDefault();
+		document.getElementById("search-input")!.focus();
 	}
+};
 
-	const resetOptions = () => {
-		$searchQuery = "";
-		$categories = defaultCategories;
-	};
+let hasCopied = false;
+const copyLinkWithParams = () => {
+	const url = $page.url;
+	url.searchParams.set("categories", JSON.stringify($categories));
+	url.searchParams.set("q", $searchQuery);
+
+	navigator.clipboard.writeText(url.toString());
+	hasCopied = true;
+};
+
+$: {
+	if (hasCopied) {
+		setTimeout(() => (hasCopied = false), 2.5 * 1000);
+	}
+}
+
+const resetOptions = () => {
+	$searchQuery = "";
+	$categories = defaultCategories;
+};
 </script>
 
 <svelte:window on:keydown={focusSearch} />
 
 <Navbar>
-	<form class="mx-auto flex items-center gap-2" role="search" action="/?/search">
+	<form class="mx-auto flex items-center gap-2 max-sm:hidden" role="search" action="/?/search">
 		<Input
 			class="w-auto"
 			placeholder="o alasa e nimi"
@@ -86,7 +86,7 @@
 
 				<DropdownMenu.Group>
 					<DropdownMenu.Label>
-						<CategoriesIcon aria-label="Categories icon" class="inline mr-1 size-4" />
+						<CategoriesIcon aria-label="Categories icon" class="mr-1 inline size-4" />
 						<span>Usage Categories</span>
 					</DropdownMenu.Label>
 
@@ -102,10 +102,10 @@
 				<DropdownMenu.Group>
 					<DropdownMenu.Label
 						class={$page.route.id === "/(words)/words/[word]"
-							? `opacity-50 pointer-events-none`
+							? `pointer-events-none opacity-50`
 							: ""}
 					>
-						<WritingSystemIcon aria-label="Fountain pen icon" class="inline mr-1 size-4" />
+						<WritingSystemIcon aria-label="Fountain pen icon" class="mr-1 inline size-4" />
 						<span>Writing System</span>
 					</DropdownMenu.Label>
 
@@ -131,13 +131,13 @@
 					<svelte:component
 						this={!hasCopied ? LinkIcon : CheckIcon}
 						aria-hidden
-						class="inline mr-2 size-4"
+						class="mr-2 inline size-4"
 					/>
 					<span>Copy Permalink</span>
 				</DropdownMenu.Item>
 
 				<DropdownMenu.Item class="font-semibold" on:click={resetOptions}>
-					<ResetIcon aria-hidden class="inline mr-2 size-4" />
+					<ResetIcon aria-hidden class="mr-2 inline size-4" />
 					<span>Reset Options</span>
 				</DropdownMenu.Item>
 			</DropdownMenu.Content>

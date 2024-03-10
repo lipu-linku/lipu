@@ -9,15 +9,15 @@
 	export let localeList: Languages;
 	export let selected: keyof Languages;
 
-	$: items = Object.entries(localeList).map(([locale, lang]) => ({
-		value: locale,
+	$: items = Object.entries(localeList).map(([id, lang]) => ({
+		value: id,
 		label: lang.name.endonym,
 	}));
 </script>
 
 <Select.Root
 	{items}
-	selected={{ value: localeList[selected].locale, label: localeList[selected].name.endonym }}
+	selected={{ value: localeList[selected].id, label: localeList[selected].name.endonym }}
 	onSelectedChange={(item) => {
 		if (item) {
 			localStorage.setItem("lang", item.value);
@@ -35,10 +35,8 @@
 	</Select.Trigger>
 
 	<Select.Content sameWidth={false} class="max-h-[50dvh] overflow-y-scroll">
-		{#each entries(localeList) as [locale, language] (locale)}
-			<Select.Item label={language.name.endonym} value={locale}>
-				{language.name.endonym}
-			</Select.Item>
+		{#each items as { value, label } (value)}
+			<Select.Item {label} {value}>{label}</Select.Item>
 		{/each}
 	</Select.Content>
 

@@ -1,72 +1,62 @@
-<script lang="ts">
-	import { Button } from "$lib/components/ui/button";
-	import { Separator } from "$lib/components/ui/separator";
-
-	import { mode, toggleMode } from "mode-watcher";
-	import type { SvelteComponent } from "svelte";
-	import type { SvelteHTMLElements } from "svelte/elements";
-
-	import icon from "$lib/assets/icon.png";
-	import { entries } from "$lib/utils";
-	import InfoIcon from "~icons/lucide/info";
-	import DarkModeIcon from "~icons/lucide/moon";
-	import LightModeIcon from "~icons/lucide/sun";
-	import FontsIcon from "~icons/mdi/format-font";
-
-	type NavbarLink = {
-		href: string;
-		label: string;
-		icon: typeof SvelteComponent<SvelteHTMLElements["svg"]>;
-	};
-
-	const links: Record<string, NavbarLink> = {
-		// TODO: fix the fonts page
-		// fonts: {
-		// 	href: "/fonts",
-		// 	label: "Fonts",
-		// 	icon: FontsIcon,
-		// },
-	} as const;
+<script lang="ts" context="module">
+export type NavbarLink = {
+	href: string;
+	label: string;
+	icon: typeof SvelteComponent<SvelteHTMLElements["svg"]>;
+};
 </script>
 
-<nav
-	class="z-10 h-16 sticky top-0 flex items-center justify-between gap-2 bg-background p-4 border-b border-b-border"
+<script lang="ts">
+import type { SvelteComponent } from "svelte";
+import type { SvelteHTMLElements } from "svelte/elements";
+
+import DesktopNav from "./DesktopNav.svelte";
+import MobileNav from "./MobileNav.svelte";
+import { Button } from "$lib/components/ui/button";
+import { mode, toggleMode } from "mode-watcher";
+
+import InfoIcon from "~icons/lucide/info";
+import DarkModeIcon from "~icons/lucide/moon";
+import LightModeIcon from "~icons/lucide/sun";
+import FontsIcon from "~icons/mdi/format-font";
+
+const links: Record<string, NavbarLink> = {
+	// TODO: fix the fonts page
+	fonts: {
+		href: "/fonts",
+		label: "Fonts",
+		icon: FontsIcon,
+	},
+} as const;
+</script>
+
+<header
+	class="sticky top-0 z-50 flex items-center justify-between gap-2 border-b border-border/40 bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60"
 >
-	<header class="mx-3 max-sm:mx-auto">
-		<a href="/">
-			<h1 class="flex items-center gap-4 my-0 sm:ml-auto">
-				<img src={icon} class="h-8 invert dark:invert-0" alt="lipu Linku" />
-				<span class="text-current font-semibold">lipu Linku</span>
-			</h1>
-		</a>
-	</header>
+	<div class="container mx-0 flex h-10 max-w-screen-2xl items-center gap-2 px-2">
+		<DesktopNav links={links}>
+			<slot />
+		</DesktopNav>
+		<MobileNav links={links}>
+			<slot />
+		</MobileNav>
 
-	<Separator orientation="vertical" />
+		<Button
+			class="ml-auto"
+			variant="outline"
+			size="icon"
+			on:click={toggleMode}
+			aria-label="Toggle theme"
+		>
+			{#if $mode === "light"}
+				<DarkModeIcon aria-label="Moon icon" />
+			{:else}
+				<LightModeIcon aria-label="Sun icon" />
+			{/if}
+		</Button>
 
-	<ul>
-		{#each entries(links) as [id, link] (id)}
-			<li>
-				<Button class="flex items-center gap-[1ch]" variant="ghost" href={link.href}>
-					<svelte:component this={link.icon} />
-					<span>{link.label}</span>
-				</Button>
-			</li>
-		{/each}
-	</ul>
-
-	<div class="flex-1 flex items-center gap-2">
-		<slot />
+		<Button variant="outline" size="icon" href="/about" aria-label="About Linku">
+			<InfoIcon aria-label="Information icon" />
+		</Button>
 	</div>
-
-	<Button variant="outline" size="icon" on:click={toggleMode} aria-label="Toggle theme">
-		{#if $mode === "light"}
-			<DarkModeIcon aria-label="Moon icon" />
-		{:else}
-			<LightModeIcon aria-label="Sun icon" />
-		{/if}
-	</Button>
-
-	<Button variant="outline" size="icon" href="/about" aria-label="About Linku">
-		<InfoIcon aria-label="Information icon" />
-	</Button>
-</nav>
+</header>
