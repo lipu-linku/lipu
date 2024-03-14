@@ -2,8 +2,8 @@
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
 	import * as Select from "$lib/components/ui/select";
-	import { entries } from "$lib/utils";
 	import type { Languages } from "@kulupu-linku/sona";
+
 	import LanguagesIcon from "~icons/lucide/languages";
 
 	export let localeList: Languages;
@@ -27,7 +27,7 @@
 		}
 	}}
 >
-	<Select.Trigger class="max-w-48 w-auto justify-start gap-2">
+	<Select.Trigger class="md:max-w-48 md:w-auto md:justify-start gap-2">
 		<LanguagesIcon aria-label="Languages icon" class="size-4" />
 		<Select.Value class="line-clamp-1 overflow-ellipsis">
 			{localeList[selected].name.endonym}

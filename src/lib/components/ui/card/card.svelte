@@ -12,10 +12,7 @@
 
 <div
 	bind:this={thisEl}
-	class={cn(
-		"rounded-lg border bg-card text-card-foreground shadow-sm",
-		className
-	)}
+	class={cn("rounded-lg border bg-card text-card-foreground shadow-sm", className)}
 	{...$$restProps}
 >
 	<slot />

@@ -84,9 +84,7 @@
 					Loading...
 				{:then}
 					<span transition:flyAndScale={{ y: 10 }} style="font-family: '{font.name}'">
-						{#if $fontSentence.match(/[\u{F1900}-\u{F19FF}]/gu)}
-							
-						{/if}
+						{#if $fontSentence.match(/[\u{F1900}-\u{F19FF}]/gu)}{/if}
 						{$fontSentence.trim()}
 					</span>
 				{:catch}

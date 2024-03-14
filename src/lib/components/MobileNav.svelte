@@ -5,7 +5,7 @@
 	import * as Sheet from "$lib/components/ui/sheet";
 	import Separator from "./ui/separator/separator.svelte";
 	import type { NavbarLink } from "./Navbar.svelte";
-  
+
 	import logo from "$lib/assets/icon.png";
 	import MenuIcon from "~icons/lucide/menu";
 

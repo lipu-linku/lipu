@@ -15,9 +15,9 @@ export const wordSearch = (
 ): LocalizedWord[] => {
 	query = normalize(query);
 
-	const initialFilteredWords = Object.values(words).filter(
-		(w) => categories[w.usage_category] && (wordList?.includes(w.word) ?? true),
-	);
+	const initialFilteredWords = Object.values(words)
+		.filter((w) => categories[w.usage_category] && (wordList?.includes(w.word) ?? true))
+		.sort((a, b) => a.word.toLowerCase().localeCompare(b.word.toLowerCase()));
 
 	if (query === "") return initialFilteredWords;
 

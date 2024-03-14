@@ -1,61 +1,61 @@
 <script lang="ts">
-import { Button } from "$lib/components/ui/button";
-import { Input } from "$lib/components/ui/input";
-import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-import LanguageSwitch from "$lib/components/LanguageSwitch.svelte";
-import Navbar from "$lib/components/Navbar.svelte";
+	import { Button } from "$lib/components/ui/button";
+	import { Input } from "$lib/components/ui/input";
+	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+	import LanguageSwitch from "$lib/components/LanguageSwitch.svelte";
+	import Navbar from "$lib/components/Navbar.svelte";
 
-import { page } from "$app/stores";
-import { categories, defaultCategories, searchQuery, writingSystem } from "$lib/state";
-import { keys } from "$lib/utils";
+	import { page } from "$app/stores";
+	import { categories, defaultCategories, searchQuery, writingSystem } from "$lib/state";
+	import { keys } from "$lib/utils";
 
-import CheckIcon from "~icons/lucide/check";
-import CategoriesIcon from "~icons/lucide/layout-dashboard";
-import LinkIcon from "~icons/lucide/link";
-import WritingSystemIcon from "~icons/lucide/pen-tool";
-import SearchIcon from "~icons/lucide/search";
-import SettingsIcon from "~icons/lucide/settings";
-import ResetIcon from "~icons/lucide/undo-2";
+	import CheckIcon from "~icons/lucide/check";
+	import CategoriesIcon from "~icons/lucide/layout-dashboard";
+	import LinkIcon from "~icons/lucide/link";
+	import WritingSystemIcon from "~icons/lucide/pen-tool";
+	import SearchIcon from "~icons/lucide/search";
+	import SettingsIcon from "~icons/lucide/settings";
+	import ResetIcon from "~icons/lucide/undo-2";
 
-export let data;
+	export let data;
 
-$: ({ languages, language } = data);
+	$: ({ languages, language } = data);
 
-const focusSearch = (e: KeyboardEvent) => {
-	if (e.key === "/" && document.activeElement?.id !== "search-input") {
-		e.preventDefault();
-		document.getElementById("search-input")!.focus();
+	const focusSearch = (e: KeyboardEvent) => {
+		if (e.key === "/" && document.activeElement?.id !== "search-input") {
+			e.preventDefault();
+			document.getElementById("search-input")!.focus();
+		}
+	};
+
+	let hasCopied = false;
+	const copyLinkWithParams = () => {
+		const url = $page.url;
+		url.searchParams.set("categories", JSON.stringify($categories));
+		url.searchParams.set("q", $searchQuery);
+
+		navigator.clipboard.writeText(url.toString());
+		hasCopied = true;
+	};
+
+	$: {
+		if (hasCopied) {
+			setTimeout(() => (hasCopied = false), 2.5 * 1000);
+		}
 	}
-};
 
-let hasCopied = false;
-const copyLinkWithParams = () => {
-	const url = $page.url;
-	url.searchParams.set("categories", JSON.stringify($categories));
-	url.searchParams.set("q", $searchQuery);
-
-	navigator.clipboard.writeText(url.toString());
-	hasCopied = true;
-};
-
-$: {
-	if (hasCopied) {
-		setTimeout(() => (hasCopied = false), 2.5 * 1000);
-	}
-}
-
-const resetOptions = () => {
-	$searchQuery = "";
-	$categories = defaultCategories;
-};
+	const resetOptions = () => {
+		$searchQuery = "";
+		$categories = defaultCategories;
+	};
 </script>
 
 <svelte:window on:keydown={focusSearch} />
 
 <Navbar>
-	<form class="mx-auto flex items-center gap-2 max-sm:hidden" role="search" action="/?/search">
+	<form class="md:mx-auto flex items-center gap-2" role="search" action="/?/search">
 		<Input
-			class="w-auto"
+			class="md:w-auto"
 			placeholder="o alasa e nimi"
 			type="search"
 			name="q"
@@ -79,7 +79,7 @@ const resetOptions = () => {
 				</Button>
 			</DropdownMenu.Trigger>
 
-			<DropdownMenu.Content>
+			<DropdownMenu.Content class="w-screen md:w-auto">
 				<DropdownMenu.Label class="text-center">Search Options</DropdownMenu.Label>
 
 				<DropdownMenu.Separator />
