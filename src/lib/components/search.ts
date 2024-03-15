@@ -15,11 +15,14 @@ export const wordSearch = (
 ): LocalizedWord[] => {
 	query = normalize(query);
 
-	const initialFilteredWords = Object.values(words)
-		.filter((w) => categories[w.usage_category] && (wordList?.includes(w.word) ?? true))
-		.sort((a, b) => a.word.toLowerCase().localeCompare(b.word.toLowerCase()));
+	const initialFilteredWords = Object.values(words).filter(
+		(w) => categories[w.usage_category] && (wordList?.includes(w.word) ?? true),
+	);
 
-	if (query === "") return initialFilteredWords;
+	if (query === "")
+		return initialFilteredWords.sort((a, b) =>
+			a.word.toLowerCase().localeCompare(b.word.toLowerCase()),
+		);
 
 	const scoreFilter = (word: LocalizedWord) =>
 		Boolean(
