@@ -7,6 +7,7 @@
 	import { categories, defaultCategories, searchQuery, writingSystem } from "$lib/state";
 	import { cn, keys } from "$lib/utils";
 
+	import { pushState } from "$app/navigation";
 	import CheckIcon from "~icons/lucide/check";
 	import CategoriesIcon from "~icons/lucide/layout-dashboard";
 	import LinkIcon from "~icons/lucide/link";
@@ -41,19 +42,23 @@
 		}
 	}
 
-	const resetOptions = () => {
+	$: if ($searchQuery === "") clearQuery();
+
+	const clearQuery = () => {
 		$searchQuery = "";
+		$page.url.searchParams.delete("q");
+		pushState($page.url, {});
+	};
+
+	const resetOptions = () => {
+		clearQuery();
 		$categories = defaultCategories;
 	};
 </script>
 
 <svelte:window on:keydown={focusSearch} />
 
-<form
-	class={cn("mx-auto justify-center items-center gap-2", className)}
-	role="search"
-	action="/?/search"
->
+<form class={cn("mx-auto justify-center items-center gap-2", className)} role="search">
 	<Input
 		class="w-auto"
 		placeholder="o alasa e nimi"
