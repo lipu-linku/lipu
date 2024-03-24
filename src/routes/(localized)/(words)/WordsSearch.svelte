@@ -43,7 +43,7 @@
 		}
 	}
 
-	$: if ($searchQuery === "") clearQuery();
+	$: if ($searchQuery === "" && $page.url.searchParams.has("q")) clearQuery();
 
 	const clearQuery = () => {
 		$searchQuery = "";
