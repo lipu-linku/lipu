@@ -4,7 +4,13 @@
 	import { Input } from "$lib/components/ui/input";
 
 	import { page } from "$app/stores";
-	import { categories, defaultCategories, searchQuery, writingSystem } from "$lib/state";
+	import {
+		categories,
+		categoriesSerializer,
+		defaultCategories,
+		searchQuery,
+		writingSystem,
+	} from "$lib/state";
 	import { cn, keys } from "$lib/utils";
 
 	import { pushState } from "$app/navigation";
@@ -29,7 +35,7 @@
 
 	let hasCopied = false;
 	const copyLinkWithParams = () => {
-		const url = $page.url;
+		const url = new URL($page.url);
 		url.searchParams.set("categories", JSON.stringify($categories));
 		url.searchParams.set("q", $searchQuery);
 
@@ -52,8 +58,11 @@
 	};
 
 	const resetOptions = () => {
-		clearQuery();
+		$searchQuery = "";
 		$categories = defaultCategories;
+
+		$page.url.searchParams.forEach((v, k, params) => params.delete(k, v));
+		if (browser) pushState($page.url, {});
 	};
 </script>
 
@@ -147,7 +156,7 @@
 		</DropdownMenu.Content>
 	</DropdownMenu.Root>
 
-	<input type="hidden" name="categories" value={JSON.stringify($categories)} />
+	<input type="hidden" name="categories" value={categoriesSerializer.stringify($categories)} />
 
 	<Button class="inline-flex" type="submit" variant="outline" size="icon">
 		<SearchIcon />

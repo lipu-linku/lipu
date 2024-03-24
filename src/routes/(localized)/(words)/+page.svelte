@@ -3,7 +3,7 @@
 
 	import { page } from "$app/stores";
 	import { wordSearch } from "$lib/components/search";
-	import { categories, searchQuery } from "$lib/state";
+	import { categories, categoriesSerializer, searchQuery } from "$lib/state";
 	import WordsSearch from "./WordsSearch.svelte";
 
 	export let data;
@@ -15,7 +15,7 @@
 	$: sorted_filtered_dictionary = wordSearch(
 		$page.url.searchParams.get("q") ?? $searchQuery,
 		words,
-		categoriesParam ? JSON.parse(categoriesParam) : $categories,
+		categoriesParam ? categoriesSerializer.parse(categoriesParam) : $categories,
 		wordList,
 		language.id,
 	);
