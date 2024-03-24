@@ -15,6 +15,7 @@
 	import SearchIcon from "~icons/lucide/search";
 	import SettingsIcon from "~icons/lucide/settings";
 	import ResetIcon from "~icons/lucide/undo-2";
+	import { browser } from "$app/environment";
 
 	let className = "";
 	export { className as class };
@@ -47,7 +48,7 @@
 	const clearQuery = () => {
 		$searchQuery = "";
 		$page.url.searchParams.delete("q");
-		pushState($page.url, {});
+		if (browser) pushState($page.url, {});
 	};
 
 	const resetOptions = () => {
