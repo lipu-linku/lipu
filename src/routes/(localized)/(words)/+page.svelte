@@ -4,6 +4,7 @@
 	import { page } from "$app/stores";
 	import { wordSearch } from "$lib/components/search";
 	import { categories, searchQuery } from "$lib/state";
+	import WordsSearch from "./WordsSearch.svelte";
 
 	export let data;
 	$: ({ words, language } = data);
@@ -24,7 +25,9 @@
 	<title>lipu Linku</title>
 </svelte:head>
 
-<main class="flex-1 my-4">
+<main class="flex-1 my-4 space-y-4">
+	<WordsSearch class="flex md:hidden" />
+
 	<ul
 		class="flex-1 flex flex-col items-stretch gap-2 mx-auto max-w-[min(1000px,clamp(60%,400px,100%_-_3rem))]"
 	>
