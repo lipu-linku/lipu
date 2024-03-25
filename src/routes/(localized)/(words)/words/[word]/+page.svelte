@@ -112,7 +112,7 @@
 		</div>
 	</header>
 
-	<div class="flex-1 grid sm:grid-cols-3 max-sm:flex max-sm:flex-col gap-2 justify-stretch">
+	<div class="flex-1 grid grid-cols-3 max-md:flex max-md:flex-col gap-2 justify-stretch">
 		<Card>
 			<CardHeader>
 				<CardTitle class="text-2xl" tag="h2">Meaning</CardTitle>

@@ -25,9 +25,7 @@
 	<title>lipu Linku</title>
 </svelte:head>
 
-<main class="flex-1 my-4 space-y-4">
-	<WordsSearch class="flex md:hidden" />
-
+<main class="flex-1 my-4">
 	<ul
 		class="flex-1 flex flex-col items-stretch gap-2 mx-auto max-w-[min(1000px,clamp(60%,400px,100%_-_3rem))]"
 	>
