@@ -12,35 +12,35 @@
 		"format": "prettier --plugin-search-dir . --write ."
 	},
 	"devDependencies": {
-		"@iconify/json": "^2.2.190",
+		"@iconify/json": "^2.2.196",
 		"@kulupu-linku/sona": "^0.2.3",
-		"@sveltejs/adapter-cloudflare": "^4.1.0",
-		"@sveltejs/kit": "^2.5.2",
+		"@sveltejs/adapter-cloudflare": "^4.2.0",
+		"@sveltejs/kit": "^2.5.5",
 		"@sveltejs/vite-plugin-svelte": "^3.0.2",
 		"clsx": "^2.1.0",
 		"fastest-levenshtein": "^1.0.16",
-		"lightningcss": "^1.24.0",
-		"mode-watcher": "^0.2.2",
+		"lightningcss": "^1.24.1",
+		"mode-watcher": "^0.3.0",
 		"postcss-nesting": "^12.1.0",
-		"postcss-preset-env": "^9.5.0",
+		"postcss-preset-env": "^9.5.2",
 		"prettier": "^3.2.5",
 		"prettier-plugin-svelte": "^3.2.2",
-		"prettier-plugin-tailwindcss": "^0.5.12",
+		"prettier-plugin-tailwindcss": "^0.5.13",
 		"svelte": "^4.2.12",
-		"svelte-check": "^3.6.6",
+		"svelte-check": "^3.6.8",
 		"svelte-intersection-observer": "^1.0.0",
 		"svelte-persisted-store": "^0.9.1",
-		"tailwind-merge": "^2.2.1",
-		"tailwind-variants": "^0.2.0",
-		"tailwindcss": "^3.4.1",
+		"tailwind-merge": "^2.2.2",
+		"tailwind-variants": "^0.2.1",
+		"tailwindcss": "^3.4.3",
 		"tslib": "^2.6.2",
-		"typescript": "^5.4.2",
+		"typescript": "^5.4.3",
 		"unplugin-icons": "^0.18.5",
-		"vite": "^5.1.5"
+		"vite": "^5.2.6"
 	},
 	"type": "module",
 	"dependencies": {
-		"bits-ui": "^0.19.5"
+		"bits-ui": "^0.21.1"
 	},
 	"packageManager": "pnpm@8.8.0+sha1.9922e8b650d393700209ccd81e0ebdbcbe43b0d3"
 }
