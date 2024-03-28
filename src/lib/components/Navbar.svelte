@@ -31,9 +31,9 @@
 </script>
 
 <header
-	class="sticky top-0 z-50 space-y-2 border-b border-border/40 bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+	class="md:sticky top-0 z-50 md:border-b border-border/40 bg-background/95 p-4 pb-0 md:pb-4 backdrop-blur supports-[backdrop-filter]:bg-background/60"
 >
-	<div class="container mx-auto flex h-10 items-center gap-2 px-2">
+	<div class="container mx-auto flex h-10 items-center gap-2 px-0 md:px-2">
 		<DesktopNav {links}>
 			<slot />
 		</DesktopNav>
@@ -59,6 +59,4 @@
 			<InfoIcon aria-label="Information icon" />
 		</Button>
 	</div>
-
-	<slot name="second-line" />
 </header>

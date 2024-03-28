@@ -68,7 +68,7 @@
 
 <svelte:window on:keydown={focusSearch} />
 
-<form class={cn("px-2 mx-auto md:justify-center items-center gap-2", className)} role="search">
+<form class={cn("px-2 md:mx-auto md:justify-center items-center gap-2", className)} role="search">
 	<Input
 		class="w-auto bg-background flex-1 md:flex-none"
 		placeholder="o alasa e nimi"

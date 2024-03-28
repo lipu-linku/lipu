@@ -11,8 +11,10 @@
 	<WordsSearch class="hidden md:flex" />
 
 	<LanguageSwitch selected={language.id} localeList={languages} />
-
-	<WordsSearch class="flex sticky z-50 top-[4.5rem] md:hidden" slot="second-line" />
 </Navbar>
+
+<WordsSearch
+	class="flex sticky z-50 top-0 border-b border-border/40 bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden"
+/>
 
 <slot />
