@@ -17,7 +17,8 @@
 
 	let ucsur = false;
 
-	$: filtered = entries(fonts).filter(([, f]) => (ucsur ? f.ucsur : true));
+	$: filtered = entries(fonts)
+		.filter(([, f]) => (ucsur ? f.ucsur : true));
 
 	let sidebarOpen = true;
 </script>
