@@ -2,7 +2,7 @@ import { client } from "@kulupu-linku/sona/client";
 import type { PageServerLoad } from "./$types";
 import { entries } from "$lib/utils";
 
-const openLicenses = [];
+const openLicenses = ["GPL", "MIT", "OFL", "CC"];
 
 export const load: PageServerLoad = async ({ fetch }) => {
 	return {
@@ -10,6 +10,6 @@ export const load: PageServerLoad = async ({ fetch }) => {
 			await client({ fetch })
 				.v1.fonts.$get()
 				.then((r) => r.json()),
-		).filter(([, it]) => openLicenses.includes(it.license)),
+		).filter(([, it]) => openLicenses.some(l => it.license.startsWith(l))),
 	};
 };
