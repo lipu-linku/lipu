@@ -10,6 +10,6 @@ export const load: PageServerLoad = async ({ fetch }) => {
 			await client({ fetch })
 				.v1.fonts.$get()
 				.then((r) => r.json()),
-		).filter(([, it]) => openLicenses.some(l => it.license.startsWith(l))),
+		).filter(([, it]) => openLicenses.some((l) => it.license.startsWith(l))),
 	};
 };

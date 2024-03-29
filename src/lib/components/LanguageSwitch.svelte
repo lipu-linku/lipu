@@ -27,7 +27,7 @@
 		}
 	}}
 >
-	<Select.Trigger class="md:max-w-48 md:w-auto md:justify-start gap-2">
+	<Select.Trigger class="md:max-w-48 md:w-auto bg-background md:justify-start gap-2">
 		<LanguagesIcon aria-label="Languages icon" class="size-4" />
 		<Select.Value class="line-clamp-1 overflow-ellipsis">
 			{localeList[selected].name.endonym}
