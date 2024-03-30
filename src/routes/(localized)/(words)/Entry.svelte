@@ -38,7 +38,7 @@
 	id={word.id}
 	class="
 		relative flex-1 w-auto flex justify-between border-2 transition-colors
-		before:absolute before:inset-y-0 before:w-1 before:rounded-s-md before:bg-[--category-color] before:transition-[width] has-[a:hover]:border-zinc-300 has-[a:hover]:before:w-2
+		before:absolute before:inset-y-0 before:w-1 before:rounded-s-md before:bg-[--category-color] before:transition-[width] has-[a:hover]:border-zinc-400 has-[a:hover]:before:w-2
 	"
 	--category-color={categoryColors[word.usage_category]}
 >
