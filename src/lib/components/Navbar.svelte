@@ -27,6 +27,11 @@
 			label: "Fonts",
 			icon: FontsIcon,
 		},
+		about: {
+			href: "/about",
+			label: "About",
+			icon: InfoIcon,
+		}
 	} as const;
 </script>
 
@@ -53,10 +58,6 @@
 			{:else}
 				<LightModeIcon aria-label="Sun icon" />
 			{/if}
-		</Button>
-
-		<Button variant="ghost" size="icon" href="/about" aria-label="About Linku">
-			<InfoIcon aria-label="Information icon" />
 		</Button>
 	</div>
 </header>

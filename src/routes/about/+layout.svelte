@@ -24,6 +24,6 @@
 	{/if}
 </Button>
 
-<main class="my-2 flex flex-col items-center justify-center gap-4 min-h-dvh">
+<main class="my-auto flex flex-col items-center justify-center gap-4 min-h-full">
 	<slot />
 </main>

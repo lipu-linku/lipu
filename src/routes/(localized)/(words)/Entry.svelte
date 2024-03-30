@@ -25,13 +25,6 @@
 		sandbox: "oklch(20.55% 0.052 284.53)",
 		obscure: "oklch(32.72% 0.149 311.74)",
 	} as const satisfies Record<UsageCategory, string>;
-
-	const bookColors = {
-		pu: "",
-		"ku suli": "",
-		"ku lili": "",
-		none: "",
-	} as const satisfies Record<Book, string>;
 </script>
 
 <Card
