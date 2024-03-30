@@ -42,10 +42,10 @@
 	"
 	--category-color={categoryColors[word.usage_category]}
 >
-	<a href="/words/{word.word}" class="flex-1">
+	<a href="/words/{word.word}" class="flex-1 p-0.5">
 		<CardHeader class="space-y-1 p-4 pl-6">
-			<CardTitle class="text-2xl">{word.word}</CardTitle>
-			<CardDescription dir={language.direction} class="text-foreground">
+			<CardTitle class="text-2xl leading-8">{word.word}</CardTitle>
+			<CardDescription dir={language.direction} class="text-[1rem] text-foreground">
 				{definition}
 			</CardDescription>
 			{#if word.see_also.length > 0}
