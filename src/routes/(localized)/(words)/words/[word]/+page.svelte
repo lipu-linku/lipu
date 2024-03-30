@@ -76,7 +76,7 @@
 	/>
 </svelte:head>
 
-<main class="flex-1 max-w-screen-2xl flex flex-col gap-4 p-4 pb-2">
+<main class="flex-1 max-w-screen-2xl mx-auto flex flex-col gap-4 p-4 pb-2">
 	<header class="flex-1 flex items-center gap-4">
 		<Button href="/" class="justify-self-end" variant="ghost" size="icon">
 			<BackIcon />
