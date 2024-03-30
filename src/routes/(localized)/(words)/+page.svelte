@@ -25,7 +25,7 @@
 </svelte:head>
 
 <main class="flex-1 my-4 space-y-4">
-	<p class="text-center">
+	<p class="text-center text-balance">
 		The site is currently in beta!
 		<br />
 		If you have feedback, please contact kala Asi or jan Telesi on Discord!

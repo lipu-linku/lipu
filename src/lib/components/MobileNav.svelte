@@ -43,7 +43,7 @@
 
 			<Separator orientation="horizontal" />
 
-			<ul class="flex flex-col">
+			<ul class="flex flex-col gap-4">
 				{#each entries(links) as [id, link] (id)}
 					<a
 						href={link.href}
