@@ -11,13 +11,16 @@
 
 	$: items = Object.entries(localeList).map(([id, lang]) => ({
 		value: id,
-		label: lang.name.endonym,
+		label: lang.name.endonym ?? lang.name.en,
 	}));
+
+	$: selectedItem = localeList[selected];
+	$: label = selectedItem.name.endonym ?? selectedItem.name.en;
 </script>
 
 <Select.Root
 	{items}
-	selected={{ value: localeList[selected].id, label: localeList[selected].name.endonym }}
+	selected={{ value: selectedItem.id, label }}
 	onSelectedChange={(item) => {
 		if (item) {
 			localStorage.setItem("lang", item.value);
@@ -30,7 +33,7 @@
 	<Select.Trigger class="md:max-w-48 md:w-auto bg-background md:justify-start gap-2">
 		<LanguagesIcon aria-label="Languages icon" class="size-4" />
 		<Select.Value class="line-clamp-1 overflow-ellipsis">
-			{localeList[selected].name.endonym}
+			{label}
 		</Select.Value>
 	</Select.Trigger>
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { writingSystem } from "$lib/state";
 	import type { Language, LocalizedWord } from "@kulupu-linku/sona";
-	import { getTranslatedData, type Book, type UsageCategory } from "@kulupu-linku/sona/utils";
+	import { getTranslatedData, type UsageCategory } from "@kulupu-linku/sona/utils";
 
 	import AudioButton from "$lib/components/AudioButton.svelte";
 	import {
