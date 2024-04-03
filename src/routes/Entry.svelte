@@ -58,10 +58,11 @@
 						{usageScore}%
 					</span>
 				{:else}
-					{word.creator.join(", ")} &middot; {word.coined_year} &middot;
-					<span title="{usageScore}% of toki pona speakers will recognize this word">
-						{usageScore}%
-					</span>
+					{[
+						word.creator.length > 0 ? word.creator.join(", ") : undefined,
+						word.coined_year,
+						word.book !== "none" ? word.book : undefined,
+					].filter(Boolean).join(" · ")}
 				{/if}
 			</CardDescription>
 		</CardHeader>
