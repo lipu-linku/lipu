@@ -112,7 +112,7 @@
 				<DropdownMenu.Separator />
 				<DropdownMenu.Group>
 					<DropdownMenu.Label
-						class={$page.route.id === "/(words)/words/[word]"
+						class={$page.route.id === "/words/[word]"
 							? `pointer-events-none opacity-50`
 							: ""}
 					>
@@ -121,13 +121,13 @@
 					</DropdownMenu.Label>
 					<DropdownMenu.RadioGroup bind:value={$writingSystem}>
 						<DropdownMenu.RadioItem
-							disabled={$page.route.id === "/(words)/words/[word]"}
+							disabled={$page.route.id === "/words/[word]"}
 							value="sitelen_pona"
 						>
 							sitelen pona
 						</DropdownMenu.RadioItem>
 						<DropdownMenu.RadioItem
-							disabled={$page.route.id === "/(words)/words/[word]"}
+							disabled={$page.route.id === "/words/[word]"}
 							value="sitelen_sitelen"
 						>
 							sitelen sitelen

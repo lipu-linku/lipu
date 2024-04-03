@@ -52,10 +52,14 @@
 				</CardDescription>
 			{/if}
 			<CardDescription>
-				{word.usage_category} · {word.book} ·
-				<span title="{usageScore}% of toki pona speakers will recognize this word">
-					{usageScore}%
-				</span>
+				{#if word.usage_category !== "sandbox"}
+					{word.usage_category} · {word.book} ·
+					<span title="{usageScore}% of toki pona speakers will recognize this word">
+						{usageScore}%
+					</span>
+				{:else}
+					Usage: {usageScore}%
+				{/if}
 			</CardDescription>
 		</CardHeader>
 	</a>

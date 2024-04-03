@@ -2,7 +2,9 @@
 	import { page } from "$app/stores";
 	import AudioButton from "$lib/components/AudioButton.svelte";
 	import Collapsible from "$lib/components/Collapsible.svelte";
+	import Navbar from "$lib/components/Navbar.svelte";
 	import { Button } from "$lib/components/ui/button";
+	import WordsSearch from "../../(words)/WordsSearch.svelte";
 	import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
 	import {
 		DropdownMenu,
@@ -20,7 +22,7 @@
 	import ShareButton from "~icons/lucide/share-2";
 
 	export let data;
-	$: ({ word, language } = data);
+	$: ({ word, language, languages } = data);
 
 	$: usageScore = Object.values(word.usage).at(-1) ?? 0;
 	$: definition = getTranslatedData(word, "definition", language.id);
@@ -34,12 +36,6 @@
 				? (language.id as keyof (typeof word)["pu_verbatim"])
 				: ("en" as const)
 		];
-
-	$: etym_string = etymology.map((it, i) => {
-		const constant = word.etymology[i];
-
-		return `${i > 0 ? " ⇐ " : ""}${constant.word ?? ""} ${constant.alt ? `(${constant.alt})` : ""} ${it.definition ? `- ${it.definition}` : ""} ${it.language ? `[${it.language}]` : ""}`.trim();
-	});
 
 	const englishFormat = new Intl.ListFormat("en", { style: "narrow" });
 	let listFormat = new Intl.ListFormat("en");
@@ -76,9 +72,17 @@
 	/>
 </svelte:head>
 
+<Navbar {language} {languages}>
+	<WordsSearch class="hidden md:flex" />
+</Navbar>
+
+<WordsSearch
+	class="flex sticky z-50 top-0 border-b border-border/40 bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden"
+/>
+
 <main class="flex-1 max-w-screen-2xl mx-auto flex flex-col gap-4 p-4 pb-2">
 	<header class="flex-1 flex items-center gap-4">
-		<Button href="/" class="justify-self-end" variant="ghost" size="icon">
+		<Button on:click={() => history.back()} class="justify-self-end" variant="ghost" size="icon">
 			<BackIcon />
 		</Button>
 
