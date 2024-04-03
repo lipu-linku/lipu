@@ -1,4 +1,7 @@
 <script lang="ts" context="module">
+	import type { SvelteComponent } from "svelte";
+	import type { SvelteHTMLElements } from "svelte/elements";
+
 	export type NavbarLink = {
 		href: string;
 		label: string;
@@ -7,31 +10,38 @@
 </script>
 
 <script lang="ts">
-	import type { SvelteComponent } from "svelte";
-	import type { SvelteHTMLElements } from "svelte/elements";
-
+	import LanguageSwitch from "./LanguageSwitch.svelte";
 	import DesktopNav from "./DesktopNav.svelte";
 	import MobileNav from "./MobileNav.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { mode, toggleMode } from "mode-watcher";
+	import type { Language, Languages } from "@kulupu-linku/sona";
 
 	import InfoIcon from "~icons/lucide/info";
 	import DarkModeIcon from "~icons/lucide/moon";
 	import LightModeIcon from "~icons/lucide/sun";
 	import FontsIcon from "~icons/mdi/format-font";
+	import FlaskIcon from "~icons/lucide/flask-conical";
+
+	export let languages: Languages;
+	export let language: Language;
 
 	const links: Record<string, NavbarLink> = {
-		// TODO: fix the fonts page
 		fonts: {
 			href: "/fonts",
 			label: "Fonts",
 			icon: FontsIcon,
 		},
+		sandbox: {
+			href: "/sandbox",
+			label: "Sandbox",
+			icon: FlaskIcon,
+		},
 		about: {
 			href: "/about",
 			label: "About",
 			icon: InfoIcon,
-		}
+		},
 	} as const;
 </script>
 
@@ -41,9 +51,13 @@
 	<div class="container mx-auto flex h-10 items-center gap-2 px-0 md:px-2">
 		<DesktopNav {links}>
 			<slot />
+
+			<LanguageSwitch triggerClass="ml-auto" selected={language.id} localeList={languages} />
 		</DesktopNav>
 		<MobileNav {links}>
 			<slot />
+
+			<LanguageSwitch selected={language.id} localeList={languages} />
 		</MobileNav>
 
 		<Button

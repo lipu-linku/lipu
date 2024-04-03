@@ -1,5 +1,5 @@
 <script lang="ts">
-	import Entry from "./Entry.svelte";
+	import Entry from "../Entry.svelte";
 
 	import { page } from "$app/stores";
 	import { wordSearch } from "$lib/components/search";
@@ -14,7 +14,10 @@
 	$: sorted_filtered_dictionary = wordSearch(
 		$page.url.searchParams.get("q") ?? $searchQuery,
 		words,
-		categoriesParam ? categoriesSerializer.parse(categoriesParam) : $categories,
+		{
+			sandbox: false,
+			...(categoriesParam ? categoriesSerializer.parse(categoriesParam) : $categories),
+		},
 		wordList,
 		language.id,
 	);

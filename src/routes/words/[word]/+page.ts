@@ -1,9 +1,16 @@
 import { error } from "@sveltejs/kit";
 import { distance } from "fastest-levenshtein";
 import type { PageLoad } from "./$types";
+import { client } from "@kulupu-linku/sona/client";
 
-export const load: PageLoad = async ({ params: { word }, parent }) => {
-	const { words, language } = await parent();
+export const load: PageLoad = async ({ params: { word }, parent, fetch }) => {
+	const { language } = await parent();
+
+	const sona = client({ fetch });
+	const words = {
+		...(await sona.v1.sandbox.$get({ query: { lang: language.id } }).then((r) => r.json())),
+		...(await sona.v1.words.$get({ query: { lang: language.id } }).then((r) => r.json())),
+	};
 
 	const wordData = words[word];
 
