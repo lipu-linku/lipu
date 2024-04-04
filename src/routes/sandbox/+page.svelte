@@ -29,15 +29,19 @@
 </svelte:head>
 
 <main class="flex-1 my-4 space-y-4">
-	<p class="text-center text-balance mx-auto">
+	<p class="text-center text-balance px-2 mx-auto">
 		The <i>sandbox</i> is a collection of proposed words which are
-		<strong class="whitespace-nowrap">not actively in use</strong>. If you are a learner,
-		<strong class="whitespace-nowrap">please stick to the main dictionary</strong>
+		<strong class="md:whitespace-nowrap">not actively in use</strong>.
+		<br />
+		If you are a learner,
+		<strong class="md:whitespace-nowrap">please stick to the main dictionary</strong>
 		- these words will not help you speak the language.
 		<br />
 		Some of these words are of value to the <strong>community</strong> as a piece of culture -
-		essentially memes. Some reflect early drafts of
-		<span class="whitespace-nowrap">Toki Pona</span>. A lot are one-off jokes, created and abandoned
+		essentially memes.
+		<br />
+		Some reflect early drafts of
+		<span class="md:whitespace-nowrap">Toki Pona</span>. A lot are one-off jokes, created and abandoned
 		immediately.
 	</p>
 	<ul class="flex flex-col items-stretch gap-2 mx-auto max-w-[min(95vw,1000px)]">

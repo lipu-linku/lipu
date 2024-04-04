@@ -17,6 +17,7 @@
 		"@sveltejs/adapter-cloudflare": "^4.2.0",
 		"@sveltejs/kit": "^2.5.5",
 		"@sveltejs/vite-plugin-svelte": "^3.0.2",
+		"chart.js": "^4.4.2",
 		"clsx": "^2.1.0",
 		"fastest-levenshtein": "^1.0.16",
 		"lightningcss": "^1.24.1",
@@ -42,5 +43,5 @@
 	"dependencies": {
 		"bits-ui": "^0.21.2"
 	},
-	"packageManager": "pnpm@8.8.0+sha1.9922e8b650d393700209ccd81e0ebdbcbe43b0d3"
+	"packageManager": "pnpm@8.15.6"
 }

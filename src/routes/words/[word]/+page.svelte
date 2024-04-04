@@ -1,25 +1,22 @@
 <script lang="ts">
-	import { page } from "$app/stores";
 	import AudioButton from "$lib/components/AudioButton.svelte";
 	import Collapsible from "$lib/components/Collapsible.svelte";
 	import Navbar from "$lib/components/Navbar.svelte";
-	import { Button } from "$lib/components/ui/button";
 	import WordsSearch from "../../(words)/WordsSearch.svelte";
-	import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
-	import {
-		DropdownMenu,
-		DropdownMenuContent,
-		DropdownMenuItem,
-		DropdownMenuLabel,
-		DropdownMenuSeparator,
-		DropdownMenuTrigger,
-	} from "$lib/components/ui/dropdown-menu";
-	import { Tooltip, TooltipContent, TooltipTrigger } from "$lib/components/ui/tooltip";
+
+	import { Button } from "$lib/components/ui/button";
+	import * as Card from "$lib/components/ui/card";
+	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+	import * as Tooltip from "$lib/components/ui/tooltip";
+
+	import { page } from "$app/stores";
 	import { getTranslatedData } from "@kulupu-linku/sona/utils";
+
 	import BackIcon from "~icons/lucide/arrow-left";
 	import CopyIcon from "~icons/lucide/copy";
 	import InfoIcon from "~icons/lucide/info";
 	import ShareButton from "~icons/lucide/share-2";
+	import UsageGraph from "./UsageGraph.svelte";
 
 	export let data;
 	$: ({ word, language, languages } = data);
@@ -92,36 +89,36 @@
 			{#if word.audio}
 				<AudioButton audio={word.audio} />
 			{/if}
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild let:builder>
+			<DropdownMenu.Root>
+				<DropdownMenu.Trigger asChild let:builder>
 					<Button builders={[builder]} variant="outline" size="icon">
 						<ShareButton />
 					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent>
-					<DropdownMenuLabel>Share word</DropdownMenuLabel>
-					<DropdownMenuSeparator />
+				</DropdownMenu.Trigger>
+				<DropdownMenu.Content>
+					<DropdownMenu.Label>Share word</DropdownMenu.Label>
+					<DropdownMenu.Separator />
 
-					<DropdownMenuItem on:click={() => navigator.clipboard.writeText($page.url.toString())}>
+					<DropdownMenu.Item on:click={() => navigator.clipboard.writeText($page.url.toString())}>
 						<CopyIcon class="inline mr-2 size-4" />
 						Copy URL
-					</DropdownMenuItem>
+					</DropdownMenu.Item>
 
-					<DropdownMenuItem on:click={copyCodepoint}>
+					<DropdownMenu.Item on:click={copyCodepoint}>
 						<span class="text-2xl -ml-1 mr-2 font-sitelen-pona">sitelen-pona</span>
 						sitelen pona
-					</DropdownMenuItem>
-				</DropdownMenuContent>
-			</DropdownMenu>
+					</DropdownMenu.Item>
+				</DropdownMenu.Content>
+			</DropdownMenu.Root>
 		</div>
 	</header>
 
 	<div class="flex-1 grid grid-cols-3 max-md:flex max-md:flex-col gap-2 justify-stretch">
-		<Card>
-			<CardHeader>
-				<CardTitle class="text-2xl" tag="h2">Meaning</CardTitle>
-			</CardHeader>
-			<CardContent class="flex flex-col gap-3">
+		<Card.Root>
+			<Card.Header>
+				<Card.Title class="text-2xl" tag="h2">Meaning</Card.Title>
+			</Card.Header>
+			<Card.Content class="flex flex-col gap-3">
 				<div class="flex flex-col justify-center gap-2">
 					<h3 class="font-medium text-xl">Common Definition</h3>
 					<p dir={language.direction}>{definition}</p>
@@ -134,18 +131,18 @@
 					<div class="flex flex-col justify-center gap-2">
 						<h3 class="flex items-center gap-2 font-medium text-xl">
 							ku definitions
-							<Tooltip>
-								<TooltipTrigger
+							<Tooltip.Root>
+								<Tooltip.Trigger
 									class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
 								>
 									<InfoIcon class="size-4 " />
-								</TooltipTrigger>
-								<TooltipContent class="max-w-[min(55ch,80%)]">
+								</Tooltip.Trigger>
+								<Tooltip.Content class="max-w-[min(55ch,80%)]">
 									Each ku definition is assigned a frequency index from ½ to 5, which describes how
 									commonly it was translated that way in the toki pona community, according to a
 									survey.
-								</TooltipContent>
-							</Tooltip>
+								</Tooltip.Content>
+							</Tooltip.Root>
 						</h3>
 
 						<Collapsible content={englishFormat.format(kuString)} />
@@ -167,14 +164,14 @@
 						</ul>
 					</div>
 				{/if}
-			</CardContent>
-		</Card>
+			</Card.Content>
+		</Card.Root>
 
-		<Card>
-			<CardHeader>
-				<CardTitle class="text-2xl" tag="h2">Usage</CardTitle>
-			</CardHeader>
-			<CardContent class="flex flex-col gap-3">
+		<Card.Root>
+			<Card.Header>
+				<Card.Title class="text-2xl" tag="h2">Usage</Card.Title>
+			</Card.Header>
+			<Card.Content class="flex flex-col gap-3">
 				{#if word.representations?.ligatures && word.representations?.ligatures?.length > 0}
 					<div class="flex flex-col justify-center gap-2">
 						<h3 class="font-medium text-xl">sitelen pona</h3>
@@ -232,14 +229,14 @@
 						</video>
 					</div>
 				{/if} -->
-			</CardContent>
-		</Card>
+			</Card.Content>
+		</Card.Root>
 
-		<Card>
-			<CardHeader>
-				<CardTitle class="text-2xl" tag="h2">More Info</CardTitle>
-			</CardHeader>
-			<CardContent class="flex flex-col gap-3">
+		<Card.Root>
+			<Card.Header>
+				<Card.Title class="text-2xl" tag="h2">More Info</Card.Title>
+			</Card.Header>
+			<Card.Content class="flex flex-col gap-3">
 				{#if commentary}
 					<h3 class="font-medium text-xl">Commentary</h3>
 					<p dir={language.direction}>{commentary}</p>
@@ -309,7 +306,18 @@
 						</ul>
 					</div>
 				{/if}
-			</CardContent>
-		</Card>
+			</Card.Content>
+		</Card.Root>
+
+		{#if Object.keys(word.usage).length > 1}
+			<Card.Root class="col-span-3">
+				<Card.Header>
+					<Card.Title class="text-2xl" tag="h2">Usage Trend</Card.Title>
+				</Card.Header>
+				<Card.Content class="flex flex-col gap-3">
+					<UsageGraph data={word.usage} />
+				</Card.Content>
+			</Card.Root>
+		{/if}
 	</div>
 </main>
