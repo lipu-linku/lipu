@@ -89,10 +89,13 @@ export const flyAndScale = (
 	};
 };
 
-export const fuzzyMatch = (t: string, s: string) => {
-	var i = 0,
-		n = -1,
-		l;
-	for (; (l = s[i++]); ) if (!~(n = t.indexOf(l, n + 1))) return false;
+export const fuzzyMatch = (text: string, query: string) => {
+	let lastMatch = -1;
+	for (const char of query) {
+		lastMatch = text.indexOf(char, lastMatch + 1);
+		if (lastMatch === -1) {
+			return false;
+		}
+	}
 	return true;
 };
