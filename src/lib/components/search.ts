@@ -1,4 +1,4 @@
-import { normalize } from "$lib/utils";
+import { fuzzyMatch, normalize } from "$lib/utils";
 import type { Language, LocalizedWord, Words } from "@kulupu-linku/sona";
 import { getTranslatedData, type UsageCategory } from "@kulupu-linku/sona/utils";
 import { distance } from "fastest-levenshtein";
@@ -26,53 +26,60 @@ export const wordSearch = (
 
 	const scoreFilter = (word: LocalizedWord) =>
 		Boolean(
-			basicScore(word.word, query) ||
-				basicScore(getTranslatedData(word, "definition", language), query) ||
-				basicScore(word.ku_data ? Object.keys(word.ku_data).join(", ") : "", query) ||
-				basicScore(getTranslatedData(word, "etymology", language).join(", "), query) ||
-				basicScore(word.source_language, query) ||
-				basicScore(word.creator.join(", "), query) ||
-				basicScore(getTranslatedData(word, "commentary", language), query),
+			wordScore(word.word, query) ||
+				dataScore(getTranslatedData(word, "definition", language), query) ||
+				dataScore(word.ku_data ? Object.keys(word.ku_data).join(", ") : "", query) ||
+				dataScore(getTranslatedData(word, "etymology", language).join(", "), query) ||
+				dataScore(word.source_language, query) ||
+				dataScore(word.creator.join(", "), query) ||
+				dataScore(getTranslatedData(word, "commentary", language), query),
 		);
 
 	const filtered = initialFilteredWords.filter((w) => scoreFilter(w));
-	const scored = filtered.map((w) => [w, wordScore(w, query, language)] as const);
+	const scored = filtered.map((w) => [w, wordDataScore(w, query, language)] as const);
 	const sorted = scored.sort(([, a], [, b]) => b - a);
 	const onlyWords = sorted.map(([w]) => w);
 
 	return onlyWords;
 };
 
-const wordScore = (word: LocalizedWord, query: string, language: string) => {
+const wordDataScore = (word: LocalizedWord, query: string, language: string) => {
 	let score = 0;
 
-	score += basicScore(word.word, query) * 100;
-	score += basicScore(getTranslatedData(word, "definition", language), query) * 50;
-	score += basicScore(word.ku_data ? Object.keys(word.ku_data).join(", ") : "", query) * 40;
-	score += basicScore(getTranslatedData(word, "etymology", language).join(", "), query) * 30;
-	score += basicScore(word.source_language, query) * 20;
-	score += basicScore(word.creator.join(", "), query) * 10;
-	score += basicScore(getTranslatedData(word, "commentary", language), query) * 5;
+	score += wordScore(word.word, query) * 100;
+	score += dataScore(getTranslatedData(word, "definition", language), query) * 50;
+	score += dataScore(word.ku_data ? Object.keys(word.ku_data).join(", ") : "", query) * 40;
+	score += dataScore(getTranslatedData(word, "etymology", language).join(", "), query) * 30;
+	score += dataScore(word.source_language, query) * 20;
+	score += dataScore(word.creator.join(", "), query) * 10;
+	score += dataScore(getTranslatedData(word, "commentary", language), query) * 5;
 
 	return score;
 };
 
-const basicScore = (text: string | undefined, query: string) => {
+const fuzzyScore = (text: string | undefined, query: string) => {
+	if (!text) return 0;
+	return fuzzyMatch(text, query) ? 2 : 0; // 1 for base, 1 for match
+};
+
+const includesScore = (text: string | undefined, query: string) => {
+	if (!text) return 0;
+	return text.includes(query) ? 2 : 0;
+};
+
+const distanceScore = (text: string | undefined, query: string) => {
 	if (!text) return 0;
 
-	const includes = text.includes(query);
 	const dist = distance(query, text);
 	const maxDist = text.length / 3;
+	if (dist > maxDist) return 0;
+	return 1 + ((maxDist - dist) / maxDist) * 2;
+};
 
-	// words which don't include the query and are too far away
-	// are not worth much
-	if (!includes && dist > maxDist) return 0;
+const wordScore = (text: string | undefined, query: string) => {
+	return fuzzyScore(text, query) + distanceScore(text, query);
+};
 
-	let score = 1;
-
-	// converts the distance to a 1-3 scale
-	if (dist <= maxDist) score += ((maxDist - dist) / maxDist) * 2;
-	if (includes) score++;
-
-	return score;
+const dataScore = (text: string | undefined, query: string) => {
+	return includesScore(text, query) + distanceScore(text, query);
 };
