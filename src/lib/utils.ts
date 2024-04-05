@@ -88,3 +88,14 @@ export const flyAndScale = (
 		easing: cubicOut,
 	};
 };
+
+export const fuzzyMatch = (text: string, query: string) => {
+	let lastMatch = -1;
+	for (const char of query) {
+		lastMatch = text.indexOf(char, lastMatch + 1);
+		if (lastMatch === -1) {
+			return false;
+		}
+	}
+	return true;
+};
