@@ -11,6 +11,7 @@
 	import type { Font } from "@kulupu-linku/sona";
 	import { flyAndScale } from "$lib/utils";
 	import IntersectionObserver from "svelte-intersection-observer";
+	import * as m from "$paraglide/messages";
 
 	import DownloadIcon from "~icons/lucide/download";
 	import RepoIcon from "~icons/lucide/file-code";
@@ -22,12 +23,12 @@
 		? Intl.DateTimeFormat("en", { month: "long", year: "numeric" }).format(
 				new Date(font.last_updated),
 			)
-		: undefined;
+		: "undefined";
 
 	$: fontDescription = [
-		`Created by ${font.creator}`,
-		`Updated on ${lastUpdatedDate}`,
-		`Licensed as ${font.license}`,
+		m.fonts_entry_created_by({ creator: font.creator }),
+		m.fonts_entry_updated_on({ date: lastUpdatedDate }),
+		m.fonts_entry_licensed_as({ license: font.license }),
 	]
 		.filter((s) => !s.includes("undefined"))
 		.join(" · ");
@@ -81,17 +82,17 @@
 		<CardContent class="text-3xl">
 			{#if intersecting}
 				{#await loadFont()}
-					Loading...
+					{m.fonts_entry_loading()}
 				{:then}
 					<span transition:flyAndScale={{ y: 10 }} style="font-family: '{font.name}'">
 						{#if $fontSentence.match(/[\u{F1900}-\u{F19FF}]/gu)}{/if}
 						{$fontSentence.trim()}
 					</span>
 				{:catch}
-					The font failed to load.
+					{m.fonts_entry_failed()}
 				{/await}
 			{:else}
-				Loading...
+				{m.fonts_entry_loading()}
 			{/if}
 		</CardContent>
 	</Card>

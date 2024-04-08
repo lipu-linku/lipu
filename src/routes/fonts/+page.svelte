@@ -1,15 +1,15 @@
 <script lang="ts">
 	import { fontSentence } from "$lib/state";
-	import { entries } from "$lib/utils";
 	import { fly } from "svelte/transition";
-	import FontEntry from "./FontEntry.svelte";
+	import * as m from "$paraglide/messages";
 
+	import * as Card from "$lib/components/ui/card";
+	import { Checkbox } from "$lib/components/ui/checkbox";
 	import { Button } from "$lib/components/ui/button";
-	import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
+	import FontEntry from "./FontEntry.svelte";
 
-	import { Checkbox } from "$lib/components/ui/checkbox";
 	import CloseIcon from "~icons/lucide/x";
 
 	export let data;
@@ -27,7 +27,7 @@
 </svelte:head>
 
 <div class="flex-0 flex flex-col items-center gap-2">
-	<h2 class="py-2 text-center text-4xl font-medium">Font Search</h2>
+	<h2 class="py-2 text-center text-4xl font-medium">{m.fonts_title()}</h2>
 
 	<Input class="max-w-[30%]" bind:value={$fontSentence} />
 
@@ -42,9 +42,9 @@
 
 		{#if sidebarOpen}
 			<aside transition:fly={{ x: 100 }}>
-				<Card>
-					<CardHeader class="relative">
-						<CardTitle>Font Display Settings</CardTitle>
+				<Card.Root>
+					<Card.Header class="relative">
+						<Card.Title>{m.fonts_settings_title()}</Card.Title>
 						<Button
 							class="absolute top-2 right-4"
 							variant="ghost"
@@ -53,17 +53,19 @@
 						>
 							<CloseIcon />
 						</Button>
-					</CardHeader>
+					</Card.Header>
 
-					<CardContent class="flex flex-col gap-4">
+					<Card.Content class="flex flex-col gap-4">
 						<div class="flex flex-col gap-2">
 							<div class="flex items-center space-x-2">
 								<Checkbox id="ucsur-input" aria-labelledby="ucsur-label" bind:checked={ucsur} />
-								<Label for="ucsur-input" id="ucsur-label">Only Show UCSUR Fonts</Label>
+								<Label for="ucsur-input" id="ucsur-label"
+									>{m.fonts_settings_only_show_ucsur()}</Label
+								>
 							</div>
 						</div>
-					</CardContent>
-				</Card>
+					</Card.Content>
+				</Card.Root>
 			</aside>
 		{/if}
 	</main>

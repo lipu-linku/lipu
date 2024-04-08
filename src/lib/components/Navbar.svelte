@@ -16,6 +16,7 @@
 	import { Button } from "$lib/components/ui/button";
 	import { mode, toggleMode } from "mode-watcher";
 	import type { Language, Languages } from "@kulupu-linku/sona";
+	import * as m from "$paraglide/messages";
 
 	import HomeIcon from "~icons/lucide/home";
 	import FontsIcon from "~icons/mdi/format-font";
@@ -30,22 +31,22 @@
 	const links: Record<string, NavbarLink> = {
 		home: {
 			href: "/",
-			label: "Home",
+			label: m.navbar_links_home(),
 			icon: HomeIcon,
 		},
 		fonts: {
 			href: "/fonts",
-			label: "Fonts",
+			label: m.navbar_links_fonts(),
 			icon: FontsIcon,
 		},
 		sandbox: {
 			href: "/sandbox",
-			label: "Sandbox",
+			label: m.navbar_links_sandbox(),
 			icon: FlaskIcon,
 		},
 		about: {
 			href: "/about",
-			label: "About",
+			label: m.navbar_links_about(),
 			icon: InfoIcon,
 		},
 	} as const;

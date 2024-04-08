@@ -1,20 +1,15 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button";
-	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import { Input } from "$lib/components/ui/input";
 
 	import { browser } from "$app/environment";
 	import { page } from "$app/stores";
-	import { searchQuery, writingSystem } from "$lib/state";
+	import { searchQuery } from "$lib/state";
 	import { cn } from "$lib/utils";
 
 	import { pushState } from "$app/navigation";
-	import CheckIcon from "~icons/lucide/check";
 	import LinkIcon from "~icons/lucide/link";
-	import WritingSystemIcon from "~icons/lucide/pen-tool";
 	import SearchIcon from "~icons/lucide/search";
-	import SettingsIcon from "~icons/lucide/settings";
-	import ResetIcon from "~icons/lucide/undo-2";
 
 	let className = "";
 	export { className as class };
@@ -46,13 +41,6 @@
 	const clearQuery = () => {
 		$searchQuery = "";
 		$page.url.searchParams.delete("q");
-		if (browser) pushState($page.url, {});
-	};
-
-	const resetOptions = () => {
-		$searchQuery = "";
-
-		$page.url.searchParams.forEach((v, k, params) => params.delete(k, v));
 		if (browser) pushState($page.url, {});
 	};
 </script>
