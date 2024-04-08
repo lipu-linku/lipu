@@ -16,5 +16,7 @@ const render = (words: string[]) =>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url><loc>https://linku.la/</loc></url>
 <url><loc>https://linku.la/about</loc></url>
-${words.map((word) => `<url><loc>https://linku.la/${word}</loc></url>`).join("")}
+<url><loc>https://linku.la/sandbox</loc></url>
+<url><loc>https://linku.la/fonts</loc></url>
+${words.map((word) => `<url><loc>https://linku.la/words/${word}</loc></url>`).join("")}
 </urlset>`;
