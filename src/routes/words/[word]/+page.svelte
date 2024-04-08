@@ -3,6 +3,7 @@
 	import Collapsible from "$lib/components/Collapsible.svelte";
 	import Navbar from "$lib/components/Navbar.svelte";
 	import WordsSearch from "../../(words)/WordsSearch.svelte";
+	import UsageGraph from "./UsageGraph.svelte";
 
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
@@ -16,7 +17,7 @@
 	import CopyIcon from "~icons/lucide/copy";
 	import InfoIcon from "~icons/lucide/info";
 	import ShareButton from "~icons/lucide/share-2";
-	import UsageGraph from "./UsageGraph.svelte";
+	import { cn } from "$lib/utils";
 
 	export let data;
 	$: ({ word, language, languages } = data);
@@ -26,6 +27,14 @@
 	$: commentary = getTranslatedData(word, "commentary", language.id);
 	$: etymology = getTranslatedData(word, "etymology", language.id);
 	$: sitelenPonaEtymology = getTranslatedData(word, "sp_etymology", language.id);
+
+	$: hasRepresentations =
+		word.representations &&
+		(word.representations.ligatures?.length ||
+			word.representations.sitelen_emosi ||
+			word.representations.sitelen_jelo?.length ||
+			word.representations.sitelen_sitelen ||
+			word.representations.ucsur);
 
 	$: pu_verbatim =
 		word.pu_verbatim?.[
@@ -113,7 +122,12 @@
 		</div>
 	</header>
 
-	<div class="flex-1 grid grid-cols-3 max-md:flex max-md:flex-col gap-2 justify-stretch">
+	<div
+		class={cn(
+			"flex-1 grid grid-cols-3 max-md:flex max-md:flex-col gap-2 justify-stretch",
+			!hasRepresentations && "grid-cols-2",
+		)}
+	>
 		<Card.Root>
 			<Card.Header>
 				<Card.Title class="text-2xl" tag="h2">Meaning</Card.Title>
@@ -167,60 +181,61 @@
 			</Card.Content>
 		</Card.Root>
 
-		<Card.Root>
-			<Card.Header>
-				<Card.Title class="text-2xl" tag="h2">Usage</Card.Title>
-			</Card.Header>
-			<Card.Content class="flex flex-col gap-3">
-				{#if word.representations?.ligatures && word.representations?.ligatures?.length > 0}
-					<div class="flex flex-col justify-center gap-2">
-						<h3 class="font-medium text-xl">sitelen pona</h3>
-						<p>
-							<span class="text-7xl font-sitelen-pona">
-								{word.representations?.ligatures?.join(" ")}
-							</span>
-						</p>
-						{#if sitelenPonaEtymology}
-							<p dir={language.direction}>{sitelenPonaEtymology}</p>
-						{/if}
-					</div>
-				{/if}
+		{#if hasRepresentations}
+			<Card.Root>
+				<Card.Header>
+					<Card.Title class="text-2xl" tag="h2">Usage</Card.Title>
+				</Card.Header>
+				<Card.Content class="flex flex-col gap-3">
+					{#if word.representations?.ligatures && word.representations?.ligatures?.length > 0}
+						<div class="flex flex-col justify-center gap-2">
+							<h3 class="font-medium text-xl">sitelen pona</h3>
+							<p>
+								<span class="text-7xl font-sitelen-pona">
+									{word.representations?.ligatures?.join(" ")}
+								</span>
+							</p>
+							{#if sitelenPonaEtymology}
+								<p dir={language.direction}>{sitelenPonaEtymology}</p>
+							{/if}
+						</div>
+					{/if}
 
-				{#if word.representations?.sitelen_sitelen}
-					<div class="flex flex-col justify-center gap-2">
-						<h3 class="font-medium text-xl">sitelen sitelen</h3>
-						<img
-							src={word.representations.sitelen_sitelen}
-							alt="{word.word} in sitelen sitelen format"
-							class="dark:invert size-16 m-2"
-						/>
-					</div>
-				{/if}
+					{#if word.representations?.sitelen_sitelen}
+						<div class="flex flex-col justify-center gap-2">
+							<h3 class="font-medium text-xl">sitelen sitelen</h3>
+							<img
+								src={word.representations.sitelen_sitelen}
+								alt="{word.word} in sitelen sitelen format"
+								class="dark:invert size-16 m-2"
+							/>
+						</div>
+					{/if}
 
-				{#if word.representations?.ucsur}
-					<div class="flex flex-col justify-center gap-2">
-						<h3 class="flex items-center gap-2 first-letter:font-medium text-xl">
-							<span>UCSUR Codepoint</span>
-							<a
-								class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colorsx"
-								href="https://www.kreativekorp.com/ucsur/charts/sitelen.html"
-								target="_blank"
-							>
-								<InfoIcon class="align-middle size-4" />
-							</a>
-						</h3>
+					{#if word.representations?.ucsur}
+						<div class="flex flex-col justify-center gap-2">
+							<h3 class="flex items-center gap-2 first-letter:font-medium text-xl">
+								<span>UCSUR Codepoint</span>
+								<a
+									class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colorsx"
+									href="https://www.kreativekorp.com/ucsur/charts/sitelen.html"
+									target="_blank"
+								>
+									<InfoIcon class="align-middle size-4" />
+								</a>
+							</h3>
 
-						<p class="flex items-center gap-2">
-							{word.representations.ucsur}
-							<Button class="p-1 h-fit" variant="ghost" on:click={copyCodepoint}>
-								<CopyIcon />
-							</Button>
-						</p>
-					</div>
-				{/if}
+							<p class="flex items-center gap-2">
+								{word.representations.ucsur}
+								<Button class="p-1 h-fit" variant="ghost" on:click={copyCodepoint}>
+									<CopyIcon />
+								</Button>
+							</p>
+						</div>
+					{/if}
 
-				<!-- TODO: find a good way to lazy load the word's luka pona sign by name -->
-				<!-- {#if word.luka_pona}
+					<!-- TODO: find a good way to lazy load the word's luka pona sign by name -->
+					<!-- {#if word.luka_pona}
 					<div class="flex flex-col justify-center gap-2">
 						<h3 class="font-medium text-xl">luka pona</h3>
 						<video class="rounded-md" controls muted playsinline preload="metadata">
@@ -229,8 +244,9 @@
 						</video>
 					</div>
 				{/if} -->
-			</Card.Content>
-		</Card.Root>
+				</Card.Content>
+			</Card.Root>
+		{/if}
 
 		<Card.Root>
 			<Card.Header>
