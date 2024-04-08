@@ -12,13 +12,13 @@ dependencies:
 devDependencies:
   '@iconify/json':
     specifier: ^2.2.196
-    version: 2.2.197
+    version: 2.2.198
   '@kulupu-linku/sona':
     specifier: ^0.2.3
     version: 0.2.3
   '@sveltejs/adapter-cloudflare':
     specifier: ^4.2.0
-    version: 4.2.1(@sveltejs/kit@2.5.5)(wrangler@3.47.1)
+    version: 4.2.1(@sveltejs/kit@2.5.5)(wrangler@3.48.0)
   '@sveltejs/kit':
     specifier: ^2.5.5
     version: 2.5.5(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.12)(vite@5.2.8)
@@ -1348,8 +1348,8 @@ packages:
       zod: 3.22.4
     dev: true
 
-  /@iconify/json@2.2.197:
-    resolution: {integrity: sha512-THpL6FPTaYhXRkCSCVAxR1J/tpicJH/2nHeGh1L25Dd9EJJURemPfqsY05cbasLH0a16RF9UZhksx0QKg8msZw==}
+  /@iconify/json@2.2.198:
+    resolution: {integrity: sha512-z4cvKDXBK6priTJhRppWQSV2ljYhuonArN6ugTM8axDcJFHZ6x75a1YDxd1HVON+c86RspvcjZ1mhOXA3qheaQ==}
     dependencies:
       '@iconify/types': 2.0.0
       pathe: 1.1.2
@@ -1606,7 +1606,7 @@ packages:
     dev: true
     optional: true
 
-  /@sveltejs/adapter-cloudflare@4.2.1(@sveltejs/kit@2.5.5)(wrangler@3.47.1):
+  /@sveltejs/adapter-cloudflare@4.2.1(@sveltejs/kit@2.5.5)(wrangler@3.48.0):
     resolution: {integrity: sha512-TWwsMp2Hj2IuEbdcf2RG334FW6Cgb4l9JsZfopTCg1B4ZBqrrMow2aqmoVIhfSybIUXhyTkwQoFpaGOf/I0BLQ==}
     peerDependencies:
       '@sveltejs/kit': ^2.0.0
@@ -1616,7 +1616,7 @@ packages:
       '@sveltejs/kit': 2.5.5(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.12)(vite@5.2.8)
       esbuild: 0.19.12
       worktop: 0.8.0-next.18
-      wrangler: 3.47.1
+      wrangler: 3.48.0
     dev: true
 
   /@sveltejs/kit@2.5.5(@sveltejs/vite-plugin-svelte@3.0.2)(svelte@4.2.12)(vite@5.2.8):
@@ -1698,11 +1698,11 @@ packages:
   /@types/node-forge@1.3.11:
     resolution: {integrity: sha512-FQx220y22OKNTqaByeBGqHWYz4cl94tpcxeFdvBo3wjG6XPBuZ0BNgNZRV5J5TFmmcsJ4IzsLkmGRiQbnYsBEQ==}
     dependencies:
-      '@types/node': 20.12.4
+      '@types/node': 20.12.5
     dev: true
 
-  /@types/node@20.12.4:
-    resolution: {integrity: sha512-E+Fa9z3wSQpzgYQdYmme5X3OTuejnnTx88A6p6vkkJosR3KBz+HpE3kqNm98VE6cfLFcISx7zW7MsJkH6KwbTw==}
+  /@types/node@20.12.5:
+    resolution: {integrity: sha512-BD+BjQ9LS/D8ST9p5uqBxghlN+S42iuNxjsUGjeZobe/ciXzk2qb1B6IXc6AnRLS+yFJRpN2IPEHMzwspfDJNw==}
     dependencies:
       undici-types: 5.26.5
     dev: true
@@ -2921,8 +2921,8 @@ packages:
       minipass: 7.0.4
     dev: true
 
-  /path-to-regexp@6.2.1:
-    resolution: {integrity: sha512-JLyh7xT1kizaEvcaXOQwOc2/Yhw6KZOvPf1S8401UyLk86CU79LN3vl7ztXGm/pZ+YjoyAJ4rxmHwbkBXJX+yw==}
+  /path-to-regexp@6.2.2:
+    resolution: {integrity: sha512-GQX3SSMokngb36+whdpRXE+3f9V8UzyAorlYvOGx87ufGHehNTn5lCxrKtLyZ4Yl/wEKnNnr98ZzOwwDZV5ogw==}
     dev: true
 
   /pathe@1.1.2:
@@ -4104,8 +4104,8 @@ packages:
       regexparam: 3.0.0
     dev: true
 
-  /wrangler@3.47.1:
-    resolution: {integrity: sha512-KEnYxAnhpn8vkAV3thrdCB79CK43Wr+L5xvUmfUSZu9j9HFm0I2z9HHPKzzIwdhpcvdC3WtZZz+n5NS2NQ1yzA==}
+  /wrangler@3.48.0:
+    resolution: {integrity: sha512-Wv7JS6FyX1j9HkaM6WL3fmTzBMAYc4hPSyZCuxuH55hkJDX/7ts+YAgsaN1U8rKoDrV3FVSgBfI9TyqP9iuM8Q==}
     engines: {node: '>=16.17.0'}
     hasBin: true
     peerDependencies:
@@ -4122,7 +4122,7 @@ packages:
       esbuild: 0.17.19
       miniflare: 3.20240404.0
       nanoid: 3.3.7
-      path-to-regexp: 6.2.1
+      path-to-regexp: 6.2.2
       resolve: 1.22.8
       resolve.exports: 2.0.2
       selfsigned: 2.4.1
