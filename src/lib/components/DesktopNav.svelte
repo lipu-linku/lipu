@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { page } from "$app/stores";
-	import { cn, entries } from "$lib/utils";
+	import { entries } from "$lib/utils";
 	import type { NavbarLink } from "./Navbar.svelte";
 
 	import logo from "$lib/assets/icon.png";
@@ -20,11 +19,7 @@
 			<Button
 				variant="ghost"
 				href={link.href}
-				class={cn(
-					"px-2 flex items-center justify-center gap-2",
-					"transition-colors hover:text-foreground/80",
-					$page.url.pathname.startsWith(link.href) ? "text-foreground" : "text-foreground/60",
-				)}
+				class="px-2 flex items-center justify-center gap-2 transition-colors text-foreground/60 hover:text-foreground/80"
 			>
 				<svelte:component this={link.icon} class="inline-block" />
 				{link.label}
