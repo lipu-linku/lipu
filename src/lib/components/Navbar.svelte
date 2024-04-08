@@ -17,16 +17,22 @@
 	import { mode, toggleMode } from "mode-watcher";
 	import type { Language, Languages } from "@kulupu-linku/sona";
 
+	import HomeIcon from "~icons/lucide/home";
+	import FontsIcon from "~icons/mdi/format-font";
+	import FlaskIcon from "~icons/lucide/flask-conical";
 	import InfoIcon from "~icons/lucide/info";
 	import DarkModeIcon from "~icons/lucide/moon";
 	import LightModeIcon from "~icons/lucide/sun";
-	import FontsIcon from "~icons/mdi/format-font";
-	import FlaskIcon from "~icons/lucide/flask-conical";
 
 	export let languages: Languages;
 	export let language: Language;
 
 	const links: Record<string, NavbarLink> = {
+		home: {
+			href: "/",
+			label: "Home",
+			icon: HomeIcon,
+		},
 		fonts: {
 			href: "/fonts",
 			label: "Fonts",
