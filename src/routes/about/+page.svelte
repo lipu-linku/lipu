@@ -7,13 +7,12 @@
 		AccordionTrigger,
 	} from "$lib/components/ui/accordion";
 	import { Button } from "$lib/components/ui/button";
-	import { Separator } from "$lib/components/ui/separator";
-	import TableIcon from "~icons/lucide/table-2";
 	import WebIcon from "~icons/lucide/globe";
 	import LanguagesIcon from "~icons/lucide/languages";
+	import SurveyIcon from "~icons/lucide/list-checks";
+	import TableIcon from "~icons/lucide/table-2";
 	import RobotIcon from "~icons/mdi/robot-excited";
 	import DiscordIcon from "~icons/simple-icons/discord";
-	import SurveyIcon from "~icons/lucide/list-checks";
 
 	let openAccordion: "dataset" | "bot" | "translations" | "website" | "survey" | undefined;
 
@@ -52,13 +51,15 @@
 		class="underline"
 		href="http://tokipona.org/nimi_pu.txt"
 		target="_blank"
-		rel="noopenner noreferrer">tokipona.org</a
-	>.
+		rel="noopenner noreferrer"
+	>
+		tokipona.org
+	</a>.
 </p>
 
 <Accordion
 	bind:value={openAccordion}
-	class="w-[65%] [&_:is(a,_button):not([data-bits-button-root],_[data-bits-accordion-trigger])]:underline [&_[data-bits-accordion-content]>div]:flex [&_[data-bits-accordion-content]>div]:flex-col [&_[data-bits-accordion-content]>div]:gap-3"
+	class="w-[65%] [&_:is(a,_button):not([data-button-root],_[data-accordion-trigger])]:underline [&_[data-bits-accordion-content]>div]:flex [&_[data-bits-accordion-content]>div]:flex-col [&_[data-bits-accordion-content]>div]:gap-3"
 >
 	<AccordionItem value="dataset">
 		<!-- these class names disable the rotation on the first icon,  -->
@@ -108,7 +109,7 @@
 			</span>
 		</AccordionTrigger>
 		<AccordionContent
-			class="[&_code]:border [&_code]:border-border [&_code]:px-1 [&_code]:rounded-sm"
+			class="[&>div]:space-y-4 [&_code]:border [&_code]:border-border [&_code]:px-1 [&_code]:rounded-sm"
 		>
 			<p>
 				The bot is for requesting and receiving Linku data without leaving discord, with a couple
@@ -121,61 +122,47 @@
 				Add it to your server!
 			</Button>
 
-			<Separator />
-
 			<h2>
-				<code>/nimi</code> (<code>/n</code>) command
+				<code>/nimi</code> (<code>/n</code>)
 			</h2>
-			<p>Returns a dictionary entry on the word you requested.</p>
 			<p>
+				Returns a dictionary entry on the word you requested.
+				<br />
 				You can customise the language used for the definitions using
 				<code>/preferences language</code> (the default is English).
 			</p>
 
-			<Separator />
-
-			<h2><code>/ss</code> command</h2>
+			<h2><code>/ss</code></h2>
 			<p>Returns the sitelen sitelen (sitelen suwi) glyph for the word you requested.</p>
 
-			<Separator />
-
-			<h2><code>/lp</code> command</h2>
+			<h2><code>/lp</code></h2>
 			<p>Returns a luka pona sign gif for the word you requested.</p>
 
-			<Separator />
-
-			<h2><code>/sp</code> command</h2>
+			<h2><code>/sp</code></h2>
 			<p>
 				Converts your text to the linja sike font for sitelen pona, and displays it as an image.
-			</p>
-			<p>
+				<br />
 				You can customise the size of the font using
 				<code>/preferences fontsize</code> (the default is 72).
 			</p>
 
-			<Separator />
-
-			<h2><code>/acro</code> command</h2>
-			<p>Finds toki pona words beginning with each letter in your request.</p>
+			<h2><code>/acro</code></h2>
 			<p>
-				You can customise the set of words (only pu -- pu and ku suli -- pu and ku -- all available
-				words) will be used using
-				<code>/preferences acro</code> (the default is pu and ku suli).
+				Finds toki pona words beginning with each letter in your request.<br />
+				You can customise the set of words (only pu -- pu and ku suli -- pu and ku -- all available words)
+				will be used using
+				<code class="whitespace-nowrap">/preferences acro</code> (the default is pu and ku suli).
 			</p>
 
-			<Separator />
-
-			<h2><code>/prompt</code> command</h2>
+			<h2><code>/prompt</code></h2>
 			<p>
 				Provides a random conversation prompt in Toki Pona, with a translation in your set language
 				or English under a spoiler.
 			</p>
 
-			<Separator />
-
-			<h2><code>/preferences</code> command</h2>
-			<p>Its uses are listed above.</p>
+			<h2><code>/preferences</code></h2>
 			<p>
+				Its uses are listed above.<br />
 				Additionally, you can reset all preferences using
 				<code>/preferences reset</code>.
 			</p>
@@ -195,7 +182,7 @@
 					rel="noopener noreferrer">instance</a
 				>
 				on
-				<a href="https://crowdin.com">Crowdin, a localization platform</a>, where anyone can help
+				<a href="https://crowdin.com">Crowdin</a>, a localization platform, where anyone can help
 				translate data in our dataset. We support translating definitions, etymology of words,
 				etymology of sitelen pona, and commentary.
 			</p>
@@ -219,8 +206,9 @@
 				If you're looking for the Google sheet previously named nimi Linku, it can be found
 				<a
 					href="https://docs.google.com/spreadsheets/d/1xwgTAxwgn4ZAc4DBnHte0cqta1aaxe112Wh1rv9w5Yk"
-					>here</a
-				>. Note that it has been archived and cannot be contributed to any longer.
+				>
+					here
+				</a>. Note that it has been archived and cannot be contributed to any longer.
 			</p>
 		</AccordionContent>
 	</AccordionItem>
@@ -240,18 +228,18 @@
 			</p>
 			<p>
 				You may choose the language you want definitions to use, and filter by the words'
-				appearances in books and recognition among the toki pona community.
+				appearances in books and usage among the toki pona community.
 			</p>
 			<p>
 				The website is available as free, open source software, under the GPL-3 license. It is built
-				using <a href="https://kit.svelte.dev/" target="_blank" rel="noopener noreferrer"
-					>SvelteKit</a
-				>,
-				<a href="https://tailwindcss.com/" target="_blank" rel="noopener noreferrer">tailwindcss</a
-				>, and
-				<a href="https://www.shadcn-svelte.com/" target="_blank" rel="noopener noreferrer"
-					>shadcn-svelte</a
-				>.
+				using <a href="https://kit.svelte.dev/" target="_blank" rel="noopener noreferrer">
+					SvelteKit
+				</a>,
+				<a href="https://tailwindcss.com/" target="_blank" rel="noopener noreferrer">tailwindcss</a>
+				, and
+				<a href="https://www.shadcn-svelte.com/" target="_blank" rel="noopener noreferrer">
+					shadcn-svelte
+				</a>.
 			</p>
 		</AccordionContent>
 	</AccordionItem>
@@ -261,7 +249,7 @@
 				<SurveyIcon /> wile Linku (the survey)
 			</span>
 		</AccordionTrigger>
-		<AccordionContent>
+		<AccordionContent class="[&>div]:space-y-3">
 			<p>
 				The survey is run annually every
 				<a href="https://suno.pona.la" target="_blank" rel="noopener noreferrer"
@@ -302,7 +290,7 @@
 	rel="noopener noreferrer"
 	class="flex items-center gap-[1ch]"
 >
-	<DiscordIcon /> kulupu Linku (the Discord server!)
+	<DiscordIcon /> kulupu Linku on Discord
 </Button>
 
 <p>

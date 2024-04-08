@@ -4,6 +4,7 @@
 	import { Input } from "$lib/components/ui/input";
 
 	import { page } from "$app/stores";
+	import { browser } from "$app/environment";
 	import {
 		categories,
 		categoriesSerializer,
@@ -21,7 +22,6 @@
 	import SearchIcon from "~icons/lucide/search";
 	import SettingsIcon from "~icons/lucide/settings";
 	import ResetIcon from "~icons/lucide/undo-2";
-	import { browser } from "$app/environment";
 
 	let className = "";
 	export { className as class };
@@ -112,7 +112,7 @@
 				<DropdownMenu.Separator />
 				<DropdownMenu.Group>
 					<DropdownMenu.Label
-						class={$page.route.id === "/(words)/words/[word]"
+						class={$page.route.id === "/words/[word]"
 							? `pointer-events-none opacity-50`
 							: ""}
 					>
@@ -121,13 +121,13 @@
 					</DropdownMenu.Label>
 					<DropdownMenu.RadioGroup bind:value={$writingSystem}>
 						<DropdownMenu.RadioItem
-							disabled={$page.route.id === "/(words)/words/[word]"}
+							disabled={$page.route.id === "/words/[word]"}
 							value="sitelen_pona"
 						>
 							sitelen pona
 						</DropdownMenu.RadioItem>
 						<DropdownMenu.RadioItem
-							disabled={$page.route.id === "/(words)/words/[word]"}
+							disabled={$page.route.id === "/words/[word]"}
 							value="sitelen_sitelen"
 						>
 							sitelen sitelen
@@ -149,8 +149,10 @@
 				</DropdownMenu.Item>
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
+
 		<input type="hidden" name="categories" value={categoriesSerializer.stringify($categories)} />
-		<Button class="inline-flex" type="submit" variant="outline" size="icon">
+
+		<Button aria-label="submit search" class="inline-flex" type="submit" variant="outline" size="icon">
 			<SearchIcon />
 		</Button>
 	</div>

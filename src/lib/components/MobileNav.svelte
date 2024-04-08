@@ -29,14 +29,7 @@
 
 	<Sheet.Content side="bottom">
 		<nav class="flex flex-col justify-center gap-4">
-			<a
-				href="/"
-				class={cn(
-					$page.url.pathname === "/" ? "text-foreground" : "text-foreground/60",
-					"flex items-center",
-				)}
-				on:click={() => (open = false)}
-			>
+			<a href="/" class="flex items-center text-foreground/60" on:click={() => (open = false)}>
 				<img src={logo} alt="Linku's logo" class="size-6 mr-2" />
 				<span class="font-bold">lipu Linku</span>
 			</a>

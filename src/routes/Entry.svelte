@@ -22,8 +22,8 @@
 		core: "oklch(93.29% 0.137 106.54)",
 		common: "oklch(61.15% 0.177 30.62)",
 		uncommon: "oklch(46.87% 0.159 351.1)",
-		sandbox: "oklch(20.55% 0.052 284.53)",
 		obscure: "oklch(32.72% 0.149 311.74)",
+		sandbox: "oklch(20.55% 0.052 284.53)",
 	} as const satisfies Record<UsageCategory, string>;
 </script>
 
@@ -35,7 +35,7 @@
 	"
 	--category-color={categoryColors[word.usage_category]}
 >
-	<a href="/words/{word.word}" class="flex-1 p-0.5">
+	<a href="/words/{word.id}" class="flex-1 p-0.5">
 		<CardHeader class="space-y-1 p-4 pl-6">
 			<CardTitle class="text-2xl leading-8">{word.word}</CardTitle>
 			<CardDescription dir={language.direction} class="text-[1rem] text-foreground">
@@ -52,10 +52,18 @@
 				</CardDescription>
 			{/if}
 			<CardDescription>
-				{word.usage_category} · {word.book} ·
-				<span title="{usageScore}% of toki pona speakers will recognize this word">
-					{usageScore}%
-				</span>
+				{#if word.usage_category !== "sandbox"}
+					{word.usage_category} · {word.book} ·
+					<span title="{usageScore}% of toki pona speakers will recognize this word">
+						{usageScore}%
+					</span>
+				{:else}
+					{[
+						word.creator.length > 0 ? word.creator.join(", ") : undefined,
+						word.coined_year,
+						word.book !== "none" ? word.book : undefined,
+					].filter(Boolean).join(" · ")}
+				{/if}
 			</CardDescription>
 		</CardHeader>
 	</a>

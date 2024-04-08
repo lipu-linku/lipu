@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { ModeWatcher } from "mode-watcher";
-	import "../app.postcss";
 	import { page } from "$app/stores";
 	import { flyAndScale } from "$lib/utils";
 	import { Button } from "$lib/components/ui/button";
 	import UpArrowIcon from "~icons/lucide/arrow-up";
+
+	import "../app.postcss";
 
 	let scrollY: number;
 	let outerHeight: number;

@@ -7,6 +7,6 @@ export const load: LayoutLoad = async ({ parent, fetch }) => {
 	return {
 		words: await client({ fetch })
 			.v1.words.$get({ query: { lang: language.id } })
-			.then(async (r) => r.json()),
+			.then((r) => r.json()),
 	};
 };

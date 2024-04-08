@@ -1,26 +1,26 @@
 <script lang="ts">
-	import { page } from "$app/stores";
 	import AudioButton from "$lib/components/AudioButton.svelte";
 	import Collapsible from "$lib/components/Collapsible.svelte";
+	import Navbar from "$lib/components/Navbar.svelte";
+	import WordsSearch from "../../(words)/WordsSearch.svelte";
+	import UsageGraph from "./UsageGraph.svelte";
+
 	import { Button } from "$lib/components/ui/button";
-	import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
-	import {
-		DropdownMenu,
-		DropdownMenuContent,
-		DropdownMenuItem,
-		DropdownMenuLabel,
-		DropdownMenuSeparator,
-		DropdownMenuTrigger,
-	} from "$lib/components/ui/dropdown-menu";
-	import { Tooltip, TooltipContent, TooltipTrigger } from "$lib/components/ui/tooltip";
+	import * as Card from "$lib/components/ui/card";
+	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+	import * as Tooltip from "$lib/components/ui/tooltip";
+
+	import { page } from "$app/stores";
 	import { getTranslatedData } from "@kulupu-linku/sona/utils";
+
 	import BackIcon from "~icons/lucide/arrow-left";
 	import CopyIcon from "~icons/lucide/copy";
 	import InfoIcon from "~icons/lucide/info";
 	import ShareButton from "~icons/lucide/share-2";
+	import { cn } from "$lib/utils";
 
 	export let data;
-	$: ({ word, language } = data);
+	$: ({ word, language, languages } = data);
 
 	$: usageScore = Object.values(word.usage).at(-1) ?? 0;
 	$: definition = getTranslatedData(word, "definition", language.id);
@@ -28,18 +28,20 @@
 	$: etymology = getTranslatedData(word, "etymology", language.id);
 	$: sitelenPonaEtymology = getTranslatedData(word, "sp_etymology", language.id);
 
+	$: hasRepresentations =
+		word.representations &&
+		(word.representations.ligatures?.length ||
+			word.representations.sitelen_emosi ||
+			word.representations.sitelen_jelo?.length ||
+			word.representations.sitelen_sitelen ||
+			word.representations.ucsur);
+
 	$: pu_verbatim =
 		word.pu_verbatim?.[
 			language.id in word.pu_verbatim
 				? (language.id as keyof (typeof word)["pu_verbatim"])
 				: ("en" as const)
 		];
-
-	$: etym_string = etymology.map((it, i) => {
-		const constant = word.etymology[i];
-
-		return `${i > 0 ? " ⇐ " : ""}${constant.word ?? ""} ${constant.alt ? `(${constant.alt})` : ""} ${it.definition ? `- ${it.definition}` : ""} ${it.language ? `[${it.language}]` : ""}`.trim();
-	});
 
 	const englishFormat = new Intl.ListFormat("en", { style: "narrow" });
 	let listFormat = new Intl.ListFormat("en");
@@ -76,7 +78,15 @@
 	/>
 </svelte:head>
 
-<main class="flex-1 max-w-screen-2xl mx-auto flex flex-col gap-4 p-4 pb-2">
+<Navbar {language} {languages}>
+	<WordsSearch class="hidden md:flex" />
+</Navbar>
+
+<WordsSearch
+	class="flex sticky z-50 top-0 border-b border-border/40 bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden"
+/>
+
+<main class="flex-1 max-w-screen-2xl 2xl:mx-auto flex flex-col gap-4 p-4 pb-2">
 	<header class="flex-1 flex items-center gap-4">
 		<Button href="/" class="justify-self-end" variant="ghost" size="icon">
 			<BackIcon />
@@ -88,36 +98,41 @@
 			{#if word.audio}
 				<AudioButton audio={word.audio} />
 			{/if}
-			<DropdownMenu>
-				<DropdownMenuTrigger asChild let:builder>
+			<DropdownMenu.Root>
+				<DropdownMenu.Trigger asChild let:builder>
 					<Button builders={[builder]} variant="outline" size="icon">
 						<ShareButton />
 					</Button>
-				</DropdownMenuTrigger>
-				<DropdownMenuContent>
-					<DropdownMenuLabel>Share word</DropdownMenuLabel>
-					<DropdownMenuSeparator />
+				</DropdownMenu.Trigger>
+				<DropdownMenu.Content>
+					<DropdownMenu.Label>Share word</DropdownMenu.Label>
+					<DropdownMenu.Separator />
 
-					<DropdownMenuItem on:click={() => navigator.clipboard.writeText($page.url.toString())}>
+					<DropdownMenu.Item on:click={() => navigator.clipboard.writeText($page.url.toString())}>
 						<CopyIcon class="inline mr-2 size-4" />
 						Copy URL
-					</DropdownMenuItem>
+					</DropdownMenu.Item>
 
-					<DropdownMenuItem on:click={copyCodepoint}>
+					<DropdownMenu.Item on:click={copyCodepoint}>
 						<span class="text-2xl -ml-1 mr-2 font-sitelen-pona">sitelen-pona</span>
 						sitelen pona
-					</DropdownMenuItem>
-				</DropdownMenuContent>
-			</DropdownMenu>
+					</DropdownMenu.Item>
+				</DropdownMenu.Content>
+			</DropdownMenu.Root>
 		</div>
 	</header>
 
-	<div class="flex-1 grid grid-cols-3 max-md:flex max-md:flex-col gap-2 justify-stretch">
-		<Card>
-			<CardHeader>
-				<CardTitle class="text-2xl" tag="h2">Meaning</CardTitle>
-			</CardHeader>
-			<CardContent class="flex flex-col gap-3">
+	<div
+		class={cn(
+			"flex-1 grid grid-cols-3 max-md:flex max-md:flex-col gap-2 justify-stretch",
+			!hasRepresentations && "grid-cols-2",
+		)}
+	>
+		<Card.Root>
+			<Card.Header>
+				<Card.Title class="text-2xl" tag="h2">Meaning</Card.Title>
+			</Card.Header>
+			<Card.Content class="flex flex-col gap-3">
 				<div class="flex flex-col justify-center gap-2">
 					<h3 class="font-medium text-xl">Common Definition</h3>
 					<p dir={language.direction}>{definition}</p>
@@ -130,18 +145,18 @@
 					<div class="flex flex-col justify-center gap-2">
 						<h3 class="flex items-center gap-2 font-medium text-xl">
 							ku definitions
-							<Tooltip>
-								<TooltipTrigger
+							<Tooltip.Root>
+								<Tooltip.Trigger
 									class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
 								>
 									<InfoIcon class="size-4 " />
-								</TooltipTrigger>
-								<TooltipContent class="max-w-[min(55ch,80%)]">
+								</Tooltip.Trigger>
+								<Tooltip.Content class="max-w-[min(55ch,80%)]">
 									Each ku definition is assigned a frequency index from ½ to 5, which describes how
 									commonly it was translated that way in the toki pona community, according to a
 									survey.
-								</TooltipContent>
-							</Tooltip>
+								</Tooltip.Content>
+							</Tooltip.Root>
 						</h3>
 
 						<Collapsible content={englishFormat.format(kuString)} />
@@ -163,63 +178,64 @@
 						</ul>
 					</div>
 				{/if}
-			</CardContent>
-		</Card>
+			</Card.Content>
+		</Card.Root>
 
-		<Card>
-			<CardHeader>
-				<CardTitle class="text-2xl" tag="h2">Usage</CardTitle>
-			</CardHeader>
-			<CardContent class="flex flex-col gap-3">
-				{#if word.representations?.ligatures && word.representations?.ligatures?.length > 0}
-					<div class="flex flex-col justify-center gap-2">
-						<h3 class="font-medium text-xl">sitelen pona</h3>
-						<p>
-							<span class="text-7xl font-sitelen-pona">
-								{word.representations?.ligatures?.join(" ")}
-							</span>
-						</p>
-						{#if sitelenPonaEtymology}
-							<p dir={language.direction}>{sitelenPonaEtymology}</p>
-						{/if}
-					</div>
-				{/if}
+		{#if hasRepresentations}
+			<Card.Root>
+				<Card.Header>
+					<Card.Title class="text-2xl" tag="h2">Usage</Card.Title>
+				</Card.Header>
+				<Card.Content class="flex flex-col gap-3">
+					{#if word.representations?.ligatures && word.representations?.ligatures?.length > 0}
+						<div class="flex flex-col justify-center gap-2">
+							<h3 class="font-medium text-xl">sitelen pona</h3>
+							<p>
+								<span class="text-7xl font-sitelen-pona">
+									{word.representations?.ligatures?.join(" ")}
+								</span>
+							</p>
+							{#if sitelenPonaEtymology}
+								<p dir={language.direction}>{sitelenPonaEtymology}</p>
+							{/if}
+						</div>
+					{/if}
 
-				{#if word.representations?.sitelen_sitelen}
-					<div class="flex flex-col justify-center gap-2">
-						<h3 class="font-medium text-xl">sitelen sitelen</h3>
-						<img
-							src={word.representations.sitelen_sitelen}
-							alt="{word.word} in sitelen sitelen format"
-							class="dark:invert size-16 m-2"
-						/>
-					</div>
-				{/if}
+					{#if word.representations?.sitelen_sitelen}
+						<div class="flex flex-col justify-center gap-2">
+							<h3 class="font-medium text-xl">sitelen sitelen</h3>
+							<img
+								src={word.representations.sitelen_sitelen}
+								alt="{word.word} in sitelen sitelen format"
+								class="dark:invert size-16 m-2"
+							/>
+						</div>
+					{/if}
 
-				{#if word.representations?.ucsur}
-					<div class="flex flex-col justify-center gap-2">
-						<h3 class="flex items-center gap-2 first-letter:font-medium text-xl">
-							<span>UCSUR Codepoint</span>
-							<a
-								class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colorsx"
-								href="https://www.kreativekorp.com/ucsur/charts/sitelen.html"
-								target="_blank"
-							>
-								<InfoIcon class="align-middle size-4" />
-							</a>
-						</h3>
+					{#if word.representations?.ucsur}
+						<div class="flex flex-col justify-center gap-2">
+							<h3 class="flex items-center gap-2 first-letter:font-medium text-xl">
+								<span>UCSUR Codepoint</span>
+								<a
+									class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colorsx"
+									href="https://www.kreativekorp.com/ucsur/charts/sitelen.html"
+									target="_blank"
+								>
+									<InfoIcon class="align-middle size-4" />
+								</a>
+							</h3>
 
-						<p class="flex items-center gap-2">
-							{word.representations.ucsur}
-							<Button class="p-1 h-fit" variant="ghost" on:click={copyCodepoint}>
-								<CopyIcon />
-							</Button>
-						</p>
-					</div>
-				{/if}
+							<p class="flex items-center gap-2">
+								{word.representations.ucsur}
+								<Button class="p-1 h-fit" variant="ghost" on:click={copyCodepoint}>
+									<CopyIcon />
+								</Button>
+							</p>
+						</div>
+					{/if}
 
-				<!-- TODO: find a good way to lazy load the word's luka pona sign by name -->
-				<!-- {#if word.luka_pona}
+					<!-- TODO: find a good way to lazy load the word's luka pona sign by name -->
+					<!-- {#if word.luka_pona}
 					<div class="flex flex-col justify-center gap-2">
 						<h3 class="font-medium text-xl">luka pona</h3>
 						<video class="rounded-md" controls muted playsinline preload="metadata">
@@ -228,14 +244,15 @@
 						</video>
 					</div>
 				{/if} -->
-			</CardContent>
-		</Card>
+				</Card.Content>
+			</Card.Root>
+		{/if}
 
-		<Card>
-			<CardHeader>
-				<CardTitle class="text-2xl" tag="h2">More Info</CardTitle>
-			</CardHeader>
-			<CardContent class="flex flex-col gap-3">
+		<Card.Root>
+			<Card.Header>
+				<Card.Title class="text-2xl" tag="h2">More Info</Card.Title>
+			</Card.Header>
+			<Card.Content class="flex flex-col gap-3">
 				{#if commentary}
 					<h3 class="font-medium text-xl">Commentary</h3>
 					<p dir={language.direction}>{commentary}</p>
@@ -262,7 +279,7 @@
 							{#if word.creator}
 								<li>
 									<span class="text-muted-foreground">Created by: </span>
-									{word.creator}
+									{listFormat.format(word.creator)}
 								</li>
 							{/if}
 							{#if word.coined_year || word.coined_era}
@@ -305,7 +322,18 @@
 						</ul>
 					</div>
 				{/if}
-			</CardContent>
-		</Card>
+			</Card.Content>
+		</Card.Root>
+
+		{#if Object.keys(word.usage).length > 1}
+			<Card.Root class="col-span-3">
+				<Card.Header>
+					<Card.Title class="text-2xl" tag="h2">Usage Trend</Card.Title>
+				</Card.Header>
+				<Card.Content class="flex flex-col gap-3">
+					<UsageGraph data={word.usage} />
+				</Card.Content>
+			</Card.Root>
+		{/if}
 	</div>
 </main>

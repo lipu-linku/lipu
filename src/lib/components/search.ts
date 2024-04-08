@@ -9,17 +9,14 @@ import { distance } from "fastest-levenshtein";
 export const wordSearch = (
 	query: string,
 	words: Words,
-	categories: Record<Exclude<UsageCategory, "sandbox">, boolean>,
+	categories: Record<UsageCategory, boolean>,
 	wordList: string[] | undefined = undefined,
 	language: Language["id"] = "en",
 ): LocalizedWord[] => {
 	query = normalize(query);
 
 	const initialFilteredWords = Object.values(words).filter(
-		(w) =>
-			w.usage_category !== "sandbox" &&
-			categories[w.usage_category] &&
-			(wordList?.includes(w.word) ?? true),
+		(w) => categories[w.usage_category] && (wordList?.includes(w.word) ?? true),
 	);
 
 	if (query === "")
