@@ -271,7 +271,7 @@
 			</p>
 
 			<Button
-				href="https://github.com/lipu-linku/ijo/blob/main/survey/2023/results.md"
+				href="https://github.com/lipu-linku/ijo/blob/main/survey/2023/README.md"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="whitespace-nowrap"
