@@ -265,11 +265,7 @@
 							{#if word.etymology.length > 0 && etymology.length > 0}
 								{#each word.etymology as etym, i}
 									{@const local_etym = etymology[i]}
-									<li
-										dir={language.direction}
-										class:text-left={language.direction === "ltr"}
-										class:text-right={language.direction === "rtl"}
-									>
+									<li dir={language.direction} class="text-start">
 										{local_etym.language}{etym.word ? `: ${etym.word}` : ""}{etym.alt
 											? ` (${etym.alt})`
 											: ""}{local_etym.definition ? `; ${local_etym.definition}` : ""}

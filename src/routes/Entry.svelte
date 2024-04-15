@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { writingSystem } from "$lib/state";
+	import { writingSystem, etymologiesEnabled } from "$lib/state";
 	import type { Language, LocalizedWord } from "@kulupu-linku/sona";
 	import { getTranslatedData, type UsageCategory } from "@kulupu-linku/sona/utils";
 
@@ -16,6 +16,7 @@
 	export let language: Language;
 
 	$: definition = getTranslatedData(word, "definition", language.id);
+	$: etymology = getTranslatedData(word, "etymology", language.id);
 	$: usageScore = Object.values(word.usage).at(-1) ?? 0;
 
 	const categoryColors = {
@@ -62,9 +63,29 @@
 						word.creator.length > 0 ? word.creator.join(", ") : undefined,
 						word.coined_year,
 						word.book !== "none" ? word.book : undefined,
-					].filter(Boolean).join(" · ")}
+					]
+						.filter(Boolean)
+						.join(" · ")}
 				{/if}
 			</CardDescription>
+			{#if $etymologiesEnabled && word.etymology.length > 0 && etymology.length > 0}
+				<CardDescription>
+					{@const etymString = word.etymology
+						.map((etym, i) => {
+							const local_etym = etymology[i];
+							return (
+								local_etym.language +
+								(etym.word ? `: ${etym.word}` : "") +
+								(etym.alt ? ` (${etym.alt})` : "") +
+								(local_etym.definition ? ` - ${local_etym.definition}` : "")
+							);
+						})
+						.join("; ")}
+					<span dir={language.direction} class="text-start">
+						{etymString}
+					</span>
+				</CardDescription>
+			{/if}
 		</CardHeader>
 	</a>
 
