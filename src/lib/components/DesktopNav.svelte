@@ -21,7 +21,7 @@
 				href={link.href}
 				class="px-2 flex items-center justify-center gap-2 transition-colors text-foreground/60 hover:text-foreground/80"
 			>
-				<svelte:component this={link.icon} class="inline-block" />
+				<svelte:component this={link.icon} />
 				{link.label}
 			</Button>
 		{/each}

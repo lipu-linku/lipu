@@ -20,6 +20,7 @@
 	import HomeIcon from "~icons/lucide/home";
 	import FontsIcon from "~icons/mdi/format-font";
 	import FlaskIcon from "~icons/lucide/flask-conical";
+	import ClipboardPlusIcon from "~icons/lucide/clipboard-plus";
 	import InfoIcon from "~icons/lucide/info";
 	import DarkModeIcon from "~icons/lucide/moon";
 	import LightModeIcon from "~icons/lucide/sun";
@@ -42,6 +43,11 @@
 			href: "/sandbox",
 			label: "Sandbox",
 			icon: FlaskIcon,
+		},
+		forms: {
+			href: "/forms",
+			label: "Forms",
+			icon: ClipboardPlusIcon,
 		},
 		about: {
 			href: "/about",
