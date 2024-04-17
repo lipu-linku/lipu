@@ -2,7 +2,7 @@
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
 	import * as Select from "$lib/components/ui/select";
-	import { cn } from "$lib/utils";
+	import { cn } from "$lib/components/ui/utils";
 	import type { Languages } from "@kulupu-linku/sona";
 
 	import LanguagesIcon from "~icons/lucide/languages";

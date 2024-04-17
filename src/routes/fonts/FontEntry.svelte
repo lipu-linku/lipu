@@ -9,7 +9,7 @@
 	} from "$lib/components/ui/card";
 	import { fontSentence } from "$lib/state";
 	import type { Font } from "@kulupu-linku/sona";
-	import { flyAndScale } from "$lib/utils";
+	import { flyAndScale } from "$lib/components/ui/utils";
 	import IntersectionObserver from "svelte-intersection-observer";
 
 	import DownloadIcon from "~icons/lucide/download";

@@ -12,9 +12,10 @@
 		searchQuery,
 		writingSystem,
 	} from "$lib/state";
-	import { cn, keys } from "$lib/utils";
-
+	import { keys } from "$lib/utils";
+	import { cn } from "$lib/components/ui/utils";
 	import { pushState } from "$app/navigation";
+
 	import CheckIcon from "~icons/lucide/check";
 	import CategoriesIcon from "~icons/lucide/layout-dashboard";
 	import LinkIcon from "~icons/lucide/link";
@@ -112,9 +113,7 @@
 				<DropdownMenu.Separator />
 				<DropdownMenu.Group>
 					<DropdownMenu.Label
-						class={$page.route.id === "/words/[word]"
-							? `pointer-events-none opacity-50`
-							: ""}
+						class={$page.route.id === "/words/[word]" ? `pointer-events-none opacity-50` : ""}
 					>
 						<WritingSystemIcon aria-label="Fountain pen icon" class="mr-1 inline size-4" />
 						<span>Writing System</span>
@@ -152,7 +151,13 @@
 
 		<input type="hidden" name="categories" value={categoriesSerializer.stringify($categories)} />
 
-		<Button aria-label="submit search" class="inline-flex" type="submit" variant="outline" size="icon">
+		<Button
+			aria-label="submit search"
+			class="inline-flex"
+			type="submit"
+			variant="outline"
+			size="icon"
+		>
 			<SearchIcon />
 		</Button>
 	</div>

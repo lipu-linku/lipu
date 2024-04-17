@@ -41,8 +41,8 @@
 		essentially memes.
 		<br />
 		Some reflect early drafts of
-		<span class="md:whitespace-nowrap">Toki Pona</span>. A lot are one-off jokes, created and abandoned
-		immediately.
+		<span class="md:whitespace-nowrap">Toki Pona</span>. A lot are one-off jokes, created and
+		abandoned immediately.
 	</p>
 	<ul class="flex flex-col items-stretch gap-2 mx-auto max-w-[min(95vw,1000px)]">
 		{#each sorted_filtered_dictionary as word (word.id)}

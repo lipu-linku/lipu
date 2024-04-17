@@ -14,7 +14,7 @@
 	import * as Card from "$lib/components/ui/card";
 
 	import WordIcon from "~icons/lucide/whole-word";
-	import { entries } from "$lib/utils";
+	import { entries } from "$lib/components/ui/utils";
 
 	const cards = {
 		word: {

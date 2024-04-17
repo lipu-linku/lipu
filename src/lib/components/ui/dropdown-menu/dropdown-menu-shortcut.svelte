@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { cn } from "$lib/utils";
 	import type { HTMLAttributes } from "svelte/elements";
+	import { cn } from "$lib/components/ui/utils.js";
 
 	type $$Props = HTMLAttributes<HTMLSpanElement>;
 

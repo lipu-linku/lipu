@@ -62,7 +62,9 @@
 						word.creator.length > 0 ? word.creator.join(", ") : undefined,
 						word.coined_year,
 						word.book !== "none" ? word.book : undefined,
-					].filter(Boolean).join(" · ")}
+					]
+						.filter(Boolean)
+						.join(" · ")}
 				{/if}
 			</CardDescription>
 		</CardHeader>

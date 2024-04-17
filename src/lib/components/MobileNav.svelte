@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-	import { cn, entries } from "$lib/utils";
+	import { cn, entries } from "$lib/components/ui/utils";
 	import { Button } from "$lib/components/ui/button";
 	import * as Sheet from "$lib/components/ui/sheet";
 	import Separator from "./ui/separator/separator.svelte";

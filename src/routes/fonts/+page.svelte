@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fontSentence } from "$lib/state";
-	import { entries } from "$lib/utils";
+	import { entries } from "$lib/components/ui/utils";
 	import { fly } from "svelte/transition";
 	import FontEntry from "./FontEntry.svelte";
 

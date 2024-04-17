@@ -6,7 +6,7 @@
 	import { browser } from "$app/environment";
 	import { page } from "$app/stores";
 	import { searchQuery, writingSystem } from "$lib/state";
-	import { cn } from "$lib/utils";
+	import { cn } from "$lib/components/ui/utils";
 
 	import { pushState } from "$app/navigation";
 	import CheckIcon from "~icons/lucide/check";
@@ -77,7 +77,13 @@
 			<LinkIcon />
 		</Button>
 
-		<Button aria-label="Submit search" class="inline-flex" type="submit" variant="outline" size="icon">
+		<Button
+			aria-label="Submit search"
+			class="inline-flex"
+			type="submit"
+			variant="outline"
+			size="icon"
+		>
 			<SearchIcon />
 		</Button>
 	</div>

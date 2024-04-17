@@ -17,7 +17,7 @@
 	import CopyIcon from "~icons/lucide/copy";
 	import InfoIcon from "~icons/lucide/info";
 	import ShareButton from "~icons/lucide/share-2";
-	import { cn } from "$lib/utils";
+	import { cn } from "$lib/components/ui/utils";
 
 	export let data;
 	$: ({ word, language, languages } = data);
