@@ -1,6 +1,5 @@
 <script lang="ts">
 	import { fontSentence } from "$lib/state";
-	import { entries } from "$lib/utils";
 	import { fly } from "svelte/transition";
 	import FontEntry from "./FontEntry.svelte";
 
@@ -8,8 +7,9 @@
 	import { Card, CardContent, CardHeader, CardTitle } from "$lib/components/ui/card";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
-
 	import { Checkbox } from "$lib/components/ui/checkbox";
+	
+	import logo from "$lib/assets/icon.png?url";
 	import CloseIcon from "~icons/lucide/x";
 
 	export let data;
@@ -23,7 +23,11 @@
 </script>
 
 <svelte:head>
-	<title>lipu Linku &middot; Fonts</title>
+	<title>lipu Linku · Fonts</title>
+	<meta name="description" content="Browse fonts for Toki Pona" />
+	<meta name="og:title" content="lipu Linku · Fonts" />
+	<meta name="og:description" content="Browse fonts for Toki Pona" />
+	<meta name="og:image" content={logo} />
 </svelte:head>
 
 <div class="flex-0 flex flex-col items-center gap-2">
