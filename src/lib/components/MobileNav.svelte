@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-	import { cn, entries } from "$lib/components/ui/utils";
+	import { cn } from "$lib/components/ui/utils";
 	import { Button } from "$lib/components/ui/button";
 	import * as Sheet from "$lib/components/ui/sheet";
 	import Separator from "./ui/separator/separator.svelte";
@@ -8,6 +8,7 @@
 
 	import logo from "$lib/assets/icon.png";
 	import MenuIcon from "~icons/lucide/menu";
+	import { entries } from "$lib/utils";
 
 	export let links: Record<string, NavbarLink>;
 
@@ -22,7 +23,7 @@
 			size="icon"
 			class="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
 		>
-			<MenuIcon class="size-5 inline-block" />
+			<MenuIcon class="inline-block size-5" />
 			<span class="sr-only">Toggle Menu</span>
 		</Button>
 	</Sheet.Trigger>
@@ -30,7 +31,7 @@
 	<Sheet.Content side="bottom">
 		<nav class="flex flex-col justify-center gap-4">
 			<a href="/" class="flex items-center text-foreground/60" on:click={() => (open = false)}>
-				<img src={logo} alt="Linku's logo" class="size-6 mr-2" />
+				<img src={logo} alt="Linku's logo" class="mr-2 size-6" />
 				<span class="font-bold">lipu Linku</span>
 			</a>
 
@@ -46,7 +47,7 @@
 						)}
 						on:click={() => (open = false)}
 					>
-						<svelte:component this={link.icon} class="inline-block mr-2" />
+						<svelte:component this={link.icon} class="mr-2 inline-block" />
 						{link.label}
 					</a>
 				{/each}

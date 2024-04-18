@@ -83,16 +83,16 @@
 </Navbar>
 
 <WordsSearch
-	class="flex sticky z-50 top-0 border-b border-border/40 bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden"
+	class="sticky top-0 z-50 flex border-b border-border/40 bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden"
 />
 
-<main class="flex-1 max-w-screen-2xl 2xl:mx-auto flex flex-col gap-4 p-4 pb-2">
-	<header class="flex-1 flex items-center gap-4">
+<main class="flex max-w-screen-2xl flex-1 flex-col gap-4 p-4 pb-2 2xl:mx-auto">
+	<header class="flex flex-1 items-center gap-4">
 		<Button href="/" class="justify-self-end" variant="ghost" size="icon">
 			<BackIcon />
 		</Button>
 
-		<h1 class="font-semibold text-4xl align-middle">{word.word}</h1>
+		<h1 class="align-middle text-4xl font-semibold">{word.word}</h1>
 
 		<div class="ml-auto flex items-center gap-2">
 			{#if word.audio}
@@ -109,12 +109,12 @@
 					<DropdownMenu.Separator />
 
 					<DropdownMenu.Item on:click={() => navigator.clipboard.writeText($page.url.toString())}>
-						<CopyIcon class="inline mr-2 size-4" />
+						<CopyIcon class="mr-2 inline size-4" />
 						Copy URL
 					</DropdownMenu.Item>
 
 					<DropdownMenu.Item on:click={copyCodepoint}>
-						<span class="text-2xl -ml-1 mr-2 font-sitelen-pona">sitelen-pona</span>
+						<span class="-ml-1 mr-2 font-sitelen-pona text-2xl">sitelen-pona</span>
 						sitelen pona
 					</DropdownMenu.Item>
 				</DropdownMenu.Content>
@@ -124,7 +124,7 @@
 
 	<div
 		class={cn(
-			"flex-1 grid grid-cols-3 max-md:flex max-md:flex-col gap-2 justify-stretch",
+			"grid flex-1 grid-cols-3 justify-stretch gap-2 max-md:flex max-md:flex-col",
 			!hasRepresentations && "grid-cols-2",
 		)}
 	>
@@ -134,7 +134,7 @@
 			</Card.Header>
 			<Card.Content class="flex flex-col gap-3">
 				<div class="flex flex-col justify-center gap-2">
-					<h3 class="font-medium text-xl">Common Definition</h3>
+					<h3 class="text-xl font-medium">Common Definition</h3>
 					<p dir={language.direction}>{definition}</p>
 				</div>
 
@@ -143,11 +143,11 @@
 						([def, usage]) => def + usageToIndex(usage),
 					)}
 					<div class="flex flex-col justify-center gap-2">
-						<h3 class="flex items-center gap-2 font-medium text-xl">
+						<h3 class="flex items-center gap-2 text-xl font-medium">
 							ku definitions
 							<Tooltip.Root>
 								<Tooltip.Trigger
-									class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
+									class="grid place-items-center rounded-md p-2 transition-colors hover:bg-accent hover:text-accent-foreground"
 								>
 									<InfoIcon class="size-4 " />
 								</Tooltip.Trigger>
@@ -165,7 +165,7 @@
 
 				{#if pu_verbatim}
 					<div class="flex flex-col justify-center gap-2">
-						<h3 class="font-medium text-xl">pu definition</h3>
+						<h3 class="text-xl font-medium">pu definition</h3>
 						<ul>
 							{#each pu_verbatim.split("\n") as line}
 								{@const [partOfSpeech, ...definition] = line.split(" ")}
@@ -189,9 +189,9 @@
 				<Card.Content class="flex flex-col gap-3">
 					{#if word.representations?.ligatures && word.representations?.ligatures?.length > 0}
 						<div class="flex flex-col justify-center gap-2">
-							<h3 class="font-medium text-xl">sitelen pona</h3>
+							<h3 class="text-xl font-medium">sitelen pona</h3>
 							<p>
-								<span class="text-7xl font-sitelen-pona">
+								<span class="font-sitelen-pona text-7xl">
 									{word.representations?.ligatures?.join(" ")}
 								</span>
 							</p>
@@ -203,31 +203,31 @@
 
 					{#if word.representations?.sitelen_sitelen}
 						<div class="flex flex-col justify-center gap-2">
-							<h3 class="font-medium text-xl">sitelen sitelen</h3>
+							<h3 class="text-xl font-medium">sitelen sitelen</h3>
 							<img
 								src={word.representations.sitelen_sitelen}
 								alt="{word.word} in sitelen sitelen format"
-								class="dark:invert size-16 m-2"
+								class="m-2 size-16 dark:invert"
 							/>
 						</div>
 					{/if}
 
 					{#if word.representations?.ucsur}
 						<div class="flex flex-col justify-center gap-2">
-							<h3 class="flex items-center gap-2 first-letter:font-medium text-xl">
+							<h3 class="flex items-center gap-2 text-xl first-letter:font-medium">
 								<span>UCSUR Codepoint</span>
 								<a
-									class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colorsx"
+									class="transition-colorsx grid place-items-center rounded-md p-2 hover:bg-accent hover:text-accent-foreground"
 									href="https://www.kreativekorp.com/ucsur/charts/sitelen.html"
 									target="_blank"
 								>
-									<InfoIcon class="align-middle size-4" />
+									<InfoIcon class="size-4 align-middle" />
 								</a>
 							</h3>
 
 							<p class="flex items-center gap-2">
 								{word.representations.ucsur}
-								<Button class="p-1 h-fit" variant="ghost" on:click={copyCodepoint}>
+								<Button class="h-fit p-1" variant="ghost" on:click={copyCodepoint}>
 									<CopyIcon />
 								</Button>
 							</p>
@@ -254,13 +254,13 @@
 			</Card.Header>
 			<Card.Content class="flex flex-col gap-3">
 				{#if commentary}
-					<h3 class="font-medium text-xl">Commentary</h3>
+					<h3 class="text-xl font-medium">Commentary</h3>
 					<p dir={language.direction}>{commentary}</p>
 				{/if}
 
 				{#if etymology.length > 0 || word.creator || word.coined_year || word.coined_era}
 					<div class="flex flex-col justify-center gap-2">
-						<h3 class="font-medium text-xl">Origin</h3>
+						<h3 class="text-xl font-medium">Origin</h3>
 						<ul class="flex flex-col justify-center gap-2">
 							{#if word.etymology.length > 0 && etymology.length > 0}
 								{#each word.etymology as etym, i}
@@ -293,7 +293,7 @@
 				{/if}
 
 				<div class="flex flex-col justify-center gap-2">
-					<h3 class="font-medium text-xl">Usage Data</h3>
+					<h3 class="text-xl font-medium">Usage Data</h3>
 					<ul class="flex flex-col justify-center gap-2">
 						<li>
 							<span class="text-muted-foreground">Category:</span>
@@ -312,7 +312,7 @@
 
 				{#if word.see_also.length > 0}
 					<div class="flex flex-col justify-center gap-2">
-						<h3 class="font-medium text-xl">See also</h3>
+						<h3 class="text-xl font-medium">See also</h3>
 						<ul class="flex flex-wrap items-center gap-2">
 							{#each word.see_also as other}
 								<li>

@@ -58,7 +58,7 @@
 </script>
 
 <header
-	class="md:sticky top-0 z-50 md:border-b border-border/40 bg-background/95 p-4 pb-0 md:pb-4 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+	class="top-0 z-50 border-border/40 bg-background/95 p-4 pb-0 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:sticky md:border-b md:pb-4"
 >
 	<div class="container mx-auto flex h-10 items-center gap-2 px-0 md:px-2">
 		<DesktopNav {links}>

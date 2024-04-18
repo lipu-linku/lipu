@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { fontSentence } from "$lib/state";
-	import { entries } from "$lib/components/ui/utils";
+	import { entries } from "$lib/utils";
 	import { fly } from "svelte/transition";
 	import FontEntry from "./FontEntry.svelte";
 
@@ -31,7 +31,7 @@
 
 	<Input class="max-w-[30%]" bind:value={$fontSentence} />
 
-	<main class="w-full p-4 grid grid-cols-[70%_30%] gap-2">
+	<main class="grid w-full grid-cols-[70%_30%] gap-2 p-4">
 		<ul class="flex flex-col gap-2">
 			{#each filtered as [id, font] (id)}
 				<li>
@@ -46,7 +46,7 @@
 					<CardHeader class="relative">
 						<CardTitle>Font Display Settings</CardTitle>
 						<Button
-							class="absolute top-2 right-4"
+							class="absolute right-4 top-2"
 							variant="ghost"
 							size="icon"
 							on:click={() => (sidebarOpen = !sidebarOpen)}

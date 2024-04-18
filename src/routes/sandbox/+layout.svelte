@@ -12,7 +12,7 @@
 </Navbar>
 
 <SandboxSearch
-	class="flex sticky z-50 top-0 border-b border-border/40 bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden"
+	class="sticky top-0 z-50 flex border-b border-border/40 bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden"
 />
 
 <slot />

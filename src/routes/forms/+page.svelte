@@ -11,25 +11,43 @@
 </script>
 
 <script lang="ts">
+	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
+	import { entries } from "$lib/utils";
+	import { signIn, signOut } from "@auth/sveltekit/client";
 
+	import GithubIcon from "~icons/lucide/github";
 	import WordIcon from "~icons/lucide/whole-word";
-	import { entries } from "$lib/components/ui/utils";
+
+	export let data;
+	$: ({ session } = data);
 
 	const cards = {
 		word: {
 			href: "/forms/word",
 			label: "New Word",
-			description: "Submit a new word for consideration into ",
+			description: "Submit a new word to the Sandbox for consideration in the next survey.",
 			icon: WordIcon,
 		},
 	} as const satisfies Record<string, FormCard>;
 </script>
 
-<h1 class="font-medium text-4xl">Forms</h1>
-<p class="text-balance"></p>
+<h1 class="text-4xl font-medium">Forms</h1>
 
-<ul class="flex justify-center items-center gap-3 flex-wrap">
+<div>
+	{#if !session}
+		<Button on:click={() => signIn("github")}>
+			Sign In with <GithubIcon class="ms-1 inline-block" aria-label="GitHub" />
+		</Button>
+	{:else}
+		<p>
+			Signed in as {session.user?.name}
+		</p>
+		<Button on:click={() => signOut()}>Sign Out</Button>
+	{/if}
+</div>
+
+<ul class="flex flex-wrap items-center justify-center gap-3">
 	{#each entries(cards) as [id, form] (id)}
 		<li>
 			<Card.Root class="transition-colors has-[a:hover]:border-zinc-400">

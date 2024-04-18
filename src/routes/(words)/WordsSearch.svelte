@@ -69,9 +69,9 @@
 
 <svelte:window on:keydown={focusSearch} />
 
-<form class={cn("px-2 md:mx-auto md:justify-center items-center gap-2", className)} role="search">
+<form class={cn("items-center gap-2 px-2 md:mx-auto md:justify-center", className)} role="search">
 	<Input
-		class="w-auto bg-background flex-1 md:flex-none"
+		class="w-auto flex-1 bg-background md:flex-none"
 		placeholder="o alasa e nimi"
 		type="search"
 		name="q"
@@ -96,7 +96,7 @@
 				</Button>
 			</DropdownMenu.Trigger>
 			<!-- this is some absolute positioning fuckery to get the dropdown to be centered -->
-			<DropdownMenu.Content class="max-md:!inset-x-0 max-md:mx-auto w-[90vw] md:w-auto">
+			<DropdownMenu.Content class="w-[90vw] max-md:!inset-x-0 max-md:mx-auto md:w-auto">
 				<DropdownMenu.Label class="text-center">Search Options</DropdownMenu.Label>
 				<DropdownMenu.Separator />
 				<DropdownMenu.Group>

@@ -30,7 +30,7 @@
 <Card
 	id={word.id}
 	class="
-		relative flex-1 w-auto flex justify-between border-2 transition-colors
+		relative flex w-auto flex-1 justify-between border-2 transition-colors
 		before:absolute before:inset-y-0 before:w-1 before:rounded-s-md before:bg-[--category-color] before:transition-[width] has-[a:hover]:border-zinc-400 has-[a:hover]:before:w-2
 	"
 	--category-color={categoryColors[word.usage_category]}
@@ -71,7 +71,7 @@
 	</a>
 
 	<CardContent
-		class="my-auto flex items-center justify-center gap-1 py-2 px-4 text-6xl max-md:flex-col-reverse md:gap-4 md:py-0"
+		class="my-auto flex items-center justify-center gap-1 px-4 py-2 text-6xl max-md:flex-col-reverse md:gap-4 md:py-0"
 	>
 		{#if word.audio.length > 0}
 			<AudioButton audio={word.audio} />

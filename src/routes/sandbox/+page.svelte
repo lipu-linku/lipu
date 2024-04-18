@@ -28,8 +28,8 @@
 	<title>lipu Linku</title>
 </svelte:head>
 
-<main class="flex-1 my-4 space-y-4">
-	<p class="text-center text-balance px-2 mx-auto">
+<main class="my-4 flex-1 space-y-4">
+	<p class="mx-auto text-balance px-2 text-center">
 		The <i>sandbox</i> is a collection of proposed words which are
 		<strong class="md:whitespace-nowrap">not actively in use</strong>.
 		<br />
@@ -44,7 +44,7 @@
 		<span class="md:whitespace-nowrap">Toki Pona</span>. A lot are one-off jokes, created and
 		abandoned immediately.
 	</p>
-	<ul class="flex flex-col items-stretch gap-2 mx-auto max-w-[min(95vw,1000px)]">
+	<ul class="mx-auto flex max-w-[min(95vw,1000px)] flex-col items-stretch gap-2">
 		{#each sorted_filtered_dictionary as word (word.id)}
 			<li>
 				<Entry {language} {word} />

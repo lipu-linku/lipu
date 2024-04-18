@@ -49,7 +49,7 @@
 		<CardHeader class="relative">
 			<CardTitle>{font.name}</CardTitle>
 			<CardDescription>{fontDescription}</CardDescription>
-			<nav class="absolute top-2 right-4 flex items-center gap-2">
+			<nav class="absolute right-4 top-2 flex items-center gap-2">
 				{#if font.links.repo}
 					<Button
 						variant="outline"

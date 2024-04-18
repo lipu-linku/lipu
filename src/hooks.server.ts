@@ -1,7 +1,4 @@
-import type { Handle } from "@sveltejs/kit";
+import { handleAuth } from "$lib/auth.server";
+import { type Handle } from "@sveltejs/kit";
 
-export const handle: Handle = async ({ event, resolve }) => {
-	if (event.url.pathname === "/words") return Response.redirect(event.url.origin + "/");
-
-	return await resolve(event);
-};
+export const handle: Handle = handleAuth;

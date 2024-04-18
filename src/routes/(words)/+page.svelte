@@ -27,13 +27,13 @@
 	<title>lipu Linku</title>
 </svelte:head>
 
-<main class="flex-1 my-4 space-y-4">
-	<p class="text-center text-balance">
+<main class="my-4 flex-1 space-y-4">
+	<p class="text-balance text-center">
 		The site is currently in beta!
 		<br />
 		If you have feedback, please contact kala Asi or jan Telesi on Discord!
 	</p>
-	<ul class="flex flex-col items-stretch gap-2 mx-auto max-w-[min(95vw,1000px)]">
+	<ul class="mx-auto flex max-w-[min(95vw,1000px)] flex-col items-stretch gap-2">
 		{#each sorted_filtered_dictionary as word (word.id)}
 			<li>
 				<Entry {language} {word} />

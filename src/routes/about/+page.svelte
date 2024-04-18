@@ -33,9 +33,9 @@
 	<title>lipu Linku &middot; About Linku</title>
 </svelte:head>
 
-<h1 class="font-medium text-4xl">About Linku</h1>
+<h1 class="text-4xl font-medium">About Linku</h1>
 
-<p class="[&>button]:underline w-[65%] text-center text-balance">
+<p class="w-[65%] text-balance text-center [&>button]:underline">
 	Linku is a <button on:click={switchTo("dataset")}>dataset</button> with many
 	<button on:click={switchTo("translations")}>translations</button>, a
 	<button on:click={switchTo("bot")}>Discord bot</button>, a
@@ -109,7 +109,7 @@
 			</span>
 		</AccordionTrigger>
 		<AccordionContent
-			class="[&>div]:space-y-4 [&_code]:border [&_code]:border-border [&_code]:px-1 [&_code]:rounded-sm"
+			class="[&>div]:space-y-4 [&_code]:rounded-sm [&_code]:border [&_code]:border-border [&_code]:px-1"
 		>
 			<p>
 				The bot is for requesting and receiving Linku data without leaving discord, with a couple

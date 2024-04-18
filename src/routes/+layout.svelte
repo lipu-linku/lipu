@@ -15,7 +15,7 @@
 
 <svelte:window bind:scrollY bind:outerHeight />
 
-<div class="relative my-0 mx-auto p-0 flex flex-col min-h-dvh">
+<div class="relative mx-auto my-0 flex min-h-dvh flex-col p-0">
 	<slot />
 
 	{#if !$page.params.word && scrollY > 1.05 * outerHeight}

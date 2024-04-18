@@ -9,7 +9,7 @@
 </script>
 
 <div class="hidden w-full md:flex md:items-center">
-	<a href="/" class="flex items-center space-x-2 mr-4">
+	<a href="/" class="mr-4 flex items-center space-x-2">
 		<img src={logo} alt="Linku's logo" class="size-6" />
 		<span class="hidden font-bold sm:inline-block">lipu Linku</span>
 	</a>
@@ -19,7 +19,7 @@
 			<Button
 				variant="ghost"
 				href={link.href}
-				class="px-2 flex items-center justify-center gap-2 transition-colors text-foreground/60 hover:text-foreground/80"
+				class="flex items-center justify-center gap-2 px-2 text-foreground/60 transition-colors hover:text-foreground/80"
 			>
 				<svelte:component this={link.icon} />
 				{link.label}
@@ -27,7 +27,7 @@
 		{/each}
 	</nav>
 
-	<div class="flex-1 flex">
+	<div class="flex flex-1">
 		<slot />
 	</div>
 </div>

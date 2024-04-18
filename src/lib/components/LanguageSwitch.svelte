@@ -35,7 +35,7 @@
 	}}
 >
 	<Select.Trigger
-		class={cn("md:max-w-48 md:w-auto bg-background md:justify-start gap-2", triggerClass)}
+		class={cn("gap-2 bg-background md:w-auto md:max-w-48 md:justify-start", triggerClass)}
 	>
 		<LanguagesIcon aria-label="Languages icon" class="size-4" />
 		<Select.Value class="line-clamp-1 overflow-ellipsis">

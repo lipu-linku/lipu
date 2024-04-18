@@ -59,9 +59,9 @@
 
 <svelte:window on:keydown={focusSearch} />
 
-<form class={cn("px-2 md:mx-auto md:justify-center items-center gap-2", className)} role="search">
+<form class={cn("items-center gap-2 px-2 md:mx-auto md:justify-center", className)} role="search">
 	<Input
-		class="w-auto bg-background flex-1 md:flex-none"
+		class="w-auto flex-1 bg-background md:flex-none"
 		placeholder="o alasa e nimi"
 		type="search"
 		name="q"

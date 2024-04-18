@@ -7,6 +7,7 @@ import type { Words } from "@kulupu-linku/sona";
 declare global {
 	namespace App {
 		interface Error {
+			message: string;
 			closest?: string[];
 		}
 		// interface Locals {}

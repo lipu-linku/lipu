@@ -8,20 +8,23 @@
 		"preview": "vite preview",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"lint": "prettier --plugin-search-dir . --check . && eslint .",
-		"format": "prettier --plugin-search-dir . --write ."
+		"lint": "prettier --check .",
+		"format": "prettier --write ."
 	},
 	"devDependencies": {
+		"@auth/sveltekit": "^0.15.0",
 		"@iconify/json": "^2.2.201",
 		"@kulupu-linku/sona": "^0.2.3",
 		"@sveltejs/adapter-cloudflare": "^4.4.0",
 		"@sveltejs/kit": "^2.5.6",
 		"@sveltejs/vite-plugin-svelte": "^3.1.0",
+		"@taplo/lib": "^0.5.0",
 		"chart.js": "^4.4.2",
 		"clsx": "^2.1.0",
 		"fastest-levenshtein": "^1.0.16",
 		"lightningcss": "^1.24.1",
 		"mode-watcher": "^0.3.0",
+		"octokit": "^3.2.0",
 		"postcss-nesting": "^12.1.1",
 		"postcss-preset-env": "^9.5.5",
 		"prettier": "^3.2.5",
@@ -37,11 +40,14 @@
 		"tslib": "^2.6.2",
 		"typescript": "^5.4.5",
 		"unplugin-icons": "^0.18.5",
-		"vite": "^5.2.9"
+		"vite": "^5.2.9",
+		"zod": "^3.22.4"
 	},
 	"type": "module",
 	"dependencies": {
-		"bits-ui": "^0.21.3"
+		"bits-ui": "^0.21.3",
+		"formsnap": "^1.0.0",
+		"sveltekit-superforms": "^2.12.5"
 	},
 	"packageManager": "pnpm@9.0.1"
 }
