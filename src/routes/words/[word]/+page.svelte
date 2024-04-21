@@ -71,7 +71,10 @@
 </script>
 
 <svelte:head>
-	<title>lipu Linku &middot; {word.word}</title>
+	<title>lipu Linku · {word.word}</title>
+	<meta property="description" content={definition} />
+	<meta property="og:title" content="lipu Linku · {word.word}" />
+	<meta property="og:description" content={definition} />
 	<meta
 		property="og:image"
 		content="https://raw.githubusercontent.com/lipu-linku/ijo/main/sitelenpona/sitelen-seli-kiwen/{word.word}.png"
