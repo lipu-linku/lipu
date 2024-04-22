@@ -9,6 +9,7 @@
 		categories,
 		categoriesSerializer,
 		defaultCategories,
+		etymologiesEnabled,
 		searchQuery,
 		writingSystem,
 	} from "$lib/state";
@@ -113,10 +114,10 @@
 				<DropdownMenu.Separator />
 				<DropdownMenu.Group>
 					<DropdownMenu.Label
-						class={$page.route.id === "/words/[word]" ? `pointer-events-none opacity-50` : ""}
+						class={cn($page.route.id === "/words/[word]" && "pointer-events-none opacity-50")}
 					>
 						<WritingSystemIcon aria-label="Fountain pen icon" class="mr-1 inline size-4" />
-						<span>Writing System</span>
+						<span>Display Settings</span>
 					</DropdownMenu.Label>
 					<DropdownMenu.RadioGroup bind:value={$writingSystem}>
 						<DropdownMenu.RadioItem
@@ -132,6 +133,12 @@
 							sitelen sitelen
 						</DropdownMenu.RadioItem>
 					</DropdownMenu.RadioGroup>
+
+					<DropdownMenu.Separator />
+
+					<DropdownMenu.CheckboxItem bind:checked={$etymologiesEnabled}>
+						Show Etymologies
+					</DropdownMenu.CheckboxItem>
 				</DropdownMenu.Group>
 				<DropdownMenu.Separator />
 				<DropdownMenu.Item class="font-semibold" on:click={copyLinkWithParams}>

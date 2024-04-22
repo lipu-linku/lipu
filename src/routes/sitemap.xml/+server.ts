@@ -1,10 +1,12 @@
+import { client } from "@kulupu-linku/sona/client";
 import type { RequestHandler } from "./$types";
+import { keys } from "$lib/utils";
 
 export const GET = (async ({ fetch }) => {
-	const data = await fetch("/data").then((res) => res.json());
-	const words = Object.keys(data.data);
+	const words = await client({ fetch }).v1.words.$get({ query: {} });
+	const sandbox = await client({ fetch }).v1.sandbox.$get({ query: {} });
 
-	return new Response(render(words), {
+	return new Response(render([...keys(words), ...keys(sandbox)]), {
 		headers: {
 			"Content-Type": "application/xml",
 		},

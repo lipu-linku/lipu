@@ -4,6 +4,7 @@
 	import { page } from "$app/stores";
 	import { wordSearch } from "$lib/components/search";
 	import { searchQuery } from "$lib/state";
+	import logo from "$lib/assets/icon.png?url";
 
 	export let data;
 	$: ({ words, language } = data);
@@ -25,7 +26,11 @@
 </script>
 
 <svelte:head>
-	<title>lipu Linku</title>
+	<title>lipu Linku · Sandbox</title>
+	<meta name="description" content="Collection of Toki Pona word proposals" />
+	<meta name="title" content="lipu Linku · Sandbox" />
+	<meta name="og:description" content="Collection of Toki Pona word proposals" />
+	<meta name="og:image" content={logo} />
 </svelte:head>
 
 <main class="my-4 flex-1 space-y-4">
