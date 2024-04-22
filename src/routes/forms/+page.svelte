@@ -37,7 +37,7 @@
 <div>
 	{#if !session}
 		<Button on:click={() => signIn("github")}>
-			Sign In with <GithubIcon class="ms-1 inline-block" aria-label="GitHub" />
+			Sign In with <GithubIcon class="ms-[1ch] inline-block" aria-label="GitHub" />
 		</Button>
 	{:else}
 		<p>

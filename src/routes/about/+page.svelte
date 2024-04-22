@@ -1,5 +1,7 @@
 <script lang="ts">
 	import { browser } from "$app/environment";
+	import { page } from "$app/stores";
+	import ExternalLink from "$lib/components/ExternalLink.svelte";
 	import {
 		Accordion,
 		AccordionContent,
@@ -7,6 +9,7 @@
 		AccordionTrigger,
 	} from "$lib/components/ui/accordion";
 	import { Button } from "$lib/components/ui/button";
+
 	import WebIcon from "~icons/lucide/globe";
 	import LanguagesIcon from "~icons/lucide/languages";
 	import SurveyIcon from "~icons/lucide/list-checks";
@@ -14,12 +17,13 @@
 	import RobotIcon from "~icons/mdi/robot-excited";
 	import DiscordIcon from "~icons/simple-icons/discord";
 
-	let openAccordion: "dataset" | "bot" | "translations" | "website" | "survey" | undefined;
+	const accordionBlocks = ["dataset", "bot", "translations", "website", "survey"] as const;
+	let openAccordion: string | undefined = $page.url.hash.slice(1);
 
-	const switchTo = (item: NonNullable<typeof openAccordion>) => () => (openAccordion = item);
+	const switchTo = (item: (typeof accordionBlocks)[number]) => () => (openAccordion = item);
 
 	$: {
-		if (openAccordion && browser)
+		if (browser && openAccordion)
 			window.scrollTo({
 				top: 0,
 				behavior: window.matchMedia("(prefers-reduced-motion: no-preference)").matches
@@ -35,26 +39,19 @@
 
 <h1 class="text-4xl font-medium">About Linku</h1>
 
-<p class="w-[65%] text-balance text-center [&>button]:underline">
-	Linku is a <button on:click={switchTo("dataset")}>dataset</button> with many
-	<button on:click={switchTo("translations")}>translations</button>, a
-	<button on:click={switchTo("bot")}>Discord bot</button>, a
-	<button on:click={switchTo("website")}>website</button>, and an
-	<button on:click={switchTo("survey")}>annual survey</button> created by kala Asi and contributed to
-	by jan Ke Tami, jan Telesi, jan Kekan San, and many others for the purpose of collecting and displaying
-	toki pona dictionary information accurate to current use.
+<p class="w-[65%] text-balance text-center [&>a]:underline">
+	Linku is a <a href="/about#dataset">dataset</a> with many
+	<a href="/about#translations">translations</a>, a
+	<a href="/about#bot">Discord bot</a>, a
+	<a href="/about#website">website</a>, and an
+	<a href="/about#survey">annual survey</a> created by kala Asi and contributed to by jan Ke Tami, jan
+	Telesi, jan Kekan San, and many others for the purpose of collecting and displaying toki pona dictionary
+	information accurate to current use.
 </p>
 
 <p>
 	ku data is provided by
-	<a
-		class="underline"
-		href="http://tokipona.org/nimi_pu.txt"
-		target="_blank"
-		rel="noopenner noreferrer"
-	>
-		tokipona.org
-	</a>.
+	<ExternalLink href="http://tokipona.org/nimi_pu.txt">tokipona.org</ExternalLink>.
 </p>
 
 <Accordion
@@ -62,7 +59,6 @@
 	class="w-[65%] [&_:is(a,_button):not([data-button-root],_[data-accordion-trigger])]:underline [&_[data-bits-accordion-content]>div]:flex [&_[data-bits-accordion-content]>div]:flex-col [&_[data-bits-accordion-content]>div]:gap-3"
 >
 	<AccordionItem value="dataset">
-		<!-- these class names disable the rotation on the first icon,  -->
 		<AccordionTrigger>
 			<span class="flex items-center gap-3">
 				<TableIcon /> sona Linku (the dataset)
@@ -84,19 +80,13 @@
 			<p>
 				The Linku github organization is owned by kala Asi and jan Kekan San, and changes are
 				discussed in
-				<a href="https://discord.gg/A3ZPqnHHsy" target="_blank" rel="noopener noreferrer"
-					>kulupu Linku</a
-				>.
+				<ExternalLink href="https://discord.gg/A3ZPqnHHsy">kulupu Linku</ExternalLink>.
 			</p>
 			<p>
 				If you are looking for the old dataset called jasima, the data can be found
-				<a href="https://linku.la/jasima/data.json" target="_blank" rel="noopener noreferrer"
-					>here</a
-				>
+				<ExternalLink href="https://linku.la/jasima/data.json">here</ExternalLink>
 				and the repo can be found
-				<a href="https://github.com/lipu-linku/jasima" target="_blank" rel="noopener noreferrer"
-					>here</a
-				>. Also see
+				<ExternalLink href="https://github.com/lipu-linku/jasima">here</ExternalLink>. Also see
 				<button on:click={switchTo("translations")}>nimi Linku</button> for information about the previous
 				Google sheet.
 			</p>
@@ -115,12 +105,13 @@
 				The bot is for requesting and receiving Linku data without leaving discord, with a couple
 				quality of life features.
 			</p>
-			<Button
+			<ExternalLink
 				variant="secondary"
+				inline={false}
 				href="https://discord.com/oauth2/authorize?client_id=901910020701163522&permissions=277025441792&scope=applications.commands%20bot"
 			>
 				Add it to your server!
-			</Button>
+			</ExternalLink>
 
 			<h2>
 				<code>/nimi</code> (<code>/n</code>)
@@ -232,14 +223,10 @@
 			</p>
 			<p>
 				The website is available as free, open source software, under the GPL-3 license. It is built
-				using <a href="https://kit.svelte.dev/" target="_blank" rel="noopener noreferrer">
-					SvelteKit
-				</a>,
-				<a href="https://tailwindcss.com/" target="_blank" rel="noopener noreferrer">tailwindcss</a>
+				using <ExternalLink href="https://kit.svelte.dev/">SvelteKit</ExternalLink>,
+				<ExternalLink href="https://tailwindcss.com/">tailwindcss</ExternalLink>
 				, and
-				<a href="https://www.shadcn-svelte.com/" target="_blank" rel="noopener noreferrer">
-					shadcn-svelte
-				</a>.
+				<ExternalLink href="https://www.shadcn-svelte.com/">shadcn-svelte</ExternalLink>.
 			</p>
 		</AccordionContent>
 	</AccordionItem>
@@ -252,10 +239,8 @@
 		<AccordionContent class="[&>div]:space-y-3">
 			<p>
 				The survey is run annually every
-				<a href="https://suno.pona.la" target="_blank" rel="noopener noreferrer"
-					>suno pi toki pona</a
-				>, anniversary of Toki Pona, and asks the community how they use Toki Pona and the words in
-				it.
+				<ExternalLink href="https://suno.pona.la">suno pi toki pona</ExternalLink>, anniversary of
+				Toki Pona, and asks the community how they use Toki Pona and the words in it.
 			</p>
 			<p>
 				This data is used to fill out <button on:click={switchTo("dataset")}>the dataset</button>
@@ -265,36 +250,30 @@
 			</p>
 			<p>
 				The survey is distributed via Google forms, and its execution and analysis are discussed in
-				<a href="https://discord.gg/A3ZPqnHHsy" target="_blank" rel="noopener noreferrer"
-					>kulupu Linku</a
-				>.
+				<ExternalLink href="https://discord.gg/A3ZPqnHHsy">kulupu Linku</ExternalLink>.
 			</p>
 
-			<Button
+			<ExternalLink
 				href="https://github.com/lipu-linku/ijo/blob/main/survey/2023/results.md"
-				target="_blank"
-				rel="noopener noreferrer"
 				class="whitespace-nowrap"
 				variant="secondary"
 			>
 				See the 2023 Word Survey results here!
-			</Button>
+			</ExternalLink>
 		</AccordionContent>
 	</AccordionItem>
 </Accordion>
 
-<Button
+<ExternalLink
 	variant="secondary"
 	href="https://discord.gg/A3ZPqnHHsy"
-	target="_blank"
-	rel="noopener noreferrer"
+	inline={false}
 	class="flex items-center gap-[1ch]"
 >
 	<DiscordIcon /> kulupu Linku on Discord
-</Button>
+</ExternalLink>
 
-<p>
-	Also see <a class="underline" href="https://nimi.li" target="_blank" rel="noopener noreferrer"
-		>nimi.li</a
-	>, a third party frontend for the website created by ijo Tani.
+<p class="text-sm text-muted-foreground">
+	Also see <ExternalLink href="https://nimi.li">nimi.li</ExternalLink>, a third party frontend for
+	the website created by ijo Tani.
 </p>
