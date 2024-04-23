@@ -3,7 +3,10 @@ import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ fetch, setHeaders }) => {
+	const data = (await client({ fetch })
+		.jasima.$get()
+		.then((r) => r.json())) as any;
 	setHeaders({ "Cache-Control": "s-maxage=31536000" });
 
-	return await client({ fetch }).jasima.$get();
+	return json(data);
 };
