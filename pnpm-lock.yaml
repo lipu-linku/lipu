@@ -104,6 +104,9 @@ importers:
       vite-plugin-pwa:
         specifier: ^0.19.8
         version: 0.19.8(@vite-pwa/assets-generator@0.2.4)(vite@5.2.10(@types/node@20.12.7)(lightningcss@1.24.1)(terser@5.30.4))(workbox-build@7.1.0)(workbox-window@7.1.0)
+      workbox-window:
+        specifier: ^7.1.0
+        version: 7.1.0
 
 packages:
 
