@@ -55,8 +55,8 @@ export default {
 				sm: "calc(var(--radius) - 4px)",
 			},
 			fontFamily: {
-				sans: [...fontFamily.sans],
 				"sitelen-pona": "sitelen seli kiwen mono asuki",
+				"sitelen-ucsur": [...fontFamily.sans, "sitelen seli kiwen mono juniko"],
 			},
 		},
 	},

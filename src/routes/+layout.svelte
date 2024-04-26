@@ -1,17 +1,53 @@
 <script lang="ts">
+	import { onMount } from "svelte";
 	import { ModeWatcher } from "mode-watcher";
 	import { page } from "$app/stores";
 	import { flyAndScale } from "$lib/utils";
 	import { Button } from "$lib/components/ui/button";
-	import UpArrowIcon from "~icons/lucide/arrow-up";
+
+	import { pwaInfo } from "virtual:pwa-info";
+	import { pwaAssetsHead } from "virtual:pwa-assets/head";
 
 	import "../app.postcss";
+	import UpArrowIcon from "~icons/lucide/arrow-up";
+
+	$: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : "";
+
+	onMount(async () => {
+		if (pwaInfo) {
+			const { registerSW } = await import("virtual:pwa-register");
+			registerSW({
+				immediate: true,
+				onRegistered(r) {
+					r &&
+						setInterval(() => {
+							console.log("Checking for sw update");
+							r.update();
+						}, 20 * 1000);
+					console.log(`SW Registered: ${r}`);
+				},
+				onRegisterError(error) {
+					console.log("SW registration error", error);
+				},
+			});
+		}
+	});
 
 	let scrollY: number;
 	let outerHeight: number;
 </script>
 
 <ModeWatcher />
+
+<svelte:head>
+	{@html webManifest}
+	{#if pwaAssetsHead && pwaAssetsHead.themeColor}
+		<meta name="theme-color" content={pwaAssetsHead.themeColor.content} />
+	{/if}
+	{#each pwaAssetsHead.links as link}
+		<link {...link} />
+	{/each}
+</svelte:head>
 
 <svelte:window bind:scrollY bind:outerHeight />
 
