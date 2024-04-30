@@ -1,41 +1,47 @@
 <script lang="ts">
 	import type { Word } from "@kulupu-linku/sona";
-	import { Chart, Svg, Axis, Spline, Highlight, Tooltip, TooltipItem } from "layerchart";
+	import { scaleTime } from "d3-scale";
+	import { Axis, Chart, Highlight, Points, Spline, Svg, Tooltip, TooltipItem } from "layerchart";
+	import type { ComponentProps } from "svelte";
 
 	export let data: Word["usage"];
+
+	const labelProps: ComponentProps<Axis>["labelProps"] = {
+		class: "fill-current font-semibold m-3",
+	};
 
 	$: plots = Object.entries(data).map(([date, v]) => ({ date: new Date(date), value: v }));
 </script>
 
-<div class="h-[600px] p-4 border rounded">
-	<Chart
-		data={plots}
-		x="date"
-		y="value"
-		yDomain={[0, 100]}
-		yNice
-		tooltip={{ mode: "bisect-x" }}
-		padding={{ left: 16, bottom: 24 }}
-	>
-		<Svg>
-			<Axis placement="left" grid rule />
-			<Axis
-				placement="bottom"
-				format={(d) => new Date(d).toLocaleDateString("en", { month: "short", year: "numeric" })}
-				rule
-			/>
-			<Spline class="stroke-2 stroke-primary" />
-			<Highlight points lines />
-		</Svg>
+<Chart
+	data={plots}
+	x="date"
+	xScale={scaleTime()}
+	y="value"
+	yDomain={[0, 100]}
+	tooltip={{ mode: "bisect-x" }}
+	padding={{ left: 16, bottom: 24 }}
+>
+	<Svg>
+		<Axis placement="left" grid={{ class: "stroke-muted" }} format={(d) => `${d}%`} {labelProps} />
+		<Axis
+			placement="bottom"
+			rule={{ class: "stroke-muted" }}
+			format={(d) => d.toLocaleDateString("en", { month: "short", year: "numeric" })}
+			{labelProps}
+		/>
+		<Spline class="stroke-2 stroke-primary" />
+		<Points data={plots} class="fill-primary" />
+		<Highlight points lines={{ class: "stroke-secondary" }} />
+	</Svg>
 
-		<Tooltip
-			classes={{
-				container: "border",
-			}}
-			header={({ date }) => date.toLocaleDateString("en", { month: "short", year: "numeric" })}
-			let:data
-		>
-			<TooltipItem label="Usage" value="{data.value}%" />
-		</Tooltip>
-	</Chart>
-</div>
+	<Tooltip
+		classes={{
+			container: "border",
+		}}
+		header={({ date }) => date.toLocaleDateString("en", { month: "short", year: "numeric" })}
+		let:data
+	>
+		<TooltipItem label="Usage" value="{data.value}%" />
+	</Tooltip>
+</Chart>
