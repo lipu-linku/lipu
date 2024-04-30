@@ -29,10 +29,13 @@
 		</Svg>
 
 		<Tooltip
+			classes={{
+				container: "border",
+			}}
 			header={({ date }) => date.toLocaleDateString("en", { month: "short", year: "numeric" })}
 			let:data
 		>
-			<TooltipItem label="value" value={data.value} />
+			<TooltipItem label="Usage" value="{data.value}%" />
 		</Tooltip>
 	</Chart>
 </div>
