@@ -1,4 +1,7 @@
 /// <reference types="unplugin-icons/types/svelte" />
+/// <reference types="vite-plugin-pwa/svelte" />
+/// <reference types="vite-plugin-pwa/info" />
+/// <reference types="vite-plugin-pwa/pwa-assets" />
 
 import type { Words } from "@kulupu-linku/sona";
 

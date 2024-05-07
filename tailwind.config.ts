@@ -3,7 +3,11 @@ import { fontFamily } from "tailwindcss/defaultTheme";
 
 export default {
 	darkMode: ["class"],
-	content: ["./src/**/*.{html,js,svelte,ts}"],
+	content: [
+		"./src/**/*.{html,js,svelte,ts}",
+		"./node_modules/svelte-ux/**/*.{svelte,js}",
+		"./node_modules/layerchart/**/*.{svelte,js}",
+	],
 	safelist: ["dark"],
 	theme: {
 		container: {
@@ -55,8 +59,8 @@ export default {
 				sm: "calc(var(--radius) - 4px)",
 			},
 			fontFamily: {
-				sans: [...fontFamily.sans],
 				"sitelen-pona": "sitelen seli kiwen mono asuki",
+				"sitelen-ucsur": [...fontFamily.sans, "sitelen seli kiwen mono juniko"],
 			},
 		},
 	},

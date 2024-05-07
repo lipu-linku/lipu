@@ -329,7 +329,7 @@
 				<Card.Header>
 					<Card.Title class="text-2xl" tag="h2">Usage Trend</Card.Title>
 				</Card.Header>
-				<Card.Content class="flex flex-col gap-3">
+				<Card.Content class="h-[600px] p-4 px-8">
 					<UsageGraph data={word.usage} />
 				</Card.Content>
 			</Card.Root>
