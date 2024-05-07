@@ -1,58 +1,47 @@
 <script lang="ts">
 	import type { Word } from "@kulupu-linku/sona";
-	import { Chart, registerables } from "chart.js";
-	import type { Action } from "svelte/action";
+	import { scaleTime } from "d3-scale";
+	import { Axis, Chart, Highlight, Points, Spline, Svg, Tooltip, TooltipItem } from "layerchart";
+	import type { ComponentProps } from "svelte";
 
 	export let data: Word["usage"];
 
-	$: plots = Object.entries(data).map(([date, v]) => ({ date: new Date(date), value: v }));
-
-	const chart: Action<HTMLCanvasElement> = (el) => {
-		Chart.register(...registerables);
-
-		Chart.defaults.borderColor = `hsl(${getComputedStyle(document.body).getPropertyValue("--muted-foreground")})`;
-
-		const chart = new Chart(el, {
-			type: "line",
-			data: {
-				labels: plots.map((it) =>
-					it.date.toLocaleDateString("en", { month: "short", year: "numeric" }),
-				),
-				datasets: [
-					{
-						data: plots.map((it) => it.value),
-					},
-				],
-			},
-			options: {
-				plugins: {
-					legend: {
-						display: false,
-					},
-					tooltip: {
-						usePointStyle: true,
-						callbacks: {
-							label: (item) => item.formattedValue + "%",
-						},
-					},
-				},
-				scales: {
-					y: {
-						min: 0,
-						max: 100,
-						position: "left",
-					},
-					x: {
-						position: "bottom",
-					},
-				},
-			},
-		});
-
-		return {
-			destroy: () => chart.destroy(),
-		};
+	const labelProps: ComponentProps<Axis>["labelProps"] = {
+		class: "fill-current font-semibold m-3",
 	};
+
+	$: plots = Object.entries(data).map(([date, v]) => ({ date: new Date(date), value: v }));
 </script>
 
-<canvas use:chart></canvas>
+<Chart
+	data={plots}
+	x="date"
+	xScale={scaleTime()}
+	y="value"
+	yDomain={[0, 100]}
+	tooltip={{ mode: "bisect-x" }}
+	padding={{ left: 16, bottom: 24 }}
+>
+	<Svg>
+		<Axis placement="left" grid={{ class: "stroke-muted" }} format={(d) => `${d}%`} {labelProps} />
+		<Axis
+			placement="bottom"
+			rule={{ class: "stroke-muted" }}
+			format={(d) => d.toLocaleDateString("en", { month: "short", year: "numeric" })}
+			{labelProps}
+		/>
+		<Spline class="stroke-2 stroke-primary" />
+		<Points data={plots} class="fill-primary" />
+		<Highlight points lines={{ class: "stroke-secondary" }} />
+	</Svg>
+
+	<Tooltip
+		classes={{
+			container: "border",
+		}}
+		header={({ date }) => date.toLocaleDateString("en", { month: "short", year: "numeric" })}
+		let:data
+	>
+		<TooltipItem label="Usage" value="{data.value}%" />
+	</Tooltip>
+</Chart>
