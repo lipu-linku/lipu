@@ -70,9 +70,9 @@
 		</AccordionTrigger>
 		<AccordionContent>
 			<p>
-				The dataset is a github repository which has all data we track, and is where you go to add
-				new data. Everyone may view the data, but direct contributions are only available to
-				maintainers or via pull requests.
+				The <a href="https://github.com/lipu-linku/sona">dataset</a> is a github repository which has
+				all data we track, and is where you go to add new data. Everyone may view the data, but direct
+				contributions are only available to maintainers or via pull requests.
 			</p>
 			<p>
 				Changes to the source language data are automatically synced to
@@ -82,8 +82,8 @@
 				<button on:click={switchTo("website")}>the website</button>.
 			</p>
 			<p>
-				The Linku github organization is owned by kala Asi and jan Kekan San, and changes are
-				discussed in
+				The <a href="https://github.com/lipu-linku">Linku github organization</a> is owned by kala
+				Asi and jan Kekan San, and changes are discussed in
 				<a href="https://discord.gg/A3ZPqnHHsy" target="_blank" rel="noopener noreferrer"
 					>kulupu Linku</a
 				>.
