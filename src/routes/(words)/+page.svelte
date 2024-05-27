@@ -9,6 +9,8 @@
 	export let data;
 	$: ({ words, language } = data);
 
+	const hasDisclaimer = false;
+
 	$: categoriesParam = $page.url.searchParams.get("categories");
 
 	$: wordList = $page.url.searchParams.get("list")?.split(",");
@@ -33,11 +35,10 @@
 </svelte:head>
 
 <main class="flex-1 my-4 space-y-4">
-	<p class="text-center text-balance">
-		The site is currently in beta!
-		<br />
-		If you have feedback, please contact kala Asi or jan Telesi on Discord!
-	</p>
+	{#if hasDisclaimer}
+		<p class="text-center text-balance">
+		</p>
+	{/if}
 	<ul class="flex flex-col items-stretch gap-2 mx-auto max-w-[min(95vw,1000px)]">
 		{#each sorted_filtered_dictionary as word (word.id)}
 			<li>
