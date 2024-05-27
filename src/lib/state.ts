@@ -1,6 +1,6 @@
 import { browser } from "$app/environment";
 import type { UsageCategory } from "@kulupu-linku/sona/utils";
-import { persisted, type Serializer } from "svelte-persisted-store/dist/index.mjs";
+import { persisted, type Serializer } from "svelte-persisted-store";
 import { writable } from "svelte/store";
 import { entries, fromEntries } from "$lib/utils";
 
