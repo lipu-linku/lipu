@@ -6,7 +6,7 @@
 
 	export let data: Word["usage"];
 
-	const labelProps: ComponentProps<Axis>["labelProps"] = {
+	const tickLabelProps: ComponentProps<Axis>["tickLabelProps"] = {
 		class: "fill-current font-semibold m-3",
 	};
 
@@ -23,12 +23,12 @@
 	padding={{ left: 16, bottom: 24 }}
 >
 	<Svg>
-		<Axis placement="left" grid={{ class: "stroke-muted" }} format={(d) => `${d}%`} {labelProps} />
+		<Axis placement="left" grid={{ class: "stroke-muted" }} format={(d) => `${d}%`} {tickLabelProps} />
 		<Axis
 			placement="bottom"
 			rule={{ class: "stroke-muted" }}
 			format={(d) => d.toLocaleDateString("en", { month: "short", year: "numeric" })}
-			{labelProps}
+			{tickLabelProps}
 		/>
 		<Spline class="stroke-2 stroke-primary" />
 		<Points data={plots} class="fill-primary" />
