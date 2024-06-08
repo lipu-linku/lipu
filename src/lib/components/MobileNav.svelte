@@ -6,8 +6,10 @@
 	import Separator from "./ui/separator/separator.svelte";
 	import type { NavbarLink } from "./Navbar.svelte";
 
-	import logo from "$lib/assets/icon.png";
+	import iconLight from "$lib/assets/icon-light.png";
+	import iconDark from "$lib/assets/icon-dark.png";
 	import MenuIcon from "~icons/lucide/menu";
+	import { mode } from "mode-watcher";
 
 	export let links: Record<string, NavbarLink>;
 
@@ -30,7 +32,7 @@
 	<Sheet.Content side="bottom">
 		<nav class="flex flex-col justify-center gap-4">
 			<a href="/" class="flex items-center text-foreground/60" on:click={() => (open = false)}>
-				<img src={logo} alt="Linku's logo" class="size-6 mr-2" />
+				<img src={$mode === "dark" ? iconDark : iconLight} alt="Linku's logo" class="size-6 mr-2" />
 				<span class="font-bold">lipu Linku</span>
 			</a>
 

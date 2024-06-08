@@ -44,7 +44,7 @@ export default defineConfig({
 			devOptions: {
 				type: "module",
 				enabled: false,
-				navigateFallback: "/"
+				navigateFallback: "/",
 			},
 			pwaAssets: {
 				config: true,

@@ -8,7 +8,7 @@
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
 	import { Checkbox } from "$lib/components/ui/checkbox";
-	
+
 	import logo from "$lib/assets/icon.png?url";
 	import CloseIcon from "~icons/lucide/x";
 

@@ -4,7 +4,7 @@
 	import { page } from "$app/stores";
 	import { wordSearch } from "$lib/components/search";
 	import { categories, categoriesSerializer, searchQuery } from "$lib/state";
-	import logo from "$lib/assets/icon.png?url";
+	import logo from "$lib/assets/icon-light.png?url";
 
 	export let data;
 	$: ({ words, language } = data);
@@ -36,8 +36,7 @@
 
 <main class="flex-1 my-4 space-y-4">
 	{#if hasDisclaimer}
-		<p class="text-center text-balance">
-		</p>
+		<p class="text-center text-balance"></p>
 	{/if}
 	<ul class="flex flex-col items-stretch gap-2 mx-auto max-w-[min(95vw,1000px)]">
 		{#each sorted_filtered_dictionary as word (word.id)}

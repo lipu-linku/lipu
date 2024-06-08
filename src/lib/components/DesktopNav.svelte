@@ -2,15 +2,17 @@
 	import { entries } from "$lib/utils";
 	import type { NavbarLink } from "./Navbar.svelte";
 
-	import logo from "$lib/assets/icon.png";
+	import iconLight from "$lib/assets/icon-light.png";
+	import iconDark from "$lib/assets/icon-dark.png";
 	import { Button } from "$lib/components/ui/button";
+	import { mode } from "mode-watcher";
 
 	export let links: Record<string, NavbarLink>;
 </script>
 
 <div class="hidden w-full md:flex md:items-center">
 	<a href="/" class="flex items-center space-x-2 mr-4">
-		<img src={logo} alt="Linku's logo" class="size-6" />
+		<img src={$mode === "dark" ? iconDark : iconLight} alt="Linku's logo" class="size-6" />
 		<span class="hidden font-bold sm:inline-block">lipu Linku</span>
 	</a>
 

@@ -23,7 +23,12 @@
 	padding={{ left: 16, bottom: 24 }}
 >
 	<Svg>
-		<Axis placement="left" grid={{ class: "stroke-muted" }} format={(d) => `${d}%`} {tickLabelProps} />
+		<Axis
+			placement="left"
+			grid={{ class: "stroke-muted" }}
+			format={(d) => `${d}%`}
+			{tickLabelProps}
+		/>
 		<Axis
 			placement="bottom"
 			rule={{ class: "stroke-muted" }}

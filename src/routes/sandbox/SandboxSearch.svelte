@@ -77,7 +77,13 @@
 			<LinkIcon />
 		</Button>
 
-		<Button aria-label="Submit search" class="inline-flex" type="submit" variant="outline" size="icon">
+		<Button
+			aria-label="Submit search"
+			class="inline-flex"
+			type="submit"
+			variant="outline"
+			size="icon"
+		>
 			<SearchIcon />
 		</Button>
 	</div>
