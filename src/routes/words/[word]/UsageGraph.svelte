@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { cn } from "$lib/utils";
 	import type { Word } from "@kulupu-linku/sona";
 	import { scaleTime } from "d3-scale";
 	import { Axis, Chart, Highlight, Points, Spline, Svg, Tooltip, TooltipItem } from "layerchart";
@@ -33,7 +34,7 @@
 			placement="bottom"
 			rule={{ class: "stroke-muted" }}
 			format={(d) => d.toLocaleDateString("en", { month: "short", year: "numeric" })}
-			{tickLabelProps}
+			tickLabelProps={{ class: cn(tickLabelProps.class, "max-md:hidden") }}
 		/>
 		<Spline class="stroke-2 stroke-primary" />
 		<Points data={plots} class="fill-primary" />

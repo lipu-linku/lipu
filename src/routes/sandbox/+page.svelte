@@ -4,7 +4,7 @@
 	import { page } from "$app/stores";
 	import { wordSearch } from "$lib/components/search";
 	import { searchQuery } from "$lib/state";
-	import logo from "$lib/assets/icon.png?url";
+	import logo from "$lib/assets/icon-light.png?url";
 
 	export let data;
 	$: ({ words, language } = data);
