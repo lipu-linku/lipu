@@ -9,7 +9,7 @@
 	import { Label } from "$lib/components/ui/label";
 	import { Checkbox } from "$lib/components/ui/checkbox";
 
-	import logo from "$lib/assets/icon.png?url";
+	import logo from "$lib/assets/icon-light.png?url";
 	import CloseIcon from "~icons/lucide/x";
 
 	export let data;

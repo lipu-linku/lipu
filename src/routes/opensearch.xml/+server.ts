@@ -1,5 +1,5 @@
 import type { RequestHandler } from "./$types";
-import logo from "$lib/assets/icon.png?url";
+import logo from "$lib/assets/icon-light.png?url";
 
 export const GET: RequestHandler = async ({ url }) => {
 	return new Response(
