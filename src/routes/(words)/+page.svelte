@@ -1,6 +1,7 @@
 <script lang="ts">
 	import Entry from "../Entry.svelte";
 
+	import autoAnimate from "@formkit/auto-animate";
 	import { page } from "$app/stores";
 	import { wordSearch } from "$lib/components/search";
 	import {
@@ -46,7 +47,7 @@
 	{#if hasDisclaimer}
 		<p class="text-center text-balance"></p>
 	{/if}
-	<ul class="flex flex-col items-stretch gap-2 mx-auto max-w-[min(95vw,1000px)]">
+	<ul use:autoAnimate class="flex flex-col items-stretch gap-2 mx-auto max-w-[min(95vw,1000px)]">
 		{#each sorted_filtered_dictionary as word (word.id)}
 			<li>
 				<Entry {language} {word} />

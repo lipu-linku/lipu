@@ -13,6 +13,7 @@
 		"generate-pwa-assets": "pwa-assets-generator"
 	},
 	"devDependencies": {
+		"@formkit/auto-animate": "^0.8.2",
 		"@iconify/json": "^2.2.222",
 		"@kulupu-linku/sona": "^0.3.5",
 		"@sveltejs/adapter-cloudflare": "^4.5.0",
