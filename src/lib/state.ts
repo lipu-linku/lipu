@@ -38,10 +38,22 @@ export const categories = persisted("categories", defaultCategories, {
 	serializer: categoriesSerializer,
 });
 
+export const favorites = persisted<Set<string>>("favorites", new Set(), {
+	serializer: {
+		parse: (text) => {
+			const noPadding = /,*(.*),*/.exec(text)?.[1] ?? "";
+			return new Set(noPadding !== "" ? noPadding.split(",") : []);
+		},
+		stringify: (obj) => [...obj.values()].join(","),
+	},
+});
+
 export const writingSystem = persisted<"sitelen_pona" | "sitelen_sitelen">(
 	"writing_system",
 	"sitelen_pona",
 );
+
 export const etymologiesEnabled = persisted("etymologies_enabled", true);
+export const onlyFavorites = persisted("only_favorites", false);
 
 export const fontSentence = persisted("font_sentence", "jan li pana e moku tawa sina");

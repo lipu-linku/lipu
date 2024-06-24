@@ -1,9 +1,10 @@
 <script lang="ts">
-	import { writingSystem, etymologiesEnabled } from "$lib/state";
+	import { writingSystem, etymologiesEnabled, favorites } from "$lib/state";
 	import type { Language, LocalizedWord } from "@kulupu-linku/sona";
 	import { getTranslatedData, type UsageCategory } from "@kulupu-linku/sona/utils";
 
 	import AudioButton from "$lib/components/AudioButton.svelte";
+	import { Button } from "$lib/components/ui/button";
 	import {
 		Card,
 		CardContent,
@@ -11,6 +12,9 @@
 		CardHeader,
 		CardTitle,
 	} from "$lib/components/ui/card";
+
+	import FavoriteIcon from "~icons/lucide/heart";
+	import UnfavoriteIcon from "~icons/lucide/heart-off";
 
 	export let word: LocalizedWord;
 	export let language: Language;
@@ -90,25 +94,44 @@
 	</a>
 
 	<CardContent
-		class="my-auto flex items-center justify-center gap-1 py-2 px-4 text-6xl max-md:flex-col-reverse md:gap-4 md:py-0"
+		class="flex flex-col items-end justify-between gap-1 p-4 text-6xl max-md:flex-col-reverse md:gap-4"
 	>
-		{#if word.audio.length > 0}
-			<AudioButton audio={word.audio} />
-		{/if}
+		<div class="flex items-center gap-2">
+			{#if word.audio.length > 0}
+				<AudioButton audio={word.audio} />
+			{/if}
 
-		{#if $writingSystem === "sitelen_pona" && word.representations?.ligatures}
-			{#each word.representations.ligatures.slice(0, 3) as glyph}
-				<span class="text-center font-sitelen-pona">{glyph}</span>
-			{/each}
-		{:else if $writingSystem === "sitelen_sitelen" && word.representations?.sitelen_sitelen}
-			<img
-				src={word.representations.sitelen_sitelen}
-				alt="{word.word} in sitelen sitelen format"
-				class="size-16 dark:invert"
-				loading="lazy"
-			/>
-		{:else}
-			<span class="min-w-14" aria-hidden="true"></span>
-		{/if}
+			<Button
+				variant="outline"
+				size="icon"
+				on:click={() => {
+					$favorites.has(word.id) ? $favorites.delete(word.id) : $favorites.add(word.id);
+					$favorites = $favorites;
+				}}
+			>
+				{#if !$favorites.has(word.id)}
+					<FavoriteIcon />
+				{:else}
+					<UnfavoriteIcon />
+				{/if}
+			</Button>
+		</div>
+
+		<div>
+			{#if $writingSystem === "sitelen_pona" && word.representations?.ligatures}
+				{#each word.representations.ligatures.slice(0, 3) as glyph}
+					<span class="text-center font-sitelen-pona">{glyph}</span>
+				{/each}
+			{:else if $writingSystem === "sitelen_sitelen" && word.representations?.sitelen_sitelen}
+				<img
+					src={word.representations.sitelen_sitelen}
+					alt="{word.word} in sitelen sitelen format"
+					class="size-16 dark:invert"
+					loading="lazy"
+				/>
+			{:else}
+				<span class="min-w-14" aria-hidden="true"></span>
+			{/if}
+		</div>
 	</CardContent>
 </Card>

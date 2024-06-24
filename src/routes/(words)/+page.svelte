@@ -3,7 +3,13 @@
 
 	import { page } from "$app/stores";
 	import { wordSearch } from "$lib/components/search";
-	import { categories, categoriesSerializer, searchQuery } from "$lib/state";
+	import {
+		categories,
+		categoriesSerializer,
+		favorites,
+		onlyFavorites,
+		searchQuery,
+	} from "$lib/state";
 	import logo from "$lib/assets/icon-light.png?url";
 
 	export let data;
@@ -21,6 +27,8 @@
 			sandbox: false,
 			...(categoriesParam ? categoriesSerializer.parse(categoriesParam) : $categories),
 		},
+		$favorites,
+		$onlyFavorites,
 		wordList,
 		language.id,
 	);

@@ -12,6 +12,8 @@
 		etymologiesEnabled,
 		searchQuery,
 		writingSystem,
+		onlyFavorites,
+		favorites,
 	} from "$lib/state";
 	import { cn, keys } from "$lib/utils";
 
@@ -60,7 +62,8 @@
 
 	const resetOptions = () => {
 		$searchQuery = "";
-		$categories = defaultCategories;
+		categories.reset();
+		onlyFavorites.reset();
 
 		$page.url.searchParams.forEach((v, k, params) => params.delete(k, v));
 		if (browser) pushState($page.url, {});
@@ -137,6 +140,10 @@
 
 					<DropdownMenu.CheckboxItem bind:checked={$etymologiesEnabled}>
 						Show Etymologies
+					</DropdownMenu.CheckboxItem>
+
+					<DropdownMenu.CheckboxItem bind:checked={$onlyFavorites} disabled={$favorites.size === 0}>
+						Only Show Favorites
 					</DropdownMenu.CheckboxItem>
 				</DropdownMenu.Group>
 				<DropdownMenu.Separator />

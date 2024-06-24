@@ -5,13 +5,12 @@
 
 	import { browser } from "$app/environment";
 	import { page } from "$app/stores";
-	import { searchQuery, writingSystem } from "$lib/state";
+	import { etymologiesEnabled, favorites, onlyFavorites, searchQuery } from "$lib/state";
 	import { cn } from "$lib/utils";
 
 	import { pushState } from "$app/navigation";
 	import CheckIcon from "~icons/lucide/check";
 	import LinkIcon from "~icons/lucide/link";
-	import WritingSystemIcon from "~icons/lucide/pen-tool";
 	import SearchIcon from "~icons/lucide/search";
 	import SettingsIcon from "~icons/lucide/settings";
 	import ResetIcon from "~icons/lucide/undo-2";
@@ -51,6 +50,7 @@
 
 	const resetOptions = () => {
 		$searchQuery = "";
+		onlyFavorites.reset();
 
 		$page.url.searchParams.forEach((v, k, params) => params.delete(k, v));
 		if (browser) pushState($page.url, {});
@@ -73,12 +73,48 @@
 	/>
 
 	<div class="flex items-center justify-center gap-2">
-		<Button aria-label="Copy Permalink" variant="outline" size="icon" on:click={copyLinkWithParams}>
-			<LinkIcon />
-		</Button>
+		<DropdownMenu.Root closeOnItemClick={false} preventScroll={false}>
+			<DropdownMenu.Trigger asChild let:builder>
+				<Button
+					form=""
+					builders={[builder]}
+					variant="outline"
+					size="icon"
+					aria-label="Search Options"
+				>
+					<SettingsIcon aria-label="Settings icon" />
+				</Button>
+			</DropdownMenu.Trigger>
+			<!-- this is some absolute positioning fuckery to get the dropdown to be centered -->
+			<DropdownMenu.Content class="max-md:!inset-x-0 max-md:mx-auto w-[90vw] md:w-auto">
+				<DropdownMenu.Label class="text-center">Search Options</DropdownMenu.Label>
+				<DropdownMenu.Group>
+					<DropdownMenu.CheckboxItem bind:checked={$etymologiesEnabled}>
+						Show Etymologies
+					</DropdownMenu.CheckboxItem>
+
+					<DropdownMenu.CheckboxItem bind:checked={$onlyFavorites} disabled={$favorites.size === 0}>
+						Only Show Favorites
+					</DropdownMenu.CheckboxItem>
+				</DropdownMenu.Group>
+				<DropdownMenu.Separator />
+				<DropdownMenu.Item class="font-semibold" on:click={copyLinkWithParams}>
+					<svelte:component
+						this={!hasCopied ? LinkIcon : CheckIcon}
+						aria-hidden
+						class="mr-2 inline size-4"
+					/>
+					<span>Copy Permalink</span>
+				</DropdownMenu.Item>
+				<DropdownMenu.Item class="font-semibold" on:click={resetOptions}>
+					<ResetIcon aria-hidden class="mr-2 inline size-4" />
+					<span>Reset Options</span>
+				</DropdownMenu.Item>
+			</DropdownMenu.Content>
+		</DropdownMenu.Root>
 
 		<Button
-			aria-label="Submit search"
+			aria-label="submit search"
 			class="inline-flex"
 			type="submit"
 			variant="outline"
