@@ -13,8 +13,8 @@
 		CardTitle,
 	} from "$lib/components/ui/card";
 
-	import FavoriteIcon from "~icons/material-symbols/favorite";
-	import UnfavoriteIcon from "~icons/material-symbols/favorite-outline";
+	import FavoriteIcon from "~icons/material-symbols/favorite-outline";
+	import UnfavoriteIcon from "~icons/material-symbols/favorite";
 
 	export let word: LocalizedWord;
 	export let language: Language;
