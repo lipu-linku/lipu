@@ -20,15 +20,15 @@
 		"@sveltejs/vite-plugin-svelte": "^3.1.1",
 		"@types/d3-scale": "^4.0.8",
 		"@vite-pwa/assets-generator": "^0.2.4",
-		"@vite-pwa/sveltekit": "^0.5.0",
+		"@vite-pwa/sveltekit": "^0.6.0",
 		"bits-ui": "^0.21.10",
 		"chart.js": "^4.4.3",
 		"clsx": "^2.1.1",
 		"d3-scale": "^4.0.2",
 		"fastest-levenshtein": "^1.0.16",
-		"layerchart": "^0.41.4",
+		"layerchart": "^0.43.0",
 		"lightningcss": "^1.25.1",
-		"mode-watcher": "^0.3.0",
+		"mode-watcher": "^0.4.0",
 		"postcss-nesting": "^12.1.5",
 		"postcss-preset-env": "^9.5.14",
 		"prettier": "^3.3.2",
@@ -51,5 +51,5 @@
 		"workbox-window": "^7.1.0"
 	},
 	"type": "module",
-	"packageManager": "pnpm@9.3.0"
+	"packageManager": "pnpm@9.6.0"
 }
