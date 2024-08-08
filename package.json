@@ -29,7 +29,7 @@
 		"layerchart": "^0.43.0",
 		"lightningcss": "^1.25.1",
 		"mode-watcher": "^0.4.0",
-		"postcss-nesting": "^12.1.5",
+		"postcss-nesting": "^13.0.0",
 		"postcss-preset-env": "^9.5.14",
 		"prettier": "^3.3.2",
 		"prettier-plugin-svelte": "^3.2.4",
