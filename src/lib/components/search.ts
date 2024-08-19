@@ -10,19 +10,26 @@ export const wordSearch = (
 	query: string,
 	words: Words,
 	categories: Record<UsageCategory, boolean>,
+	favorites: Set<string>,
+	onlyFavorites: boolean,
 	wordList: string[] | undefined = undefined,
 	language: Language["id"] = "en",
 ): LocalizedWord[] => {
 	query = normalize(query);
 
 	const initialFilteredWords = Object.values(words).filter(
-		(w) => categories[w.usage_category] && (wordList?.includes(w.word) ?? true),
+		(w) =>
+			categories[w.usage_category] &&
+			(wordList?.includes(w.word) ?? true) &&
+			(onlyFavorites ? favorites.has(w.id) : true),
 	);
 
 	if (query === "")
-		return initialFilteredWords.sort((a, b) =>
-			a.word.toLowerCase().localeCompare(b.word.toLowerCase()),
-		);
+		return initialFilteredWords.sort((a, b) => {
+			if (favorites.has(a.id)) return -1;
+			if (favorites.has(b.id)) return 1;
+			return a.word.toLowerCase().localeCompare(b.word.toLowerCase());
+		});
 
 	const scoreFilter = (word: LocalizedWord) =>
 		Boolean(
@@ -36,16 +43,24 @@ export const wordSearch = (
 		);
 
 	const filtered = initialFilteredWords.filter((w) => scoreFilter(w));
-	const scored = filtered.map((w) => [w, wordDataScore(w, query, language)] as const);
+	const scored = filtered.map(
+		(w) => [w, wordDataScore(w, query, language, favorites.has(w.id))] as const,
+	);
 	const sorted = scored.sort(([, a], [, b]) => b - a);
 	const onlyWords = sorted.map(([w]) => w);
 
 	return onlyWords;
 };
 
-const wordDataScore = (word: LocalizedWord, query: string, language: string) => {
+const wordDataScore = (
+	word: LocalizedWord,
+	query: string,
+	language: string,
+	isFavorite: boolean,
+) => {
 	let score = 0;
 
+	score += isFavorite ? Infinity : 0;
 	score += wordScore(word.word, query) * 100;
 	score += dataScore(getTranslatedData(word, "definition", language), query) * 50;
 	score += dataScore(word.ku_data ? Object.keys(word.ku_data).join(", ") : "", query) * 40;
