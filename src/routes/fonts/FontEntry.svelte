@@ -15,6 +15,7 @@
 	import DownloadIcon from "~icons/lucide/download";
 	import RepoIcon from "~icons/lucide/file-code";
 	import WebIcon from "~icons/lucide/globe";
+	import { m } from "$lib/paraglide";
 
 	export let font: Font;
 
@@ -81,17 +82,17 @@
 		<CardContent class="text-3xl">
 			{#if intersecting}
 				{#await loadFont()}
-					Loading...
+					{m.font_loading()}
 				{:then}
 					<span transition:flyAndScale={{ y: 10 }} style="font-family: '{font.name}'">
-						{#if $fontSentence.match(/[\u{F1900}-\u{F19FF}]/gu)}{/if}
+						<!-- {#if $fontSentence.match(/[\u{F1900}-\u{F19FF}]/gu)}{/if} -->
 						{$fontSentence.trim()}
 					</span>
 				{:catch}
-					The font failed to load.
+					{m.font_failed()}
 				{/await}
 			{:else}
-				Loading...
+				{m.font_loading()}
 			{/if}
 		</CardContent>
 	</Card>

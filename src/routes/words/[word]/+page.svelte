@@ -18,6 +18,7 @@
 	import InfoIcon from "~icons/lucide/info";
 	import ShareButton from "~icons/lucide/share-2";
 	import { cn } from "$lib/utils";
+	import { m } from "$lib/paraglide";
 
 	export let data;
 	$: ({ word, language, languages } = data);
@@ -108,12 +109,12 @@
 					</Button>
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content>
-					<DropdownMenu.Label>Share word</DropdownMenu.Label>
+					<DropdownMenu.Label>{m.share_word()}</DropdownMenu.Label>
 					<DropdownMenu.Separator />
 
 					<DropdownMenu.Item on:click={() => navigator.clipboard.writeText($page.url.toString())}>
 						<CopyIcon class="inline mr-2 size-4" />
-						Copy URL
+						{m.copy_url()}
 					</DropdownMenu.Item>
 
 					<DropdownMenu.Item on:click={copyCodepoint}>
@@ -133,11 +134,11 @@
 	>
 		<Card.Root>
 			<Card.Header>
-				<Card.Title class="text-2xl" tag="h2">Meaning</Card.Title>
+				<Card.Title class="text-2xl" tag="h2">{m.meaning()}</Card.Title>
 			</Card.Header>
 			<Card.Content class="flex flex-col gap-3">
 				<div class="flex flex-col justify-center gap-2">
-					<h3 class="font-medium text-xl">Common Definition</h3>
+					<h3 class="font-medium text-xl">{m.common_definition()}</h3>
 					<p dir={language.direction}>{definition}</p>
 				</div>
 
@@ -147,7 +148,7 @@
 					)}
 					<div class="flex flex-col justify-center gap-2">
 						<h3 class="flex items-center gap-2 font-medium text-xl">
-							ku definitions
+							{m.ku_definitions()}
 							<Tooltip.Root>
 								<Tooltip.Trigger
 									class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
@@ -155,9 +156,7 @@
 									<InfoIcon class="size-4 " />
 								</Tooltip.Trigger>
 								<Tooltip.Content class="max-w-[min(55ch,80%)]">
-									Each ku definition is assigned a frequency index from ½ to 5, which describes how
-									commonly it was translated that way in the toki pona community, according to a
-									survey.
+									{m.ku_definitions_tooltip()}
 								</Tooltip.Content>
 							</Tooltip.Root>
 						</h3>
@@ -168,7 +167,7 @@
 
 				{#if pu_verbatim}
 					<div class="flex flex-col justify-center gap-2">
-						<h3 class="font-medium text-xl">pu definition</h3>
+						<h3 class="font-medium text-xl">{m.pu_definition()}</h3>
 						<ul>
 							{#each pu_verbatim.split("\n") as line}
 								{@const [partOfSpeech, ...definition] = line.split(" ")}
@@ -187,7 +186,7 @@
 		{#if hasRepresentations}
 			<Card.Root>
 				<Card.Header>
-					<Card.Title class="text-2xl" tag="h2">Usage</Card.Title>
+					<Card.Title class="text-2xl" tag="h2">{m.usage()}</Card.Title>
 				</Card.Header>
 				<Card.Content class="flex flex-col gap-3">
 					{#if word.representations?.ligatures && word.representations?.ligatures?.length > 0}
@@ -218,7 +217,7 @@
 					{#if word.representations?.ucsur}
 						<div class="flex flex-col justify-center gap-2">
 							<h3 class="flex items-center gap-2 first-letter:font-medium text-xl">
-								<span>UCSUR Codepoint</span>
+								<span>{m.ucsur_codepoint()}</span>
 								<a
 									class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colorsx"
 									href="https://www.kreativekorp.com/ucsur/charts/sitelen.html"
@@ -253,17 +252,17 @@
 
 		<Card.Root>
 			<Card.Header>
-				<Card.Title class="text-2xl" tag="h2">More Info</Card.Title>
+				<Card.Title class="text-2xl" tag="h2">{m.more_info()}</Card.Title>
 			</Card.Header>
 			<Card.Content class="flex flex-col gap-3">
 				{#if commentary}
-					<h3 class="font-medium text-xl">Commentary</h3>
+					<h3 class="font-medium text-xl">{m.commentary()}</h3>
 					<p dir={language.direction}>{commentary}</p>
 				{/if}
 
 				{#if etymology.length > 0 || word.creator || word.coined_year || word.coined_era}
 					<div class="flex flex-col justify-center gap-2">
-						<h3 class="font-medium text-xl">Origin</h3>
+						<h3 class="font-medium text-xl">{m.origin()}</h3>
 						<ul class="flex flex-col justify-center gap-2">
 							{#if word.etymology.length > 0 && etymology.length > 0}
 								{#each word.etymology as etym, i}
@@ -277,13 +276,13 @@
 							{/if}
 							{#if word.creator}
 								<li>
-									<span class="text-muted-foreground">Created by: </span>
+									<span class="text-muted-foreground">{m.created_by()} </span>
 									{listFormat.format(word.creator)}
 								</li>
 							{/if}
 							{#if word.coined_year || word.coined_era}
 								<li>
-									<span class="text-muted-foreground">Coined in:</span>
+									<span class="text-muted-foreground">{m.coined_in()}</span>
 									{[word.coined_year, word.coined_era].filter(Boolean).join(", ")}
 								</li>
 							{/if}
@@ -292,18 +291,18 @@
 				{/if}
 
 				<div class="flex flex-col justify-center gap-2">
-					<h3 class="font-medium text-xl">Usage Data</h3>
+					<h3 class="font-medium text-xl">{m.usage_data()}</h3>
 					<ul class="flex flex-col justify-center gap-2">
 						<li>
-							<span class="text-muted-foreground">Category:</span>
+							<span class="text-muted-foreground">{m.usage_data_category()}</span>
 							{word.usage_category}
 						</li>
 						<li>
-							<span class="text-muted-foreground">Usage:</span>
+							<span class="text-muted-foreground">{m.usage_data_usage()}</span>
 							{usageScore}%
 						</li>
 						<li>
-							<span class="text-muted-foreground">Book:</span>
+							<span class="text-muted-foreground">{m.usage_data_book()}</span>
 							{word.book}
 						</li>
 					</ul>
@@ -311,7 +310,7 @@
 
 				{#if word.see_also.length > 0}
 					<div class="flex flex-col justify-center gap-2">
-						<h3 class="font-medium text-xl">See also</h3>
+						<h3 class="font-medium text-xl">{m.see_also_info()}</h3>
 						<ul class="flex flex-wrap items-center gap-2">
 							{#each word.see_also as other}
 								<li>
@@ -327,7 +326,7 @@
 		{#if Object.keys(word.usage).length > 1}
 			<Card.Root class="col-span-3">
 				<Card.Header>
-					<Card.Title class="text-2xl" tag="h2">Usage Trend</Card.Title>
+					<Card.Title class="text-2xl" tag="h2">{m.usage_trend()}</Card.Title>
 				</Card.Header>
 				<Card.Content class="h-[600px] p-4 px-8">
 					<UsageGraph data={word.usage} />

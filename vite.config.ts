@@ -1,10 +1,11 @@
+import { paraglide } from '@inlang/paraglide-sveltekit/vite'
 import { sveltekit } from "@sveltejs/kit/vite";
 import { SvelteKitPWA } from "@vite-pwa/sveltekit";
 import Icons from "unplugin-icons/vite";
 import { defineConfig } from "vite";
 
 export default defineConfig({
-	plugins: [
+	plugins: [paraglide({ project: './project.inlang', outdir: './src/lib/paraglide' }),
 		sveltekit(),
 		Icons({
 			compiler: "svelte",

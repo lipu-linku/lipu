@@ -6,6 +6,7 @@
 	import { wordSearch } from "$lib/components/search";
 	import { favorites, onlyFavorites, searchQuery } from "$lib/state";
 	import logo from "$lib/assets/icon-light.png?url";
+	import { basicMarkdownProcessing, m } from "$lib/paraglide";
 
 	export let data;
 	$: ({ words, language } = data);
@@ -38,19 +39,13 @@
 
 <main class="flex-1 my-4 space-y-4">
 	<p class="text-center text-balance px-2 mx-auto">
-		The <i>sandbox</i> is a collection of proposed words which are
-		<strong class="md:whitespace-nowrap">not actively in use</strong>.
+		{@html basicMarkdownProcessing(m.sandbox_disclosure_1())}
 		<br />
-		If you are a learner,
-		<strong class="md:whitespace-nowrap">please stick to the main dictionary</strong>
-		- these words will not help you speak the language.
+		{@html basicMarkdownProcessing(m.sandbox_disclosure_2())}
 		<br />
-		Some of these words are of value to the <strong>community</strong> as a piece of culture -
-		essentially memes.
+		{@html basicMarkdownProcessing(m.sandbox_disclosure_3())}
 		<br />
-		Some reflect early drafts of
-		<span class="md:whitespace-nowrap">Toki Pona</span>. A lot are one-off jokes, created and
-		abandoned immediately.
+		{@html basicMarkdownProcessing(m.sandbox_disclosure_4())}
 	</p>
 	<ul use:autoAnimate class="flex flex-col items-stretch gap-2 mx-auto max-w-[min(95vw,1000px)]">
 		{#each sorted_filtered_dictionary as word (word.id)}

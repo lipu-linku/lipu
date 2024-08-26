@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { m } from "$lib/paraglide";
 	export let content: string;
 	export let separator = ", ";
 	export let length: number = 50;
@@ -13,7 +14,7 @@
 
 	{#if items.length > length}
 		<button class="text-muted-foreground hover:underline" on:click={() => (expanded = !expanded)}>
-			{expanded ? "less" : "...more"}
+			{expanded ? m.collapsible_less() : m.collapsible_more()}
 		</button>
 	{/if}
 </span>

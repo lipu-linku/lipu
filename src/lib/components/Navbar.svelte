@@ -23,6 +23,7 @@
 	import InfoIcon from "~icons/lucide/info";
 	import DarkModeIcon from "~icons/lucide/moon";
 	import LightModeIcon from "~icons/lucide/sun";
+	import { m } from "$lib/paraglide";
 
 	export let languages: Languages;
 	export let language: Language;
@@ -30,22 +31,22 @@
 	const links: Record<string, NavbarLink> = {
 		home: {
 			href: "/",
-			label: "Home",
+			label: m.home_link_label(),
 			icon: HomeIcon,
 		},
 		fonts: {
 			href: "/fonts",
-			label: "Fonts",
+			label: m.fonts_link_label(),
 			icon: FontsIcon,
 		},
 		sandbox: {
 			href: "/sandbox",
-			label: "Sandbox",
+			label: m.sandbox_link_label(),
 			icon: FlaskIcon,
 		},
 		about: {
 			href: "/about",
-			label: "About",
+			label: m.about_link_label(),
 			icon: InfoIcon,
 		},
 	} as const;
@@ -71,12 +72,12 @@
 			variant="ghost"
 			size="icon"
 			on:click={toggleMode}
-			aria-label="Toggle theme"
+			aria-label={m.toggle_theme()}
 		>
 			{#if $mode === "light"}
-				<DarkModeIcon aria-label="Moon icon" />
+				<DarkModeIcon aria-label={m.moon_icon()} />
 			{:else}
-				<LightModeIcon aria-label="Sun icon" />
+				<LightModeIcon aria-label={m.sun_icon()} />
 			{/if}
 		</Button>
 	</div>

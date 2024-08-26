@@ -10,6 +10,7 @@
 	import iconDark from "$lib/assets/icon-dark.png";
 	import MenuIcon from "~icons/lucide/menu";
 	import { mode } from "mode-watcher";
+	import { m } from "$lib/paraglide";
 
 	export let links: Record<string, NavbarLink>;
 
@@ -25,14 +26,14 @@
 			class="mr-2 px-0 text-base hover:bg-transparent focus-visible:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0 md:hidden"
 		>
 			<MenuIcon class="size-5 inline-block" />
-			<span class="sr-only">Toggle Menu</span>
+			<span class="sr-only">{m.mobile_toggle_menu()}</span>
 		</Button>
 	</Sheet.Trigger>
 
 	<Sheet.Content side="bottom">
 		<nav class="flex flex-col justify-center gap-4">
 			<a href="/" class="flex items-center text-foreground/60" on:click={() => (open = false)}>
-				<img src={$mode === "dark" ? iconDark : iconLight} alt="Linku's logo" class="size-6 mr-2" />
+				<img src={$mode === "dark" ? iconDark : iconLight} alt={m.logo_alt()} class="size-6 mr-2" />
 				<span class="font-bold">lipu Linku</span>
 			</a>
 

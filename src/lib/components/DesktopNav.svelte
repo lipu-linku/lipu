@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { entries } from "$lib/utils";
 	import type { NavbarLink } from "./Navbar.svelte";
+	import { m } from "$lib/paraglide";
 
 	import iconLight from "$lib/assets/icon-light.png";
 	import iconDark from "$lib/assets/icon-dark.png";
@@ -12,7 +13,7 @@
 
 <div class="hidden w-full md:flex md:items-center">
 	<a href="/" class="flex items-center space-x-2 mr-4">
-		<img src={$mode === "dark" ? iconDark : iconLight} alt="Linku's logo" class="size-6" />
+		<img src={$mode === "dark" ? iconDark : iconLight} alt={m.logo_alt()} class="size-6" />
 		<span class="hidden font-bold sm:inline-block">lipu Linku</span>
 	</a>
 

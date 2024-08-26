@@ -1,8 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
 import { cubicOut } from "svelte/easing";
 import type { TransitionConfig } from "svelte/transition";
-import type { Languages, Words } from "@kulupu-linku/sona";
+import { twMerge } from "tailwind-merge";
 
 export function keys<T extends object>(o: T): (keyof T)[] {
 	return Object.keys(o) as (keyof T)[];
