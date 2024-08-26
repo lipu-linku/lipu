@@ -26,7 +26,7 @@
     "meaning": "Meaning",
     "common_definition": "Common Definition",
     "ku_definitions": "ku definitions",
-    "ku_definitions_tooltip": "Each ku definition is assigned a frequency index from ½ to 5, which describes how\n\t\t\t\t\t\t\t\t\tcommonly it was translated that way in the toki pona community, according to a\n\t\t\t\t\t\t\t\t\tsurvey.",
+    "ku_definitions_tooltip": "Each ku definition is assigned a frequency index from ½ to 5, which describes how commonly it was translated that way in the toki pona community, according to a survey.",
     "pu_definition": "pu definition",
     "usage": "Usage",
     "ucsur_codepoint": "UCSUR Codepoint",
