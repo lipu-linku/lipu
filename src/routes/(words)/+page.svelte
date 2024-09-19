@@ -14,7 +14,7 @@
 	export let data;
 	$: ({ words, language } = data);
 
-	const hasDisclaimer = true;
+	const hasDisclaimer = false;
 
 	$: categoriesParam = $page.url.searchParams.get("categories");
 
