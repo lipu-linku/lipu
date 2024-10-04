@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { m } from "$lib/paraglide";
 	import { cn } from "$lib/utils";
 	import type { Word } from "@kulupu-linku/sona";
 	import { scaleTime } from "d3-scale";
@@ -48,6 +49,6 @@
 		header={({ date }) => date.toLocaleDateString("en", { month: "short", year: "numeric" })}
 		let:data
 	>
-		<TooltipItem label="Usage" value="{data.value}%" />
+		<TooltipItem label={m.usage_data_usage()} value="{data.value}%" />
 	</Tooltip>
 </Chart>

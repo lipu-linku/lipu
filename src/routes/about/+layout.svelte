@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Navbar from "$lib/components/Navbar.svelte";
-	import type { Language, Languages } from "@kulupu-linku/sona";
-
+	
 	export let data;
 	$: ({ language, languages } = data);
 </script>

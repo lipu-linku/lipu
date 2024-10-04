@@ -2,6 +2,7 @@
 	import { goto } from "$app/navigation";
 	import { page } from "$app/stores";
 	import * as Select from "$lib/components/ui/select";
+	import { m } from "$lib/paraglide";
 	import { cn } from "$lib/utils";
 	import type { Languages } from "@kulupu-linku/sona";
 
@@ -37,7 +38,7 @@
 	<Select.Trigger
 		class={cn("md:max-w-48 md:w-auto bg-background md:justify-start gap-2", triggerClass)}
 	>
-		<LanguagesIcon aria-label="Languages icon" class="size-4" />
+		<LanguagesIcon aria-label={m.languages_icon()} class="size-4" />
 		<Select.Value class="line-clamp-1 overflow-ellipsis">
 			{label}
 		</Select.Value>

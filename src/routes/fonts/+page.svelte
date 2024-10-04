@@ -11,6 +11,7 @@
 
 	import logo from "$lib/assets/icon-light.png?url";
 	import CloseIcon from "~icons/lucide/x";
+	import { m } from "$lib/paraglide";
 
 	export let data;
 	$: ({ fonts } = data);
@@ -31,7 +32,7 @@
 </svelte:head>
 
 <div class="flex-0 flex flex-col items-center gap-2">
-	<h2 class="py-2 text-center text-4xl font-medium">Font Search</h2>
+	<h2 class="py-2 text-center text-4xl font-medium">{m.font_search()}</h2>
 
 	<Input class="max-w-[30%] font-sitelen-ucsur" bind:value={$fontSentence} />
 
@@ -48,7 +49,7 @@
 			<aside transition:fly={{ x: 100 }}>
 				<Card>
 					<CardHeader class="relative">
-						<CardTitle>Font Display Settings</CardTitle>
+						<CardTitle>{m.font_display_settings()}</CardTitle>
 						<Button
 							class="absolute top-2 right-4"
 							variant="ghost"
@@ -63,7 +64,7 @@
 						<div class="flex flex-col gap-2">
 							<div class="flex items-center space-x-2">
 								<Checkbox id="ucsur-input" aria-labelledby="ucsur-label" bind:checked={ucsur} />
-								<Label for="ucsur-input" id="ucsur-label">Only Show UCSUR Fonts</Label>
+								<Label for="ucsur-input" id="ucsur-label">{m.only_show_ucsur()}</Label>
 							</div>
 						</div>
 					</CardContent>

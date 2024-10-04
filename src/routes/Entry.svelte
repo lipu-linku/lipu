@@ -15,6 +15,7 @@
 
 	import FavoriteIcon from "~icons/material-symbols/favorite-outline";
 	import UnfavoriteIcon from "~icons/material-symbols/favorite";
+	import { m } from "$lib/paraglide";
 
 	export let word: LocalizedWord;
 	export let language: Language;
@@ -48,7 +49,7 @@
 			</CardDescription>
 			{#if word.see_also.length > 0}
 				<CardDescription>
-					See also:
+					{m.see_also()}
 					{#each word.see_also as other, i}
 						<a class="underline" href="/words/{other}">{other}</a>{i < word.see_also.length - 1
 							? ", "
@@ -59,8 +60,8 @@
 			<CardDescription>
 				{#if word.usage_category !== "sandbox"}
 					{word.usage_category} · {word.book} ·
-					<span title="{usageScore}% of toki pona speakers will recognize this word">
-						{usageScore}%
+					<span title={m.usage_percentage_label({ usageScore })}>
+						{m.usage_percentage({ usageScore })}
 					</span>
 				{:else}
 					{[
@@ -125,7 +126,7 @@
 			{:else if $writingSystem === "sitelen_sitelen" && word.representations?.sitelen_sitelen}
 				<img
 					src={word.representations.sitelen_sitelen}
-					alt="{word.word} in sitelen sitelen format"
+					alt={m.sitelen_sitelen_alt({ word: word.word })}
 					class="size-16 dark:invert"
 					loading="lazy"
 				/>
