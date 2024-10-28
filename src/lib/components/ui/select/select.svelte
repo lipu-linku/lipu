@@ -1,12 +1,17 @@
-<script lang="ts">
+<script lang="ts" generics="T">
 	import { Select as SelectPrimitive } from "bits-ui";
+	import type { Snippet } from "svelte";
 
-	type $$Props = SelectPrimitive.Props;
+	type Props = SelectPrimitive.Props<T> & { children: Snippet };
 
-	export let selected: $$Props["selected"] = undefined;
-	export let open: $$Props["open"] = undefined;
+	let {
+		selected = $bindable(undefined),
+		open = $bindable(undefined),
+		children,
+		...rest
+	}: Props = $props();
 </script>
 
-<SelectPrimitive.Root bind:selected bind:open {...$$restProps}>
-	<slot />
+<SelectPrimitive.Root bind:selected bind:open {...rest}>
+	{@render children?.()}
 </SelectPrimitive.Root>

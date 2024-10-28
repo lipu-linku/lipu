@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from 'svelte/legacy';
+
 	import { browser } from "$app/environment";
 	import {
 		Accordion,
@@ -14,11 +16,11 @@
 	import RobotIcon from "~icons/mdi/robot-excited";
 	import DiscordIcon from "~icons/simple-icons/discord";
 
-	let openAccordion: "dataset" | "bot" | "translations" | "website" | "survey" | undefined;
+	let openAccordion: "dataset" | "bot" | "translations" | "website" | "survey" | undefined = $state();
 
 	const switchTo = (item: NonNullable<typeof openAccordion>) => () => (openAccordion = item);
 
-	$: {
+	run(() => {
 		if (openAccordion && browser)
 			window.scrollTo({
 				top: 0,
@@ -26,7 +28,7 @@
 					? "smooth"
 					: "auto",
 			});
-	}
+	});
 </script>
 
 <svelte:head>
@@ -36,11 +38,11 @@
 <h1 class="font-medium text-4xl">About Linku</h1>
 
 <p class="[&>button]:underline w-[65%] text-center text-balance">
-	Linku is a <button on:click={switchTo("dataset")}>dataset</button> with many
-	<button on:click={switchTo("translations")}>translations</button>, a
-	<button on:click={switchTo("bot")}>Discord bot</button>, a
-	<button on:click={switchTo("website")}>website</button>, and an
-	<button on:click={switchTo("survey")}>annual survey</button> created by kala Asi and contributed to
+	Linku is a <button onclick={switchTo("dataset")}>dataset</button> with many
+	<button onclick={switchTo("translations")}>translations</button>, a
+	<button onclick={switchTo("bot")}>Discord bot</button>, a
+	<button onclick={switchTo("website")}>website</button>, and an
+	<button onclick={switchTo("survey")}>annual survey</button> created by kala Asi and contributed to
 	by jan Ke Tami, jan Telesi, jan Kekan San, and many others for the purpose of collecting and displaying
 	toki pona dictionary information accurate to current use.
 </p>
@@ -76,10 +78,10 @@
 			</p>
 			<p>
 				Changes to the source language data are automatically synced to
-				<button on:click={switchTo("translations")}>Crowdin</button>, and changes to Crowdin
+				<button onclick={switchTo("translations")}>Crowdin</button>, and changes to Crowdin
 				translations are automatically synced to the dataset. Subsequently, all data in the dataset
 				is made available via the API hosted alongside
-				<button on:click={switchTo("website")}>the website</button>.
+				<button onclick={switchTo("website")}>the website</button>.
 			</p>
 			<p>
 				The <a href="https://github.com/lipu-linku">Linku github organization</a> is owned by kala
@@ -97,7 +99,7 @@
 				<a href="https://github.com/lipu-linku/jasima" target="_blank" rel="noopener noreferrer"
 					>here</a
 				>. Also see
-				<button on:click={switchTo("translations")}>nimi Linku</button> for information about the previous
+				<button onclick={switchTo("translations")}>nimi Linku</button> for information about the previous
 				Google sheet.
 			</p>
 		</AccordionContent>
@@ -189,7 +191,7 @@
 			<p>
 				If there are any changes on Crowdin, such as approved translations or newly available
 				languages, they are automatically mirrored to
-				<button on:click={switchTo("dataset")}>the dataset</button>. This also works in reverse;
+				<button onclick={switchTo("dataset")}>the dataset</button>. This also works in reverse;
 				changes to the dataset are mirrored to Crowdin, including changes to source data.
 			</p>
 			<p>
@@ -224,7 +226,7 @@
 			</p>
 			<p>
 				The data is loaded from the
-				<button on:click={switchTo("dataset")}>sona dataset</button>.
+				<button onclick={switchTo("dataset")}>sona dataset</button>.
 			</p>
 			<p>
 				You may choose the language you want definitions to use, and filter by the words'
@@ -258,10 +260,10 @@
 				it.
 			</p>
 			<p>
-				This data is used to fill out <button on:click={switchTo("dataset")}>the dataset</button>
+				This data is used to fill out <button onclick={switchTo("dataset")}>the dataset</button>
 				with up to date information about how Toki Pona is used, to make the Linku dictionary provided
-				by <button on:click={switchTo("website")}>the website</button> and
-				<button on:click={switchTo("bot")}>the Discord bot</button> as accurate as possible.
+				by <button onclick={switchTo("website")}>the website</button> and
+				<button onclick={switchTo("bot")}>the Discord bot</button> as accurate as possible.
 			</p>
 			<p>
 				The survey is distributed via Google forms, and its execution and analysis are discussed in

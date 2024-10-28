@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Select as SelectPrimitive } from "bits-ui";
-	import { cn, flyAndScale } from "$lib/utils";
 	import { scale } from "svelte/transition";
+	import { cn, flyAndScale } from "$lib/utils.js";
 
 	type $$Props = SelectPrimitive.ContentProps;
 	type $$Events = SelectPrimitive.ContentEvents;
@@ -27,8 +27,8 @@
 	{outTransitionConfig}
 	{sideOffset}
 	class={cn(
-		"relative z-50 min-w-[8rem] overflow-hidden rounded-md border bg-popover text-popover-foreground shadow-md outline-none",
-		className,
+		"bg-popover text-popover-foreground relative z-50 min-w-[8rem] overflow-hidden rounded-md border shadow-md outline-none",
+		className
 	)}
 	{...$$restProps}
 	on:keydown

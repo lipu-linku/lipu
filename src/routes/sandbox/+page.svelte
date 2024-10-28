@@ -4,27 +4,29 @@
 	import autoAnimate from "@formkit/auto-animate";
 	import { page } from "$app/stores";
 	import { wordSearch } from "$lib/components/search";
-	import { favorites, onlyFavorites, searchQuery } from "$lib/state";
+	import { favorites, onlyFavorites, searchQuery } from "$lib/state.svelte";
 	import logo from "$lib/assets/icon-light.png?url";
 
-	export let data;
-	$: ({ words, language } = data);
+	const { data } = $props();
+	const { words, language } = $derived(data);
 
-	$: wordList = $page.url.searchParams.get("list")?.split(",");
-	$: sorted_filtered_dictionary = wordSearch(
-		$page.url.searchParams.get("q") ?? $searchQuery,
-		words,
-		{
-			sandbox: true,
-			core: false,
-			common: false,
-			uncommon: false,
-			obscure: false,
-		},
-		$favorites,
-		$onlyFavorites,
-		wordList,
-		language.id,
+	const wordList = $derived($page.url.searchParams.get("list")?.split(","));
+	const sorted_filtered_dictionary = $derived(
+		wordSearch(
+			$page.url.searchParams.get("q") ?? searchQuery.value,
+			words,
+			{
+				sandbox: true,
+				core: false,
+				common: false,
+				uncommon: false,
+				obscure: false,
+			},
+			favorites.value,
+			onlyFavorites.value,
+			wordList,
+			language.id,
+		),
 	);
 </script>
 

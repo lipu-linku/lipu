@@ -2,8 +2,8 @@
 	import Navbar from "$lib/components/Navbar.svelte";
 	import WordsSearch from "./WordsSearch.svelte";
 
-	export let data;
-	$: ({ languages, language } = data);
+	const { data, children } = $props();
+	const { languages, language } = $derived(data);
 </script>
 
 <Navbar {languages} {language}>
@@ -14,4 +14,4 @@
 	class="flex sticky z-50 top-0 border-b border-border/40 bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden"
 />
 
-<slot />
+{@render children()}

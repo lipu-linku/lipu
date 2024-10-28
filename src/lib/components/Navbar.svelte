@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
 	import type { SvelteComponent } from "svelte";
 	import type { SvelteHTMLElements } from "svelte/elements";
 
@@ -24,8 +24,13 @@
 	import DarkModeIcon from "~icons/lucide/moon";
 	import LightModeIcon from "~icons/lucide/sun";
 
-	export let languages: Languages;
-	export let language: Language;
+	interface Props {
+		languages: Languages;
+		language: Language;
+		children?: import("svelte").Snippet;
+	}
+
+	const { languages, language, children }: Props = $props();
 
 	const links: Record<string, NavbarLink> = {
 		home: {
@@ -56,12 +61,12 @@
 >
 	<div class="container mx-auto flex h-10 items-center gap-2 px-0 md:px-2">
 		<DesktopNav {links}>
-			<slot />
+			{@render children?.()}
 
 			<LanguageSwitch triggerClass="ml-auto" selected={language.id} localeList={languages} />
 		</DesktopNav>
 		<MobileNav {links}>
-			<slot />
+			{@render children?.()}
 
 			<LanguageSwitch selected={language.id} localeList={languages} />
 		</MobileNav>

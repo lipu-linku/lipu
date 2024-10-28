@@ -1,10 +1,10 @@
 <script lang="ts">
 	import Navbar from "$lib/components/Navbar.svelte";
 
-	export let data;
-	$: ({ language, languages } = data);
+	const { data, children } = $props();
+	const { language, languages } = $derived(data);
 </script>
 
 <Navbar {languages} {language} />
 
-<slot />
+{@render children()}

@@ -7,19 +7,24 @@
 
 	import LanguagesIcon from "~icons/lucide/languages";
 
-	export let localeList: Languages;
-	export let selected: keyof Languages;
+	interface Props {
+		localeList: Languages;
+		selected: keyof Languages;
+		triggerClass?: string;
+		contentClass?: string;
+	}
 
-	export let triggerClass = "";
-	export let contentClass = "";
+	const { localeList, selected, triggerClass = "", contentClass = "" }: Props = $props();
 
-	$: items = Object.entries(localeList).map(([id, lang]) => ({
-		value: id,
-		label: lang.name.endonym ?? lang.name.en,
-	}));
+	const items = $derived(
+		Object.entries(localeList).map(([id, lang]) => ({
+			value: id,
+			label: lang.name.endonym ?? lang.name.en,
+		})),
+	);
 
-	$: selectedItem = localeList[selected];
-	$: label = selectedItem.name.endonym ?? selectedItem.name.en;
+	const selectedItem = $derived(localeList[selected]);
+	const label = $derived(selectedItem.name.endonym ?? selectedItem.name.en);
 </script>
 
 <Select.Root

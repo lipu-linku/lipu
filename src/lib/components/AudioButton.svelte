@@ -3,7 +3,11 @@
 	import type { WordAudio } from "@kulupu-linku/sona";
 	import SpeakerIcon from "~icons/lucide/volume-2";
 
-	export let audio: WordAudio;
+	interface Props {
+		audio: WordAudio;
+	}
+
+	const { audio }: Props = $props();
 
 	function play() {
 		new Audio(audio[Math.floor(Math.random() * audio.length)].link).play();

@@ -7,7 +7,12 @@
 	import { Button } from "$lib/components/ui/button";
 	import { mode } from "mode-watcher";
 
-	export let links: Record<string, NavbarLink>;
+	interface Props {
+		links: Record<string, NavbarLink>;
+		children?: import("svelte").Snippet;
+	}
+
+	const { links, children }: Props = $props();
 </script>
 
 <div class="hidden w-full md:flex md:items-center">
@@ -23,13 +28,13 @@
 				href={link.href}
 				class="px-2 flex items-center justify-center gap-2 transition-colors text-foreground/60 hover:text-foreground/80"
 			>
-				<svelte:component this={link.icon} class="inline-block" />
+				<link.icon class="inline-block" />
 				{link.label}
 			</Button>
 		{/each}
 	</nav>
 
 	<div class="flex-1 flex">
-		<slot />
+		{@render children?.()}
 	</div>
 </div>

@@ -1,12 +1,45 @@
 import { browser } from "$app/environment";
 import type { UsageCategory } from "@kulupu-linku/sona/utils";
-import { persisted, type Serializer } from "svelte-persisted-store";
 import { writable } from "svelte/store";
 import { entries, fromEntries } from "$lib/utils";
 
-export const searchQuery = writable(
-	browser ? new URLSearchParams(window.location.search).get("q") ?? "" : "",
-);
+type Serializer<T> = { parse: (from: string) => T; stringify: (from: T) => string };
+
+const persisted = <T>(
+	key: string,
+	initialValue: T,
+	options: { serializer?: Serializer<T> } = {},
+) => {
+	const { serializer = { parse: (s) => JSON.parse(s) as T, stringify: (s) => JSON.stringify(s) } } =
+		options;
+
+	let computedInitial: T;
+	if (browser) {
+		const initial = localStorage.getItem(key);
+		computedInitial = initial ? serializer.parse(initial) : initialValue;
+	} else {
+		computedInitial = initialValue;
+	}
+
+	let value = $state(computedInitial);
+
+	$effect.root(() => {
+		$effect(() => {
+			localStorage.setItem(key, serializer.stringify(value));
+		});
+	});
+
+	return {
+		value,
+		reset() {
+			value = initialValue;
+		},
+	};
+};
+
+export const searchQuery = $state({
+	value: browser ? (new URLSearchParams(window.location.search).get("q") ?? "") : "",
+});
 
 export const defaultCategories: Record<Exclude<UsageCategory, "sandbox">, boolean> = {
 	core: true,

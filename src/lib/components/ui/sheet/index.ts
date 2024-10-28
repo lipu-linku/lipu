@@ -1,5 +1,5 @@
 import { Dialog as SheetPrimitive } from "bits-ui";
-import { tv, type VariantProps } from "tailwind-variants";
+import { type VariantProps, tv } from "tailwind-variants";
 
 import Portal from "./sheet-portal.svelte";
 import Overlay from "./sheet-overlay.svelte";
@@ -38,7 +38,7 @@ export {
 };
 
 export const sheetVariants = tv({
-	base: "fixed z-50 gap-4 bg-background p-6 shadow-lg",
+	base: "bg-background fixed z-50 gap-4 p-6 shadow-lg",
 	variants: {
 		side: {
 			top: "inset-x-0 top-0 border-b",

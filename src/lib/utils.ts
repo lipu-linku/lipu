@@ -1,8 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
-import { twMerge } from "tailwind-merge";
 import { cubicOut } from "svelte/easing";
 import type { TransitionConfig } from "svelte/transition";
-import type { Languages, Words } from "@kulupu-linku/sona";
+import { twMerge } from "tailwind-merge";
 
 export function keys<T extends object>(o: T): (keyof T)[] {
 	return Object.keys(o) as (keyof T)[];
@@ -36,6 +35,17 @@ export const normalize = (str: string) =>
 		.replace(/[\u0300-\u036f]/g, "")
 		.toLocaleLowerCase()
 		.trim();
+
+export const fuzzyMatch = (text: string, query: string) => {
+	let lastMatch = -1;
+	for (const char of query) {
+		lastMatch = text.indexOf(char, lastMatch + 1);
+		if (lastMatch === -1) {
+			return false;
+		}
+	}
+	return true;
+};
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
@@ -87,15 +97,4 @@ export const flyAndScale = (
 		},
 		easing: cubicOut,
 	};
-};
-
-export const fuzzyMatch = (text: string, query: string) => {
-	let lastMatch = -1;
-	for (const char of query) {
-		lastMatch = text.indexOf(char, lastMatch + 1);
-		if (lastMatch === -1) {
-			return false;
-		}
-	}
-	return true;
 };

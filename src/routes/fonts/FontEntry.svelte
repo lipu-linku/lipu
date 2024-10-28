@@ -7,32 +7,43 @@
 		CardHeader,
 		CardTitle,
 	} from "$lib/components/ui/card";
-	import { fontSentence } from "$lib/state";
+	import { fontSentence } from "$lib/state.svelte";
 	import type { Font } from "@kulupu-linku/sona";
 	import { flyAndScale } from "$lib/utils";
-	import IntersectionObserver from "svelte-intersection-observer";
+	import { useIntersectionObserver } from "runed";
 
 	import DownloadIcon from "~icons/lucide/download";
 	import RepoIcon from "~icons/lucide/file-code";
 	import WebIcon from "~icons/lucide/globe";
 
-	export let font: Font;
+	interface Props {
+		font: Font;
+	}
 
-	$: lastUpdatedDate = font.last_updated
-		? Intl.DateTimeFormat("en", { month: "long", year: "numeric" }).format(
-				new Date(font.last_updated),
-			)
-		: undefined;
+	const { font }: Props = $props();
 
-	$: fontDescription = [
-		`Created by ${font.creator}`,
-		`Updated on ${lastUpdatedDate}`,
-		`Licensed as ${font.license}`,
-	]
-		.filter((s) => !s.includes("undefined"))
-		.join(" · ");
+	let cardElement = $state<HTMLDivElement>();
+	let intersecting = $state(false);
+	useIntersectionObserver(
+		() => cardElement,
+		(entries) => {
+			intersecting = entries[0]?.isIntersecting ?? false;
+		},
+	);
 
-	let cardElement: HTMLDivElement;
+	const lastUpdatedDate = $derived(
+		font.last_updated
+			? Intl.DateTimeFormat("en", { month: "long", year: "numeric" }).format(
+					new Date(font.last_updated),
+				)
+			: undefined,
+	);
+
+	const fontDescription = $derived(
+		[`Created by ${font.creator}`, `Updated on ${lastUpdatedDate}`, `Licensed as ${font.license}`]
+			.filter((s) => !s.includes("undefined"))
+			.join(" · "),
+	);
 
 	const loadFont = async () => {
 		const fontFace = new FontFace(
@@ -44,55 +55,53 @@
 	};
 </script>
 
-<IntersectionObserver once element={cardElement} let:intersecting>
-	<Card bind:thisEl={cardElement}>
-		<CardHeader class="relative">
-			<CardTitle>{font.name}</CardTitle>
-			<CardDescription>{fontDescription}</CardDescription>
-			<nav class="absolute top-2 right-4 flex items-center gap-2">
-				{#if font.links.repo}
-					<Button
-						variant="outline"
-						size="icon"
-						href={font.links.repo}
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						<RepoIcon />
-					</Button>
-				{/if}
-				{#if font.links.webpage}
-					<Button
-						variant="outline"
-						size="icon"
-						href={font.links.webpage}
-						target="_blank"
-						rel="noopener noreferrer"
-					>
-						<WebIcon />
-					</Button>
-				{/if}
-				<Button variant="outline" size="icon" href={font.links.fontfile} download>
-					<DownloadIcon />
+<Card bind:thisEl={cardElement}>
+	<CardHeader class="relative">
+		<CardTitle>{font.name}</CardTitle>
+		<CardDescription>{fontDescription}</CardDescription>
+		<nav class="absolute top-2 right-4 flex items-center gap-2">
+			{#if font.links.repo}
+				<Button
+					variant="outline"
+					size="icon"
+					href={font.links.repo}
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					<RepoIcon />
 				</Button>
-			</nav>
-		</CardHeader>
-
-		<CardContent class="text-3xl">
-			{#if intersecting}
-				{#await loadFont()}
-					Loading...
-				{:then}
-					<span transition:flyAndScale={{ y: 10 }} style="font-family: '{font.name}'">
-						{#if $fontSentence.match(/[\u{F1900}-\u{F19FF}]/gu)}{/if}
-						{$fontSentence.trim()}
-					</span>
-				{:catch}
-					The font failed to load.
-				{/await}
-			{:else}
-				Loading...
 			{/if}
-		</CardContent>
-	</Card>
-</IntersectionObserver>
+			{#if font.links.webpage}
+				<Button
+					variant="outline"
+					size="icon"
+					href={font.links.webpage}
+					target="_blank"
+					rel="noopener noreferrer"
+				>
+					<WebIcon />
+				</Button>
+			{/if}
+			<Button variant="outline" size="icon" href={font.links.fontfile} download>
+				<DownloadIcon />
+			</Button>
+		</nav>
+	</CardHeader>
+
+	<CardContent class="text-3xl">
+		{#if intersecting}
+			{#await loadFont()}
+				Loading...
+			{:then}
+				<span transition:flyAndScale={{ y: 10 }} style="font-family: '{font.name}'">
+					{#if fontSentence.value.match(/[\u{F1900}-\u{F19FF}]/gu)}{/if}
+					{fontSentence.value.trim()}
+				</span>
+			{:catch}
+				The font failed to load.
+			{/await}
+		{:else}
+			Loading...
+		{/if}
+	</CardContent>
+</Card>

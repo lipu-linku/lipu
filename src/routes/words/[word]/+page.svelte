@@ -1,11 +1,13 @@
 <script lang="ts">
+	import { run } from "svelte/legacy";
+
 	import AudioButton from "$lib/components/AudioButton.svelte";
 	import Collapsible from "$lib/components/Collapsible.svelte";
 	import Navbar from "$lib/components/Navbar.svelte";
 	import WordsSearch from "../../(words)/WordsSearch.svelte";
 	import UsageGraph from "./UsageGraph.svelte";
 
-	import { Button } from "$lib/components/ui/button";
+	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import * as Tooltip from "$lib/components/ui/tooltip";
@@ -19,40 +21,37 @@
 	import ShareButton from "~icons/lucide/share-2";
 	import { cn } from "$lib/utils";
 
-	export let data;
-	$: ({ word, language, languages } = data);
+	const { data } = $props();
+	const { word, language, languages } = $derived(data);
 
-	$: usageScore = Object.values(word.usage).at(-1) ?? 0;
-	$: definition = getTranslatedData(word, "definition", language.id);
-	$: commentary = getTranslatedData(word, "commentary", language.id);
-	$: etymology = getTranslatedData(word, "etymology", language.id);
-	$: sitelenPonaEtymology = getTranslatedData(word, "sp_etymology", language.id);
+	const usageScore = $derived(Object.values(word.usage).at(-1) ?? 0);
+	const definition = $derived(getTranslatedData(word, "definition", language.id));
+	const commentary = $derived(getTranslatedData(word, "commentary", language.id));
+	const etymology = $derived(getTranslatedData(word, "etymology", language.id));
+	const sitelenPonaEtymology = $derived(getTranslatedData(word, "sp_etymology", language.id));
 
-	$: hasRepresentations =
+	const hasRepresentations = $derived(
 		word.representations &&
-		(word.representations.ligatures?.length ||
-			word.representations.sitelen_emosi ||
-			word.representations.sitelen_jelo?.length ||
-			word.representations.sitelen_sitelen ||
-			word.representations.ucsur);
+			(word.representations.ligatures?.length ||
+				word.representations.sitelen_emosi ||
+				word.representations.sitelen_jelo?.length ||
+				word.representations.sitelen_sitelen ||
+				word.representations.ucsur),
+	);
 
-	$: pu_verbatim =
+	const pu_verbatim = $derived(
 		word.pu_verbatim?.[
 			language.id in word.pu_verbatim
 				? (language.id as keyof (typeof word)["pu_verbatim"])
 				: ("en" as const)
-		];
+		],
+	);
 
-	const englishFormat = new Intl.ListFormat("en", { style: "narrow" });
-	let listFormat = new Intl.ListFormat("en");
-	$: {
-		try {
-			listFormat = new Intl.ListFormat(language.locale);
-		} catch {
-			// this is here to allow for proper formatting,
-			// except for languages browsers don't support
-		}
-	}
+	const listFormat = $derived(
+		new Intl.ListFormat(Intl.ListFormat.supportedLocalesOf([language.locale, "en"]), {
+			style: "short",
+		}),
+	);
 
 	const usageToIndex = (usage: number) => {
 		if (usage > 80) return "⁵";
@@ -102,10 +101,8 @@
 				<AudioButton audio={word.audio} />
 			{/if}
 			<DropdownMenu.Root>
-				<DropdownMenu.Trigger asChild let:builder>
-					<Button builders={[builder]} variant="outline" size="icon">
-						<ShareButton />
-					</Button>
+				<DropdownMenu.Trigger class={buttonVariants({ variant: "outline", size: "icon" })}>
+					<ShareButton />
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content>
 					<DropdownMenu.Label>Share word</DropdownMenu.Label>
@@ -162,7 +159,7 @@
 							</Tooltip.Root>
 						</h3>
 
-						<Collapsible content={englishFormat.format(kuString)} />
+						<Collapsible content={listFormat.format(kuString)} />
 					</div>
 				{/if}
 

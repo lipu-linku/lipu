@@ -23,6 +23,8 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
 			obscure: false,
 			sandbox: false,
 		},
+		new Set(),
+		false,
 		undefined,
 		lang,
 	);
