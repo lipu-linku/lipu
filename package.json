@@ -37,7 +37,7 @@
 		"prettier-plugin-tailwindcss": "^0.6.6",
 		"sharp": "^0.33.5",
 		"sharp-ico": "^0.1.5",
-		"svelte": "^4.2.18",
+		"svelte": "^5.0.0",
 		"svelte-check": "^4.0.0",
 		"svelte-intersection-observer": "^1.0.0",
 		"svelte-persisted-store": "^0.11.0",
