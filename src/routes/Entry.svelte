@@ -1,16 +1,14 @@
 <script lang="ts">
-	import { writingSystem, etymologiesEnabled, favorites } from "$lib/state.svelte";
+	import { etymologiesEnabled, favorites, writingSystem } from "$lib/state.svelte";
 	import type { Language, LocalizedWord } from "@kulupu-linku/sona";
 	import { getTranslatedData, type UsageCategory } from "@kulupu-linku/sona/utils";
 
 	import AudioButton from "$lib/components/AudioButton.svelte";
-	import { Button, buttonVariants } from "$lib/components/ui/button";
+	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
-	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
-	
-	import MoreIcon from "~icons/lucide/menu"
-	import FavoriteIcon from "~icons/material-symbols/favorite-outline";
+
 	import UnfavoriteIcon from "~icons/material-symbols/favorite";
+	import FavoriteIcon from "~icons/material-symbols/favorite-outline";
 
 	interface Props {
 		word: LocalizedWord;
@@ -47,6 +45,11 @@
 			<Card.Description dir={language.direction} class="text-[1rem] text-foreground">
 				{definition}
 			</Card.Description>
+			{#if word.see_also.length > 0}
+				<Card.Description>
+					See also: {word.see_also.join(", ")}
+				</Card.Description>
+			{/if}
 			<Card.Description>
 				{#if word.usage_category !== "sandbox"}
 					{word.usage_category} · {word.book} ·
@@ -88,20 +91,6 @@
 		class="flex flex-col items-end justify-between gap-1 p-4 text-6xl max-md:flex-col-reverse md:gap-4"
 	>
 		<div class="flex items-center gap-2">
-			{#if word.see_also.length > 0}
-				<DropdownMenu.Root>
-					<DropdownMenu.Trigger class={buttonVariants({ variant: "outline", size: "icon" })}>
-						<MoreIcon />
-					</DropdownMenu.Trigger>
-					<DropdownMenu.Content class="text-center">
-						<DropdownMenu.Label>See Also</DropdownMenu.Label>
-						<DropdownMenu.Separator />
-						{#each word.see_also as see_also}
-							<DropdownMenu.Item href="/words/{see_also}">{see_also}</DropdownMenu.Item>
-						{/each}
-					</DropdownMenu.Content>
-				</DropdownMenu.Root>
-			{/if}
 			{#if word.audio.length > 0}
 				<AudioButton audio={word.audio} />
 			{/if}
