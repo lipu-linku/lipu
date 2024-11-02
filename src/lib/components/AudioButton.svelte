@@ -15,7 +15,7 @@
 </script>
 
 {#if audio.length > 0}
-	<Button size="icon" variant="outline" class="align-middle" on:click={play}>
+	<Button size="icon" variant="outline" class="align-middle" onclick={play}>
 		<SpeakerIcon aria-label="Speaker icon" />
 	</Button>
 {/if}

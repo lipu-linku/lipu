@@ -17,7 +17,11 @@
 
 <div class="hidden w-full md:flex md:items-center">
 	<a href="/" class="flex items-center space-x-2 mr-4">
-		<img src={$mode === "dark" ? iconDark : iconLight} alt="Linku's logo" class="size-6" />
+		{#if $mode === "dark"}
+			<img src={iconDark} alt="Linku's logo" class="size-6" />
+		{:else}
+			<img src={iconLight} alt="Linku's logo" class="size-6" />
+		{/if}
 		<span class="hidden font-bold sm:inline-block">lipu Linku</span>
 	</a>
 

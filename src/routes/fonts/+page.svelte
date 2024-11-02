@@ -53,7 +53,7 @@
 							class="absolute top-2 right-4"
 							variant="ghost"
 							size="icon"
-							on:click={() => (sidebarOpen = !sidebarOpen)}
+							onclick={() => (sidebarOpen = !sidebarOpen)}
 						>
 							<CloseIcon />
 						</Button>

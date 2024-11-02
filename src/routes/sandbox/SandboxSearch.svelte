@@ -1,11 +1,8 @@
 <script lang="ts">
-	import { run } from "svelte/legacy";
-
 	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import { Input } from "$lib/components/ui/input";
 
-	import { browser } from "$app/environment";
 	import { page } from "$app/stores";
 	import { etymologiesEnabled, favorites, onlyFavorites, searchQuery } from "$lib/state.svelte";
 	import { cn } from "$lib/utils";
@@ -56,6 +53,10 @@
 	$effect(() => {
 		if (searchQuery.value === "" && $page.url.searchParams.has("q")) clearQuery();
 	});
+
+	$effect(() => {
+		if (favorites.value.size === 0) onlyFavorites.value = false;
+	});
 </script>
 
 <svelte:window onkeydown={focusSearch} />
@@ -74,7 +75,7 @@
 	/>
 
 	<div class="flex items-center justify-center gap-2">
-		<DropdownMenu.Root closeOnItemClick={false} preventScroll={false}>
+		<DropdownMenu.Root>
 			<DropdownMenu.Trigger
 				class={buttonVariants({ variant: "outline", size: "icon" })}
 				aria-label="Search Options"
@@ -82,7 +83,7 @@
 				<SettingsIcon aria-label="Settings icon" />
 			</DropdownMenu.Trigger>
 			<!-- this is some absolute positioning fuckery to get the dropdown to be centered -->
-			<DropdownMenu.Content class="max-md:!inset-x-0 max-md:mx-auto w-[90vw] md:w-auto">
+			<DropdownMenu.Content trapFocus class="max-md:!inset-x-0 max-md:mx-auto w-[90vw] md:w-auto">
 				<DropdownMenu.Label class="text-center">Search Options</DropdownMenu.Label>
 				<DropdownMenu.Group>
 					<DropdownMenu.CheckboxItem bind:checked={etymologiesEnabled.value}>
@@ -97,12 +98,12 @@
 					</DropdownMenu.CheckboxItem>
 				</DropdownMenu.Group>
 				<DropdownMenu.Separator />
-				<DropdownMenu.Item class="font-semibold" on:click={copyLinkWithParams}>
+				<DropdownMenu.Item class="font-semibold" onclick={copyLinkWithParams}>
 					{@const CopyIcon = !hasCopied ? LinkIcon : CheckIcon}
 					<CopyIcon aria-hidden class="mr-2 inline size-4" />
 					<span>Copy Permalink</span>
 				</DropdownMenu.Item>
-				<DropdownMenu.Item class="font-semibold" on:click={resetOptions}>
+				<DropdownMenu.Item class="font-semibold" onclick={resetOptions}>
 					<ResetIcon aria-hidden class="mr-2 inline size-4" />
 					<span>Reset Options</span>
 				</DropdownMenu.Item>

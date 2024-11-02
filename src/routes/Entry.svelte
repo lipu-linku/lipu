@@ -98,7 +98,7 @@
 			<Button
 				variant="outline"
 				size="icon"
-				on:click={() => {
+				onclick={() => {
 					favorites.value.has(word.id)
 						? favorites.value.delete(word.id)
 						: favorites.value.add(word.id);

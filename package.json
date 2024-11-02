@@ -22,7 +22,7 @@
 		"@types/d3-scale": "^4.0.8",
 		"@vite-pwa/assets-generator": "^0.2.6",
 		"@vite-pwa/sveltekit": "^0.6.6",
-		"bits-ui": "0.21.16",
+		"bits-ui": "1.0.0-next.38",
 		"clsx": "^2.1.1",
 		"d3-scale": "^4.0.2",
 		"fastest-levenshtein": "^1.0.16",

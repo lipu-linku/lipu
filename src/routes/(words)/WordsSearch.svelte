@@ -86,7 +86,7 @@
 	/>
 
 	<div class="flex items-center justify-center gap-2">
-		<DropdownMenu.Root closeOnItemClick={false} preventScroll={false}>
+		<DropdownMenu.Root>
 			<DropdownMenu.Trigger
 				class={buttonVariants({ variant: "outline", size: "icon" })}
 				aria-label="Search Options"
@@ -98,10 +98,10 @@
 				<DropdownMenu.Label class="text-center">Search Options</DropdownMenu.Label>
 				<DropdownMenu.Separator />
 				<DropdownMenu.Group>
-					<DropdownMenu.Label>
+					<DropdownMenu.GroupHeading>
 						<CategoriesIcon aria-label="Categories icon" class="mr-1 inline size-4" />
 						<span>Usage Categories</span>
-					</DropdownMenu.Label>
+					</DropdownMenu.GroupHeading>
 					{#each keys(categories.value) as category}
 						<DropdownMenu.CheckboxItem bind:checked={categories.value[category]}>
 							{category}
@@ -110,12 +110,12 @@
 				</DropdownMenu.Group>
 				<DropdownMenu.Separator />
 				<DropdownMenu.Group>
-					<DropdownMenu.Label
+					<DropdownMenu.GroupHeading
 						class={cn($page.route.id === "/words/[word]" && "pointer-events-none opacity-50")}
 					>
 						<WritingSystemIcon aria-label="Fountain pen icon" class="mr-1 inline size-4" />
 						<span>Display Settings</span>
-					</DropdownMenu.Label>
+					</DropdownMenu.GroupHeading>
 					<DropdownMenu.RadioGroup bind:value={writingSystem.value}>
 						<DropdownMenu.RadioItem
 							disabled={$page.route.id === "/words/[word]"}
@@ -145,12 +145,12 @@
 					</DropdownMenu.CheckboxItem>
 				</DropdownMenu.Group>
 				<DropdownMenu.Separator />
-				<DropdownMenu.Item class="font-semibold" on:click={copyLinkWithParams}>
+				<DropdownMenu.Item class="font-semibold" onclick={copyLinkWithParams}>
 					{@const SvelteComponent = !hasCopied ? LinkIcon : CheckIcon}
 					<SvelteComponent aria-hidden class="mr-2 inline size-4" />
 					<span>Copy Permalink</span>
 				</DropdownMenu.Item>
-				<DropdownMenu.Item class="font-semibold" on:click={resetOptions}>
+				<DropdownMenu.Item class="font-semibold" onclick={resetOptions}>
 					<ResetIcon aria-hidden class="mr-2 inline size-4" />
 					<span>Reset Options</span>
 				</DropdownMenu.Item>

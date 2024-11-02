@@ -35,8 +35,16 @@
 
 	<Sheet.Content side="bottom">
 		<nav class="flex flex-col justify-center gap-4">
-			<a href="/" class="flex items-center text-foreground/60" onclick={() => (open = false)}>
-				<img src={$mode === "dark" ? iconDark : iconLight} alt="Linku's logo" class="size-6 mr-2" />
+			<a
+				href="/"
+				class="flex gap-[1ch] items-center text-foreground/60"
+				onclick={() => (open = false)}
+			>
+				{#if $mode === "dark"}
+					<img src={iconDark} alt="Linku's logo" class="size-6" />
+				{:else}
+					<img src={iconLight} alt="Linku's logo" class="size-6" />
+				{/if}
 				<span class="font-bold">lipu Linku</span>
 			</a>
 

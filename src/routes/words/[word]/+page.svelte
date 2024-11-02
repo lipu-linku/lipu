@@ -108,12 +108,12 @@
 					<DropdownMenu.Label>Share word</DropdownMenu.Label>
 					<DropdownMenu.Separator />
 
-					<DropdownMenu.Item on:click={() => navigator.clipboard.writeText($page.url.toString())}>
+					<DropdownMenu.Item onclick={() => navigator.clipboard.writeText($page.url.toString())}>
 						<CopyIcon class="inline mr-2 size-4" />
 						Copy URL
 					</DropdownMenu.Item>
 
-					<DropdownMenu.Item on:click={copyCodepoint}>
+					<DropdownMenu.Item onclick={copyCodepoint}>
 						<span class="text-2xl -ml-1 mr-2 font-sitelen-pona">sitelen-pona</span>
 						sitelen pona
 					</DropdownMenu.Item>
@@ -130,7 +130,7 @@
 	>
 		<Card.Root>
 			<Card.Header>
-				<Card.Title class="text-2xl" tag="h2">Meaning</Card.Title>
+				<Card.Title class="text-2xl" level={2}>Meaning</Card.Title>
 			</Card.Header>
 			<Card.Content class="flex flex-col gap-3">
 				<div class="flex flex-col justify-center gap-2">
@@ -184,7 +184,7 @@
 		{#if hasRepresentations}
 			<Card.Root>
 				<Card.Header>
-					<Card.Title class="text-2xl" tag="h2">Usage</Card.Title>
+					<Card.Title class="text-2xl" level={2}>Usage</Card.Title>
 				</Card.Header>
 				<Card.Content class="flex flex-col gap-3">
 					{#if word.representations?.ligatures && word.representations?.ligatures?.length > 0}
@@ -227,7 +227,7 @@
 
 							<p class="flex items-center gap-2">
 								{word.representations.ucsur}
-								<Button class="p-1 h-fit" variant="ghost" on:click={copyCodepoint}>
+								<Button class="p-1 h-fit" variant="ghost" onclick={copyCodepoint}>
 									<CopyIcon />
 								</Button>
 							</p>
@@ -250,7 +250,7 @@
 
 		<Card.Root>
 			<Card.Header>
-				<Card.Title class="text-2xl" tag="h2">More Info</Card.Title>
+				<Card.Title class="text-2xl" level={2}>More Info</Card.Title>
 			</Card.Header>
 			<Card.Content class="flex flex-col gap-3">
 				{#if commentary}
@@ -324,7 +324,7 @@
 		{#if Object.keys(word.usage).length > 1}
 			<Card.Root class="col-span-3">
 				<Card.Header>
-					<Card.Title class="text-2xl" tag="h2">Usage Trend</Card.Title>
+					<Card.Title class="text-2xl" level={2}>Usage Trend</Card.Title>
 				</Card.Header>
 				<Card.Content class="h-[600px] p-4 px-8">
 					<UsageGraph data={word.usage} />

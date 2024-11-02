@@ -9,8 +9,8 @@
 	} from "$lib/components/ui/card";
 	import { fontSentence } from "$lib/state.svelte";
 	import type { Font } from "@kulupu-linku/sona";
-	import { flyAndScale } from "$lib/utils";
 	import { useIntersectionObserver } from "runed";
+	import { fly } from "svelte/transition";
 
 	import DownloadIcon from "~icons/lucide/download";
 	import RepoIcon from "~icons/lucide/file-code";
@@ -55,7 +55,7 @@
 	};
 </script>
 
-<Card bind:thisEl={cardElement}>
+<Card bind:ref={cardElement}>
 	<CardHeader class="relative">
 		<CardTitle>{font.name}</CardTitle>
 		<CardDescription>{fontDescription}</CardDescription>
@@ -93,7 +93,7 @@
 			{#await loadFont()}
 				Loading...
 			{:then}
-				<span transition:flyAndScale={{ y: 10 }} style="font-family: '{font.name}'">
+				<span transition:fly={{ y: 10, duration: 200 }} style="font-family: '{font.name}'">
 					{#if fontSentence.value.match(/[\u{F1900}-\u{F19FF}]/gu)}{/if}
 					{fontSentence.value.trim()}
 				</span>

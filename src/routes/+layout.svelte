@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/stores";
 	import { Button } from "$lib/components/ui/button";
-	import { flyAndScale } from "$lib/utils";
 	import { ModeWatcher } from "mode-watcher";
 
 	import { pwaAssetsHead } from "virtual:pwa-assets/head";
@@ -11,6 +10,7 @@
 	import UpArrowIcon from "~icons/lucide/arrow-up";
 	import "../app.postcss";
 	import { browser } from "$app/environment";
+	import { fly } from "svelte/transition";
 
 	const { children } = $props();
 
@@ -55,11 +55,11 @@
 	{@render children()}
 
 	{#if !$page.params.word && scrollY > 1.05 * outerHeight}
-		<div transition:flyAndScale={{ y: 10 }} class="fixed bottom-4 right-4">
+		<div transition:fly={{ y: 10, duration: 150 }} class="fixed bottom-4 right-4">
 			<Button
 				class="flex items-center gap-2"
 				variant="outline"
-				on:click={() =>
+				onclick={() =>
 					window.scrollTo({
 						top: 0,
 						behavior: window.matchMedia("(prefers-reduced-motion: no-preference)").matches
