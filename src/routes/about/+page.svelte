@@ -53,8 +53,7 @@
 		target="_blank"
 		rel="noopenner noreferrer"
 	>
-		tokipona.org
-	</a>.
+		tokipona.org</a>.
 </p>
 
 <Accordion
