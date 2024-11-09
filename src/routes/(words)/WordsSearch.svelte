@@ -1,11 +1,8 @@
 <script lang="ts">
-	import { run } from "svelte/legacy";
-
 	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import { Input } from "$lib/components/ui/input";
 
-	import { browser } from "$app/environment";
 	import { page } from "$app/stores";
 	import {
 		categories,
@@ -14,7 +11,7 @@
 		favorites,
 		onlyFavorites,
 		searchQuery,
-		writingSystem,
+		writingSystem
 	} from "$lib/state.svelte";
 	import { cn, keys } from "$lib/utils";
 
@@ -43,7 +40,7 @@
 	let hasCopied = $state(false);
 	const copyLinkWithParams = () => {
 		const url = new URL($page.url);
-		url.searchParams.set("categories", JSON.stringify(categories.value));
+		url.searchParams.set("categories", JSON.stringify(categories.current));
 		url.searchParams.set("q", searchQuery.value);
 
 		navigator.clipboard.writeText(url.toString());
@@ -102,8 +99,11 @@
 						<CategoriesIcon aria-label="Categories icon" class="mr-1 inline size-4" />
 						<span>Usage Categories</span>
 					</DropdownMenu.GroupHeading>
-					{#each keys(categories.value) as category}
-						<DropdownMenu.CheckboxItem bind:checked={categories.value[category]}>
+					{#each keys(categories.current) as category}
+						<DropdownMenu.CheckboxItem
+							closeOnSelect={false}
+							bind:checked={categories.current[category]}
+						>
 							{category}
 						</DropdownMenu.CheckboxItem>
 					{/each}
@@ -116,14 +116,16 @@
 						<WritingSystemIcon aria-label="Fountain pen icon" class="mr-1 inline size-4" />
 						<span>Display Settings</span>
 					</DropdownMenu.GroupHeading>
-					<DropdownMenu.RadioGroup bind:value={writingSystem.value}>
+					<DropdownMenu.RadioGroup bind:value={writingSystem.current}>
 						<DropdownMenu.RadioItem
+							closeOnSelect={false}
 							disabled={$page.route.id === "/words/[word]"}
 							value="sitelen_pona"
 						>
 							sitelen pona
 						</DropdownMenu.RadioItem>
 						<DropdownMenu.RadioItem
+							closeOnSelect={false}
 							disabled={$page.route.id === "/words/[word]"}
 							value="sitelen_sitelen"
 						>
@@ -133,13 +135,17 @@
 
 					<DropdownMenu.Separator />
 
-					<DropdownMenu.CheckboxItem bind:checked={etymologiesEnabled.value}>
+					<DropdownMenu.CheckboxItem
+						closeOnSelect={false}
+						bind:checked={etymologiesEnabled.current}
+					>
 						Show Etymologies
 					</DropdownMenu.CheckboxItem>
 
 					<DropdownMenu.CheckboxItem
-						bind:checked={onlyFavorites.value}
-						disabled={favorites.value.size === 0}
+						closeOnSelect={false}
+						bind:checked={onlyFavorites.current}
+						disabled={favorites.current.size === 0}
 					>
 						Only Show Favorites
 					</DropdownMenu.CheckboxItem>
@@ -150,7 +156,7 @@
 					<SvelteComponent aria-hidden class="mr-2 inline size-4" />
 					<span>Copy Permalink</span>
 				</DropdownMenu.Item>
-				<DropdownMenu.Item class="font-semibold" onclick={resetOptions}>
+				<DropdownMenu.Item closeOnSelect={false} class="font-semibold" onclick={resetOptions}>
 					<ResetIcon aria-hidden class="mr-2 inline size-4" />
 					<span>Reset Options</span>
 				</DropdownMenu.Item>
@@ -160,7 +166,7 @@
 		<input
 			type="hidden"
 			name="categories"
-			value={categoriesSerializer.stringify(categories.value)}
+			value={categoriesSerializer.stringify(categories.current)}
 		/>
 
 		<Button

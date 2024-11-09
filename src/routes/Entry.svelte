@@ -21,6 +21,19 @@
 	const etymology = $derived(getTranslatedData(word, "etymology", language.id));
 	const usageScore = $derived(Object.values(word.usage).at(-1) ?? 0);
 
+	const bookName = $derived.by(() => {
+		switch (word.book) {
+			case "pu":
+				return "nimi pu";
+			case "ku suli":
+				return "nimi ku suli";
+			case "ku lili":
+				return "nimi ku pi suli ala";
+			case "none":
+				return undefined;
+		}
+	});
+
 	const categoryColors = {
 		core: "oklch(93.29% 0.137 106.54)",
 		common: "oklch(61.15% 0.177 30.62)",
@@ -60,13 +73,13 @@
 					{[
 						word.creator.length > 0 ? word.creator.join(", ") : undefined,
 						word.coined_year,
-						word.book !== "none" ? word.book : undefined,
+						bookName,
 					]
 						.filter(Boolean)
 						.join(" · ")}
 				{/if}
 			</Card.Description>
-			{#if etymologiesEnabled.value && word.etymology.length > 0 && etymology.length > 0}
+			{#if etymologiesEnabled.current && word.etymology.length > 0 && etymology.length > 0}
 				<Card.Description>
 					{@const etymString = word.etymology
 						.map((etym, i) => {
@@ -99,13 +112,12 @@
 				variant="outline"
 				size="icon"
 				onclick={() => {
-					favorites.value.has(word.id)
-						? favorites.value.delete(word.id)
-						: favorites.value.add(word.id);
-					favorites.value = favorites.value;
+					favorites.current.has(word.id)
+						? favorites.current.delete(word.id)
+						: favorites.current.add(word.id);
 				}}
 			>
-				{#if !favorites.value.has(word.id)}
+				{#if !favorites.current.has(word.id)}
 					<FavoriteIcon />
 				{:else}
 					<UnfavoriteIcon />
@@ -114,11 +126,11 @@
 		</div>
 
 		<div>
-			{#if writingSystem.value === "sitelen_pona" && word.representations?.ligatures}
+			{#if writingSystem.current === "sitelen_pona" && word.representations?.ligatures}
 				{#each word.representations.ligatures.slice(0, 3) as glyph}
 					<span class="text-center font-sitelen-pona">{glyph}</span>
 				{/each}
-			{:else if writingSystem.value === "sitelen_sitelen" && word.representations?.sitelen_sitelen}
+			{:else if writingSystem.current === "sitelen_sitelen" && word.representations?.sitelen_sitelen}
 				<img
 					src={word.representations.sitelen_sitelen}
 					alt="{word.word} in sitelen sitelen format"

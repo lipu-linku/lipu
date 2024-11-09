@@ -55,7 +55,7 @@
 	});
 
 	$effect(() => {
-		if (favorites.value.size === 0) onlyFavorites.value = false;
+		if (favorites.current.size === 0) onlyFavorites.current = false;
 	});
 </script>
 
@@ -86,13 +86,17 @@
 			<DropdownMenu.Content trapFocus class="max-md:!inset-x-0 max-md:mx-auto w-[90vw] md:w-auto">
 				<DropdownMenu.Label class="text-center">Search Options</DropdownMenu.Label>
 				<DropdownMenu.Group>
-					<DropdownMenu.CheckboxItem bind:checked={etymologiesEnabled.value}>
+					<DropdownMenu.CheckboxItem
+						closeOnSelect={false}
+						bind:checked={etymologiesEnabled.current}
+					>
 						Show Etymologies
 					</DropdownMenu.CheckboxItem>
 
 					<DropdownMenu.CheckboxItem
-						bind:checked={onlyFavorites.value}
-						disabled={favorites.value.size === 0}
+						closeOnSelect={false}
+						bind:checked={onlyFavorites.current}
+						disabled={favorites.current.size === 0}
 					>
 						Only Show Favorites
 					</DropdownMenu.CheckboxItem>
@@ -103,7 +107,7 @@
 					<CopyIcon aria-hidden class="mr-2 inline size-4" />
 					<span>Copy Permalink</span>
 				</DropdownMenu.Item>
-				<DropdownMenu.Item class="font-semibold" onclick={resetOptions}>
+				<DropdownMenu.Item closeOnSelect={false} class="font-semibold" onclick={resetOptions}>
 					<ResetIcon aria-hidden class="mr-2 inline size-4" />
 					<span>Reset Options</span>
 				</DropdownMenu.Item>

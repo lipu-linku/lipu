@@ -33,7 +33,7 @@
 <div class="flex-0 flex flex-col items-center gap-2">
 	<h2 class="py-2 text-center text-4xl font-medium">Font Search</h2>
 
-	<Input class="max-w-[30%] font-sitelen-ucsur" bind:value={fontSentence.value} />
+	<Input class="max-w-[30%] font-sitelen-ucsur" bind:value={fontSentence.current} />
 
 	<main class="w-full p-4 grid grid-cols-[70%_30%] gap-2">
 		<ul class="flex flex-col gap-2">
