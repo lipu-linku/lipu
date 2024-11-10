@@ -53,8 +53,7 @@
 		target="_blank"
 		rel="noopenner noreferrer"
 	>
-		tokipona.org
-	</a>.
+		tokipona.org</a>.
 </p>
 
 <Accordion
@@ -112,7 +111,7 @@
 			class="[&>div]:space-y-4 [&_code]:border [&_code]:border-border [&_code]:px-1 [&_code]:rounded-sm"
 		>
 			<p>
-				The bot is for requesting and receiving Linku data without leaving discord, with a couple
+				The bot is for requesting and receiving Linku data without leaving Discord, with a couple
 				quality of life features.
 			</p>
 			<Button
@@ -207,8 +206,8 @@
 				<a
 					href="https://docs.google.com/spreadsheets/d/1xwgTAxwgn4ZAc4DBnHte0cqta1aaxe112Wh1rv9w5Yk"
 				>
-					here
-				</a>. Note that it has been archived and cannot be contributed to any longer.
+					here</a>. 
+				Note that it has been archived and cannot be contributed to any longer.
 			</p>
 		</AccordionContent>
 	</AccordionItem>
@@ -233,13 +232,11 @@
 			<p>
 				The website is available as free, open source software, under the GPL-3 license. It is built
 				using <a href="https://kit.svelte.dev/" target="_blank" rel="noopener noreferrer">
-					SvelteKit
-				</a>,
-				<a href="https://tailwindcss.com/" target="_blank" rel="noopener noreferrer">tailwindcss</a>
-				, and
+					SvelteKit</a>,
+				<a href="https://tailwindcss.com/" target="_blank" rel="noopener noreferrer">tailwindcss</a>,
+				and
 				<a href="https://www.shadcn-svelte.com/" target="_blank" rel="noopener noreferrer">
-					shadcn-svelte
-				</a>.
+					shadcn-svelte</a>.
 			</p>
 		</AccordionContent>
 	</AccordionItem>
