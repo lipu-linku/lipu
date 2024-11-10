@@ -178,6 +178,42 @@
 						</ul>
 					</div>
 				{/if}
+
+				{#if word.resources?.lipamanka_semantic}
+					{@const [url, id] = word.resources.lipamanka_semantic.split("#")}
+					{#await fetch(url)
+						.then((r) => r.text())
+						.then((text) => {
+							const doc = document.createElement("html");
+							doc.innerHTML = text;
+							const el = doc.querySelector(`details > summary#${id} + p`);
+							if (el) return el.textContent ?? "";
+							else throw new Error(`Could not find a semantic space definition for ${id}`);
+						}) then semantic}
+						<div class="flex flex-col justify-center gap-2">
+							<h3 class="flex items-center gap-2 font-medium text-xl">
+								Semantic space
+								<Tooltip.Root>
+									<Tooltip.Trigger
+										class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
+									>
+										<InfoIcon class="size-4 " />
+									</Tooltip.Trigger>
+									<Tooltip.Content class="max-w-[min(55ch,80%)]">
+										This information is sourced from <a
+											class="underline"
+											href="https://lipamanka.gay/essays/dictionary"
+											target="_blank"
+											rel="noopener noreferrer">lipamanka's semantic space dictionary</a
+										>. If you think something is wrong, please contact it!
+									</Tooltip.Content>
+								</Tooltip.Root>
+							</h3>
+
+							<Collapsible separator=" " content={semantic} />
+						</div>
+					{/await}
+				{/if}
 			</Card.Content>
 		</Card.Root>
 
