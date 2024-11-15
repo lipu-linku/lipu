@@ -55,7 +55,7 @@
 	});
 
 	$effect(() => {
-		if (favorites.current.size === 0) onlyFavorites.current = false;
+		if (favorites.value.size === 0) onlyFavorites.value = false;
 	});
 </script>
 
@@ -88,15 +88,15 @@
 				<DropdownMenu.Group>
 					<DropdownMenu.CheckboxItem
 						closeOnSelect={false}
-						bind:checked={etymologiesEnabled.current}
+						bind:checked={etymologiesEnabled.value}
 					>
 						Show Etymologies
 					</DropdownMenu.CheckboxItem>
 
 					<DropdownMenu.CheckboxItem
 						closeOnSelect={false}
-						bind:checked={onlyFavorites.current}
-						disabled={favorites.current.size === 0}
+						bind:checked={onlyFavorites.value}
+						disabled={favorites.value.size === 0}
 					>
 						Only Show Favorites
 					</DropdownMenu.CheckboxItem>

@@ -40,7 +40,7 @@
 	let hasCopied = $state(false);
 	const copyLinkWithParams = () => {
 		const url = new URL($page.url);
-		url.searchParams.set("categories", JSON.stringify(categories.current));
+		url.searchParams.set("categories", JSON.stringify(categories.value));
 		url.searchParams.set("q", searchQuery.value);
 
 		navigator.clipboard.writeText(url.toString());
@@ -64,6 +64,10 @@
 
 	$effect(() => {
 		if (searchQuery.value === "" && $page.url.searchParams.has("q")) clearQuery();
+	});
+
+	$effect(() => {
+		if (favorites.value.size === 0) onlyFavorites.value = false;
 	});
 </script>
 
@@ -99,10 +103,10 @@
 						<CategoriesIcon aria-label="Categories icon" class="mr-1 inline size-4" />
 						<span>Usage Categories</span>
 					</DropdownMenu.GroupHeading>
-					{#each keys(categories.current) as category}
+					{#each keys(categories.value) as category}
 						<DropdownMenu.CheckboxItem
 							closeOnSelect={false}
-							bind:checked={categories.current[category]}
+							bind:checked={categories.value[category]}
 						>
 							{category}
 						</DropdownMenu.CheckboxItem>
@@ -116,7 +120,7 @@
 						<WritingSystemIcon aria-label="Fountain pen icon" class="mr-1 inline size-4" />
 						<span>Display Settings</span>
 					</DropdownMenu.GroupHeading>
-					<DropdownMenu.RadioGroup bind:value={writingSystem.current}>
+					<DropdownMenu.RadioGroup bind:value={writingSystem.value}>
 						<DropdownMenu.RadioItem
 							closeOnSelect={false}
 							disabled={$page.route.id === "/words/[word]"}
@@ -137,15 +141,15 @@
 
 					<DropdownMenu.CheckboxItem
 						closeOnSelect={false}
-						bind:checked={etymologiesEnabled.current}
+						bind:checked={etymologiesEnabled.value}
 					>
 						Show Etymologies
 					</DropdownMenu.CheckboxItem>
 
 					<DropdownMenu.CheckboxItem
 						closeOnSelect={false}
-						bind:checked={onlyFavorites.current}
-						disabled={favorites.current.size === 0}
+						bind:checked={onlyFavorites.value}
+						disabled={favorites.value.size === 0}
 					>
 						Only Show Favorites
 					</DropdownMenu.CheckboxItem>
@@ -166,7 +170,7 @@
 		<input
 			type="hidden"
 			name="categories"
-			value={categoriesSerializer.stringify(categories.current)}
+			value={categoriesSerializer.stringify(categories.value)}
 		/>
 
 		<Button

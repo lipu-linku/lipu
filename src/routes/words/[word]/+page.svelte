@@ -1,6 +1,4 @@
 <script lang="ts">
-	import { run } from "svelte/legacy";
-
 	import AudioButton from "$lib/components/AudioButton.svelte";
 	import Collapsible from "$lib/components/Collapsible.svelte";
 	import Navbar from "$lib/components/Navbar.svelte";
@@ -15,11 +13,11 @@
 	import { page } from "$app/stores";
 	import { getTranslatedData } from "@kulupu-linku/sona/utils";
 
+	import { cn } from "$lib/utils";
 	import BackIcon from "~icons/lucide/arrow-left";
 	import CopyIcon from "~icons/lucide/copy";
 	import InfoIcon from "~icons/lucide/info";
 	import ShareButton from "~icons/lucide/share-2";
-	import { cn } from "$lib/utils";
 
 	const { data } = $props();
 	const { word, language, languages } = $derived(data);
@@ -204,8 +202,10 @@
 											class="underline"
 											href="https://lipamanka.gay/essays/dictionary"
 											target="_blank"
-											rel="noopener noreferrer">lipamanka's semantic space dictionary</a
-										>. If you think something is wrong, please contact it!
+											rel="noopener noreferrer"
+										>
+											lipamanka's semantic space dictionary
+										</a>. If you think something is wrong, please contact it!
 									</Tooltip.Content>
 								</Tooltip.Root>
 							</h3>

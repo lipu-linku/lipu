@@ -1,10 +1,6 @@
 # lipu Linku
 
-<div align="center">
-  <a href="https://discord.gg/A3ZPqnHHsy">
-    <img src="https://img.shields.io/badge/-Discord-%237289da?style=for-the-badge&logo=appveyor">
-  </a>
-</div>
+[![Discord](https://img.shields.io/badge/-Discord-%237289da?style=for-the-badge&logo=appveyor)](https://discord.gg/A3ZPqnHHsy)
 
 ## Overview
 
@@ -28,11 +24,7 @@ Requirements:
 
 ### Contributors
 
-<div align="center">
-  <a href="https://github.com/lipu-linku/lipu/graphs/contributors">
-    <img src="https://contrib.rocks/image?repo=lipu-linku/lipu" />
-  </a>
-</div>
+[![Github Contributors](https://contrib.rocks/image?repo=lipu-linku/lipu)](https://github.com/lipu-linku/lipu/graphs/contributors)
 
 ## License
 

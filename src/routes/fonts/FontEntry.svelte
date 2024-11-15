@@ -94,8 +94,8 @@
 				Loading...
 			{:then}
 				<span transition:fly={{ y: 10, duration: 200 }} style="font-family: '{font.name}'">
-					{#if fontSentence.current.match(/[\u{F1900}-\u{F19FF}]/gu)}{/if}
-					{fontSentence.current.trim()}
+					{#if fontSentence.value.match(/[\u{F1900}-\u{F19FF}]/gu)}{/if}
+					{fontSentence.value.trim()}
 				</span>
 			{:catch}
 				The font failed to load.
