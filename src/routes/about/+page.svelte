@@ -17,18 +17,6 @@
 	import DiscordIcon from "~icons/simple-icons/discord";
 
 	let openAccordion = $state<string>();
-
-	// const switchTo = (item: string) => () => (openAccordion = item);
-
-	// run(() => {
-	// 	if (openAccordion && browser)
-	// 		window.scrollTo({
-	// 			top: 0,
-	// 			behavior: window.matchMedia("(prefers-reduced-motion: no-preference)").matches
-	// 				? "smooth"
-	// 				: "auto",
-	// 		});
-	// });
 </script>
 
 <svelte:head>
@@ -152,7 +140,7 @@
 			<h2><code>/acro</code></h2>
 			<p>
 				Finds toki pona words beginning with each letter in your request.<br />
-				You can customise the set of words (only pu -- pu and ku suli -- pu and ku -- all available words)
+				You can customise the set of words (only pu/pu and ku suli/pu and ku/all available words)
 				will be used using
 				<code class="whitespace-nowrap">/preferences acro</code> (the default is pu and ku suli).
 			</p>
@@ -235,7 +223,7 @@
 			</p>
 			<p>
 				The website is available as free, open source software, under the GPL-3 license. It is built
-				using <a href="https://kit.svelte.dev/" target="_blank" rel="noopener noreferrer">
+				using <a href="https://svelte.dev/" target="_blank" rel="noopener noreferrer">
 					SvelteKit
 				</a>,
 				<a href="https://tailwindcss.com/" target="_blank" rel="noopener noreferrer">tailwindcss</a>
@@ -276,13 +264,13 @@
 			</p>
 
 			<Button
-				href="https://github.com/lipu-linku/ijo/blob/main/survey/2023/README.md"
+				href="https://github.com/lipu-linku/ijo/blob/main/survey/2024/README.md"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="whitespace-nowrap"
 				variant="secondary"
 			>
-				See the 2023 Word Survey results here!
+				See the 2024 Word Survey results here!
 			</Button>
 		</AccordionContent>
 	</AccordionItem>
@@ -298,8 +286,14 @@
 	<DiscordIcon /> kulupu Linku on Discord
 </Button>
 
-<p>
-	Also see <a class="underline" href="https://nimi.li" target="_blank" rel="noopener noreferrer"
+<p class="w-2/3 text-center text-balance">
+	Also, check out <a class="underline" href="https://nimi.li" target="_blank" rel="noopener noreferrer"
 		>nimi.li</a
-	>, a third party frontend for the website created by ijo Tani.
+	>, a third party frontend for sona Linku created by ijo Tani, and
+	<a
+		class="underline"
+		href="https://lipamanka.gay/essays/dictionary/"
+		target="_blank"
+		rel="noopener noreferrer">lipamanka's dictionary</a
+	>, which defines words based on their semantic space.
 </p>
