@@ -67,7 +67,7 @@
 		</DesktopNav>
 		<MobileNav {links}>
 			{@render children?.()}
-			
+
 			<LanguageSwitch selected={language.id} localeList={languages} />
 		</MobileNav>
 

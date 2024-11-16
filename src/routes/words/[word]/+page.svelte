@@ -151,9 +151,9 @@
 										<InfoIcon class="size-4 " />
 									</Tooltip.Trigger>
 									<Tooltip.Content class="max-w-[min(55ch,80%)]">
-										Each ku definition is assigned a frequency index from ½ to 5, which describes how
-										commonly it was translated that way in the toki pona community, according to a
-										survey.
+										Each ku definition is assigned a frequency index from ½ to 5, which describes
+										how commonly it was translated that way in the toki pona community, according to
+										a survey.
 									</Tooltip.Content>
 								</Tooltip.Root>
 							</Tooltip.Provider>

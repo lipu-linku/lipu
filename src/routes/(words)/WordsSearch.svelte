@@ -11,7 +11,7 @@
 		favorites,
 		onlyFavorites,
 		searchQuery,
-		writingSystem
+		writingSystem,
 	} from "$lib/state.svelte";
 	import { cn, keys } from "$lib/utils";
 
@@ -73,7 +73,7 @@
 
 <svelte:window onkeydown={focusSearch} />
 
-<form class={cn("px-2 md:mx-auto md:justify-center items-center gap-2", className)} role="search">
+<form class={cn("px-2 items-center gap-2", className)} role="search">
 	<Input
 		class="w-auto bg-background flex-1 md:flex-none"
 		placeholder="o alasa e nimi"
@@ -139,10 +139,7 @@
 
 					<DropdownMenu.Separator />
 
-					<DropdownMenu.CheckboxItem
-						closeOnSelect={false}
-						bind:checked={etymologiesEnabled.value}
-					>
+					<DropdownMenu.CheckboxItem closeOnSelect={false} bind:checked={etymologiesEnabled.value}>
 						Show Etymologies
 					</DropdownMenu.CheckboxItem>
 

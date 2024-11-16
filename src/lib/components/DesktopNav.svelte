@@ -38,7 +38,7 @@
 		{/each}
 	</nav>
 
-	<div class="flex-1 flex">
+	<div class="flex-1 flex justify-end">
 		{@render children?.()}
 	</div>
 </div>

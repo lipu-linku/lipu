@@ -61,7 +61,7 @@
 
 <svelte:window onkeydown={focusSearch} />
 
-<form class={cn("px-2 md:mx-auto md:justify-center items-center gap-2", className)} role="search">
+<form class={cn("px-2 items-center gap-2", className)} role="search">
 	<Input
 		class="w-auto bg-background flex-1 md:flex-none"
 		placeholder="o alasa e nimi"
@@ -86,10 +86,7 @@
 			<DropdownMenu.Content trapFocus class="max-md:!inset-x-0 max-md:mx-auto w-[90vw] md:w-auto">
 				<DropdownMenu.Label class="text-center">Search Options</DropdownMenu.Label>
 				<DropdownMenu.Group>
-					<DropdownMenu.CheckboxItem
-						closeOnSelect={false}
-						bind:checked={etymologiesEnabled.value}
-					>
+					<DropdownMenu.CheckboxItem closeOnSelect={false} bind:checked={etymologiesEnabled.value}>
 						Show Etymologies
 					</DropdownMenu.CheckboxItem>
 

@@ -22,7 +22,7 @@
 
 	const { font }: Props = $props();
 
-	let cardElement = $state<HTMLDivElement>();
+	let cardElement = $state<HTMLDivElement | null>(null);
 	let intersecting = $state(false);
 	useIntersectionObserver(
 		() => cardElement,
