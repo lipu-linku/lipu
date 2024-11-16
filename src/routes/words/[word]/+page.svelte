@@ -143,18 +143,20 @@
 					<div class="flex flex-col justify-center gap-2">
 						<h3 class="flex items-center gap-2 font-medium text-xl">
 							ku definitions
-							<Tooltip.Root>
-								<Tooltip.Trigger
-									class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
-								>
-									<InfoIcon class="size-4 " />
-								</Tooltip.Trigger>
-								<Tooltip.Content class="max-w-[min(55ch,80%)]">
-									Each ku definition is assigned a frequency index from ½ to 5, which describes how
-									commonly it was translated that way in the toki pona community, according to a
-									survey.
-								</Tooltip.Content>
-							</Tooltip.Root>
+							<Tooltip.Provider>
+								<Tooltip.Root>
+									<Tooltip.Trigger
+										class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
+									>
+										<InfoIcon class="size-4 " />
+									</Tooltip.Trigger>
+									<Tooltip.Content class="max-w-[min(55ch,80%)]">
+										Each ku definition is assigned a frequency index from ½ to 5, which describes how
+										commonly it was translated that way in the toki pona community, according to a
+										survey.
+									</Tooltip.Content>
+								</Tooltip.Root>
+							</Tooltip.Provider>
 						</h3>
 
 						<Collapsible content={listFormat.format(kuString)} />
@@ -191,23 +193,25 @@
 						<div class="flex flex-col justify-center gap-2">
 							<h3 class="flex items-center gap-2 font-medium text-xl">
 								Semantic space
-								<Tooltip.Root>
-									<Tooltip.Trigger
-										class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
-									>
-										<InfoIcon class="size-4 " />
-									</Tooltip.Trigger>
-									<Tooltip.Content class="max-w-[min(55ch,80%)]">
-										This information is sourced from <a
-											class="underline"
-											href="https://lipamanka.gay/essays/dictionary"
-											target="_blank"
-											rel="noopener noreferrer"
+								<Tooltip.Provider>
+									<Tooltip.Root>
+										<Tooltip.Trigger
+											class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
 										>
-											lipamanka's semantic space dictionary
-										</a>. If you think something is wrong, please contact it!
-									</Tooltip.Content>
-								</Tooltip.Root>
+											<InfoIcon class="size-4 " />
+										</Tooltip.Trigger>
+										<Tooltip.Content class="max-w-[min(55ch,80%)]">
+											This information is sourced from <a
+												class="underline"
+												href="https://lipamanka.gay/essays/dictionary"
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												lipamanka's semantic space dictionary
+											</a>. If you think something is wrong, please contact it!
+										</Tooltip.Content>
+									</Tooltip.Root>
+								</Tooltip.Provider>
 							</h3>
 
 							<Collapsible separator=" " content={semantic} />
