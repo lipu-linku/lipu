@@ -16,8 +16,13 @@
 	const { fonts } = $derived(data);
 
 	let ucsur = $state(false);
+	let ligatures = $state(false);
 
-	const filtered = $derived(fonts.filter(([, f]) => (ucsur ? f.ucsur : true)));
+	const filtered = $derived(
+		fonts
+			.filter(([, f]) => (ucsur ? f.ucsur : true))
+			.filter(([, f]) => (ligatures ? f.ligatures : true)),
+	);
 
 	let sidebarOpen = $state(true);
 </script>
@@ -64,6 +69,11 @@
 							<div class="flex items-center space-x-2">
 								<Checkbox id="ucsur-input" aria-labelledby="ucsur-label" bind:checked={ucsur} />
 								<Label for="ucsur-input" id="ucsur-label">Only Show UCSUR Fonts</Label>
+							</div>
+							
+							<div class="flex items-center space-x-2">
+								<Checkbox id="ligatures-input" aria-labelledby="ligatures-label" bind:checked={ligatures} />
+								<Label for="ligatures-input" id="ligatures-label">Only Show Ligature Fonts</Label>
 							</div>
 						</div>
 					</CardContent>
