@@ -125,7 +125,7 @@
 			</Button>
 		</div>
 
-		<div>
+		<div class="flex items-center justify-end flex-wrap">
 			{#if writingSystem.value === "sitelen_pona" && word.representations?.ligatures}
 				{#each word.representations.ligatures.slice(0, 3) as glyph}
 					<span class="text-center font-sitelen-pona">{glyph}</span>
