@@ -52,11 +52,11 @@
 			container: "border",
 		}}
 	>
-		{#snippet children(data: { date: Date; value: number })}
+		{#snippet children(data: { data: { date: Date; value: number } })}
 			<Tooltip.Header>
-				{data.date.toLocaleDateString("en", { month: "short", year: "numeric" })}
+				{data.data.date.toLocaleDateString("en", { month: "short", year: "numeric" })}
 			</Tooltip.Header>
-			<Tooltip.Item label="Usage" value="{data.value}%" />
+			<Tooltip.Item label="Usage" value="{data.data.value}%" />
 		{/snippet}
 	</Tooltip.Root>
 </Chart>

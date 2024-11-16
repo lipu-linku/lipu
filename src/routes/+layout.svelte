@@ -7,10 +7,9 @@
 	import { pwaInfo } from "virtual:pwa-info";
 
 	import { useRegisterSW } from "virtual:pwa-register/svelte";
+	import { fly } from "svelte/transition";
 	import UpArrowIcon from "~icons/lucide/arrow-up";
 	import "../app.postcss";
-	import { browser } from "$app/environment";
-	import { fly } from "svelte/transition";
 
 	const { children } = $props();
 
@@ -35,9 +34,7 @@
 	let outerHeight = $state<number>(0);
 </script>
 
-{#if browser}
-	<ModeWatcher />
-{/if}
+<ModeWatcher />
 
 <svelte:head>
 	{@html webManifest}
