@@ -1,12 +1,12 @@
 import { browser } from "$app/environment";
-import type { UsageCategory } from "@kulupu-linku/sona/utils";
-import { persisted, type Serializer } from "svelte-persisted-store";
-import { writable } from "svelte/store";
 import { entries, fromEntries } from "$lib/utils";
+import type { UsageCategory } from "@kulupu-linku/sona/utils";
+import { persisted, type Serializer } from "./storage.svelte";
+import { SvelteSet } from "svelte/reactivity";
 
-export const searchQuery = writable(
-	browser ? new URLSearchParams(window.location.search).get("q") ?? "" : "",
-);
+export const searchQuery = $state({
+	value: browser ? (new URLSearchParams(window.location.search).get("q") ?? "") : "",
+});
 
 export const defaultCategories: Record<Exclude<UsageCategory, "sandbox">, boolean> = {
 	core: true,
@@ -34,18 +34,14 @@ export const categoriesSerializer: Serializer<typeof defaultCategories> = {
 			.join(","),
 };
 
-export const categories = persisted("categories", defaultCategories, {
-	serializer: categoriesSerializer,
-});
+export const categories = persisted("categories", defaultCategories, categoriesSerializer);
 
-export const favorites = persisted<Set<string>>("favorites", new Set(), {
-	serializer: {
-		parse: (text) => {
-			const noPadding = /,*(.*),*/.exec(text)?.[1] ?? "";
-			return new Set(noPadding !== "" ? noPadding.split(",") : []);
-		},
-		stringify: (obj) => [...obj.values()].join(","),
+export const favorites = persisted("favorites", new SvelteSet<string>(), {
+	parse: (text) => {
+		const noPadding = /,*(.*),*/.exec(text)?.[1] ?? "";
+		return new SvelteSet(noPadding !== "" ? noPadding.split(",") : []);
 	},
+	stringify: (obj) => [...(obj?.values() ?? [])].join(","),
 });
 
 export const writingSystem = persisted<"sitelen_pona" | "sitelen_sitelen">(

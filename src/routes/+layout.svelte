@@ -1,40 +1,37 @@
 <script lang="ts">
-	import { onMount } from "svelte";
-	import { ModeWatcher } from "mode-watcher";
 	import { page } from "$app/stores";
-	import { flyAndScale } from "$lib/utils";
 	import { Button } from "$lib/components/ui/button";
+	import { ModeWatcher } from "mode-watcher";
 
-	import { pwaInfo } from "virtual:pwa-info";
 	import { pwaAssetsHead } from "virtual:pwa-assets/head";
+	import { pwaInfo } from "virtual:pwa-info";
 
-	import "../app.postcss";
+	import { useRegisterSW } from "virtual:pwa-register/svelte";
+	import { fly } from "svelte/transition";
 	import UpArrowIcon from "~icons/lucide/arrow-up";
+	import "../app.postcss";
 
-	$: webManifest = pwaInfo ? pwaInfo.webManifest.linkTag : "";
+	const { children } = $props();
 
-	onMount(async () => {
-		if (pwaInfo) {
-			const { registerSW } = await import("virtual:pwa-register");
-			registerSW({
-				immediate: true,
-				onRegistered(r) {
-					r &&
-						setInterval(() => {
-							console.log("Checking for sw update");
-							r.update();
-						}, 20 * 1000);
-					console.log(`SW Registered: ${r}`);
-				},
-				onRegisterError(error) {
-					console.log("SW registration error", error);
-				},
-			});
-		}
+	const webManifest = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : "");
+
+	useRegisterSW({
+		immediate: true,
+		onRegistered(r) {
+			r &&
+				setInterval(() => {
+					console.log("Checking for sw update");
+					r.update();
+				}, 20 * 1000);
+			console.log(`SW Registered: ${r}`);
+		},
+		onRegisterError(error) {
+			console.log("SW registration error", error);
+		},
 	});
 
-	let scrollY: number;
-	let outerHeight: number;
+	let scrollY = $state<number>(0);
+	let outerHeight = $state<number>(0);
 </script>
 
 <ModeWatcher />
@@ -52,14 +49,14 @@
 <svelte:window bind:scrollY bind:outerHeight />
 
 <div class="relative my-0 mx-auto p-0 flex flex-col min-h-dvh">
-	<slot />
+	{@render children()}
 
 	{#if !$page.params.word && scrollY > 1.05 * outerHeight}
-		<div transition:flyAndScale={{ y: 10 }} class="fixed bottom-4 right-4">
+		<div transition:fly={{ y: 10, duration: 150 }} class="fixed bottom-4 right-4">
 			<Button
 				class="flex items-center gap-2"
 				variant="outline"
-				on:click={() =>
+				onclick={() =>
 					window.scrollTo({
 						top: 0,
 						behavior: window.matchMedia("(prefers-reduced-motion: no-preference)").matches

@@ -7,47 +7,49 @@
 
 	import LanguagesIcon from "~icons/lucide/languages";
 
-	export let localeList: Languages;
-	export let selected: keyof Languages;
+	interface Props {
+		localeList: Languages;
+		selected: keyof Languages;
+		triggerClass?: string;
+		contentClass?: string;
+	}
 
-	export let triggerClass = "";
-	export let contentClass = "";
+	const { localeList, selected, triggerClass = "", contentClass = "" }: Props = $props();
 
-	$: items = Object.entries(localeList).map(([id, lang]) => ({
-		value: id,
-		label: lang.name.endonym ?? lang.name.en,
-	}));
-
-	$: selectedItem = localeList[selected];
-	$: label = selectedItem.name.endonym ?? selectedItem.name.en;
+	const items = $derived(
+		new Map(
+			Object.entries(localeList).map(
+				([id, lang]) => [id, lang.name.endonym ?? lang.name.en] as const,
+			),
+		),
+	);
 </script>
 
 <Select.Root
-	{items}
-	selected={{ value: selectedItem.id, label }}
-	onSelectedChange={(item) => {
+	type="single"
+	value={selected}
+	onValueChange={(item) => {
 		if (item) {
-			localStorage.setItem("lang", item.value);
+			localStorage.setItem("lang", item);
 			const url = new URL($page.url);
-			url.searchParams.set("lang", item.value);
+			url.searchParams.set("lang", item);
 			goto(url);
 		}
 	}}
 >
 	<Select.Trigger
-		class={cn("md:max-w-48 md:w-auto bg-background md:justify-start gap-2", triggerClass)}
+		class={cn(
+			"overflow-ellipsis md:max-w-48 md:w-fit bg-background md:justify-start gap-2",
+			triggerClass,
+		)}
 	>
 		<LanguagesIcon aria-label="Languages icon" class="size-4" />
-		<Select.Value class="line-clamp-1 overflow-ellipsis">
-			{label}
-		</Select.Value>
+		{items.get(selected)}
 	</Select.Trigger>
 
-	<Select.Content sameWidth={false} class={cn("max-h-[50dvh] overflow-y-scroll", contentClass)}>
-		{#each items as { value, label } (value)}
+	<Select.Content class={contentClass}>
+		{#each items as [value, label] (value)}
 			<Select.Item {label} {value}>{label}</Select.Item>
 		{/each}
 	</Select.Content>
-
-	<Select.Input />
 </Select.Root>

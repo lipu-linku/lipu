@@ -5,7 +5,7 @@
 	import WordsSearch from "../../(words)/WordsSearch.svelte";
 	import UsageGraph from "./UsageGraph.svelte";
 
-	import { Button } from "$lib/components/ui/button";
+	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import * as Tooltip from "$lib/components/ui/tooltip";
@@ -13,46 +13,43 @@
 	import { page } from "$app/stores";
 	import { getTranslatedData } from "@kulupu-linku/sona/utils";
 
+	import { cn } from "$lib/utils";
 	import BackIcon from "~icons/lucide/arrow-left";
 	import CopyIcon from "~icons/lucide/copy";
 	import InfoIcon from "~icons/lucide/info";
 	import ShareButton from "~icons/lucide/share-2";
-	import { cn } from "$lib/utils";
 
-	export let data;
-	$: ({ word, language, languages } = data);
+	const { data } = $props();
+	const { word, language, languages } = $derived(data);
 
-	$: usageScore = Object.values(word.usage).at(-1) ?? 0;
-	$: definition = getTranslatedData(word, "definition", language.id);
-	$: commentary = getTranslatedData(word, "commentary", language.id);
-	$: etymology = getTranslatedData(word, "etymology", language.id);
-	$: sitelenPonaEtymology = getTranslatedData(word, "sp_etymology", language.id);
+	const usageScore = $derived(Object.values(word.usage).at(-1) ?? 0);
+	const definition = $derived(getTranslatedData(word, "definition", language.id));
+	const commentary = $derived(getTranslatedData(word, "commentary", language.id));
+	const etymology = $derived(getTranslatedData(word, "etymology", language.id));
+	const sitelenPonaEtymology = $derived(getTranslatedData(word, "sp_etymology", language.id));
 
-	$: hasRepresentations =
+	const hasRepresentations = $derived(
 		word.representations &&
-		(word.representations.ligatures?.length ||
-			word.representations.sitelen_emosi ||
-			word.representations.sitelen_jelo?.length ||
-			word.representations.sitelen_sitelen ||
-			word.representations.ucsur);
+			(word.representations.ligatures?.length ||
+				word.representations.sitelen_emosi ||
+				word.representations.sitelen_jelo?.length ||
+				word.representations.sitelen_sitelen ||
+				word.representations.ucsur),
+	);
 
-	$: pu_verbatim =
+	const pu_verbatim = $derived(
 		word.pu_verbatim?.[
 			language.id in word.pu_verbatim
 				? (language.id as keyof (typeof word)["pu_verbatim"])
 				: ("en" as const)
-		];
+		],
+	);
 
-	const englishFormat = new Intl.ListFormat("en", { style: "narrow" });
-	let listFormat = new Intl.ListFormat("en");
-	$: {
-		try {
-			listFormat = new Intl.ListFormat(language.locale);
-		} catch {
-			// this is here to allow for proper formatting,
-			// except for languages browsers don't support
-		}
-	}
+	const listFormat = $derived(
+		new Intl.ListFormat(Intl.ListFormat.supportedLocalesOf([language.locale, "en"]), {
+			style: "short",
+		}),
+	);
 
 	const usageToIndex = (usage: number) => {
 		if (usage > 80) return "⁵";
@@ -91,7 +88,7 @@
 
 <main class="flex-1 max-w-screen-2xl 2xl:mx-auto flex flex-col gap-4 p-4 pb-2">
 	<header class="flex-1 flex items-center gap-4">
-		<Button href="/" class="justify-self-end" variant="ghost" size="icon">
+		<Button onclick={() => window.history.back()} class="justify-self-end" variant="ghost" size="icon">
 			<BackIcon />
 		</Button>
 
@@ -102,21 +99,19 @@
 				<AudioButton audio={word.audio} />
 			{/if}
 			<DropdownMenu.Root>
-				<DropdownMenu.Trigger asChild let:builder>
-					<Button builders={[builder]} variant="outline" size="icon">
-						<ShareButton />
-					</Button>
+				<DropdownMenu.Trigger class={buttonVariants({ variant: "outline", size: "icon" })}>
+					<ShareButton />
 				</DropdownMenu.Trigger>
 				<DropdownMenu.Content>
 					<DropdownMenu.Label>Share word</DropdownMenu.Label>
 					<DropdownMenu.Separator />
 
-					<DropdownMenu.Item on:click={() => navigator.clipboard.writeText($page.url.toString())}>
+					<DropdownMenu.Item onclick={() => navigator.clipboard.writeText($page.url.toString())}>
 						<CopyIcon class="inline mr-2 size-4" />
 						Copy URL
 					</DropdownMenu.Item>
 
-					<DropdownMenu.Item on:click={copyCodepoint}>
+					<DropdownMenu.Item onclick={copyCodepoint}>
 						<span class="text-2xl -ml-1 mr-2 font-sitelen-pona">sitelen-pona</span>
 						sitelen pona
 					</DropdownMenu.Item>
@@ -133,7 +128,7 @@
 	>
 		<Card.Root>
 			<Card.Header>
-				<Card.Title class="text-2xl" tag="h2">Meaning</Card.Title>
+				<Card.Title class="text-2xl" level={2}>Meaning</Card.Title>
 			</Card.Header>
 			<Card.Content class="flex flex-col gap-3">
 				<div class="flex flex-col justify-center gap-2">
@@ -148,21 +143,23 @@
 					<div class="flex flex-col justify-center gap-2">
 						<h3 class="flex items-center gap-2 font-medium text-xl">
 							ku definitions
-							<Tooltip.Root>
-								<Tooltip.Trigger
-									class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
-								>
-									<InfoIcon class="size-4 " />
-								</Tooltip.Trigger>
-								<Tooltip.Content class="max-w-[min(55ch,80%)]">
-									Each ku definition is assigned a frequency index from ½ to 5, which describes how
-									commonly it was translated that way in the toki pona community, according to a
-									survey.
-								</Tooltip.Content>
-							</Tooltip.Root>
+							<Tooltip.Provider>
+								<Tooltip.Root>
+									<Tooltip.Trigger
+										class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
+									>
+										<InfoIcon class="size-4 " />
+									</Tooltip.Trigger>
+									<Tooltip.Content class="max-w-[min(55ch,80%)]">
+										Each ku definition is assigned a frequency index from ½ to 5, which describes
+										how commonly it was translated that way in the toki pona community, according to
+										a survey.
+									</Tooltip.Content>
+								</Tooltip.Root>
+							</Tooltip.Provider>
 						</h3>
 
-						<Collapsible content={englishFormat.format(kuString)} />
+						<Collapsible content={listFormat.format(kuString)} />
 					</div>
 				{/if}
 
@@ -196,21 +193,25 @@
 						<div class="flex flex-col justify-center gap-2">
 							<h3 class="flex items-center gap-2 font-medium text-xl">
 								Semantic space
-								<Tooltip.Root>
-									<Tooltip.Trigger
-										class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
-									>
-										<InfoIcon class="size-4 " />
-									</Tooltip.Trigger>
-									<Tooltip.Content class="max-w-[min(55ch,80%)]">
-										This information is sourced from <a
-											class="underline"
-											href="https://lipamanka.gay/essays/dictionary"
-											target="_blank"
-											rel="noopener noreferrer">lipamanka's semantic space dictionary</a
-										>. If you think something is wrong, please contact it!
-									</Tooltip.Content>
-								</Tooltip.Root>
+								<Tooltip.Provider>
+									<Tooltip.Root>
+										<Tooltip.Trigger
+											class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
+										>
+											<InfoIcon class="size-4 " />
+										</Tooltip.Trigger>
+										<Tooltip.Content class="max-w-[min(55ch,80%)]">
+											This information is sourced from <a
+												class="underline"
+												href="https://lipamanka.gay/essays/dictionary"
+												target="_blank"
+												rel="noopener noreferrer"
+											>
+												lipamanka's semantic space dictionary
+											</a>. If you think something is wrong, please contact it!
+										</Tooltip.Content>
+									</Tooltip.Root>
+								</Tooltip.Provider>
 							</h3>
 
 							<Collapsible separator=" " content={semantic} />
@@ -223,7 +224,7 @@
 		{#if hasRepresentations}
 			<Card.Root>
 				<Card.Header>
-					<Card.Title class="text-2xl" tag="h2">Usage</Card.Title>
+					<Card.Title class="text-2xl" level={2}>Usage</Card.Title>
 				</Card.Header>
 				<Card.Content class="flex flex-col gap-3">
 					{#if word.representations?.ligatures && word.representations?.ligatures?.length > 0}
@@ -266,7 +267,7 @@
 
 							<p class="flex items-center gap-2">
 								{word.representations.ucsur}
-								<Button class="p-1 h-fit" variant="ghost" on:click={copyCodepoint}>
+								<Button class="p-1 h-fit" variant="ghost" onclick={copyCodepoint}>
 									<CopyIcon />
 								</Button>
 							</p>
@@ -289,7 +290,7 @@
 
 		<Card.Root>
 			<Card.Header>
-				<Card.Title class="text-2xl" tag="h2">More Info</Card.Title>
+				<Card.Title class="text-2xl" level={2}>More Info</Card.Title>
 			</Card.Header>
 			<Card.Content class="flex flex-col gap-3">
 				{#if commentary}
@@ -363,7 +364,7 @@
 		{#if Object.keys(word.usage).length > 1}
 			<Card.Root class="col-span-3">
 				<Card.Header>
-					<Card.Title class="text-2xl" tag="h2">Usage Trend</Card.Title>
+					<Card.Title class="text-2xl" level={2}>Usage Trend</Card.Title>
 				</Card.Header>
 				<Card.Content class="h-[600px] p-4 px-8">
 					<UsageGraph data={word.usage} />

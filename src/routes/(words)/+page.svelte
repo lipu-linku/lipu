@@ -8,28 +8,30 @@
 		favorites,
 		onlyFavorites,
 		searchQuery,
-	} from "$lib/state";
+	} from "$lib/state.svelte";
 	import logo from "$lib/assets/icon-light.png?url";
 
-	export let data;
-	$: ({ words, language } = data);
+	const { data } = $props();
+	const { words, language } = $derived(data);
 
 	const hasDisclaimer = false;
 
-	$: categoriesParam = $page.url.searchParams.get("categories");
+	const categoriesParam = $derived($page.url.searchParams.get("categories"));
 
-	$: wordList = $page.url.searchParams.get("list")?.split(",");
-	$: sorted_filtered_dictionary = wordSearch(
-		$page.url.searchParams.get("q") ?? $searchQuery,
-		words,
-		{
-			sandbox: false,
-			...(categoriesParam ? categoriesSerializer.parse(categoriesParam) : $categories),
-		},
-		$favorites,
-		$onlyFavorites,
-		wordList,
-		language.id,
+	const wordList = $derived($page.url.searchParams.get("list")?.split(","));
+	const sorted_filtered_dictionary = $derived(
+		wordSearch(
+			$page.url.searchParams.get("q") ?? searchQuery.value,
+			words,
+			{
+				sandbox: false,
+				...(categoriesParam ? categoriesSerializer.parse(categoriesParam) : categories.value),
+			},
+			favorites.value,
+			onlyFavorites.value,
+			wordList,
+			language.id,
+		),
 	);
 </script>
 
@@ -44,7 +46,8 @@
 <main class="flex-1 my-4 space-y-4">
 	{#if hasDisclaimer}
 		<p class="text-center text-balance">
-			The <a href="https://linku.la/wile">2024 Linku usage survey</a> is now open! Please take the survey to improve the dictionary!
+			The <a href="https://linku.la/wile">2024 Linku usage survey</a> is now open! Please take the survey
+			to improve the dictionary!
 		</p>
 	{/if}
 	<ul class="flex flex-col items-stretch gap-2 mx-auto max-w-[min(95vw,1000px)]">

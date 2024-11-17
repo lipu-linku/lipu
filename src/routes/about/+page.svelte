@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { run } from "svelte/legacy";
+
 	import { browser } from "$app/environment";
 	import {
 		Accordion,
@@ -14,19 +16,7 @@
 	import RobotIcon from "~icons/mdi/robot-excited";
 	import DiscordIcon from "~icons/simple-icons/discord";
 
-	let openAccordion: "dataset" | "bot" | "translations" | "website" | "survey" | undefined;
-
-	const switchTo = (item: NonNullable<typeof openAccordion>) => () => (openAccordion = item);
-
-	$: {
-		if (openAccordion && browser)
-			window.scrollTo({
-				top: 0,
-				behavior: window.matchMedia("(prefers-reduced-motion: no-preference)").matches
-					? "smooth"
-					: "auto",
-			});
-	}
+	let openAccordion = $state<string>();
 </script>
 
 <svelte:head>
@@ -36,12 +26,12 @@
 <h1 class="font-medium text-4xl">About Linku</h1>
 
 <p class="[&>button]:underline w-[65%] text-center text-balance">
-	Linku is a <button on:click={switchTo("dataset")}>dataset</button> with many
-	<button on:click={switchTo("translations")}>translations</button>, a
-	<button on:click={switchTo("bot")}>Discord bot</button>, a
-	<button on:click={switchTo("website")}>website</button>, and an
-	<button on:click={switchTo("survey")}>annual survey</button> created by kala Asi and contributed to
-	by jan Ke Tami, jan Telesi, jan Kekan San, and many others for the purpose of collecting and displaying
+	Linku is a <button onclick={() => (openAccordion = "dataset")}>dataset</button> with many
+	<button onclick={() => (openAccordion = "translations")}>translations</button>, a
+	<button onclick={() => (openAccordion = "bot")}>Discord bot</button>, a
+	<button onclick={() => (openAccordion = "website")}>website</button>, and an
+	<button onclick={() => (openAccordion = "survey")}>annual survey</button> created by kala Asi and contributed
+	to by jan Ke Tami, jan Telesi, jan Kekan San, and many others for the purpose of collecting and displaying
 	toki pona dictionary information accurate to current use.
 </p>
 
@@ -58,6 +48,7 @@
 </p>
 
 <Accordion
+	type="single"
 	bind:value={openAccordion}
 	class="w-[65%] [&_:is(a,_button):not([data-button-root],_[data-accordion-trigger])]:underline [&_[data-bits-accordion-content]>div]:flex [&_[data-bits-accordion-content]>div]:flex-col [&_[data-bits-accordion-content]>div]:gap-3"
 >
@@ -76,10 +67,10 @@
 			</p>
 			<p>
 				Changes to the source language data are automatically synced to
-				<button on:click={switchTo("translations")}>Crowdin</button>, and changes to Crowdin
-				translations are automatically synced to the dataset. Subsequently, all data in the dataset
-				is made available via the API hosted alongside
-				<button on:click={switchTo("website")}>the website</button>.
+				<button onclick={() => (openAccordion = "translations")}>Crowdin</button>, and changes to
+				Crowdin translations are automatically synced to the dataset. Subsequently, all data in the
+				dataset is made available via the API hosted alongside
+				<button onclick={() => (openAccordion = "website")}>the website</button>.
 			</p>
 			<p>
 				The <a href="https://github.com/lipu-linku">Linku github organization</a> is owned by kala
@@ -97,8 +88,8 @@
 				<a href="https://github.com/lipu-linku/jasima" target="_blank" rel="noopener noreferrer"
 					>here</a
 				>. Also see
-				<button on:click={switchTo("translations")}>nimi Linku</button> for information about the previous
-				Google sheet.
+				<button onclick={() => (openAccordion = "translations")}>nimi Linku</button> for information
+				about the previous Google sheet.
 			</p>
 		</AccordionContent>
 	</AccordionItem>
@@ -149,7 +140,7 @@
 			<h2><code>/acro</code></h2>
 			<p>
 				Finds toki pona words beginning with each letter in your request.<br />
-				You can customise the set of words (only pu -- pu and ku suli -- pu and ku -- all available words)
+				You can customise the set of words (only pu/pu and ku suli/pu and ku/all available words)
 				will be used using
 				<code class="whitespace-nowrap">/preferences acro</code> (the default is pu and ku suli).
 			</p>
@@ -189,8 +180,8 @@
 			<p>
 				If there are any changes on Crowdin, such as approved translations or newly available
 				languages, they are automatically mirrored to
-				<button on:click={switchTo("dataset")}>the dataset</button>. This also works in reverse;
-				changes to the dataset are mirrored to Crowdin, including changes to source data.
+				<button onclick={() => (openAccordion = "dataset")}>the dataset</button>. This also works in
+				reverse; changes to the dataset are mirrored to Crowdin, including changes to source data.
 			</p>
 			<p>
 				Our Crowdin instance is managed by jan Kekan San, kala Asi, and jan Tepo, with specific
@@ -224,7 +215,7 @@
 			</p>
 			<p>
 				The data is loaded from the
-				<button on:click={switchTo("dataset")}>sona dataset</button>.
+				<button onclick={() => (openAccordion = "dataset")}>sona dataset</button>.
 			</p>
 			<p>
 				You may choose the language you want definitions to use, and filter by the words'
@@ -232,7 +223,7 @@
 			</p>
 			<p>
 				The website is available as free, open source software, under the GPL-3 license. It is built
-				using <a href="https://kit.svelte.dev/" target="_blank" rel="noopener noreferrer">
+				using <a href="https://svelte.dev/" target="_blank" rel="noopener noreferrer">
 					SvelteKit
 				</a>,
 				<a href="https://tailwindcss.com/" target="_blank" rel="noopener noreferrer">tailwindcss</a>
@@ -258,10 +249,12 @@
 				it.
 			</p>
 			<p>
-				This data is used to fill out <button on:click={switchTo("dataset")}>the dataset</button>
+				This data is used to fill out <button onclick={() => (openAccordion = "dataset")}
+					>the dataset</button
+				>
 				with up to date information about how Toki Pona is used, to make the Linku dictionary provided
-				by <button on:click={switchTo("website")}>the website</button> and
-				<button on:click={switchTo("bot")}>the Discord bot</button> as accurate as possible.
+				by <button onclick={() => (openAccordion = "website")}>the website</button> and
+				<button onclick={() => (openAccordion = "bot")}>the Discord bot</button> as accurate as possible.
 			</p>
 			<p>
 				The survey is distributed via Google forms, and its execution and analysis are discussed in
@@ -271,13 +264,13 @@
 			</p>
 
 			<Button
-				href="https://github.com/lipu-linku/ijo/blob/main/survey/2023/README.md"
+				href="https://github.com/lipu-linku/ijo/blob/main/survey/2024/README.md"
 				target="_blank"
 				rel="noopener noreferrer"
 				class="whitespace-nowrap"
 				variant="secondary"
 			>
-				See the 2023 Word Survey results here!
+				See the 2024 Word Survey results here!
 			</Button>
 		</AccordionContent>
 	</AccordionItem>
@@ -293,8 +286,14 @@
 	<DiscordIcon /> kulupu Linku on Discord
 </Button>
 
-<p>
-	Also see <a class="underline" href="https://nimi.li" target="_blank" rel="noopener noreferrer"
+<p class="w-2/3 text-center text-balance">
+	Also, check out <a class="underline" href="https://nimi.li" target="_blank" rel="noopener noreferrer"
 		>nimi.li</a
-	>, a third party frontend for the website created by ijo Tani.
+	>, a third party frontend for sona Linku created by ijo Tani, and
+	<a
+		class="underline"
+		href="https://lipamanka.gay/essays/dictionary/"
+		target="_blank"
+		rel="noopener noreferrer">lipamanka's dictionary</a
+	>, which defines words based on their semantic space.
 </p>

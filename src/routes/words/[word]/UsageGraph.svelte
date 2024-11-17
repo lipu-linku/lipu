@@ -2,16 +2,22 @@
 	import { cn } from "$lib/utils";
 	import type { Word } from "@kulupu-linku/sona";
 	import { scaleTime } from "d3-scale";
-	import { Axis, Chart, Highlight, Points, Spline, Svg, Tooltip, TooltipItem } from "layerchart";
+	import { Axis, Chart, Highlight, Points, Spline, Svg, Tooltip } from "layerchart";
 	import type { ComponentProps } from "svelte";
 
-	export let data: Word["usage"];
+	interface Props {
+		data: Word["usage"];
+	}
+
+	const { data }: Props = $props();
 
 	const tickLabelProps: ComponentProps<Axis>["tickLabelProps"] = {
 		class: "fill-current font-semibold m-3",
 	};
 
-	$: plots = Object.entries(data).map(([date, v]) => ({ date: new Date(date), value: v }));
+	const plots = $derived(
+		Object.entries(data).map(([date, v]) => ({ date: new Date(date), value: v })),
+	);
 </script>
 
 <Chart
@@ -41,13 +47,16 @@
 		<Highlight points lines={{ class: "stroke-secondary" }} />
 	</Svg>
 
-	<Tooltip
+	<Tooltip.Root
 		classes={{
 			container: "border",
 		}}
-		header={({ date }) => date.toLocaleDateString("en", { month: "short", year: "numeric" })}
-		let:data
 	>
-		<TooltipItem label="Usage" value="{data.value}%" />
-	</Tooltip>
+		{#snippet children(data: { data: { date: Date; value: number } })}
+			<Tooltip.Header>
+				{data.data.date.toLocaleDateString("en", { month: "short", year: "numeric" })}
+			</Tooltip.Header>
+			<Tooltip.Item label="Usage" value="{data.data.value}%" />
+		{/snippet}
+	</Tooltip.Root>
 </Chart>

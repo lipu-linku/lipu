@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { fontSentence } from "$lib/state";
+	import { fontSentence } from "$lib/state.svelte";
 	import { fly } from "svelte/transition";
 	import FontEntry from "./FontEntry.svelte";
 
@@ -12,14 +12,19 @@
 	import logo from "$lib/assets/icon-light.png?url";
 	import CloseIcon from "~icons/lucide/x";
 
-	export let data;
-	$: ({ fonts } = data);
+	const { data } = $props();
+	const { fonts } = $derived(data);
 
-	let ucsur = false;
+	let ucsur = $state(false);
+	let ligatures = $state(false);
 
-	$: filtered = fonts.filter(([, f]) => (ucsur ? f.ucsur : true));
+	const filtered = $derived(
+		fonts
+			.filter(([, f]) => (ucsur ? f.ucsur : true))
+			.filter(([, f]) => (ligatures ? f.ligatures : true)),
+	);
 
-	let sidebarOpen = true;
+	let sidebarOpen = $state(true);
 </script>
 
 <svelte:head>
@@ -33,7 +38,7 @@
 <div class="flex-0 flex flex-col items-center gap-2">
 	<h2 class="py-2 text-center text-4xl font-medium">Font Search</h2>
 
-	<Input class="max-w-[30%] font-sitelen-ucsur" bind:value={$fontSentence} />
+	<Input class="max-w-[30%] font-sitelen-ucsur" bind:value={fontSentence.value} />
 
 	<main class="w-full p-4 grid grid-cols-[70%_30%] gap-2">
 		<ul class="flex flex-col gap-2">
@@ -53,7 +58,7 @@
 							class="absolute top-2 right-4"
 							variant="ghost"
 							size="icon"
-							on:click={() => (sidebarOpen = !sidebarOpen)}
+							onclick={() => (sidebarOpen = !sidebarOpen)}
 						>
 							<CloseIcon />
 						</Button>
@@ -64,6 +69,11 @@
 							<div class="flex items-center space-x-2">
 								<Checkbox id="ucsur-input" aria-labelledby="ucsur-label" bind:checked={ucsur} />
 								<Label for="ucsur-input" id="ucsur-label">Only Show UCSUR Fonts</Label>
+							</div>
+							
+							<div class="flex items-center space-x-2">
+								<Checkbox id="ligatures-input" aria-labelledby="ligatures-label" bind:checked={ligatures} />
+								<Label for="ligatures-input" id="ligatures-label">Only Show Ligature Fonts</Label>
 							</div>
 						</div>
 					</CardContent>

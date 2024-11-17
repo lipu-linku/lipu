@@ -1,31 +1,36 @@
-<script lang="ts" context="module">
-	import type { SvelteComponent } from "svelte";
+<script lang="ts" module>
+	import type { Component } from "svelte";
 	import type { SvelteHTMLElements } from "svelte/elements";
 
 	export type NavbarLink = {
 		href: string;
 		label: string;
-		icon: typeof SvelteComponent<SvelteHTMLElements["svg"]>;
+		icon: Component<SvelteHTMLElements["svg"]>;
 	};
 </script>
 
 <script lang="ts">
-	import LanguageSwitch from "./LanguageSwitch.svelte";
-	import DesktopNav from "./DesktopNav.svelte";
-	import MobileNav from "./MobileNav.svelte";
 	import { Button } from "$lib/components/ui/button";
-	import { mode, toggleMode } from "mode-watcher";
 	import type { Language, Languages } from "@kulupu-linku/sona";
+	import { mode, toggleMode } from "mode-watcher";
+	import DesktopNav from "./DesktopNav.svelte";
+	import LanguageSwitch from "./LanguageSwitch.svelte";
+	import MobileNav from "./MobileNav.svelte";
 
-	import HomeIcon from "~icons/lucide/home";
-	import FontsIcon from "~icons/mdi/format-font";
 	import FlaskIcon from "~icons/lucide/flask-conical";
+	import HomeIcon from "~icons/lucide/home";
 	import InfoIcon from "~icons/lucide/info";
 	import DarkModeIcon from "~icons/lucide/moon";
 	import LightModeIcon from "~icons/lucide/sun";
+	import FontsIcon from "~icons/mdi/format-font";
 
-	export let languages: Languages;
-	export let language: Language;
+	interface Props {
+		languages: Languages;
+		language: Language;
+		children?: import("svelte").Snippet;
+	}
+
+	const { languages, language, children }: Props = $props();
 
 	const links: Record<string, NavbarLink> = {
 		home: {
@@ -54,14 +59,14 @@
 <header
 	class="md:sticky top-0 z-50 md:border-b border-border/40 bg-background/95 p-4 pb-0 md:pb-4 backdrop-blur supports-[backdrop-filter]:bg-background/60"
 >
-	<div class="container mx-auto flex h-10 items-center gap-2 px-0 md:px-2">
+	<div class="flex h-10 gap-2">
 		<DesktopNav {links}>
-			<slot />
+			{@render children?.()}
 
-			<LanguageSwitch triggerClass="ml-auto" selected={language.id} localeList={languages} />
+			<LanguageSwitch selected={language.id} localeList={languages} />
 		</DesktopNav>
 		<MobileNav {links}>
-			<slot />
+			{@render children?.()}
 
 			<LanguageSwitch selected={language.id} localeList={languages} />
 		</MobileNav>
@@ -70,7 +75,7 @@
 			class="ml-auto"
 			variant="ghost"
 			size="icon"
-			on:click={toggleMode}
+			onclick={toggleMode}
 			aria-label="Toggle theme"
 		>
 			{#if $mode === "light"}

@@ -1,62 +1,69 @@
 <script lang="ts">
-	import { writingSystem, etymologiesEnabled, favorites } from "$lib/state";
+	import { etymologiesEnabled, favorites, writingSystem } from "$lib/state.svelte";
 	import type { Language, LocalizedWord } from "@kulupu-linku/sona";
 	import { getTranslatedData, type UsageCategory } from "@kulupu-linku/sona/utils";
 
 	import AudioButton from "$lib/components/AudioButton.svelte";
 	import { Button } from "$lib/components/ui/button";
-	import {
-		Card,
-		CardContent,
-		CardDescription,
-		CardHeader,
-		CardTitle,
-	} from "$lib/components/ui/card";
+	import * as Card from "$lib/components/ui/card";
 
-	import FavoriteIcon from "~icons/material-symbols/favorite-outline";
 	import UnfavoriteIcon from "~icons/material-symbols/favorite";
+	import FavoriteIcon from "~icons/material-symbols/favorite-outline";
 
-	export let word: LocalizedWord;
-	export let language: Language;
+	interface Props {
+		word: LocalizedWord;
+		language: Language;
+	}
 
-	$: definition = getTranslatedData(word, "definition", language.id);
-	$: etymology = getTranslatedData(word, "etymology", language.id);
-	$: usageScore = Object.values(word.usage).at(-1) ?? 0;
+	const { word, language }: Props = $props();
+
+	const definition = $derived(getTranslatedData(word, "definition", language.id));
+	const etymology = $derived(getTranslatedData(word, "etymology", language.id));
+	const usageScore = $derived(Object.values(word.usage).at(-1) ?? 0);
+
+	const bookName = $derived.by(() => {
+		switch (word.book) {
+			case "pu":
+				return "nimi pu";
+			case "ku suli":
+				return "nimi ku suli";
+			case "ku lili":
+				return "nimi ku pi suli ala";
+			case "none":
+				return undefined;
+		}
+	});
 
 	const categoryColors = {
 		core: "oklch(93.29% 0.137 106.54)",
 		common: "oklch(61.15% 0.177 30.62)",
-		uncommon: "oklch(46.87% 0.159 351.1)",
-		obscure: "oklch(32.72% 0.149 311.74)",
-		sandbox: "oklch(20.55% 0.052 284.53)",
+		uncommon: "oklch(56.87% 0.159 351.1)",
+		obscure: "oklch(42.72% 0.249 311.74)",
+		sandbox: "oklch(50.55% 0.052 284.53)",
 	} as const satisfies Record<UsageCategory, string>;
 </script>
 
-<Card
+<Card.Root
 	id={word.id}
 	class="
 		relative flex-1 w-auto flex justify-between border-2 transition-colors
-		before:absolute before:inset-y-0 before:w-1 before:rounded-s-md before:bg-[--category-color] before:transition-[width] has-[a:hover]:border-zinc-400 has-[a:hover]:before:w-2
+		before:absolute before:inset-y-0 before:w-1 before:rounded-s-md before:bg-[--category-color]
+		before:transition-[width] has-[a:hover]:border-[--category-color] has-[a:hover]:before:w-2
 	"
-	--category-color={categoryColors[word.usage_category]}
+	style="--category-color: {categoryColors[word.usage_category]}"
 >
 	<a href="/words/{word.id}" class="flex-1 p-0.5">
-		<CardHeader class="space-y-1 p-4 pl-6">
-			<CardTitle class="text-2xl leading-8">{word.word}</CardTitle>
-			<CardDescription dir={language.direction} class="text-[1rem] text-foreground">
+		<Card.Header class="space-y-1 p-4 pl-6">
+			<Card.Title class="text-2xl leading-8">{word.word}</Card.Title>
+			<Card.Description dir={language.direction} class="text-[1rem] text-foreground">
 				{definition}
-			</CardDescription>
+			</Card.Description>
 			{#if word.see_also.length > 0}
-				<CardDescription>
-					See also:
-					{#each word.see_also as other, i}
-						<a class="underline" href="/words/{other}">{other}</a>{i < word.see_also.length - 1
-							? ", "
-							: ""}
-					{/each}
-				</CardDescription>
+				<Card.Description>
+					See also: {word.see_also.join(", ")}
+				</Card.Description>
 			{/if}
-			<CardDescription>
+			<Card.Description>
 				{#if word.usage_category !== "sandbox"}
 					{word.usage_category} · {word.book} ·
 					<span title="{usageScore}% of toki pona speakers will recognize this word">
@@ -66,14 +73,14 @@
 					{[
 						word.creator.length > 0 ? word.creator.join(", ") : undefined,
 						word.coined_year,
-						word.book !== "none" ? word.book : undefined,
+						bookName,
 					]
 						.filter(Boolean)
 						.join(" · ")}
 				{/if}
-			</CardDescription>
-			{#if $etymologiesEnabled && word.etymology.length > 0 && etymology.length > 0}
-				<CardDescription>
+			</Card.Description>
+			{#if etymologiesEnabled.value && word.etymology.length > 0 && etymology.length > 0}
+				<Card.Description>
 					{@const etymString = word.etymology
 						.map((etym, i) => {
 							const local_etym = etymology[i];
@@ -88,12 +95,12 @@
 					<span dir={language.direction} class="text-start">
 						{etymString}
 					</span>
-				</CardDescription>
+				</Card.Description>
 			{/if}
-		</CardHeader>
+		</Card.Header>
 	</a>
 
-	<CardContent
+	<Card.Content
 		class="flex flex-col items-end justify-between gap-1 p-4 text-6xl max-md:flex-col-reverse md:gap-4"
 	>
 		<div class="flex items-center gap-2">
@@ -104,12 +111,13 @@
 			<Button
 				variant="outline"
 				size="icon"
-				on:click={() => {
-					$favorites.has(word.id) ? $favorites.delete(word.id) : $favorites.add(word.id);
-					$favorites = $favorites;
+				onclick={() => {
+					favorites.value.has(word.id)
+						? favorites.value.delete(word.id)
+						: favorites.value.add(word.id);
 				}}
 			>
-				{#if !$favorites.has(word.id)}
+				{#if !favorites.value.has(word.id)}
 					<FavoriteIcon />
 				{:else}
 					<UnfavoriteIcon />
@@ -117,12 +125,12 @@
 			</Button>
 		</div>
 
-		<div>
-			{#if $writingSystem === "sitelen_pona" && word.representations?.ligatures}
+		<div class="flex items-center justify-end flex-wrap">
+			{#if writingSystem.value === "sitelen_pona" && word.representations?.ligatures}
 				{#each word.representations.ligatures.slice(0, 3) as glyph}
 					<span class="text-center font-sitelen-pona">{glyph}</span>
 				{/each}
-			{:else if $writingSystem === "sitelen_sitelen" && word.representations?.sitelen_sitelen}
+			{:else if writingSystem.value === "sitelen_sitelen" && word.representations?.sitelen_sitelen}
 				<img
 					src={word.representations.sitelen_sitelen}
 					alt="{word.word} in sitelen sitelen format"
@@ -133,5 +141,5 @@
 				<span class="min-w-14" aria-hidden="true"></span>
 			{/if}
 		</div>
-	</CardContent>
-</Card>
+	</Card.Content>
+</Card.Root>

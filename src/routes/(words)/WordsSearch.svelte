@@ -1,20 +1,18 @@
 <script lang="ts">
-	import { Button } from "$lib/components/ui/button";
+	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import { Input } from "$lib/components/ui/input";
 
 	import { page } from "$app/stores";
-	import { browser } from "$app/environment";
 	import {
 		categories,
 		categoriesSerializer,
-		defaultCategories,
 		etymologiesEnabled,
+		favorites,
+		onlyFavorites,
 		searchQuery,
 		writingSystem,
-		onlyFavorites,
-		favorites,
-	} from "$lib/state";
+	} from "$lib/state.svelte";
 	import { cn, keys } from "$lib/utils";
 
 	import { pushState } from "$app/navigation";
@@ -26,8 +24,11 @@
 	import SettingsIcon from "~icons/lucide/settings";
 	import ResetIcon from "~icons/lucide/undo-2";
 
-	let className = "";
-	export { className as class };
+	interface Props {
+		class?: string;
+	}
+
+	const { class: className = "" }: Props = $props();
 
 	const focusSearch = (e: KeyboardEvent) => {
 		if (e.key === "/" && document.activeElement?.id !== "search-input") {
@@ -36,43 +37,43 @@
 		}
 	};
 
-	let hasCopied = false;
+	let hasCopied = $state(false);
 	const copyLinkWithParams = () => {
 		const url = new URL($page.url);
-		url.searchParams.set("categories", JSON.stringify($categories));
-		url.searchParams.set("q", $searchQuery);
+		url.searchParams.set("categories", JSON.stringify(categories.value));
+		url.searchParams.set("q", searchQuery.value);
 
 		navigator.clipboard.writeText(url.toString());
 		hasCopied = true;
+		setTimeout(() => (hasCopied = false), 2.5 * 1000);
 	};
 
-	$: {
-		if (hasCopied) {
-			setTimeout(() => (hasCopied = false), 2.5 * 1000);
-		}
-	}
-
-	$: if ($searchQuery === "" && $page.url.searchParams.has("q")) clearQuery();
-
 	const clearQuery = () => {
-		$searchQuery = "";
 		$page.url.searchParams.delete("q");
-		if (browser) pushState($page.url, {});
+		pushState($page.url, {});
 	};
 
 	const resetOptions = () => {
-		$searchQuery = "";
+		searchQuery.value = "";
 		categories.reset();
 		onlyFavorites.reset();
 
 		$page.url.searchParams.forEach((v, k, params) => params.delete(k, v));
-		if (browser) pushState($page.url, {});
+		pushState($page.url, {});
 	};
+
+	$effect(() => {
+		if (searchQuery.value === "" && $page.url.searchParams.has("q")) clearQuery();
+	});
+
+	$effect(() => {
+		if (favorites.value.size === 0) onlyFavorites.value = false;
+	});
 </script>
 
-<svelte:window on:keydown={focusSearch} />
+<svelte:window onkeydown={focusSearch} />
 
-<form class={cn("px-2 md:mx-auto md:justify-center items-center gap-2", className)} role="search">
+<form class={cn("px-2 items-center gap-2", className)} role="search">
 	<Input
 		class="w-auto bg-background flex-1 md:flex-none"
 		placeholder="o alasa e nimi"
@@ -81,54 +82,54 @@
 		required
 		autocapitalize="off"
 		autocomplete="off"
-		bind:value={$searchQuery}
+		bind:value={searchQuery.value}
 		id="search-input"
 	/>
 
 	<div class="flex items-center justify-center gap-2">
-		<DropdownMenu.Root closeOnItemClick={false} preventScroll={false}>
-			<DropdownMenu.Trigger asChild let:builder>
-				<Button
-					form=""
-					builders={[builder]}
-					variant="outline"
-					size="icon"
-					aria-label="Search Options"
-				>
-					<SettingsIcon aria-label="Settings icon" />
-				</Button>
+		<DropdownMenu.Root>
+			<DropdownMenu.Trigger
+				class={buttonVariants({ variant: "outline", size: "icon" })}
+				aria-label="Search Options"
+			>
+				<SettingsIcon aria-label="Settings icon" />
 			</DropdownMenu.Trigger>
 			<!-- this is some absolute positioning fuckery to get the dropdown to be centered -->
 			<DropdownMenu.Content class="max-md:!inset-x-0 max-md:mx-auto w-[90vw] md:w-auto">
 				<DropdownMenu.Label class="text-center">Search Options</DropdownMenu.Label>
 				<DropdownMenu.Separator />
 				<DropdownMenu.Group>
-					<DropdownMenu.Label>
+					<DropdownMenu.GroupHeading>
 						<CategoriesIcon aria-label="Categories icon" class="mr-1 inline size-4" />
 						<span>Usage Categories</span>
-					</DropdownMenu.Label>
-					{#each keys($categories) as category}
-						<DropdownMenu.CheckboxItem bind:checked={$categories[category]}>
+					</DropdownMenu.GroupHeading>
+					{#each keys(categories.value) as category}
+						<DropdownMenu.CheckboxItem
+							closeOnSelect={false}
+							bind:checked={categories.value[category]}
+						>
 							{category}
 						</DropdownMenu.CheckboxItem>
 					{/each}
 				</DropdownMenu.Group>
 				<DropdownMenu.Separator />
 				<DropdownMenu.Group>
-					<DropdownMenu.Label
+					<DropdownMenu.GroupHeading
 						class={cn($page.route.id === "/words/[word]" && "pointer-events-none opacity-50")}
 					>
 						<WritingSystemIcon aria-label="Fountain pen icon" class="mr-1 inline size-4" />
 						<span>Display Settings</span>
-					</DropdownMenu.Label>
-					<DropdownMenu.RadioGroup bind:value={$writingSystem}>
+					</DropdownMenu.GroupHeading>
+					<DropdownMenu.RadioGroup bind:value={writingSystem.value}>
 						<DropdownMenu.RadioItem
+							closeOnSelect={false}
 							disabled={$page.route.id === "/words/[word]"}
 							value="sitelen_pona"
 						>
 							sitelen pona
 						</DropdownMenu.RadioItem>
 						<DropdownMenu.RadioItem
+							closeOnSelect={false}
 							disabled={$page.route.id === "/words/[word]"}
 							value="sitelen_sitelen"
 						>
@@ -138,31 +139,36 @@
 
 					<DropdownMenu.Separator />
 
-					<DropdownMenu.CheckboxItem bind:checked={$etymologiesEnabled}>
+					<DropdownMenu.CheckboxItem closeOnSelect={false} bind:checked={etymologiesEnabled.value}>
 						Show Etymologies
 					</DropdownMenu.CheckboxItem>
 
-					<DropdownMenu.CheckboxItem bind:checked={$onlyFavorites} disabled={$favorites.size === 0}>
+					<DropdownMenu.CheckboxItem
+						closeOnSelect={false}
+						bind:checked={onlyFavorites.value}
+						disabled={favorites.value.size === 0}
+					>
 						Only Show Favorites
 					</DropdownMenu.CheckboxItem>
 				</DropdownMenu.Group>
 				<DropdownMenu.Separator />
-				<DropdownMenu.Item class="font-semibold" on:click={copyLinkWithParams}>
-					<svelte:component
-						this={!hasCopied ? LinkIcon : CheckIcon}
-						aria-hidden
-						class="mr-2 inline size-4"
-					/>
+				<DropdownMenu.Item class="font-semibold" onclick={copyLinkWithParams}>
+					{@const SvelteComponent = !hasCopied ? LinkIcon : CheckIcon}
+					<SvelteComponent aria-hidden class="mr-2 inline size-4" />
 					<span>Copy Permalink</span>
 				</DropdownMenu.Item>
-				<DropdownMenu.Item class="font-semibold" on:click={resetOptions}>
+				<DropdownMenu.Item closeOnSelect={false} class="font-semibold" onclick={resetOptions}>
 					<ResetIcon aria-hidden class="mr-2 inline size-4" />
 					<span>Reset Options</span>
 				</DropdownMenu.Item>
 			</DropdownMenu.Content>
 		</DropdownMenu.Root>
 
-		<input type="hidden" name="categories" value={categoriesSerializer.stringify($categories)} />
+		<input
+			type="hidden"
+			name="categories"
+			value={categoriesSerializer.stringify(categories.value)}
+		/>
 
 		<Button
 			aria-label="submit search"
