@@ -9,7 +9,7 @@
 	import { useRegisterSW } from "virtual:pwa-register/svelte";
 	import { fly } from "svelte/transition";
 	import UpArrowIcon from "~icons/lucide/arrow-up";
-	import "../app.postcss";
+	import "../app.css";
 
 	const { children } = $props();
 
@@ -34,7 +34,7 @@
 	let outerHeight = $state<number>(0);
 </script>
 
-<ModeWatcher />
+<ModeWatcher lightClassNames={["light"]} />
 
 <svelte:head>
 	{@html webManifest}
@@ -51,7 +51,7 @@
 <div class="relative my-0 mx-auto p-0 flex flex-col min-h-dvh">
 	{@render children()}
 
-	{#if !$page.params.word && scrollY > 1.05 * outerHeight}
+	{#if !$page.params?.word && scrollY > 1.05 * outerHeight}
 		<div transition:fly={{ y: 10, duration: 150 }} class="fixed bottom-4 right-4">
 			<Button
 				class="flex items-center gap-2"

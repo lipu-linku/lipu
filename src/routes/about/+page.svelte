@@ -1,7 +1,4 @@
 <script lang="ts">
-	import { run } from "svelte/legacy";
-
-	import { browser } from "$app/environment";
 	import {
 		Accordion,
 		AccordionContent,
@@ -25,7 +22,7 @@
 
 <h1 class="font-medium text-4xl">About Linku</h1>
 
-<p class="[&>button]:underline w-[65%] text-center text-balance">
+<p class="*:[button]:underline w-65/100 text-center text-balance">
 	Linku is a <button onclick={() => (openAccordion = "dataset")}>dataset</button> with many
 	<button onclick={() => (openAccordion = "translations")}>translations</button>, a
 	<button onclick={() => (openAccordion = "bot")}>Discord bot</button>, a
@@ -50,7 +47,11 @@
 <Accordion
 	type="single"
 	bind:value={openAccordion}
-	class="w-[65%] [&_:is(a,_button):not([data-button-root],_[data-accordion-trigger])]:underline [&_[data-bits-accordion-content]>div]:flex [&_[data-bits-accordion-content]>div]:flex-col [&_[data-bits-accordion-content]>div]:gap-3"
+	class="
+		w-65/100 **:[a,button]:cursor-pointer **:[a,button]:not-data-button-root:not-data-accordion-trigger:underline 
+		**:data-bits-accordion-content:*:[div]:flex **:data-bits-accordion-content:*:[div]::flex-col
+		**:data-bits-accordion-content:*:[div]:gap-3
+	"
 >
 	<AccordionItem value="dataset">
 		<!-- these class names disable the rotation on the first icon,  -->
@@ -100,7 +101,7 @@
 			</span>
 		</AccordionTrigger>
 		<AccordionContent
-			class="[&>div]:space-y-4 [&_code]:border [&_code]:border-border [&_code]:px-1 [&_code]:rounded-sm"
+			class="*:[div]:space-y-4 **:[code]:border **:[code]:border-border **:[code]:px-1 **:[code]:rounded-sm"
 		>
 			<p>
 				The bot is for requesting and receiving Linku data without leaving discord, with a couple
@@ -140,8 +141,8 @@
 			<h2><code>/acro</code></h2>
 			<p>
 				Finds toki pona words beginning with each letter in your request.<br />
-				You can customise the set of words (only pu/pu and ku suli/pu and ku/all available words)
-				will be used using
+				You can customise the set of words (only pu/pu and ku suli/pu and ku/all available words) will
+				be used using
 				<code class="whitespace-nowrap">/preferences acro</code> (the default is pu and ku suli).
 			</p>
 
@@ -240,7 +241,7 @@
 				<SurveyIcon /> wile Linku (the survey)
 			</span>
 		</AccordionTrigger>
-		<AccordionContent class="[&>div]:space-y-3">
+		<AccordionContent class="*:[div]:space-y-3">
 			<p>
 				The survey is run annually every
 				<a href="https://suno.pona.la" target="_blank" rel="noopener noreferrer"
@@ -287,8 +288,11 @@
 </Button>
 
 <p class="w-2/3 text-center text-balance">
-	Also, check out <a class="underline" href="https://nimi.li" target="_blank" rel="noopener noreferrer"
-		>nimi.li</a
+	Also, check out <a
+		class="underline"
+		href="https://nimi.li"
+		target="_blank"
+		rel="noopener noreferrer">nimi.li</a
 	>, a third party frontend for sona Linku created by ijo Tani, and
 	<a
 		class="underline"

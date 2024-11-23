@@ -39,7 +39,7 @@
 >
 	<Select.Trigger
 		class={cn(
-			"overflow-ellipsis md:max-w-48 md:w-fit bg-background md:justify-start gap-2",
+			"text-ellipsis md:max-w-48 md:w-fit bg-background md:justify-start gap-2",
 			triggerClass,
 		)}
 	>

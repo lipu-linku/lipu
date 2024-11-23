@@ -1,0 +1,122 @@
+@import "tailwindcss";
+@plugin "tailwindcss-animate";
+@variant dark (&:where(.dark, .dark *));
+
+@theme {
+	--color-background: light-dark(hsl(0 0% 100%), hsl(240 10% 3.9%));
+	--color-foreground: light-dark(hsl(240 10% 3.9%), hsl(0 0% 98%));
+	--color-card: light-dark(hsl(0 0% 100%), hsl(240 10% 3.9%));
+	--color-card-foreground: light-dark(hsl(240 10% 3.9%), hsl(0 0% 98%));
+	--color-popover: light-dark(hsl(0 0% 100%), hsl(240 10% 3.9%));
+	--color-popover-foreground: light-dark(hsl(240 10% 3.9%), hsl(0 0% 98%));
+	--color-primary: light-dark(hsl(240 5.9% 10%), hsl(0 0% 98%));
+	--color-primary-foreground: light-dark(hsl(0 0% 98%), hsl(240 5.9% 10%));
+	--color-secondary: light-dark(hsl(240 4.8% 95.9%), hsl(240 3.7% 15.9%));
+	--color-secondary-foreground: light-dark(hsl(240 5.9% 10%), hsl(0 0% 98%));
+	--color-muted: light-dark(hsl(240 4.8% 95.9%), hsl(240 3.7% 15.9%));
+	--color-muted-foreground: light-dark(hsl(240 3.8% 46.1%), hsl(240 5% 64.9%));
+	--color-accent: light-dark(hsl(240 4.8% 95.9%), hsl(240 3.7% 15.9%));
+	--color-accent-foreground: light-dark(hsl(240 5.9% 10%), hsl(0 0% 98%));
+	--color-destructive: light-dark(hsl(0 72.22% 50.59%), hsl(0 62.8% 30.6%));
+	--color-destructive-foreground: light-dark(hsl(0 0% 98%), hsl(0 0% 98%));
+	--color-border: light-dark(hsl(240 5.9% 90%), hsl(240 3.7% 15.9%));
+	--color-input: light-dark(hsl(240 5.9% 90%), hsl(240 3.7% 15.9%));
+	--color-ring: light-dark(hsl(240 5.9% 10%), hsl(240 4.9% 83.9%));
+
+	--radius-lg: 0.5rem;
+	--radius-md: calc(var(--radius-lg) - 2px);
+	--radius-sm: calc(var(--radius-lg) - 4px);
+
+	--font-sitelen-pona: "sitelen seli kiwen mono asuki";
+	--font-sitelen-ucsur: var(--font-sans), "sitelen seli kiwen mono juniko";
+
+	--animate-accordion-down: accordion-down 0.2s ease-out;
+	--animate-accordion-up: accordion-up 0.2s ease-out;
+	--animate-caret-blink: caret-blink 1.25s ease-out infinite;
+
+	@keyframes accordion-down {
+		from {
+			height: 0;
+		}
+		to {
+			height: var(--bits-accordion-content-height);
+		}
+	}
+
+	@keyframes accordion-up {
+		from {
+			height: var(--bits-accordion-content-height);
+		}
+		to {
+			height: 0;
+		}
+	}
+
+	@keyframes caret-blink {
+		0%,
+		70%,
+		100% {
+			opacity: 100%;
+		}
+		20%,
+		50% {
+			opacity: 0;
+		}
+	}
+
+	--color-category-core: oklch(93.29% 0.137 106.54);
+	--color-category-common: oklch(61.15% 0.177 30.62);
+	--color-category-uncommon: oklch(56.87% 0.159 351.1);
+	--color-category-obscure: oklch(42.72% 0.249 311.74);
+	--color-category-sandbox: oklch(50.55% 0.052 284.53);
+}
+
+@utility container {
+	margin-inline: auto;
+	padding-inline: 2rem;
+
+	@media (width >= 1400px) {
+		max-width: 1400px;
+	}
+}
+
+@layer utilities {
+	@font-face {
+		font-family: "sitelen seli kiwen mono asuki";
+		font-style: normal;
+		font-weight: 400;
+		src: url("https://raw.githubusercontent.com/lipu-linku/ijo/main/nasinsitelen/sitelenselikiwenmonoasuki.ttf");
+	}
+
+	@font-face {
+		font-family: "sitelen seli kiwen mono juniko";
+		font-style: normal;
+		font-weight: 400;
+		src: url("https://raw.githubusercontent.com/lipu-linku/ijo/main/nasinsitelen/sitelenselikiwenmonojuniko.ttf");
+	}
+}
+
+@layer base {
+	* {
+		@apply border-border;
+	}
+
+	.light {
+		color-scheme: light;
+	}
+	.dark {
+		color-scheme: dark;
+	}
+
+	body {
+		@apply bg-background text-foreground min-h-dvh scroll-smooth;
+		scrollbar-gutter: stable;
+	}
+
+	input[type="search"] {
+		&::-webkit-search-cancel-button,
+		&::-webkit-calendar-picker-indicator {
+			@apply hidden!;
+		}
+	}
+}

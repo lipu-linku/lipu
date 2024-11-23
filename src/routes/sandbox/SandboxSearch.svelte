@@ -83,7 +83,7 @@
 				<SettingsIcon aria-label="Settings icon" />
 			</DropdownMenu.Trigger>
 			<!-- this is some absolute positioning fuckery to get the dropdown to be centered -->
-			<DropdownMenu.Content trapFocus class="max-md:!inset-x-0 max-md:mx-auto w-[90vw] md:w-auto">
+			<DropdownMenu.Content trapFocus class="max-md:inset-x-0! max-md:mx-auto w-[90vw] md:w-auto">
 				<DropdownMenu.Label class="text-center">Search Options</DropdownMenu.Label>
 				<DropdownMenu.Group>
 					<DropdownMenu.CheckboxItem closeOnSelect={false} bind:checked={etymologiesEnabled.value}>

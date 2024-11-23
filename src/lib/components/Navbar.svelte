@@ -23,6 +23,7 @@
 	import DarkModeIcon from "~icons/lucide/moon";
 	import LightModeIcon from "~icons/lucide/sun";
 	import FontsIcon from "~icons/mdi/format-font";
+	import FormsIcon from "~icons/mdi/pencil-outline";
 
 	interface Props {
 		languages: Languages;
@@ -38,15 +39,20 @@
 			label: "Home",
 			icon: HomeIcon,
 		},
+		sandbox: {
+			href: "/sandbox",
+			label: "Sandbox",
+			icon: FlaskIcon,
+		},
 		fonts: {
 			href: "/fonts",
 			label: "Fonts",
 			icon: FontsIcon,
 		},
-		sandbox: {
-			href: "/sandbox",
-			label: "Sandbox",
-			icon: FlaskIcon,
+		forms: {
+			href: "/forms",
+			label: "Forms",
+			icon: FormsIcon
 		},
 		about: {
 			href: "/about",
@@ -57,7 +63,7 @@
 </script>
 
 <header
-	class="md:sticky top-0 z-50 md:border-b border-border/40 bg-background/95 p-4 pb-0 md:pb-4 backdrop-blur supports-[backdrop-filter]:bg-background/60"
+	class="md:sticky top-0 z-50 md:border-b border-border/40 bg-background/95 p-4 pb-0 md:pb-4 backdrop-blur supports-backdrop-filter:bg-background/60"
 >
 	<div class="flex h-10 gap-2">
 		<DesktopNav {links}>

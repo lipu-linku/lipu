@@ -33,24 +33,16 @@
 				return undefined;
 		}
 	});
-
-	const categoryColors = {
-		core: "oklch(93.29% 0.137 106.54)",
-		common: "oklch(61.15% 0.177 30.62)",
-		uncommon: "oklch(56.87% 0.159 351.1)",
-		obscure: "oklch(42.72% 0.249 311.74)",
-		sandbox: "oklch(50.55% 0.052 284.53)",
-	} as const satisfies Record<UsageCategory, string>;
 </script>
 
 <Card.Root
 	id={word.id}
 	class="
 		relative flex-1 w-auto flex justify-between border-2 transition-colors
-		before:absolute before:inset-y-0 before:w-1 before:rounded-s-md before:bg-[--category-color]
-		before:transition-[width] has-[a:hover]:border-[--category-color] has-[a:hover]:before:w-2
+		before:absolute before:inset-y-0 before:w-1 before:rounded-s-md before:bg-(--category-color)
+		before:transition-[width] has-[a:hover]:border-(--category-color) has-[a:hover]:before:w-2
 	"
-	style="--category-color: {categoryColors[word.usage_category]}"
+	style="--category-color: var(--color-category-{word.usage_category})"
 >
 	<a href="/words/{word.id}" class="flex-1 p-0.5">
 		<Card.Header class="space-y-1 p-4 pl-6">

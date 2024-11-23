@@ -83,10 +83,10 @@
 </Navbar>
 
 <WordsSearch
-	class="flex sticky z-50 top-0 border-b border-border/40 bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden"
+	class="flex sticky z-50 top-0 border-b border-border/40 bg-background/95 p-4 backdrop-blur supports-backdrop-filter:bg-background/60 md:hidden"
 />
 
-<main class="flex-1 max-w-screen-2xl 2xl:mx-auto flex flex-col gap-4 p-4 pb-2">
+<main class="flex-1 max-w-(--breakpoint-2xl) 2xl:mx-auto flex flex-col gap-4 p-4 pb-2">
 	<header class="flex-1 flex items-center gap-4">
 		<Button onclick={() => window.history.back()} class="justify-self-end" variant="ghost" size="icon">
 			<BackIcon />
