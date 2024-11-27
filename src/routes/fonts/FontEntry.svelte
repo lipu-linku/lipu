@@ -40,7 +40,11 @@
 	);
 
 	const fontDescription = $derived(
-		[`Created by ${font.creator}`, `Updated on ${lastUpdatedDate}`, `Licensed as ${font.license}`]
+		[
+			`Created by ${font.creator.join(", ")}`,
+			`Updated on ${lastUpdatedDate}`,
+			`Licensed as ${font.license}`,
+		]
 			.filter((s) => !s.includes("undefined"))
 			.join(" · "),
 	);
@@ -59,7 +63,7 @@
 	<CardHeader class="relative">
 		<CardTitle>{font.name}</CardTitle>
 		<CardDescription>{fontDescription}</CardDescription>
-		<nav class="absolute top-2 right-4 flex items-center gap-2">
+		<nav class="absolute top-2 right-2 flex items-center gap-2">
 			{#if font.links.repo}
 				<Button
 					variant="outline"

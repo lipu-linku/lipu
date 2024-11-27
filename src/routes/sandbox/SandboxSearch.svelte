@@ -1,24 +1,31 @@
 <script lang="ts">
-	import { Button, buttonVariants } from "$lib/components/ui/button";
-	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
+	import { Button } from "$lib/components/ui/button";
+	import * as Card from "$lib/components/ui/card";
+	import * as RadioGroup from "$lib/components/ui/radio-group";
+	import { Separator } from "$lib/components/ui/separator";
+	import { Checkbox } from "$lib/components/ui/checkbox";
+	import { Label } from "$lib/components/ui/label";
 	import { Input } from "$lib/components/ui/input";
 
 	import { page } from "$app/stores";
-	import { etymologiesEnabled, favorites, onlyFavorites, searchQuery } from "$lib/state.svelte";
-	import { cn } from "$lib/utils";
-
+	import {
+		categories,
+		categoriesSerializer,
+		etymologiesEnabled,
+		favorites,
+		onlyFavorites,
+		searchQuery,
+		writingSystem,
+	} from "$lib/state.svelte";
+	import { cn, keys } from "$lib/utils";
 	import { pushState } from "$app/navigation";
+
 	import CheckIcon from "~icons/lucide/check";
+	import CategoriesIcon from "~icons/lucide/layout-dashboard";
 	import LinkIcon from "~icons/lucide/link";
+	import WritingSystemIcon from "~icons/lucide/pen-tool";
 	import SearchIcon from "~icons/lucide/search";
-	import SettingsIcon from "~icons/lucide/settings";
 	import ResetIcon from "~icons/lucide/undo-2";
-
-	interface Props {
-		class?: string;
-	}
-
-	const { class: className = "" }: Props = $props();
 
 	const focusSearch = (e: KeyboardEvent) => {
 		if (e.key === "/" && document.activeElement?.id !== "search-input") {
@@ -61,64 +68,83 @@
 
 <svelte:window onkeydown={focusSearch} />
 
-<form class={cn("px-2 items-center gap-2", className)} role="search">
-	<Input
-		class="w-auto bg-background flex-1 md:flex-none"
-		placeholder="o alasa e nimi"
-		type="search"
-		name="q"
-		required
-		autocapitalize="off"
-		autocomplete="off"
-		bind:value={searchQuery.value}
-		id="search-input"
-	/>
-
-	<div class="flex items-center justify-center gap-2">
-		<DropdownMenu.Root>
-			<DropdownMenu.Trigger
-				class={buttonVariants({ variant: "outline", size: "icon" })}
-				aria-label="Search Options"
+<aside class="sticky top-0 end-0 h-dvh px-2 py-4">
+	<form class="h-full px-2 gap-2 flex flex-col" role="search">
+		<div class="flex items-center justify-stretch gap-2">
+			<Input
+				class="bg-background"
+				placeholder="o alasa e nimi"
+				type="search"
+				name="q"
+				required
+				autocapitalize="off"
+				autocomplete="off"
+				bind:value={searchQuery.value}
+				id="search-input"
+			/>
+			<Button
+				aria-label="submit search"
+				class="inline-flex"
+				type="submit"
+				variant="outline"
+				size="icon"
 			>
-				<SettingsIcon aria-label="Settings icon" />
-			</DropdownMenu.Trigger>
-			<!-- this is some absolute positioning fuckery to get the dropdown to be centered -->
-			<DropdownMenu.Content trapFocus class="max-md:inset-x-0! max-md:mx-auto w-[90vw] md:w-auto">
-				<DropdownMenu.Label class="text-center">Search Options</DropdownMenu.Label>
-				<DropdownMenu.Group>
-					<DropdownMenu.CheckboxItem closeOnSelect={false} bind:checked={etymologiesEnabled.value}>
-						Show Etymologies
-					</DropdownMenu.CheckboxItem>
+				<SearchIcon />
+			</Button>
+		</div>
 
-					<DropdownMenu.CheckboxItem
-						closeOnSelect={false}
-						bind:checked={onlyFavorites.value}
-						disabled={favorites.value.size === 0}
+		<Card.Root>
+			<Card.Header>
+				<Card.Title>Search Options</Card.Title>
+			</Card.Header>
+
+			<Card.Content class="flex flex-col gap-4">
+				<div class="grid gap-2">
+					<div class="flex items-center gap-2">
+						<Checkbox
+							bind:checked={etymologiesEnabled.value}
+							id="show-etymologies-checkbox"
+							aria-labelledby="show-etymologies-label"
+						/>
+						<Label id="show-etymologies-label" for="show-etymologies-checkbox">
+							Show Etymologies
+						</Label>
+					</div>
+					<div
+						class={cn(
+							"flex items-center gap-2",
+							favorites.value.size === 0 && "cursor-not-allowed",
+						)}
 					>
-						Only Show Favorites
-					</DropdownMenu.CheckboxItem>
-				</DropdownMenu.Group>
-				<DropdownMenu.Separator />
-				<DropdownMenu.Item class="font-semibold" onclick={copyLinkWithParams}>
-					{@const CopyIcon = !hasCopied ? LinkIcon : CheckIcon}
-					<CopyIcon aria-hidden class="mr-2 inline size-4" />
-					<span>Copy Permalink</span>
-				</DropdownMenu.Item>
-				<DropdownMenu.Item closeOnSelect={false} class="font-semibold" onclick={resetOptions}>
+						<Checkbox
+							bind:checked={onlyFavorites.value}
+							disabled={favorites.value.size === 0}
+							title={favorites.value.size === 0 ? "Select at least 1 favorite" : undefined}
+							id="only-favorites-checkbox"
+							aria-labelledby="only-favorites-label"
+						/>
+						<Label
+							title={favorites.value.size === 0 ? "Select at least 1 favorite" : undefined}
+							id="only-favorites-label"
+							for="only-favorites-checkbox">Only Show Favorites</Label
+						>
+					</div>
+				</div>
+			</Card.Content>
+
+			<Card.Footer class="grid grid-rows-2 gap-2">
+				<Button class="gap-0" variant="outline" size="sm" onclick={copyLinkWithParams}>
+					{#snippet children()}
+						{@const Icon = !hasCopied ? LinkIcon : CheckIcon}
+						<Icon aria-hidden class="mr-2 inline size-4" />
+						<span>Copy Permalink</span>
+					{/snippet}
+				</Button>
+				<Button class="gap-0" variant="outline" size="sm" onclick={resetOptions}>
 					<ResetIcon aria-hidden class="mr-2 inline size-4" />
 					<span>Reset Options</span>
-				</DropdownMenu.Item>
-			</DropdownMenu.Content>
-		</DropdownMenu.Root>
-
-		<Button
-			aria-label="submit search"
-			class="inline-flex"
-			type="submit"
-			variant="outline"
-			size="icon"
-		>
-			<SearchIcon />
-		</Button>
-	</div>
-</form>
+				</Button>
+			</Card.Footer>
+		</Card.Root>
+	</form>
+</aside>

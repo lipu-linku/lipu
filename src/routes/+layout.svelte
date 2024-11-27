@@ -1,17 +1,19 @@
 <script lang="ts">
 	import { page } from "$app/stores";
 	import { Button } from "$lib/components/ui/button";
+	import * as Resizable from "$lib/components/ui/resizable";
 	import { ModeWatcher } from "mode-watcher";
 
 	import { pwaAssetsHead } from "virtual:pwa-assets/head";
 	import { pwaInfo } from "virtual:pwa-info";
 
-	import { useRegisterSW } from "virtual:pwa-register/svelte";
+	import Navbar from "$lib/components/Navbar.svelte";
 	import { fly } from "svelte/transition";
+	import { useRegisterSW } from "virtual:pwa-register/svelte";
 	import UpArrowIcon from "~icons/lucide/arrow-up";
 	import "../app.css";
 
-	const { children } = $props();
+	const { children, data } = $props();
 
 	const webManifest = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : "");
 
@@ -48,24 +50,26 @@
 
 <svelte:window bind:scrollY bind:outerHeight />
 
-<div class="relative my-0 mx-auto p-0 flex flex-col min-h-dvh">
-	{@render children()}
+<div class="flex gap-4">
+		<Navbar language={data.language} languages={data.languages} />
 
-	{#if !$page.params?.word && scrollY > 1.05 * outerHeight}
-		<div transition:fly={{ y: 10, duration: 150 }} class="fixed bottom-4 right-4">
-			<Button
-				class="flex items-center gap-2"
-				variant="outline"
-				onclick={() =>
-					window.scrollTo({
-						top: 0,
-						behavior: window.matchMedia("(prefers-reduced-motion: no-preference)").matches
-							? "smooth"
-							: "auto",
-					})}
-			>
-				<UpArrowIcon aria-label="Up arrow icon" /> Scroll to Top
-			</Button>
-		</div>
-	{/if}
+		{@render children()}
+
+		{#if !$page.params?.word && scrollY > 1.05 * outerHeight}
+			<div transition:fly={{ y: 10, duration: 150 }} class="fixed bottom-4 right-4">
+				<Button
+					class="flex items-center gap-2"
+					variant="outline"
+					onclick={() =>
+						window.scrollTo({
+							top: 0,
+							behavior: window.matchMedia("(prefers-reduced-motion: no-preference)").matches
+								? "smooth"
+								: "auto",
+						})}
+				>
+					<UpArrowIcon aria-label="Up arrow icon" /> Scroll to Top
+				</Button>
+			</div>
+		{/if}
 </div>

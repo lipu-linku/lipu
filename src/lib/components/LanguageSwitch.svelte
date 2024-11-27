@@ -37,17 +37,12 @@
 		}
 	}}
 >
-	<Select.Trigger
-		class={cn(
-			"text-ellipsis md:max-w-48 md:w-fit bg-background md:justify-start gap-2",
-			triggerClass,
-		)}
-	>
+	<Select.Trigger class={cn("text-ellipsis", triggerClass)}>
 		<LanguagesIcon aria-label="Languages icon" class="size-4" />
 		{items.get(selected)}
 	</Select.Trigger>
 
-	<Select.Content class={contentClass}>
+	<Select.Content side="top" class={contentClass}>
 		{#each items as [value, label] (value)}
 			<Select.Item {label} {value}>{label}</Select.Item>
 		{/each}

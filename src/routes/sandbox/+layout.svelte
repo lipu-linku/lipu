@@ -6,12 +6,8 @@
 	const { languages, language } = $derived(data);
 </script>
 
-<Navbar {language} {languages}>
-	<SandboxSearch class="hidden md:flex" />
-</Navbar>
+{@render children?.()}
 
 <SandboxSearch
 	class="flex sticky z-50 top-0 border-b border-border/40 bg-background/95 p-4 backdrop-blur supports-backdrop-filter:bg-background/60 md:hidden"
 />
-
-{@render children?.()}

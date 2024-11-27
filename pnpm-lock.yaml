@@ -65,6 +65,9 @@ importers:
       mode-watcher:
         specifier: ^0.5.0
         version: 0.5.0(svelte@5.2.4)
+      paneforge:
+        specifier: 1.0.0-next.1
+        version: 1.0.0-next.1(svelte@5.2.4)
       prettier:
         specifier: ^3.3.3
         version: 3.3.3
@@ -2954,6 +2957,11 @@ packages:
 
   package-manager-detector@0.2.4:
     resolution: {integrity: sha512-H/OUu9/zUfP89z1APcBf2X8Us0tt8dUK4lUmKqz12QNXif3DxAs1/YqjGtcutZi1zQqeNQRWr9C+EbQnnvSSFA==}
+
+  paneforge@1.0.0-next.1:
+    resolution: {integrity: sha512-K28RZ/KLqnZJeuZ7TZNv5C51NrQ3UPggf2sIhIXjTd4brpRZpmCA9C2SL2o4CC0U2Ox75KxUFwEXq2A/iDBuZg==}
+    peerDependencies:
+      svelte: ^5.0.0-next.1
 
   path-is-absolute@1.0.1:
     resolution: {integrity: sha512-AVbw3UJ2e9bq64vSaS9Am0fje1Pa8pbGqTTsmXfaIiMpnr5DlDhfJOuLj9Sf95ZPVDAUerDfEk88MPmPe7UCQg==}
@@ -6825,6 +6833,11 @@ snapshots:
   package-json-from-dist@1.0.1: {}
 
   package-manager-detector@0.2.4: {}
+
+  paneforge@1.0.0-next.1(svelte@5.2.4):
+    dependencies:
+      svelte: 5.2.4
+      svelte-toolbelt: 0.4.6(svelte@5.2.4)
 
   path-is-absolute@1.0.1: {}
 
