@@ -192,7 +192,7 @@
 						}) then semantic}
 						<div class="flex flex-col justify-center gap-2">
 							<h3 class="flex items-center gap-2 font-medium text-xl">
-								Semantic space
+								Semantic space by lipamanka
 								<Tooltip.Provider>
 									<Tooltip.Root>
 										<Tooltip.Trigger
