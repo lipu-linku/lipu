@@ -80,6 +80,7 @@
 		type="search"
 		name="q"
 		required
+		autofocus
 		autocapitalize="off"
 		autocomplete="off"
 		bind:value={searchQuery.value}
