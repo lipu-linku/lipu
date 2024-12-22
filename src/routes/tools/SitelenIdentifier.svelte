@@ -130,7 +130,7 @@
 	</Card.Header>
 
 	<Card.Content class="flex flex-col gap-4">
-		<div class="grid grid-cols-[1fr_min-content] gap-2">
+		<div class="flex items-center justify-center gap-2">
 			<Select.Root allowDeselect={false} type="single" bind:value={elements.current}>
 				<Select.Trigger class={buttonVariants({ variant: "outline" })}>
 					{elementOptions[elements.current]}

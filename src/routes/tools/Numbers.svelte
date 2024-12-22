@@ -104,7 +104,7 @@
 	const converters = {
 		"pu (simple)": (from: number) => (from < 3 ? pu_precise(from) : { type: "ok", value: "mute" }),
 		"pu (precise)": pu_precise,
-		"pu (abberviated)": (from: number) => {
+		"pu (abbreviated)": (from: number) => {
 			const result = pu_precise(from);
 			if (result.type === "err") return result;
 			return {
