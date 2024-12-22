@@ -3,8 +3,10 @@
 	import * as Card from "$lib/components/ui/card";
 	import { Input } from "$lib/components/ui/input";
 	import * as Select from "$lib/components/ui/select";
+	import { PersistedState } from "runed";
 
 	import CopyIcon from "~icons/lucide/copy";
+	import InfoIcon from "~icons/lucide/info";
 
 	type ConverterResult =
 		| {
@@ -13,7 +15,7 @@
 		  }
 		| { type: "err"; message: string };
 
-	let value = $state(0);
+	let value = new PersistedState("tools-numbers-value", 0);
 
 	function pu_precise(from: number): ConverterResult {
 		if (from < 0 || !Number.isInteger(from))
@@ -42,32 +44,17 @@
 			return { type: "err", message: `${from} cannot be represented using this system!` };
 		if (from === 0) return { type: "ok", value: "ala" };
 
-		const hundreds = Math.floor(from / 100);
-		const rest = Math.floor(from % 100);
-		const fraction = (from - rest) / 0.01;
+		// let digitsAfterDecimal = 0;
 
 		let result = [];
 
-		if (hundreds >= 100) {
-			const hundredsWords = nasin_nanpa_pona(hundreds);
-			if (hundredsWords.type === "err") return hundredsWords;
-			result.push((hundredsWords.value = " ale"));
-		} else if (hundreds > 0) {
-			const hundredsWords = pu_precise(hundreds);
-			if (hundredsWords.type === "err") return hundredsWords;
-			result.push((hundredsWords.value = " ale"));
-		}
+		while (from > 0) {
+			let word = pu_precise(from % 100);
+			if (word.type === "ok") result.push(word.value);
+			else return word;
+			console.log(from);
 
-		if (rest > 0) {
-			const restWords = pu_precise(rest);
-			if (restWords.type === "err") return restWords;
-			result.push(restWords.value);
-		}
-
-		if (fraction > 0) {
-			const fractionWords = nasin_nanpa_pona(fraction);
-			if (fractionWords.type === "err") return fractionWords;
-			result.push("ala " + fractionWords.value.replace(/^ala/, "ale"));
+			from /= 100;
 		}
 
 		return {
@@ -127,30 +114,51 @@
 		},
 	} as const satisfies Record<string, (from: number) => ConverterResult>;
 
-	let converter = $state<keyof typeof converters>("pu (precise)");
+	let converter = new PersistedState<keyof typeof converters>(
+		"tools-numbers-converter",
+		"pu (precise)",
+	);
 
-	let result = $derived(converters[converter](value));
+	let result = $derived(converters[converter.current](value.current));
 </script>
 
 <Card.Root>
-	<Card.Header class="flex-row items-center justify-between">
-		<Card.Title level={2}>Number Converter</Card.Title>
+	<Card.Header class="pt-4">
+		<div class="flex items-center space-x-1.5">
+			<Card.Title id="numbers" class="me-auto" level={2}>Number Converter</Card.Title>
 
-		<Button
-			variant="ghost"
-			size="icon"
-			disabled={result.type === "err"}
-			onclick={() => (result.type === "ok" ? navigator.clipboard.writeText(result.value) : {})}
-		>
-			<CopyIcon />
-		</Button>
+			<Button
+				variant="ghost"
+				size="icon"
+				disabled={result.type === "err"}
+				onclick={() => (result.type === "ok" ? navigator.clipboard.writeText(result.value) : {})}
+			>
+				<CopyIcon />
+			</Button>
+
+			<Button
+				variant="ghost"
+				size="icon"
+				href="https://sona.pona.la/wiki/Number_systems"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				<InfoIcon />
+			</Button>
+		</div>
+
+		<Card.Description>
+			Converts from decimal into different toki pona numeral systems
+		</Card.Description>
 	</Card.Header>
 
 	<Card.Content class="flex flex-col gap-4">
 		<div class="grid grid-cols-[1fr_min-content] gap-2">
-			<Input type="number" bind:value placeholder="123" />
-			<Select.Root type="single" bind:value={converter}>
-				<Select.Trigger class={buttonVariants({ variant: "outline" })}>{converter}</Select.Trigger>
+			<Input type="number" bind:value={value.current} placeholder="123" />
+			<Select.Root type="single" bind:value={converter.current}>
+				<Select.Trigger class={buttonVariants({ variant: "outline" })}>
+					{converter.current}
+				</Select.Trigger>
 				<Select.Content>
 					{#each Object.keys(converters) as converter (converter)}
 						<Select.Item value={converter} label={converter} />

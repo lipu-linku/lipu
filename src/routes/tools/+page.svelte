@@ -1,5 +1,6 @@
 <script lang="ts">
 	import Numbers from "./Numbers.svelte";
+	import SitelenIdentifier from "./SitelenIdentifier.svelte";
 	import SitelenToUcsur from "./SitelenToUcsur.svelte";
 </script>
 
@@ -11,4 +12,6 @@
 	<Numbers />
 
 	<SitelenToUcsur />
+
+	<SitelenIdentifier />
 </main>
