@@ -21,11 +21,21 @@
 		if (from < 0 || !Number.isInteger(from))
 			return { type: "err", message: `${from} cannot be represented using this system!` };
 		if (from === 0) return { type: "ok", value: "ala" };
-		const ale = Math.floor(from / 100);
-		const mute = Math.floor((from - ale * 100) / 20);
-		const luka = Math.floor((from - ale * 100 - mute * 20) / 5);
-		const tu = Math.floor((from - ale * 100 - mute * 20 - luka * 5) / 2);
-		const wan = from - ale * 100 - mute * 20 - luka * 5 - tu * 2;
+
+		const words = {
+			ale: 100,
+			mute: 20,
+			luka: 5,
+			tu: 2,
+			wan: 1,
+		};
+		const ale = Math.floor(from / words.ale);
+		const mute = Math.floor((from - ale * words.ale) / words.mute);
+		const luka = Math.floor((from - ale * words.ale - mute * words.mute) / words.luka);
+		const tu = Math.floor(
+			(from - ale * words.ale - mute * words.mute - luka * words.luka) / words.tu,
+		);
+		const wan = from - ale * words.ale - mute * words.mute - luka * words.luka - tu * words.tu;
 
 		return {
 			type: "ok",
@@ -44,22 +54,34 @@
 			return { type: "err", message: `${from} cannot be represented using this system!` };
 		if (from === 0) return { type: "ok", value: "ala" };
 
-		// let digitsAfterDecimal = 0;
-
-		let result = [];
-
-		while (from > 0) {
-			let word = pu_precise(from % 100);
-			if (word.type === "ok") result.push(word.value);
-			else return word;
-			console.log(from);
-
-			from /= 100;
+		function sectionWords(raw: string): ConverterResult {
+			let parts = [];
+			for (let i = -raw.length % 2; i < raw.length; i += 2) {
+				const digit = parseInt(raw.slice(i, i + 2));
+				if (digit !== 0) {
+					const words = pu_precise(digit);
+					if (words.type === "err") return words;
+					parts.push(words.value);
+				}
+				if (i + 2 < raw.length) parts.push("ale");
+			}
+			return { type: "ok", value: parts.join(" ") };
 		}
+
+		let [int, frac] = from.toString().split(".") as [string, string?];
+
+		if (int.length % 2 === 1) int = "0" + int;
+		if (frac && frac.length % 2 === 1) frac = "0" + frac;
+
+		const intWords = sectionWords(int);
+		if (intWords.type === "err") return intWords;
+		if (!frac) return intWords;
+		const fracWords = sectionWords(frac);
+		if (fracWords.type === "err") return fracWords;
 
 		return {
 			type: "ok",
-			value: result.join(" "),
+			value: `${intWords.value} ala ${fracWords.value}`.trim(),
 		};
 	}
 
@@ -154,8 +176,12 @@
 
 	<Card.Content class="flex flex-col gap-4">
 		<div class="grid grid-cols-[1fr_min-content] gap-2">
-			<Input type="number" bind:value={value.current} placeholder="123" />
-			<Select.Root type="single" bind:value={converter.current}>
+			<Input
+				type="number"
+				bind:value={() => value.current, (v) => (value.current = v ?? 0)}
+				placeholder="123"
+			/>
+			<Select.Root allowDeselect={false} type="single" bind:value={converter.current}>
 				<Select.Trigger class={buttonVariants({ variant: "outline" })}>
 					{converter.current}
 				</Select.Trigger>

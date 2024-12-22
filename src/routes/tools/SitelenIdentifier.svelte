@@ -8,17 +8,17 @@
 
 	const elementOptions = {
 		"1": "1 element",
-		"2": "2 elements",
-		"2d": "2 disconnected",
-		"3": "3 elements",
-		"3d": "3 disconnected",
-		"4": "4 elements",
-		"4d": "4 disconnected",
-		"5": "5 elements",
-		"5d": "5 disconnected",
+		"2": "2 connected elements",
+		"2d": "2 disconnected elements",
+		"3": "3 connected elements",
+		"3d": "3 disconnected elements",
+		"4": "4 connected elements",
+		"4d": "4 disconnected elements",
+		"5": "5 connected elements",
+		"5d": "5 disconnected elements",
 		"6": "6 elements",
-		"7": "7 elements",
-		"7d": "7 disconnected",
+		"7": "7 connected elements",
+		"7d": "7 disconnected elements",
 		"8": "8 elements",
 		"9": "9 elements",
 		"12": "12 elements",
@@ -82,8 +82,8 @@
 		["5d zero", ["majuna", "namako", "pana", "suwi", "waso"]],
 		["5 one", ["kiwen", "ko", "len", "mije", "suno", "tomo", "walo"]],
 		["5d one", ["kalama", "moli"]],
-		["5 more", ["akesi", "alasa", "ilo", "laso", "pimeja"]],
-		["5d more", ["apeja", "kokosila", "loje"]],
+		["5 more", ["akesi", "alasa", "ilo", "kokosila", "laso", "pimeja"]],
+		["5d more", ["apeja", "loje"]],
 		["6", ["akesi", "kiki", "pan", "pipi", "su"]],
 		["7", ["jelo", "kepeken", "pakala"]],
 		["7d", ["sitelen", "sona", "soweli"]],
@@ -131,7 +131,7 @@
 
 	<Card.Content class="flex flex-col gap-4">
 		<div class="grid grid-cols-[1fr_min-content] gap-2">
-			<Select.Root type="single" bind:value={elements.current}>
+			<Select.Root allowDeselect={false} type="single" bind:value={elements.current}>
 				<Select.Trigger class={buttonVariants({ variant: "outline" })}>
 					{elementOptions[elements.current]}
 				</Select.Trigger>
@@ -142,7 +142,12 @@
 				</Select.Content>
 			</Select.Root>
 
-			<Select.Root disabled={disableLoops} type="single" bind:value={loops.current}>
+			<Select.Root
+				allowDeselect={false}
+				disabled={disableLoops}
+				type="single"
+				bind:value={loops.current}
+			>
 				<Select.Trigger class={buttonVariants({ variant: "outline" })}>
 					{loopOptions[loops.current]}
 				</Select.Trigger>
@@ -161,6 +166,8 @@
 					<span>{id}</span>
 					<span class="font-sitelen-pona text-3xl">{glyph}</span>
 				</Button>
+			{:else}
+				<span class="col-span-full text-muted-foreground text-center">No results!</span>
 			{/each}
 		</div>
 	</Card.Content>
