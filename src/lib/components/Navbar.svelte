@@ -25,7 +25,6 @@
 	import DarkModeIcon from "~icons/lucide/moon";
 	import LightModeIcon from "~icons/lucide/sun";
 	import FontsIcon from "~icons/mdi/format-font";
-	import FormsIcon from "~icons/mdi/pencil-outline";
 	import ToolsIcon from "~icons/mdi/wrench-outline";
 
 	import { goto } from "$app/navigation";
@@ -62,11 +61,6 @@
 			href: "/fonts",
 			label: "Fonts",
 			icon: FontsIcon,
-		},
-		forms: {
-			href: "/forms",
-			label: "Forms",
-			icon: FormsIcon,
 		},
 		tools: {
 			href: "/tools",
