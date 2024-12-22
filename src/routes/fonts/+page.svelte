@@ -50,12 +50,12 @@
 
 		<Card.Content class="px-4 flex flex-col gap-4">
 			<div class="flex items-center gap-2">
-				<Input bind:value={fontSentence.value} />
+				<Input bind:value={fontSentence.current} />
 				<Button
 					class="aspect-square"
 					size="icon"
 					variant="outline"
-					onclick={() => fontSentence.reset()}
+					onclick={() => (fontSentence.current = "jan li pana e moku tawa sina")}
 				>
 					<ResetIcon />
 				</Button>

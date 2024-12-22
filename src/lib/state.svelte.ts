@@ -1,7 +1,7 @@
 import { browser } from "$app/environment";
 import { entries, fromEntries } from "$lib/utils";
 import type { UsageCategory } from "@kulupu-linku/sona/utils";
-import { persisted, type Serializer } from "./storage.svelte";
+import { PersistedState } from "runed";
 import { SvelteSet } from "svelte/reactivity";
 
 export const searchQuery = $state({
@@ -15,8 +15,8 @@ export const defaultCategories: Record<Exclude<UsageCategory, "sandbox">, boolea
 	obscure: false,
 };
 
-export const categoriesSerializer: Serializer<typeof defaultCategories> = {
-	parse: (list) => {
+export const categoriesSerializer = {
+	deserialize: (list: string) => {
 		const keys = list.split(",");
 		const entries = fromEntries(
 			keys.map((it) => [it as keyof typeof defaultCategories, true] as const),
@@ -27,29 +27,33 @@ export const categoriesSerializer: Serializer<typeof defaultCategories> = {
 			...entries,
 		};
 	},
-	stringify: (obj) =>
+	serialize: (obj: Record<keyof typeof defaultCategories, boolean>) =>
 		entries(obj)
 			.filter(([, on]) => on)
 			.map(([key]) => key)
 			.join(","),
 };
 
-export const categories = persisted("categories", defaultCategories, categoriesSerializer);
-
-export const favorites = persisted("favorites", new SvelteSet<string>(), {
-	parse: (text) => {
-		const noPadding = /,*(.*),*/.exec(text)?.[1] ?? "";
-		return new SvelteSet(noPadding !== "" ? noPadding.split(",") : []);
-	},
-	stringify: (obj) => [...(obj?.values() ?? [])].join(","),
+export const categories = new PersistedState("categories", defaultCategories, {
+	serializer: categoriesSerializer,
 });
 
-export const writingSystem = persisted<"sitelen_pona" | "sitelen_sitelen">(
+export const favorites = new PersistedState("favorites", new SvelteSet<string>(), {
+	serializer: {
+		deserialize: (text) => {
+			const noPadding = /,*(.*),*/.exec(text)?.[1] ?? "";
+			return new SvelteSet(noPadding !== "" ? noPadding.split(",") : []);
+		},
+		serialize: (obj) => [...(obj?.values() ?? [])].join(","),
+	},
+});
+
+export const writingSystem = new PersistedState<"sitelen_pona" | "sitelen_sitelen">(
 	"writing_system",
 	"sitelen_pona",
 );
 
-export const etymologiesEnabled = persisted("etymologies_enabled", true);
-export const onlyFavorites = persisted("only_favorites", false);
+export const etymologiesEnabled = new PersistedState("etymologies_enabled", true);
+export const onlyFavorites = new PersistedState("only_favorites", false);
 
-export const fontSentence = persisted("font_sentence", "jan li pana e moku tawa sina");
+export const fontSentence = new PersistedState("font_sentence", "jan li pana e moku tawa sina");

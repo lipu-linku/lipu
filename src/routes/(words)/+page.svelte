@@ -25,10 +25,10 @@
 			words,
 			{
 				sandbox: false,
-				...(categoriesParam ? categoriesSerializer.parse(categoriesParam) : categories.value),
+				...(categoriesParam ? categoriesSerializer.deserialize(categoriesParam) : categories.current),
 			},
-			favorites.value,
-			onlyFavorites.value,
+			favorites.current,
+			onlyFavorites.current,
 			wordList,
 			language.id,
 		),

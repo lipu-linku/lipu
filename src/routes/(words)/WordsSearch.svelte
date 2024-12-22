@@ -11,6 +11,7 @@
 	import {
 		categories,
 		categoriesSerializer,
+		defaultCategories,
 		etymologiesEnabled,
 		favorites,
 		onlyFavorites,
@@ -34,7 +35,7 @@
 	let hasCopied = $state(false);
 	const copyLinkWithParams = () => {
 		const url = new URL(page.url);
-		url.searchParams.set("categories", JSON.stringify(categories.value));
+		url.searchParams.set("categories", JSON.stringify(categories.current));
 		url.searchParams.set("q", searchQuery.value);
 
 		navigator.clipboard.writeText(url.toString());
@@ -49,8 +50,8 @@
 
 	const resetOptions = () => {
 		searchQuery.value = "";
-		categories.reset();
-		onlyFavorites.reset();
+		categories.current = defaultCategories;
+		onlyFavorites.current = false;
 
 		page.url.searchParams.forEach((v, k, params) => params.delete(k, v));
 		pushState(page.url, {});
@@ -61,7 +62,7 @@
 	});
 
 	$effect(() => {
-		if (favorites.value.size === 0) onlyFavorites.value = false;
+		if (favorites.current.size === 0) onlyFavorites.current = false;
 	});
 </script>
 
@@ -100,10 +101,10 @@
 			<Card.Content class="flex flex-col gap-4">
 				<fieldset class="flex flex-col gap-1">
 					<div class="grid gap-2">
-						{#each keys(categories.value) as category}
+						{#each keys(categories.current) as category}
 							<div class="flex items-center gap-2">
 								<Checkbox
-									bind:checked={categories.value[category]}
+									bind:checked={categories.current[category]}
 									id="category-checkbox-{category}"
 									aria-labelledby="category-checkbox-{category}-label"
 								/>
@@ -117,7 +118,7 @@
 
 				<RadioGroup.Root
 					class={page.route.id === "/words/[word]" ? "pointer-events-none opacity-50" : undefined}
-					bind:value={writingSystem.value}
+					bind:value={writingSystem.current}
 				>
 					<div class="flex items-center gap-2">
 						<RadioGroup.Item
@@ -140,7 +141,7 @@
 				<div class="grid gap-2">
 					<div class="flex items-center gap-2">
 						<Checkbox
-							bind:checked={etymologiesEnabled.value}
+							bind:checked={etymologiesEnabled.current}
 							id="show-etymologies-checkbox"
 							aria-labelledby="show-etymologies-label"
 						/>
@@ -151,18 +152,18 @@
 					<div
 						class={cn(
 							"flex items-center gap-2",
-							favorites.value.size === 0 && "cursor-not-allowed",
+							favorites.current.size === 0 && "cursor-not-allowed",
 						)}
 					>
 						<Checkbox
-							bind:checked={onlyFavorites.value}
-							disabled={favorites.value.size === 0}
-							title={favorites.value.size === 0 ? "Select at least 1 favorite" : undefined}
+							bind:checked={onlyFavorites.current}
+							disabled={favorites.current.size === 0}
+							title={favorites.current.size === 0 ? "Select at least 1 favorite" : undefined}
 							id="only-favorites-checkbox"
 							aria-labelledby="only-favorites-label"
 						/>
 						<Label
-							title={favorites.value.size === 0 ? "Select at least 1 favorite" : undefined}
+							title={favorites.current.size === 0 ? "Select at least 1 favorite" : undefined}
 							id="only-favorites-label"
 							for="only-favorites-checkbox">Only Show Favorites</Label
 						>
@@ -187,7 +188,7 @@
 			<input
 				type="hidden"
 				name="categories"
-				value={categoriesSerializer.stringify(categories.value)}
+				value={categoriesSerializer.serialize(categories.current)}
 			/>
 		</Card.Root>
 	</form>

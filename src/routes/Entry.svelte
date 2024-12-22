@@ -71,7 +71,7 @@
 						.join(" · ")}
 				{/if}
 			</Card.Description>
-			{#if etymologiesEnabled.value && word.etymology.length > 0 && etymology.length > 0}
+			{#if etymologiesEnabled.current && word.etymology.length > 0 && etymology.length > 0}
 				<Card.Description>
 					{@const etymString = word.etymology
 						.map((etym, i) => {
@@ -104,12 +104,12 @@
 				variant="outline"
 				size="icon"
 				onclick={() => {
-					favorites.value.has(word.id)
-						? favorites.value.delete(word.id)
-						: favorites.value.add(word.id);
+					favorites.current.has(word.id)
+						? favorites.current.delete(word.id)
+						: favorites.current.add(word.id);
 				}}
 			>
-				{#if !favorites.value.has(word.id)}
+				{#if !favorites.current.has(word.id)}
 					<FavoriteIcon />
 				{:else}
 					<UnfavoriteIcon />
@@ -118,11 +118,11 @@
 		</div>
 
 		<div class="flex items-center justify-end flex-wrap">
-			{#if writingSystem.value === "sitelen_pona" && word.representations?.ligatures}
+			{#if writingSystem.current === "sitelen_pona" && word.representations?.ligatures}
 				{#each word.representations.ligatures.slice(0, 3) as glyph}
 					<span class="text-center font-sitelen-pona">{glyph}</span>
 				{/each}
-			{:else if writingSystem.value === "sitelen_sitelen" && word.representations?.sitelen_sitelen}
+			{:else if writingSystem.current === "sitelen_sitelen" && word.representations?.sitelen_sitelen}
 				<img
 					src={word.representations.sitelen_sitelen}
 					alt="{word.word} in sitelen sitelen format"
