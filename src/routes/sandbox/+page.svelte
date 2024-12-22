@@ -2,7 +2,7 @@
 	import Entry from "../Entry.svelte";
 
 	import autoAnimate from "@formkit/auto-animate";
-	import { page } from "$app/stores";
+	import { page } from "$app/state";
 	import { wordSearch } from "$lib/components/search";
 	import { favorites, onlyFavorites, searchQuery } from "$lib/state.svelte";
 	import logo from "$lib/assets/icon-light.png?url";
@@ -10,10 +10,10 @@
 	const { data } = $props();
 	const { words, language } = $derived(data);
 
-	const wordList = $derived($page.url.searchParams.get("list")?.split(","));
+	const wordList = $derived(page.url.searchParams.get("list")?.split(","));
 	const sorted_filtered_dictionary = $derived(
 		wordSearch(
-			$page.url.searchParams.get("q") ?? searchQuery.value,
+			page.url.searchParams.get("q") ?? searchQuery.value,
 			words,
 			{
 				sandbox: true,

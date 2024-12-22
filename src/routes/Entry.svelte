@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { etymologiesEnabled, favorites, writingSystem } from "$lib/state.svelte";
 	import type { Language, LocalizedWord } from "@kulupu-linku/sona";
-	import { getTranslatedData, type UsageCategory } from "@kulupu-linku/sona/utils";
+	import { getTranslatedData } from "@kulupu-linku/sona/utils";
 
 	import AudioButton from "$lib/components/AudioButton.svelte";
 	import { Button } from "$lib/components/ui/button";
@@ -126,7 +126,7 @@
 				<img
 					src={word.representations.sitelen_sitelen}
 					alt="{word.word} in sitelen sitelen format"
-					class="size-16 dark:invert"
+					class="size-16 grayscale dark:invert"
 					loading="lazy"
 				/>
 			{:else}

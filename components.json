@@ -13,5 +13,5 @@
 		"hooks": "$lib/hooks"
 	},
 	"typescript": true,
-	"registry": "https://next.shadcn-svelte.com/registry"
+	"registry": "https://next.shadcn-svelte.com/registry/"
 }

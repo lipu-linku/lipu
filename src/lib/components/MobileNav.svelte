@@ -1,16 +1,16 @@
 <script lang="ts">
-	import { page } from "$app/stores";
-	import { cn, entries } from "$lib/utils";
-	import { Button, buttonVariants } from "$lib/components/ui/button";
+	import { page } from "$app/state";
+	import { buttonVariants } from "$lib/components/ui/button";
 	import * as Sheet from "$lib/components/ui/sheet";
-	import Separator from "./ui/separator/separator.svelte";
+	import { cn, entries } from "$lib/utils";
 	import type { NavbarLink } from "./Navbar.svelte";
+	import Separator from "./ui/separator/separator.svelte";
 
-	import iconLight from "$lib/assets/icon-light.png";
 	import iconDark from "$lib/assets/icon-dark.png";
-	import MenuIcon from "~icons/lucide/menu";
+	import iconLight from "$lib/assets/icon-light.png";
 	import { mode } from "mode-watcher";
 	import type { Snippet } from "svelte";
+	import MenuIcon from "~icons/lucide/menu";
 
 	interface Props {
 		links: Record<string, NavbarLink>;
@@ -55,7 +55,7 @@
 					<a
 						href={link.href}
 						class={cn(
-							$page.url.pathname.startsWith(link.href) ? "text-foreground" : "text-foreground/60",
+							page.url.pathname.startsWith(link.href) ? "text-foreground" : "text-foreground/60",
 							"flex items-center",
 						)}
 						onclick={() => (open = false)}

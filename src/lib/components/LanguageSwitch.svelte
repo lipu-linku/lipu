@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { page } from "$app/stores";
+	import { page } from "$app/state";
 	import * as Select from "$lib/components/ui/select";
 	import { cn } from "$lib/utils";
 	import type { Languages } from "@kulupu-linku/sona";
@@ -31,7 +31,7 @@
 	onValueChange={(item) => {
 		if (item) {
 			localStorage.setItem("lang", item);
-			const url = new URL($page.url);
+			const url = new URL(page.url);
 			url.searchParams.set("lang", item);
 			goto(url);
 		}

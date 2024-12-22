@@ -1,13 +1,13 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
-	import * as RadioGroup from "$lib/components/ui/radio-group";
-	import { Separator } from "$lib/components/ui/separator";
 	import { Checkbox } from "$lib/components/ui/checkbox";
-	import { Label } from "$lib/components/ui/label";
 	import { Input } from "$lib/components/ui/input";
+	import { Label } from "$lib/components/ui/label";
+	import * as RadioGroup from "$lib/components/ui/radio-group";
 
-	import { page } from "$app/stores";
+	import { pushState } from "$app/navigation";
+	import { page } from "$app/state";
 	import {
 		categories,
 		categoriesSerializer,
@@ -18,12 +18,9 @@
 		writingSystem,
 	} from "$lib/state.svelte";
 	import { cn, keys } from "$lib/utils";
-	import { pushState } from "$app/navigation";
 
 	import CheckIcon from "~icons/lucide/check";
-	import CategoriesIcon from "~icons/lucide/layout-dashboard";
 	import LinkIcon from "~icons/lucide/link";
-	import WritingSystemIcon from "~icons/lucide/pen-tool";
 	import SearchIcon from "~icons/lucide/search";
 	import ResetIcon from "~icons/lucide/undo-2";
 
@@ -36,7 +33,7 @@
 
 	let hasCopied = $state(false);
 	const copyLinkWithParams = () => {
-		const url = new URL($page.url);
+		const url = new URL(page.url);
 		url.searchParams.set("categories", JSON.stringify(categories.value));
 		url.searchParams.set("q", searchQuery.value);
 
@@ -46,8 +43,8 @@
 	};
 
 	const clearQuery = () => {
-		$page.url.searchParams.delete("q");
-		pushState($page.url, {});
+		page.url.searchParams.delete("q");
+		pushState(page.url, {});
 	};
 
 	const resetOptions = () => {
@@ -55,12 +52,12 @@
 		categories.reset();
 		onlyFavorites.reset();
 
-		$page.url.searchParams.forEach((v, k, params) => params.delete(k, v));
-		pushState($page.url, {});
+		page.url.searchParams.forEach((v, k, params) => params.delete(k, v));
+		pushState(page.url, {});
 	};
 
 	$effect(() => {
-		if (searchQuery.value === "" && $page.url.searchParams.has("q")) clearQuery();
+		if (searchQuery.value === "" && page.url.searchParams.has("q")) clearQuery();
 	});
 
 	$effect(() => {
@@ -119,12 +116,12 @@
 				</fieldset>
 
 				<RadioGroup.Root
-					class={$page.route.id === "/words/[word]" ? "pointer-events-none opacity-50" : undefined}
+					class={page.route.id === "/words/[word]" ? "pointer-events-none opacity-50" : undefined}
 					bind:value={writingSystem.value}
 				>
 					<div class="flex items-center gap-2">
 						<RadioGroup.Item
-							disabled={$page.route.id === "/words/[word]"}
+							disabled={page.route.id === "/words/[word]"}
 							value="sitelen_pona"
 							id="sitelen-pona-radio"
 						/>
@@ -132,7 +129,7 @@
 					</div>
 					<div class="flex items-center gap-2">
 						<RadioGroup.Item
-							disabled={$page.route.id === "/words/[word]"}
+							disabled={page.route.id === "/words/[word]"}
 							value="sitelen_sitelen"
 							id="sitelen-sitelen-radio"
 						/>

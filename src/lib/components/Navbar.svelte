@@ -26,9 +26,10 @@
 	import LightModeIcon from "~icons/lucide/sun";
 	import FontsIcon from "~icons/mdi/format-font";
 	import FormsIcon from "~icons/mdi/pencil-outline";
+	import ToolsIcon from "~icons/mdi/wrench-outline";
 
 	import { goto } from "$app/navigation";
-	import { page } from "$app/stores";
+	import { page } from "$app/state";
 
 	interface Props {
 		languages: Languages;
@@ -66,6 +67,11 @@
 			href: "/forms",
 			label: "Forms",
 			icon: FormsIcon,
+		},
+		tools: {
+			href: "/tools",
+			label: "Tools",
+			icon: ToolsIcon,
 		},
 		about: {
 			href: "/about",
@@ -107,7 +113,7 @@
 			onValueChange={(item) => {
 				if (item) {
 					localStorage.setItem("lang", item);
-					const url = new URL($page.url);
+					const url = new URL(page.url);
 					url.searchParams.set("lang", item);
 					goto(url);
 				}
@@ -127,7 +133,13 @@
 			</Select.Content>
 		</Select.Root>
 
-		<Button variant="ghost" size="icon" onclick={toggleMode} aria-label="Toggle theme">
+		<Button
+			class="aspect-square"
+			variant="ghost"
+			size="icon"
+			onclick={toggleMode}
+			aria-label="Toggle theme"
+		>
 			{#if $mode === "light"}
 				<DarkModeIcon aria-label="Moon icon" />
 			{:else}

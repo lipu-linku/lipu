@@ -28,7 +28,7 @@
 	--radius-sm: calc(var(--radius-lg) - 4px);
 
 	--font-sitelen-pona: "sitelen seli kiwen mono asuki";
-	--font-sitelen-ucsur: var(--font-sans), "sitelen seli kiwen mono juniko";
+	--font-sitelen-ucsur: "sitelen seli kiwen mono asuki";
 
 	--animate-accordion-down: accordion-down 0.2s ease-out;
 	--animate-accordion-up: accordion-up 0.2s ease-out;
@@ -116,7 +116,7 @@
 	input[type="search"] {
 		&::-webkit-search-cancel-button,
 		&::-webkit-calendar-picker-indicator {
-			@apply hidden!;
+			@apply !hidden;
 		}
 	}
 }

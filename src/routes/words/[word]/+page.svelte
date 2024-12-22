@@ -1,7 +1,6 @@
 <script lang="ts">
 	import AudioButton from "$lib/components/AudioButton.svelte";
 	import Collapsible from "$lib/components/Collapsible.svelte";
-	import Navbar from "$lib/components/Navbar.svelte";
 	import WordsSearch from "../../(words)/WordsSearch.svelte";
 	import UsageGraph from "./UsageGraph.svelte";
 
@@ -10,7 +9,7 @@
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import * as Tooltip from "$lib/components/ui/tooltip";
 
-	import { page } from "$app/stores";
+	import { page } from "$app/state";
 	import { getTranslatedData } from "@kulupu-linku/sona/utils";
 
 	import { cn } from "$lib/utils";
@@ -20,7 +19,7 @@
 	import ShareButton from "~icons/lucide/share-2";
 
 	const { data } = $props();
-	const { word, language, languages } = $derived(data);
+	const { word, language } = $derived(data);
 
 	const usageScore = $derived(Object.values(word.usage).at(-1) ?? 0);
 	const definition = $derived(getTranslatedData(word, "definition", language.id));
@@ -103,7 +102,7 @@
 					<DropdownMenu.Label>Share word</DropdownMenu.Label>
 					<DropdownMenu.Separator />
 
-					<DropdownMenu.Item onclick={() => navigator.clipboard.writeText($page.url.toString())}>
+					<DropdownMenu.Item onclick={() => navigator.clipboard.writeText(page.url.toString())}>
 						<CopyIcon class="inline mr-2 size-4" />
 						Copy URL
 					</DropdownMenu.Item>
@@ -244,7 +243,7 @@
 							<img
 								src={word.representations.sitelen_sitelen}
 								alt="{word.word} in sitelen sitelen format"
-								class="dark:invert size-16 m-2"
+								class="grayscale dark:invert size-16 m-2"
 							/>
 						</div>
 					{/if}

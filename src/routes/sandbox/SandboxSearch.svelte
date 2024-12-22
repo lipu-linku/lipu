@@ -1,29 +1,17 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
-	import * as RadioGroup from "$lib/components/ui/radio-group";
-	import { Separator } from "$lib/components/ui/separator";
 	import { Checkbox } from "$lib/components/ui/checkbox";
-	import { Label } from "$lib/components/ui/label";
 	import { Input } from "$lib/components/ui/input";
+	import { Label } from "$lib/components/ui/label";
 
-	import { page } from "$app/stores";
-	import {
-		categories,
-		categoriesSerializer,
-		etymologiesEnabled,
-		favorites,
-		onlyFavorites,
-		searchQuery,
-		writingSystem,
-	} from "$lib/state.svelte";
-	import { cn, keys } from "$lib/utils";
 	import { pushState } from "$app/navigation";
+	import { page } from "$app/state";
+	import { etymologiesEnabled, favorites, onlyFavorites, searchQuery } from "$lib/state.svelte";
+	import { cn } from "$lib/utils";
 
 	import CheckIcon from "~icons/lucide/check";
-	import CategoriesIcon from "~icons/lucide/layout-dashboard";
 	import LinkIcon from "~icons/lucide/link";
-	import WritingSystemIcon from "~icons/lucide/pen-tool";
 	import SearchIcon from "~icons/lucide/search";
 	import ResetIcon from "~icons/lucide/undo-2";
 
@@ -36,7 +24,7 @@
 
 	let hasCopied = $state(false);
 	const copyLinkWithParams = () => {
-		const url = new URL($page.url);
+		const url = new URL(page.url);
 		url.searchParams.set("q", searchQuery.value);
 
 		navigator.clipboard.writeText(url.toString());
@@ -45,20 +33,20 @@
 	};
 
 	const clearQuery = () => {
-		$page.url.searchParams.delete("q");
-		pushState($page.url, {});
+		page.url.searchParams.delete("q");
+		pushState(page.url, {});
 	};
 
 	const resetOptions = () => {
 		searchQuery.value = "";
 		onlyFavorites.reset();
 
-		$page.url.searchParams.forEach((v, k, params) => params.delete(k, v));
-		pushState($page.url, {});
+		page.url.searchParams.forEach((v, k, params) => params.delete(k, v));
+		pushState(page.url, {});
 	};
 
 	$effect(() => {
-		if (searchQuery.value === "" && $page.url.searchParams.has("q")) clearQuery();
+		if (searchQuery.value === "" && page.url.searchParams.has("q")) clearQuery();
 	});
 
 	$effect(() => {

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import Entry from "../Entry.svelte";
-	import { page } from "$app/stores";
+	import { page } from "$app/state";
 	import { wordSearch } from "$lib/components/search";
 	import {
 		categories,
@@ -16,12 +16,12 @@
 
 	const hasDisclaimer = false;
 
-	const categoriesParam = $derived($page.url.searchParams.get("categories"));
+	const categoriesParam = $derived(page.url.searchParams.get("categories"));
 
-	const wordList = $derived($page.url.searchParams.get("list")?.split(","));
+	const wordList = $derived(page.url.searchParams.get("list")?.split(","));
 	const sorted_filtered_dictionary = $derived(
 		wordSearch(
-			$page.url.searchParams.get("q") ?? searchQuery.value,
+			page.url.searchParams.get("q") ?? searchQuery.value,
 			words,
 			{
 				sandbox: false,
@@ -43,14 +43,14 @@
 	<meta name="og:image" content={logo} />
 </svelte:head>
 
-<main class="flex-1 my-4 space-y-4">
+<main class="my-4 space-y-4 min-w-6/10">
 	{#if hasDisclaimer}
 		<p class="text-center text-balance">
 			The <a href="https://linku.la/wile">2024 Linku usage survey</a> is now open! Please take the survey
 			to improve the dictionary!
 		</p>
 	{/if}
-	<ul class="flex flex-col items-stretch gap-2 mx-auto max-w-[min(95vw,1000px)]">
+	<ul class="flex flex-col items-stretch gap-2">
 		{#each sorted_filtered_dictionary as word (word.id)}
 			<li>
 				<Entry {language} {word} />
