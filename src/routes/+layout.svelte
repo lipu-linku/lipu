@@ -1,24 +1,26 @@
 <script lang="ts">
-	import { page } from "$app/stores";
+	import { page } from "$app/state";
+	import Navbar from "$lib/components/Navbar.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { ModeWatcher } from "mode-watcher";
+	import { outerHeight, scrollY } from "svelte/reactivity/window";
+	import { fly } from "svelte/transition";
 
 	import { pwaAssetsHead } from "virtual:pwa-assets/head";
 	import { pwaInfo } from "virtual:pwa-info";
-
 	import { useRegisterSW } from "virtual:pwa-register/svelte";
-	import { fly } from "svelte/transition";
-	import UpArrowIcon from "~icons/lucide/arrow-up";
-	import "../app.postcss";
 
-	const { children } = $props();
+	import UpArrowIcon from "~icons/lucide/arrow-up";
+	import "../app.css";
+
+	const { children, data } = $props();
 
 	const webManifest = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : "");
 
 	useRegisterSW({
 		immediate: true,
 		onRegistered(r) {
-			r &&
+			if (r)
 				setInterval(() => {
 					console.log("Checking for sw update");
 					r.update();
@@ -29,14 +31,12 @@
 			console.log("SW registration error", error);
 		},
 	});
-
-	let scrollY = $state<number>(0);
-	let outerHeight = $state<number>(0);
 </script>
 
-<ModeWatcher />
+<ModeWatcher lightClassNames={["light"]} />
 
 <svelte:head>
+	<!-- eslint-disable svelte/no-at-html-tags -->
 	{@html webManifest}
 	{#if pwaAssetsHead && pwaAssetsHead.themeColor}
 		<meta name="theme-color" content={pwaAssetsHead.themeColor.content} />
@@ -46,12 +46,12 @@
 	{/each}
 </svelte:head>
 
-<svelte:window bind:scrollY bind:outerHeight />
+<div class="grid grid-cols-[min-content_1fr_fit-content(100%)] justify-center gap-2">
+	<Navbar {...data} />
 
-<div class="relative my-0 mx-auto p-0 flex flex-col min-h-dvh">
 	{@render children()}
 
-	{#if !$page.params.word && scrollY > 1.05 * outerHeight}
+	{#if !page.params?.word && (scrollY.current ?? 0) > 1.05 * (outerHeight.current ?? 0)}
 		<div transition:fly={{ y: 10, duration: 150 }} class="fixed bottom-4 right-4">
 			<Button
 				class="flex items-center gap-2"

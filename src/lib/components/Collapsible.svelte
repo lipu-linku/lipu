@@ -1,9 +1,10 @@
 <script lang="ts">
-	interface Props {
+	import type { HTMLAttributes } from "svelte/elements";
+
+	interface Props extends HTMLAttributes<HTMLSpanElement> {
 		content: string;
 		separator?: string;
 		length?: number;
-		[key: string]: any;
 	}
 
 	const { content, separator = ", ", length = 50, ...rest }: Props = $props();

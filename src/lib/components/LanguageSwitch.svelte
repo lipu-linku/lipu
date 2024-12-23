@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { goto } from "$app/navigation";
-	import { page } from "$app/stores";
+	import { page } from "$app/state";
 	import * as Select from "$lib/components/ui/select";
 	import { cn } from "$lib/utils";
 	import type { Languages } from "@kulupu-linku/sona";
@@ -31,23 +31,18 @@
 	onValueChange={(item) => {
 		if (item) {
 			localStorage.setItem("lang", item);
-			const url = new URL($page.url);
+			const url = new URL(page.url);
 			url.searchParams.set("lang", item);
 			goto(url);
 		}
 	}}
 >
-	<Select.Trigger
-		class={cn(
-			"overflow-ellipsis md:max-w-48 md:w-fit bg-background md:justify-start gap-2",
-			triggerClass,
-		)}
-	>
+	<Select.Trigger class={cn("text-ellipsis", triggerClass)}>
 		<LanguagesIcon aria-label="Languages icon" class="size-4" />
 		{items.get(selected)}
 	</Select.Trigger>
 
-	<Select.Content class={contentClass}>
+	<Select.Content side="top" class={contentClass}>
 		{#each items as [value, label] (value)}
 			<Select.Item {label} {value}>{label}</Select.Item>
 		{/each}

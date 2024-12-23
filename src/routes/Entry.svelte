@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { etymologiesEnabled, favorites, writingSystem } from "$lib/state.svelte";
 	import type { Language, LocalizedWord } from "@kulupu-linku/sona";
-	import { getTranslatedData, type UsageCategory } from "@kulupu-linku/sona/utils";
+	import { getTranslatedData } from "@kulupu-linku/sona/utils";
 
 	import AudioButton from "$lib/components/AudioButton.svelte";
 	import { Button } from "$lib/components/ui/button";
@@ -33,24 +33,16 @@
 				return undefined;
 		}
 	});
-
-	const categoryColors = {
-		core: "oklch(93.29% 0.137 106.54)",
-		common: "oklch(61.15% 0.177 30.62)",
-		uncommon: "oklch(56.87% 0.159 351.1)",
-		obscure: "oklch(42.72% 0.249 311.74)",
-		sandbox: "oklch(50.55% 0.052 284.53)",
-	} as const satisfies Record<UsageCategory, string>;
 </script>
 
 <Card.Root
 	id={word.id}
 	class="
 		relative flex-1 w-auto flex justify-between border-2 transition-colors
-		before:absolute before:inset-y-0 before:w-1 before:rounded-s-md before:bg-[--category-color]
-		before:transition-[width] has-[a:hover]:border-[--category-color] has-[a:hover]:before:w-2
+		before:absolute before:inset-y-0 before:w-1 before:rounded-s-md before:bg-(--category-color)
+		before:transition-[width] has-[a:hover]:border-(--category-color) has-[a:hover]:before:w-2
 	"
-	style="--category-color: {categoryColors[word.usage_category]}"
+	style="--category-color: var(--color-category-{word.usage_category})"
 >
 	<a href="/words/{word.id}" class="flex-1 p-0.5">
 		<Card.Header class="space-y-1 p-4 pl-6">
@@ -79,7 +71,7 @@
 						.join(" · ")}
 				{/if}
 			</Card.Description>
-			{#if etymologiesEnabled.value && word.etymology.length > 0 && etymology.length > 0}
+			{#if etymologiesEnabled.current && word.etymology.length > 0 && etymology.length > 0}
 				<Card.Description>
 					{@const etymString = word.etymology
 						.map((etym, i) => {
@@ -112,12 +104,12 @@
 				variant="outline"
 				size="icon"
 				onclick={() => {
-					favorites.value.has(word.id)
-						? favorites.value.delete(word.id)
-						: favorites.value.add(word.id);
+					favorites.current.has(word.id)
+						? favorites.current.delete(word.id)
+						: favorites.current.add(word.id);
 				}}
 			>
-				{#if !favorites.value.has(word.id)}
+				{#if !favorites.current.has(word.id)}
 					<FavoriteIcon />
 				{:else}
 					<UnfavoriteIcon />
@@ -126,15 +118,15 @@
 		</div>
 
 		<div class="flex items-center justify-end flex-wrap">
-			{#if writingSystem.value === "sitelen_pona" && word.representations?.ligatures}
+			{#if writingSystem.current === "sitelen_pona" && word.representations?.ligatures}
 				{#each word.representations.ligatures.slice(0, 3) as glyph}
 					<span class="text-center font-sitelen-pona">{glyph}</span>
 				{/each}
-			{:else if writingSystem.value === "sitelen_sitelen" && word.representations?.sitelen_sitelen}
+			{:else if writingSystem.current === "sitelen_sitelen" && word.representations?.sitelen_sitelen}
 				<img
 					src={word.representations.sitelen_sitelen}
 					alt="{word.word} in sitelen sitelen format"
-					class="size-16 dark:invert"
+					class="size-16 grayscale dark:invert"
 					loading="lazy"
 				/>
 			{:else}
