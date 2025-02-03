@@ -164,7 +164,7 @@
 				{@const [id, glyph] = Array.isArray(word) ? word : [word, word]}
 				<Button class="flex-col gap-1 h-fit" href="/words/{id}" variant="ghost">
 					<span>{id}</span>
-					<span class="font-sitelen-pona text-3xl">{glyph}</span>
+					<span class="font-sitelen-seli-kiwen text-3xl">{glyph}</span>
 				</Button>
 			{:else}
 				<span class="col-span-full text-muted-foreground text-center">No results!</span>

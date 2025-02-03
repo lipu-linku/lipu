@@ -119,9 +119,11 @@
 
 		<div class="flex items-center justify-end flex-wrap">
 			{#if writingSystem.current === "sitelen_pona" && word.representations?.ligatures}
-				{#each word.representations.ligatures.slice(0, 3) as glyph}
-					<span class="text-center font-sitelen-pona">{glyph}</span>
-				{/each}
+			<span class="text-center font-sitelen-seli-kiwen">
+						{#each word.representations.ligatures.slice(0, 3) as glyph}
+						{glyph}
+						{/each}
+					</span>
 			{:else if writingSystem.current === "sitelen_sitelen" && word.representations?.sitelen_sitelen}
 				<img
 					src={word.representations.sitelen_sitelen}

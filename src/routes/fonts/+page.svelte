@@ -16,9 +16,17 @@
 
 	let ucsur = $state(false);
 	let ligatures = $state(false);
+	let search = $state("");
 
 	const filtered = $derived(
 		fonts
+			.filter(([, f]) =>
+				search
+					? f.name.includes(search) ||
+						f.filename.includes(search) ||
+						f.creator.join(" ").includes(search)
+					: true,
+			)
 			.filter(([, f]) => (ucsur ? f.ucsur : true))
 			.filter(([, f]) => (ligatures ? f.ligatures : true)),
 	);
@@ -32,7 +40,19 @@
 	<meta name="og:image" content={logo} />
 </svelte:head>
 
-<main class="w-full my-4">
+<main class="w-full my-4 space-y-2">
+	<div class="flex items-center gap-2">
+		<Input bind:value={fontSentence.current} />
+		<Button
+			class="aspect-square"
+			size="icon"
+			variant="outline"
+			onclick={() => (fontSentence.current = "jan li pana e moku tawa sina")}
+		>
+			<ResetIcon />
+		</Button>
+	</div>
+
 	<ul class="flex flex-col gap-2">
 		{#each filtered as [id, font] (id)}
 			<li>
@@ -49,25 +69,17 @@
 		</Card.Header>
 
 		<Card.Content class="px-4 flex flex-col gap-4">
-			<div class="flex items-center gap-2">
-				<Input bind:value={fontSentence.current} />
-				<Button
-					class="aspect-square"
-					size="icon"
-					variant="outline"
-					onclick={() => (fontSentence.current = "jan li pana e moku tawa sina")}
-				>
-					<ResetIcon />
-				</Button>
-			</div>
-
 			<div class="flex flex-col gap-2">
-				<div class="flex items-center space-x-2">
+				<div class="flex flex-col gap-2">
+					<Input id="search-input" aria-label="Search for fonts" bind:value={search} />
+				</div>
+
+				<div class="flex items-center gap-2">
 					<Checkbox id="ucsur-input" aria-labelledby="ucsur-label" bind:checked={ucsur} />
 					<Label for="ucsur-input" id="ucsur-label">Only Show UCSUR Fonts</Label>
 				</div>
 
-				<div class="flex items-center space-x-2">
+				<div class="flex items-center gap-2">
 					<Checkbox
 						id="ligatures-input"
 						aria-labelledby="ligatures-label"

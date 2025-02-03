@@ -69,7 +69,7 @@
 <svelte:window onkeydown={focusSearch} />
 
 <aside class="sticky top-0 end-0 h-dvh px-2 py-4">
-	<form class="h-full px-2 gap-2 flex flex-col" role="search">
+	<form class="h-full px-2 gap-4 flex flex-col" role="search">
 		<div class="flex items-center justify-stretch gap-2">
 			<Input
 				class="bg-background"

@@ -12,10 +12,11 @@
 	import { page } from "$app/state";
 	import { getTranslatedData } from "@kulupu-linku/sona/utils";
 
-	import { cn } from "$lib/utils";
 	import BackIcon from "~icons/lucide/arrow-left";
+	import CodeIcon from "~icons/lucide/code-xml";
 	import CopyIcon from "~icons/lucide/copy";
 	import InfoIcon from "~icons/lucide/info";
+	import GraphIcon from "~icons/lucide/line-chart";
 	import ShareButton from "~icons/lucide/share-2";
 
 	const { data } = $props();
@@ -77,7 +78,7 @@
 	/>
 </svelte:head>
 
-<main class="flex-1 my-4 flex flex-col gap-2 pb-2">
+<main class="flex-1 my-4 flex flex-col gap-4 pb-2">
 	<header class="flex-1 flex items-center gap-4">
 		<Button
 			onclick={() => window.history.back()}
@@ -91,6 +92,15 @@
 		<h1 class="font-semibold text-4xl align-middle">{word.word}</h1>
 
 		<div class="ml-auto flex items-center gap-2">
+			<Button
+				href="https://github.com/lipu-linku/sona/blob/main/words/metadata/{word.id}.toml"
+				variant="outline"
+				size="icon"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				<CodeIcon />
+			</Button>
 			{#if word.audio}
 				<AudioButton audio={word.audio} />
 			{/if}
@@ -108,7 +118,7 @@
 					</DropdownMenu.Item>
 
 					<DropdownMenu.Item onclick={copyCodepoint}>
-						<span class="text-2xl -ml-1 mr-2 font-sitelen-pona">sitelen-pona</span>
+						<span class="text-2xl -ml-1 mr-2 font-sitelen-seli-kiwen">sitelen-pona</span>
 						sitelen pona
 					</DropdownMenu.Item>
 				</DropdownMenu.Content>
@@ -116,13 +126,8 @@
 		</div>
 	</header>
 
-	<div
-		class={cn(
-			"flex-1 grid grid-cols-3 max-md:flex max-md:flex-col gap-2 justify-stretch",
-			!hasRepresentations && "grid-cols-2",
-		)}
-	>
-		<Card.Root>
+	<div class="flex-1 grid grid-cols-2 auto-rows-min gap-2">
+		<Card.Root class="col-span-2">
 			<Card.Header>
 				<Card.Title class="text-2xl" level={2}>Meaning</Card.Title>
 			</Card.Header>
@@ -182,8 +187,8 @@
 						.then((text) => {
 							const doc = document.createElement("html");
 							doc.innerHTML = text;
-							const el = doc.querySelector(`details > summary#${id} + p`);
-							if (el) return el.textContent ?? "";
+							const el = doc.querySelectorAll(`details > summary#${id} ~ p`);
+							if (el.length > 0) return [...el].reduce((acc, it) => acc + "\n\n" + it.textContent, "").trim();
 							else throw new Error(`Could not find a semantic space definition for ${id}`);
 						}) then semantic}
 						<div class="flex flex-col justify-center gap-2">
@@ -199,7 +204,7 @@
 										<Tooltip.Content class="max-w-[min(55ch,80%)]">
 											This information is sourced from <a
 												class="underline"
-												href="https://lipamanka.gay/essays/dictionary"
+												href={word.resources.lipamanka_semantic}
 												target="_blank"
 												rel="noopener noreferrer"
 											>
@@ -210,7 +215,7 @@
 								</Tooltip.Provider>
 							</h3>
 
-							<Collapsible separator=" " content={semantic} />
+							<Collapsible class="whitespace-pre-line" separator=" " content={semantic} />
 						</div>
 					{/await}
 				{/if}
@@ -227,7 +232,7 @@
 						<div class="flex flex-col justify-center gap-2">
 							<h3 class="font-medium text-xl">sitelen pona</h3>
 							<p>
-								<span class="text-7xl font-sitelen-pona">
+								<span class="text-7xl font-sitelen-seli-kiwen">
 									{word.representations?.ligatures?.join(" ")}
 								</span>
 							</p>
@@ -358,9 +363,19 @@
 		</Card.Root>
 
 		{#if Object.keys(word.usage).length > 1}
-			<Card.Root class="col-span-3">
-				<Card.Header>
+			<Card.Root class="col-span-2">
+				<Card.Header class="flex flex-row justify-between">
 					<Card.Title class="text-2xl" level={2}>Usage Trend</Card.Title>
+
+					<Button
+						variant="outline"
+						size="icon"
+						href="https://ilo.muni.la/?query={word.word}"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<GraphIcon />
+					</Button>
 				</Card.Header>
 				<Card.Content class="h-[600px] p-4 px-8">
 					<UsageGraph data={word.usage} />

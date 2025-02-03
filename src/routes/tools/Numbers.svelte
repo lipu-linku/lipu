@@ -195,7 +195,7 @@
 
 		<span class="text-balance">{result.type === "ok" ? result.value : result.message}</span>
 		{#if result.type === "ok"}
-			<span class="font-sitelen-pona text-2xl">{result.value}</span>
+			<span class="font-sitelen-seli-kiwen text-2xl">{result.value}</span>
 		{/if}
 	</Card.Content>
 </Card.Root>

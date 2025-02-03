@@ -75,7 +75,7 @@
 	} as const;
 </script>
 
-<aside class="sticky top-0 start-0 h-dvh px-4 py-5 flex flex-col gap-4">
+<aside class="sticky top-0 start-0 h-dvh px-4 py-5 flex flex-col gap-6">
 	<header>
 		<a href="/" class="flex items-center gap-2">
 			{#if $mode === "dark"}
@@ -127,17 +127,11 @@
 			</Select.Content>
 		</Select.Root>
 
-		<Button
-			class="aspect-square"
-			variant="ghost"
-			size="icon"
-			onclick={toggleMode}
-			aria-label="Toggle theme"
-		>
+		<Button variant="ghost" size="icon" aria-label="Open theme menu" onclick={toggleMode}>
 			{#if $mode === "light"}
-				<DarkModeIcon aria-label="Moon icon" />
+				<LightModeIcon />
 			{:else}
-				<LightModeIcon aria-label="Sun icon" />
+				<DarkModeIcon />
 			{/if}
 		</Button>
 	</div>

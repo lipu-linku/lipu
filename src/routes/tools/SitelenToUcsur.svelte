@@ -215,11 +215,11 @@
 		</Card.Description>
 	</Card.Header>
 
-	<Card.Content class="h-full flex flex-col gap-4">
+	<Card.Content class="h-max flex flex-col gap-4">
 		<Textarea bind:value={value.current} placeholder="tomo lipu lon seme" />
 
 		<span
-			class="whitespace-pre-line inline-block data-ok:font-sitelen-ucsur text-2xl"
+			class="whitespace-pre-line inline-block data-ok:font-sitelen-seli-kiwen text-2xl"
 			data-ok={result.type === "ok" || undefined}
 		>
 			{result.type === "ok" ? result.value : result.message}
