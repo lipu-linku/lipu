@@ -1,5 +1,6 @@
 <script lang="ts">
 	import FontEntry from "./FontEntry.svelte";
+	import SitelenKeyboard from "./SitelenKeyboard.svelte";
 	import { fontSentence } from "$lib/state.svelte";
 
 	import * as Card from "$lib/components/ui/card";
@@ -10,6 +11,8 @@
 
 	import logo from "$lib/assets/icon-light.png?url";
 	import ResetIcon from "~icons/lucide/rotate-cw";
+	import KeyboardIcon from "~icons/lucide/keyboard"
+	import KeyboardOffIcon from "~icons/lucide/keyboard-off"
 
 	const { data } = $props();
 	const { fonts } = $derived(data);
@@ -17,6 +20,8 @@
 	let ucsur = $state(false);
 	let ligatures = $state(false);
 	let search = $state("");
+	let keyboardOpen = $state(true);
+	let fontSentenceInput = $state<HTMLInputElement | null>(null);
 
 	const filtered = $derived(
 		fonts
@@ -42,7 +47,19 @@
 
 <main class="w-full my-4 space-y-2">
 	<div class="flex items-center gap-2">
-		<Input bind:value={fontSentence.current} />
+		<Input class="font-sitelen-seli-juniko md:text-2xl" bind:value={fontSentence.current} bind:ref={fontSentenceInput} />
+		<Button
+			class="aspect-square"
+			size="icon"
+			variant="outline"
+			onclick={() => keyboardOpen = !keyboardOpen}
+		>
+			{#if !keyboardOpen}
+				<KeyboardIcon />
+			{:else}
+				<KeyboardOffIcon />
+			{/if}
+		</Button>
 		<Button
 			class="aspect-square"
 			size="icon"
@@ -52,6 +69,10 @@
 			<ResetIcon />
 		</Button>
 	</div>
+
+	{#if keyboardOpen}
+		<SitelenKeyboard bind:value={fontSentence.current} bind:input={fontSentenceInput} />
+	{/if}
 
 	<ul class="flex flex-col gap-2">
 		{#each filtered as [id, font] (id)}

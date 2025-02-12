@@ -1,7 +1,6 @@
 <script lang="ts">
 	import Entry from "../Entry.svelte";
 
-	import autoAnimate from "@formkit/auto-animate";
 	import { page } from "$app/state";
 	import { wordSearch } from "$lib/components/search";
 	import { favorites, onlyFavorites, searchQuery } from "$lib/state.svelte";
@@ -54,7 +53,7 @@
 		<span class="md:whitespace-nowrap">Toki Pona</span>. A lot are one-off jokes, created and
 		abandoned immediately.
 	</p>
-	<ul use:autoAnimate class="flex flex-col items-stretch gap-2 mx-auto max-w-[min(95vw,1000px)]">
+	<ul class="flex flex-col items-stretch gap-2 mx-auto max-w-[min(95vw,1000px)]">
 		{#each sorted_filtered_dictionary as word (word.id)}
 			<li>
 				<Entry {language} {word} />

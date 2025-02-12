@@ -1,11 +1,9 @@
 <script lang="ts">
-	import NameGenerator from "./NameGenerator.svelte";
 	import Numbers from "./Numbers.svelte";
 	import SitelenIdentifier from "./SitelenIdentifier.svelte";
 	import SitelenToUcsur from "./SitelenToUcsur.svelte";
 
 	const { data } = $props();
-	const { words } = $derived(data);
 </script>
 
 <svelte:head>
@@ -20,6 +18,4 @@
 	<SitelenToUcsur />
 
 	<SitelenIdentifier />
-
-	<NameGenerator {words} />
 </main>
