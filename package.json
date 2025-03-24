@@ -16,7 +16,7 @@
 		"@formkit/auto-animate": "^0.8.2",
 		"@iconify/json": "^2.2.272",
 		"@kulupu-linku/sona": "^0.3.7",
-		"@sveltejs/adapter-cloudflare": "^5.0.0",
+		"@sveltejs/adapter-cloudflare": "^6.0.0",
 		"@sveltejs/kit": "^2.8.1",
 		"@sveltejs/vite-plugin-svelte": "4.0.1",
 		"@types/d3-scale": "^4.0.8",
