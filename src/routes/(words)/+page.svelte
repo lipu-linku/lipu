@@ -50,6 +50,12 @@
 			to improve the dictionary!
 		</p>
 	{/if}
+	{#if categories.obscure}
+		<p class="text-center text-balance">
+			Most speakers don't use or understand obscure words. If you're a beginner, they will not help you
+			learn the language.
+		</p>
+	{/if}
 	<ul class="flex flex-col items-stretch gap-2 mx-auto max-w-[min(95vw,1000px)]">
 		{#each sorted_filtered_dictionary as word (word.id)}
 			<li>
