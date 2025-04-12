@@ -50,7 +50,7 @@
 			to improve the dictionary!
 		</p>
 	{/if}
-	{#if categories.obscure}
+	{#if categories.value.obscure}
 		<p class="text-center text-balance">
 			Most speakers don't use or understand obscure words. If you're a beginner, they will not help you
 			learn the language.
