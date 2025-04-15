@@ -82,7 +82,7 @@
 					<WebIcon />
 				</Button>
 			{/if}
-			<Button variant="outline" size="icon" href={font.links.fontfile} download>
+			<Button variant="outline" size="icon" href="https://raw.githubusercontent.com/lipu-linku/ijo/main/nasinsitelen/{font.filename}" download>
 				<DownloadIcon />
 			</Button>
 		</nav>
