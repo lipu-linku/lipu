@@ -20,7 +20,7 @@
 		"@sveltejs/kit": "^2.8.1",
 		"@sveltejs/vite-plugin-svelte": "4.0.1",
 		"@types/d3-scale": "^4.0.8",
-		"@vite-pwa/assets-generator": "^0.2.6",
+		"@vite-pwa/assets-generator": "^1.0.0",
 		"@vite-pwa/sveltekit": "^0.6.6",
 		"bits-ui": "1.0.0-next.63",
 		"clsx": "^2.1.1",
