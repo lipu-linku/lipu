@@ -46,7 +46,7 @@
 	{/each}
 </svelte:head>
 
-<div class="grid grid-cols-[min-content_1fr_fit-content(100%)] justify-center gap-2">
+<div class="grid sm:grid-cols-[min-content_1fr_fit-content(100%)] justify-center gap-2">
 	<Navbar {...data} />
 
 	{@render children()}

@@ -10,7 +10,7 @@ export const wordSearch = (
 	query: string,
 	words: Words,
 	categories: Record<UsageCategory, boolean>,
-	favorites: Record<string, boolean>,
+	favorites: Set<string>,
 	onlyFavorites: boolean,
 	wordList: string[] | undefined = undefined,
 	language: Language["id"] = "en",
@@ -21,14 +21,13 @@ export const wordSearch = (
 		(w) =>
 			categories[w.usage_category] &&
 			(wordList?.includes(w.word) ?? true) &&
-			(onlyFavorites ? favorites[w.id] : true),
+			(onlyFavorites ? favorites.has(w.id) : true),
 	);
 
 	if (query === "")
 		return initialFilteredWords.sort((a, b) => {
-			if (favorites[a.id]) return -1;
-			if (favorites[b.id]) return 1;
-
+			if (favorites.has(a.id)) return -1;
+			if (favorites.has(b.id)) return 1;
 			return a.word.toLowerCase().localeCompare(b.word.toLowerCase());
 		});
 
@@ -45,7 +44,7 @@ export const wordSearch = (
 
 	const filtered = initialFilteredWords.filter((w) => scoreFilter(w));
 	const scored = filtered.map(
-		(w) => [w, wordDataScore(w, query, language, favorites[w.id])] as const,
+		(w) => [w, wordDataScore(w, query, language, favorites.has(w.id))] as const,
 	);
 	const sorted = scored.sort(([, a], [, b]) => b - a);
 	const onlyWords = sorted.map(([w]) => w);

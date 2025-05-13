@@ -11,8 +11,8 @@
 
 	import logo from "$lib/assets/icon-light.png?url";
 	import ResetIcon from "~icons/lucide/rotate-cw";
-	import KeyboardIcon from "~icons/lucide/keyboard"
-	import KeyboardOffIcon from "~icons/lucide/keyboard-off"
+	import KeyboardIcon from "~icons/lucide/keyboard";
+	import KeyboardOffIcon from "~icons/lucide/keyboard-off";
 
 	const { data } = $props();
 	const { fonts } = $derived(data);
@@ -47,12 +47,16 @@
 
 <main class="w-full my-4 space-y-2">
 	<div class="flex items-center gap-2">
-		<Input class="font-sitelen-seli-juniko md:text-2xl" bind:value={fontSentence.current} bind:ref={fontSentenceInput} />
+		<Input
+			class="font-sitelen-seli-juniko md:text-2xl"
+			bind:value={fontSentence.current}
+			bind:ref={fontSentenceInput}
+		/>
 		<Button
 			class="aspect-square"
 			size="icon"
 			variant="outline"
-			onclick={() => keyboardOpen = !keyboardOpen}
+			onclick={() => (keyboardOpen = !keyboardOpen)}
 		>
 			{#if !keyboardOpen}
 				<KeyboardIcon />

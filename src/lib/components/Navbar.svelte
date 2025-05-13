@@ -10,16 +10,17 @@
 </script>
 
 <script lang="ts">
-	import { Button } from "$lib/components/ui/button";
+	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import * as Select from "$lib/components/ui/select";
 	import type { Language, Languages } from "@kulupu-linku/sona";
 	import { mode, toggleMode } from "mode-watcher";
 
 	import iconDark from "$lib/assets/icon-dark.png";
 	import iconLight from "$lib/assets/icon-light.png";
-	import { entries } from "$lib/utils";
+	import { cn, entries } from "$lib/utils";
+	import MenuIcon from "~icons/lucide/menu";
 	import FlaskIcon from "~icons/lucide/flask-conical";
-	import HomeIcon from "~icons/lucide/home";
+	import HomeIcon from "~icons/lucide/house";
 	import InfoIcon from "~icons/lucide/info";
 	import LanguagesIcon from "~icons/lucide/languages";
 	import DarkModeIcon from "~icons/lucide/moon";
@@ -29,6 +30,7 @@
 
 	import { goto } from "$app/navigation";
 	import { page } from "$app/state";
+	import * as Sheet from "$lib/components/ui/sheet";
 
 	interface Props {
 		languages: Languages;
@@ -75,10 +77,25 @@
 	} as const;
 </script>
 
-<aside class="sticky top-0 start-0 h-dvh px-4 py-5 flex flex-col gap-6">
+<aside class="sticky top-0 start-0 h-dvh px-4 py-5 flex-col gap-6 hidden sm:flex">
+	{@render sidebar()}
+</aside>
+
+<Sheet.Root>
+	<Sheet.Trigger
+		class={cn(
+			buttonVariants({ variant: "outline", size: "icon" }),
+			"fixed z-20 bottom-4 left-4 shadow-2xl sm:hidden",
+		)}
+	>
+		<MenuIcon />
+	</Sheet.Trigger>
+</Sheet.Root>
+
+{#snippet sidebar()}
 	<header>
 		<a href="/" class="flex items-center gap-2">
-			{#if $mode === "dark"}
+			{#if mode.current === "dark"}
 				<img src={iconDark} alt="Linku's logo" class="size-6" />
 			{:else}
 				<img src={iconLight} alt="Linku's logo" class="size-6" />
@@ -128,11 +145,11 @@
 		</Select.Root>
 
 		<Button variant="ghost" size="icon" aria-label="Open theme menu" onclick={toggleMode}>
-			{#if $mode === "light"}
+			{#if mode.current === "light"}
 				<LightModeIcon />
 			{:else}
 				<DarkModeIcon />
 			{/if}
 		</Button>
 	</div>
-</aside>
+{/snippet}

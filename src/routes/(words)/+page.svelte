@@ -25,7 +25,9 @@
 			words,
 			{
 				sandbox: false,
-				...(categoriesParam ? categoriesSerializer.deserialize(categoriesParam) : categories.current),
+				...(categoriesParam
+					? categoriesSerializer.deserialize(categoriesParam)
+					: categories.current),
 			},
 			favorites.current,
 			onlyFavorites.current,
@@ -43,11 +45,17 @@
 	<meta name="og:image" content={logo} />
 </svelte:head>
 
-<main class="my-4 space-y-4 min-w-6/10">
+<main class="mx-auto sm:my-4 space-y-4 sm:min-w-6/10 p-2 sm:p-0">
 	{#if hasDisclaimer}
 		<p class="text-center text-balance">
 			The <a href="https://linku.la/wile">2024 Linku usage survey</a> is now open! Please take the survey
 			to improve the dictionary!
+		</p>
+	{/if}
+	{#if categories.current.obscure}
+		<p class="text-center text-balance">
+			Most speakers don't use or understand obscure words. If you're a beginner, they will not help
+			you learn the language.
 		</p>
 	{/if}
 	<ul class="flex flex-col items-stretch gap-2">

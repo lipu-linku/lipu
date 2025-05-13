@@ -65,12 +65,6 @@
 			opacity: 0;
 		}
 	}
-
-	--color-category-core: oklch(93.29% 0.137 106.54);
-	--color-category-common: oklch(61.15% 0.177 30.62);
-	--color-category-uncommon: oklch(56.87% 0.159 351.1);
-	--color-category-obscure: oklch(42.72% 0.249 311.74);
-	--color-category-sandbox: oklch(50.55% 0.052 284.53);
 }
 
 @utility container {
@@ -89,7 +83,7 @@
 		font-weight: 400;
 		src: url("https://raw.githubusercontent.com/lipu-linku/ijo/main/nasinsitelen/sitelenselikiwenmonoasuki.ttf");
 	}
-	
+
 	@font-face {
 		font-family: "sitelen seli kiwen mono juniko";
 		font-style: normal;
@@ -103,8 +97,16 @@
 		@apply border-border;
 	}
 
+	:root {
+		--color-category-core: oklch(93.29% 0.137 106.54);
+		--color-category-common: oklch(61.15% 0.177 30.62);
+		--color-category-uncommon: oklch(56.87% 0.159 351.1);
+		--color-category-obscure: oklch(42.72% 0.249 311.74);
+		--color-category-sandbox: oklch(50.55% 0.052 284.53);
+	}
+
 	.light {
-		color-sckijetesantakaluheme: light;
+		color-scheme: light;
 	}
 	.dark {
 		color-scheme: dark;

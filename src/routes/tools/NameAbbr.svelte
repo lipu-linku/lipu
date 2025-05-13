@@ -15,7 +15,7 @@
 		  }
 		| { type: "err"; message: string };
 
-	let value = new PersistedState("tools-sp-ucsur-value", "");
+	let value = new PersistedState("tools-name-abbr-value", "");
 
 	const wordsByLength = Object.entries(ucsur_map).toSorted(([a], [b]) => b.length - a.length);
 	function converter(from: string): ConverterResult {

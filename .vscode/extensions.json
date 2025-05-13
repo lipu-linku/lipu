@@ -3,6 +3,5 @@
 		"antfu.iconify",
 		"svelte.svelte-vscode",
 		"esbenp.prettier-vscode",
-		"dbaeumer.vscode-eslint"
 	]
 }

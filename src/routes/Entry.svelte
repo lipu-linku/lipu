@@ -43,6 +43,7 @@
 		before:transition-[width] has-[a:hover]:border-(--category-color) has-[a:hover]:before:w-2
 	"
 	style="--category-color: var(--color-category-{word.usage_category})"
+	data-category={word.usage_category}
 >
 	<a href="/words/{word.id}" class="flex-1 p-0.5">
 		<Card.Header class="space-y-1 p-4 pl-6">
@@ -101,15 +102,13 @@
 			{/if}
 
 			<Button
+				onclick={() => {
+					favorites.current[word.id] = !favorites.current[word.id];
+				}}
 				variant="outline"
 				size="icon"
-				onclick={() => {
-					favorites.current.has(word.id)
-						? favorites.current.delete(word.id)
-						: favorites.current.add(word.id);
-				}}
 			>
-				{#if !favorites.current.has(word.id)}
+				{#if !favorites.current[word.id]}
 					<FavoriteIcon />
 				{:else}
 					<UnfavoriteIcon />
@@ -119,11 +118,11 @@
 
 		<div class="flex items-center justify-end flex-wrap">
 			{#if writingSystem.current === "sitelen_pona" && word.representations?.ligatures}
-			<span class="text-center font-sitelen-seli-kiwen">
-						{#each word.representations.ligatures.slice(0, 3) as glyph}
+				<span class="text-center font-sitelen-seli-kiwen">
+					{#each word.representations.ligatures.slice(0, 3) as glyph}
 						{glyph}
-						{/each}
-					</span>
+					{/each}
+				</span>
 			{:else if writingSystem.current === "sitelen_sitelen" && word.representations?.sitelen_sitelen}
 				<img
 					src={word.representations.sitelen_sitelen}

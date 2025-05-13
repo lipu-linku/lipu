@@ -50,7 +50,7 @@
 	});
 
 	$effect(() => {
-		if (favorites.current.size === 0) onlyFavorites.current = false;
+		if (Object.keys(favorites.current).length === 0) onlyFavorites.current = false;
 	});
 </script>
 
@@ -101,18 +101,22 @@
 					<div
 						class={cn(
 							"flex items-center gap-2",
-							favorites.current.size === 0 && "cursor-not-allowed",
+							Object.keys(favorites.current).length === 0 && "cursor-not-allowed",
 						)}
 					>
 						<Checkbox
 							bind:checked={onlyFavorites.current}
-							disabled={favorites.current.size === 0}
-							title={favorites.current.size === 0 ? "Select at least 1 favorite" : undefined}
+							disabled={Object.keys(favorites.current).length === 0}
+							title={Object.keys(favorites.current).length === 0
+								? "Select at least 1 favorite"
+								: undefined}
 							id="only-favorites-checkbox"
 							aria-labelledby="only-favorites-label"
 						/>
 						<Label
-							title={favorites.current.size === 0 ? "Select at least 1 favorite" : undefined}
+							title={Object.keys(favorites.current).length === 0
+								? "Select at least 1 favorite"
+								: undefined}
 							id="only-favorites-label"
 							for="only-favorites-checkbox">Only Show Favorites</Label
 						>

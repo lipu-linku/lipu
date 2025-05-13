@@ -188,7 +188,9 @@
 							const doc = document.createElement("html");
 							doc.innerHTML = text;
 							const el = doc.querySelectorAll(`details > summary#${id} ~ p`);
-							if (el.length > 0) return [...el].reduce((acc, it) => acc + "\n\n" + it.textContent, "").trim();
+							if (el.length > 0) return [...el]
+									.reduce((acc, it) => acc + "\n\n" + it.textContent, "")
+									.trim();
 							else throw new Error(`Could not find a semantic space definition for ${id}`);
 						}) then semantic}
 						<div class="flex flex-col justify-center gap-2">
