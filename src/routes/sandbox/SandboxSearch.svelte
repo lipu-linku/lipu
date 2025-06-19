@@ -1,13 +1,12 @@
 <script lang="ts">
+	import { pushState } from "$app/navigation";
+	import { page } from "$app/state";
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 	import { Checkbox } from "$lib/components/ui/checkbox";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
-
-	import { pushState } from "$app/navigation";
-	import { page } from "$app/state";
-	import { etymologiesEnabled, favorites, onlyFavorites, searchQuery } from "$lib/state.svelte";
+	import { etymologiesEnabled, favorites, onlyFavorites, queryParams } from "$lib/state.svelte";
 	import { cn } from "$lib/utils";
 
 	import CheckIcon from "~icons/lucide/check";
@@ -24,21 +23,17 @@
 
 	let hasCopied = $state(false);
 	const copyLinkWithParams = () => {
-		const url = new URL(page.url);
-		url.searchParams.set("q", searchQuery.value);
-
-		navigator.clipboard.writeText(url.toString());
+		navigator.clipboard.writeText(page.url.toString());
 		hasCopied = true;
 		setTimeout(() => (hasCopied = false), 2.5 * 1000);
 	};
 
 	const clearQuery = () => {
-		page.url.searchParams.delete("q");
-		pushState(page.url, {});
+		queryParams.q = null;
 	};
 
 	const resetOptions = () => {
-		searchQuery.value = "";
+		clearQuery();
 		onlyFavorites.current = false;
 
 		page.url.searchParams.forEach((v, k, params) => params.delete(k, v));
@@ -46,11 +41,7 @@
 	};
 
 	$effect(() => {
-		if (searchQuery.value === "" && page.url.searchParams.has("q")) clearQuery();
-	});
-
-	$effect(() => {
-		if (Object.keys(favorites.current).length === 0) onlyFavorites.current = false;
+		if (queryParams.q === "") clearQuery();
 	});
 </script>
 
@@ -67,7 +58,7 @@
 				required
 				autocapitalize="off"
 				autocomplete="off"
-				bind:value={searchQuery.value}
+				bind:value={queryParams.q}
 				id="search-input"
 			/>
 			<Button
@@ -101,22 +92,18 @@
 					<div
 						class={cn(
 							"flex items-center gap-2",
-							Object.keys(favorites.current).length === 0 && "cursor-not-allowed",
+							favorites.current.length === 0 && "cursor-not-allowed",
 						)}
 					>
 						<Checkbox
 							bind:checked={onlyFavorites.current}
-							disabled={Object.keys(favorites.current).length === 0}
-							title={Object.keys(favorites.current).length === 0
-								? "Select at least 1 favorite"
-								: undefined}
+							disabled={favorites.current.length === 0}
+							title={favorites.current.length === 0 ? "Select at least 1 favorite" : undefined}
 							id="only-favorites-checkbox"
 							aria-labelledby="only-favorites-label"
 						/>
 						<Label
-							title={Object.keys(favorites.current).length === 0
-								? "Select at least 1 favorite"
-								: undefined}
+							title={favorites.current.length === 0 ? "Select at least 1 favorite" : undefined}
 							id="only-favorites-label"
 							for="only-favorites-checkbox">Only Show Favorites</Label
 						>

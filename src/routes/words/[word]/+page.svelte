@@ -1,23 +1,20 @@
 <script lang="ts">
+	import { page } from "$app/state";
 	import AudioButton from "$lib/components/AudioButton.svelte";
 	import Collapsible from "$lib/components/Collapsible.svelte";
-	import WordsSearch from "../../(words)/WordsSearch.svelte";
-	import UsageGraph from "./UsageGraph.svelte";
-
 	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import * as Tooltip from "$lib/components/ui/tooltip";
-
-	import { page } from "$app/state";
 	import { getTranslatedData } from "@kulupu-linku/sona/utils";
-
 	import BackIcon from "~icons/lucide/arrow-left";
 	import CodeIcon from "~icons/lucide/code-xml";
 	import CopyIcon from "~icons/lucide/copy";
 	import InfoIcon from "~icons/lucide/info";
 	import GraphIcon from "~icons/lucide/line-chart";
 	import ShareButton from "~icons/lucide/share-2";
+	import WordsSearch from "../../(words)/WordsSearch.svelte";
+	import UsageGraph from "./UsageGraph.svelte";
 
 	const { data } = $props();
 	const { word, language } = $derived(data);
@@ -129,7 +126,7 @@
 	<div class="flex-1 grid grid-cols-2 auto-rows-min gap-2">
 		<Card.Root class="col-span-2">
 			<Card.Header>
-				<Card.Title class="text-2xl" level={2}>Meaning</Card.Title>
+				<Card.Title class="text-2xl"><h2>Meaning</h2></Card.Title>
 			</Card.Header>
 			<Card.Content class="flex flex-col gap-3">
 				<div class="flex flex-col justify-center gap-2">
@@ -227,7 +224,7 @@
 		{#if hasRepresentations}
 			<Card.Root>
 				<Card.Header>
-					<Card.Title class="text-2xl" level={2}>Usage</Card.Title>
+					<Card.Title class="text-2xl"><h2>Usage</h2></Card.Title>
 				</Card.Header>
 				<Card.Content class="flex flex-col gap-3">
 					{#if word.representations?.ligatures && word.representations?.ligatures?.length > 0}
@@ -293,7 +290,7 @@
 
 		<Card.Root>
 			<Card.Header>
-				<Card.Title class="text-2xl" level={2}>More Info</Card.Title>
+				<Card.Title class="text-2xl"><h2>More Info</h2></Card.Title>
 			</Card.Header>
 			<Card.Content class="flex flex-col gap-3">
 				{#if commentary}
@@ -367,7 +364,7 @@
 		{#if Object.keys(word.usage).length > 1}
 			<Card.Root class="col-span-2">
 				<Card.Header class="flex flex-row justify-between">
-					<Card.Title class="text-2xl" level={2}>Usage Trend</Card.Title>
+					<Card.Title class="text-2xl"><h2>Usage Trend</h2></Card.Title>
 
 					<Button
 						variant="outline"

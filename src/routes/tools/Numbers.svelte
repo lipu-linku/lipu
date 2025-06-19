@@ -145,9 +145,9 @@
 </script>
 
 <Card.Root>
-	<Card.Header class="pt-4">
+	<Card.Header>
 		<div class="flex items-center space-x-1.5">
-			<Card.Title id="numbers" class="me-auto" level={2}>Number Converter</Card.Title>
+			<Card.Title id="numbers" class="text-2xl me-auto"><h2>Number Converter</h2></Card.Title>
 
 			<Button
 				variant="ghost"

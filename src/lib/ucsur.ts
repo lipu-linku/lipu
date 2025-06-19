@@ -1,4 +1,4 @@
-export type Codepoint = { label: string; codepoint: string };
+export type Codepoint = { label: string; codepoint: string; title?: string };
 
 export const ucsur_map = {
 	a: { label: "a", codepoint: "\u{f1900}" },
@@ -146,13 +146,13 @@ export const ucsur_map = {
 	powe: { label: "powe", codepoint: "\u{f19a3}" },
 	"[": { label: "[", codepoint: "\u{f1990}" },
 	"]": { label: "]", codepoint: "\u{f1991}" },
-	"-": { label: "nimi-sin", codepoint: "\u200D" }, // this is just a ZWJ
-	"^": { label: "nimi^sin", codepoint: "\u{f1995}" },
-	"*": { label: "nimi*sin", codepoint: "\u{f1996}" },
+	"-": { label: "nimi-sin", title: "Combining", codepoint: "\u200D" }, // this is just a ZWJ
+	"^": { label: "nimi^sin", title: "Stacking", codepoint: "\u{f1995}" },
+	"*": { label: "nimi*sin", title: "Scaling", codepoint: "\u{f1996}" },
 	"(": { label: "open sinpin", codepoint: "\u{f1997}" },
 	")": { label: "pini sinpin", codepoint: "\u{f1998}" },
 	"{": { label: "open monsi", codepoint: "\u{f199a}" },
 	"}": { label: "pini monsi", codepoint: "\u{f199b}" },
-	".": { label: "..", codepoint: "\u{f199c}" },
-	":": { label: "::", codepoint: "\u{f199d}" },
+	".": { label: "..", title: "·", codepoint: "\u{f199c}" },
+	":": { label: "::", title: ":", codepoint: "\u{f199d}" },
 } satisfies Record<string, Codepoint>;

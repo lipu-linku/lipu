@@ -2,13 +2,12 @@
 	import { page } from "$app/state";
 	import Navbar from "$lib/components/Navbar.svelte";
 	import { Button } from "$lib/components/ui/button";
-	import { ModeWatcher } from "mode-watcher";
-	import { outerHeight, scrollY } from "svelte/reactivity/window";
-	import { fly } from "svelte/transition";
-
 	import { pwaAssetsHead } from "virtual:pwa-assets/head";
 	import { pwaInfo } from "virtual:pwa-info";
 	import { useRegisterSW } from "virtual:pwa-register/svelte";
+	import { ModeWatcher } from "mode-watcher";
+	import { outerHeight, scrollY } from "svelte/reactivity/window";
+	import { fly } from "svelte/transition";
 
 	import UpArrowIcon from "~icons/lucide/arrow-up";
 	import "../app.css";

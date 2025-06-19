@@ -2,6 +2,7 @@ import { fuzzyMatch, normalize } from "$lib/utils";
 import type { Language, LocalizedWord, Words } from "@kulupu-linku/sona";
 import { getTranslatedData, type UsageCategory } from "@kulupu-linku/sona/utils";
 import { distance } from "fastest-levenshtein";
+import type { SvelteSet } from "svelte/reactivity";
 
 // adapted directly from jan Tani's excellent nimi.li project with their permission:
 // https://github.com/cubedhuang/sona-nimi/blob/master/src/routes/(words)/%2Bpage.svelte
@@ -10,7 +11,7 @@ export const wordSearch = (
 	query: string,
 	words: Words,
 	categories: Record<UsageCategory, boolean>,
-	favorites: Set<string>,
+	favorites: string[],
 	onlyFavorites: boolean,
 	wordList: string[] | undefined = undefined,
 	language: Language["id"] = "en",
@@ -21,13 +22,13 @@ export const wordSearch = (
 		(w) =>
 			categories[w.usage_category] &&
 			(wordList?.includes(w.word) ?? true) &&
-			(onlyFavorites ? favorites.has(w.id) : true),
+			(onlyFavorites ? favorites.includes(w.id) : true),
 	);
 
 	if (query === "")
 		return initialFilteredWords.sort((a, b) => {
-			if (favorites.has(a.id)) return -1;
-			if (favorites.has(b.id)) return 1;
+			if (favorites.includes(a.id)) return -1;
+			if (favorites.includes(b.id)) return 1;
 			return a.word.toLowerCase().localeCompare(b.word.toLowerCase());
 		});
 
@@ -44,7 +45,7 @@ export const wordSearch = (
 
 	const filtered = initialFilteredWords.filter((w) => scoreFilter(w));
 	const scored = filtered.map(
-		(w) => [w, wordDataScore(w, query, language, favorites.has(w.id))] as const,
+		(w) => [w, wordDataScore(w, query, language, favorites.includes(w.id))] as const,
 	);
 	const sorted = scored.sort(([, a], [, b]) => b - a);
 	const onlyWords = sorted.map(([w]) => w);

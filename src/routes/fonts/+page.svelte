@@ -1,18 +1,16 @@
 <script lang="ts">
-	import FontEntry from "./FontEntry.svelte";
-	import SitelenKeyboard from "./SitelenKeyboard.svelte";
-	import { fontSentence } from "$lib/state.svelte";
-
+	import logo from "$lib/assets/icon-light.png?url";
+	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 	import { Checkbox } from "$lib/components/ui/checkbox";
-	import { Label } from "$lib/components/ui/label";
 	import { Input } from "$lib/components/ui/input";
-	import { Button } from "$lib/components/ui/button";
-
-	import logo from "$lib/assets/icon-light.png?url";
-	import ResetIcon from "~icons/lucide/rotate-cw";
+	import { Label } from "$lib/components/ui/label";
+	import { fontSentence } from "$lib/state.svelte";
 	import KeyboardIcon from "~icons/lucide/keyboard";
 	import KeyboardOffIcon from "~icons/lucide/keyboard-off";
+	import ResetIcon from "~icons/lucide/rotate-cw";
+	import FontEntry from "./FontEntry.svelte";
+	import SitelenKeyboard from "./SitelenKeyboard.svelte";
 
 	const { data } = $props();
 	const { fonts } = $derived(data);
@@ -89,13 +87,13 @@
 
 <aside class="sticky min-w-1/5 top-0 end-0 h-dvh px-2 py-4">
 	<Card.Root class="h-full">
-		<Card.Header class="px-4">
-			<Card.Title>Font Display Settings</Card.Title>
+		<Card.Header>
+			<Card.Title class="text-xl">Font Display Settings</Card.Title>
 		</Card.Header>
 
 		<Card.Content class="px-4 flex flex-col gap-4">
-			<div class="flex flex-col gap-2">
-				<div class="flex flex-col gap-2">
+			<div class="flex flex-col gap-4">
+				<div class="flex flex-col gap-2 mb-2">
 					<Input id="search-input" aria-label="Search for fonts" bind:value={search} />
 				</div>
 

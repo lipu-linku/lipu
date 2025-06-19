@@ -108,8 +108,8 @@
 		<ul>
 			{#each entries(links) as [id, link] (id)}
 				<li>
-					<Button variant="link" class="w-full justify-start p-0" href={link.href}>
-						<link.icon class="inline-block" />
+					<Button variant="link" class="w-full justify-start p-0 has-[>svg]:px-0" href={link.href}>
+						<link.icon />
 						{link.label}
 					</Button>
 				</li>
@@ -137,7 +137,7 @@
 				</span>
 			</Select.Trigger>
 
-			<Select.Content side="top">
+			<Select.Content class="max-h-[80dvh]" side="top">
 				{#each languageOptions as [value, label] (value)}
 					<Select.Item {label} {value}>{label}</Select.Item>
 				{/each}

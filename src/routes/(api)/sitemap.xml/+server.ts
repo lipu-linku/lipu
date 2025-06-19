@@ -1,6 +1,6 @@
+import { keys } from "$lib/utils";
 import { client } from "@kulupu-linku/sona/client";
 import type { RequestHandler } from "./$types";
-import { keys } from "$lib/utils";
 
 export const GET = (async ({ fetch }) => {
 	const words = await client({ fetch }).v1.words.$get({ query: {} });

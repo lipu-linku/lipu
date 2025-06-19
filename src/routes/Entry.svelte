@@ -1,11 +1,10 @@
 <script lang="ts">
-	import { etymologiesEnabled, favorites, writingSystem } from "$lib/state.svelte";
-	import type { Language, LocalizedWord } from "@kulupu-linku/sona";
-	import { getTranslatedData } from "@kulupu-linku/sona/utils";
-
 	import AudioButton from "$lib/components/AudioButton.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
+	import { etymologiesEnabled, favorites, onlyFavorites, writingSystem } from "$lib/state.svelte";
+	import type { Language, LocalizedWord } from "@kulupu-linku/sona";
+	import { getTranslatedData } from "@kulupu-linku/sona/utils";
 
 	import UnfavoriteIcon from "~icons/material-symbols/favorite";
 	import FavoriteIcon from "~icons/material-symbols/favorite-outline";
@@ -38,7 +37,7 @@
 <Card.Root
 	id={word.id}
 	class="
-		relative flex-1 w-auto flex justify-between border-2 transition-colors
+	md:flex-row py-2 relative border-2 transition-colors
 		before:absolute before:inset-y-0 before:w-1 before:rounded-s-md before:bg-(--category-color)
 		before:transition-[width] has-[a:hover]:border-(--category-color) has-[a:hover]:before:w-2
 	"
@@ -103,12 +102,17 @@
 
 			<Button
 				onclick={() => {
-					favorites.current[word.id] = !favorites.current[word.id];
+					const index = favorites.current.findIndex((w) => w === word.id);
+					if (index === -1) favorites.current.push(word.id);
+					else favorites.current.splice(index);
+
+					if (onlyFavorites.current && favorites.current.length === 0)
+						onlyFavorites.current = false;
 				}}
 				variant="outline"
 				size="icon"
 			>
-				{#if !favorites.current[word.id]}
+				{#if !favorites.current.includes(word.id)}
 					<FavoriteIcon />
 				{:else}
 					<UnfavoriteIcon />

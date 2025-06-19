@@ -1,4 +1,5 @@
 import Root from "./card.svelte";
+import Action from "./card-action.svelte";
 import Content from "./card-content.svelte";
 import Description from "./card-description.svelte";
 import Footer from "./card-footer.svelte";
@@ -12,6 +13,7 @@ export {
 	Footer,
 	Header,
 	Title,
+	Action,
 	//
 	Root as Card,
 	Content as CardContent,
@@ -19,4 +21,5 @@ export {
 	Footer as CardFooter,
 	Header as CardHeader,
 	Title as CardTitle,
+	Action as CardAction,
 };

@@ -1,7 +1,7 @@
+import { client } from "@kulupu-linku/sona/client";
 import { error } from "@sveltejs/kit";
 import { distance } from "fastest-levenshtein";
 import type { PageLoad } from "./$types";
-import { client } from "@kulupu-linku/sona/client";
 
 export const load: PageLoad = async ({ params: { word }, parent, fetch }) => {
 	const { language } = await parent();

@@ -1,13 +1,13 @@
 <script lang="ts">
+	import { pushState } from "$app/navigation";
+	import { page } from "$app/state";
 	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 	import { Checkbox } from "$lib/components/ui/checkbox";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
 	import * as RadioGroup from "$lib/components/ui/radio-group";
-
-	import { pushState } from "$app/navigation";
-	import { page } from "$app/state";
+	import * as Sheet from "$lib/components/ui/sheet";
 	import {
 		categories,
 		categoriesSerializer,
@@ -15,16 +15,14 @@
 		etymologiesEnabled,
 		favorites,
 		onlyFavorites,
-		searchQuery,
+		queryParams,
 		writingSystem,
 	} from "$lib/state.svelte";
 	import { cn, keys } from "$lib/utils";
-
 	import CheckIcon from "~icons/lucide/check";
 	import LinkIcon from "~icons/lucide/link";
 	import SearchIcon from "~icons/lucide/search";
 	import ResetIcon from "~icons/lucide/undo-2";
-	import * as Sheet from "$lib/components/ui/sheet";
 
 	const focusSearch = (e: KeyboardEvent) => {
 		if (e.key === "/" && document.activeElement?.id !== "search-input") {
@@ -37,7 +35,7 @@
 	const copyLinkWithParams = () => {
 		const url = new URL(page.url);
 		url.searchParams.set("categories", JSON.stringify(categories.current));
-		url.searchParams.set("q", searchQuery.value);
+		url.searchParams.set("q", queryParams.q ?? "");
 
 		navigator.clipboard.writeText(url.toString());
 		hasCopied = true;
@@ -45,12 +43,11 @@
 	};
 
 	const clearQuery = () => {
-		page.url.searchParams.delete("q");
-		pushState(page.url, {});
+		queryParams.q = null;
 	};
 
 	const resetOptions = () => {
-		searchQuery.value = "";
+		clearQuery();
 		categories.current = defaultCategories;
 		onlyFavorites.current = false;
 
@@ -59,11 +56,7 @@
 	};
 
 	$effect(() => {
-		if (searchQuery.value === "" && page.url.searchParams.has("q")) clearQuery();
-	});
-
-	$effect(() => {
-		if (Object.keys(favorites.current).length === 0) onlyFavorites.current = false;
+		if (queryParams.q === "") clearQuery();
 	});
 </script>
 
@@ -106,7 +99,7 @@
 			required
 			autocapitalize="off"
 			autocomplete="off"
-			bind:value={searchQuery.value}
+			bind:value={queryParams.q}
 			id="search-input"
 		/>
 		<Button
@@ -186,15 +179,15 @@
 				>
 					<Checkbox
 						bind:checked={onlyFavorites.current}
-						disabled={Object.keys(favorites.current).length === 0}
-						title={Object.keys(favorites.current).length === 0
+						disabled={favorites.current.length === 0}
+						title={favorites.current.length === 0
 							? "Select at least 1 favorite"
 							: undefined}
 						id="only-favorites-checkbox"
 						aria-labelledby="only-favorites-label"
 					/>
 					<Label
-						title={Object.keys(favorites.current).length === 0
+						title={favorites.current.length === 0
 							? "Select at least 1 favorite"
 							: undefined}
 						id="only-favorites-label"

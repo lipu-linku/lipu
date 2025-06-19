@@ -42,7 +42,7 @@
 		{items.get(selected)}
 	</Select.Trigger>
 
-	<Select.Content side="top" class={contentClass}>
+	<Select.Content side="top" class={cn("h-[50dvh]", contentClass)}>
 		{#each items as [value, label] (value)}
 			<Select.Item {label} {value}>{label}</Select.Item>
 		{/each}

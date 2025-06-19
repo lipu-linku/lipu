@@ -1,12 +1,6 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button";
-	import {
-		Card,
-		CardContent,
-		CardDescription,
-		CardHeader,
-		CardTitle,
-	} from "$lib/components/ui/card";
+	import * as Card from "$lib/components/ui/card";
 	import { fontSentence } from "$lib/state.svelte";
 	import type { Font } from "@kulupu-linku/sona";
 	import { useIntersectionObserver } from "runed";
@@ -59,11 +53,11 @@
 	};
 </script>
 
-<Card bind:ref={cardElement}>
-	<CardHeader class="relative">
-		<CardTitle>{font.name}</CardTitle>
-		<CardDescription>{fontDescription}</CardDescription>
-		<nav class="absolute top-2 right-2 flex items-center gap-2">
+<Card.Root bind:ref={cardElement}>
+	<Card.Header class="relative">
+		<Card.Title class="text-2xl">{font.name}</Card.Title>
+		<Card.Description>{fontDescription}</Card.Description>
+		<nav class="absolute right-4 flex items-center gap-2">
 			{#if font.links.repo}
 				<Button
 					variant="outline"
@@ -90,9 +84,9 @@
 				<DownloadIcon />
 			</Button>
 		</nav>
-	</CardHeader>
+	</Card.Header>
 
-	<CardContent class="text-3xl">
+	<Card.Content class="text-3xl">
 		{#if intersecting}
 			{#await loadFont()}
 				Loading...
@@ -107,5 +101,5 @@
 		{:else}
 			Loading...
 		{/if}
-	</CardContent>
-</Card>
+	</Card.Content>
+</Card.Root>

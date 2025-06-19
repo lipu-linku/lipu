@@ -111,9 +111,9 @@
 </script>
 
 <Card.Root>
-	<Card.Header class="pt-4">
+	<Card.Header>
 		<div class="flex items-center space-x-1.5">
-			<Card.Title id="sp-identifier" class="me-auto" level={2}>Sitelen Pona Identifier</Card.Title>
+			<Card.Title id="sp-identifier" class="text-2xl me-auto"><h2>Sitelen Pona Identifier</h2></Card.Title>
 
 			<Button
 				variant="ghost"

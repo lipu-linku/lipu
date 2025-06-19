@@ -1,10 +1,9 @@
 <script lang="ts">
-	import Entry from "../Entry.svelte";
-
 	import { page } from "$app/state";
-	import { wordSearch } from "$lib/components/search";
-	import { favorites, onlyFavorites, searchQuery } from "$lib/state.svelte";
 	import logo from "$lib/assets/icon-light.png?url";
+	import { wordSearch } from "$lib/components/search.svelte";
+	import { favorites, onlyFavorites, queryParams } from "$lib/state.svelte";
+	import Entry from "../Entry.svelte";
 
 	const { data } = $props();
 	const { words, language } = $derived(data);
@@ -12,7 +11,7 @@
 	const wordList = $derived(page.url.searchParams.get("list")?.split(","));
 	const sorted_filtered_dictionary = $derived(
 		wordSearch(
-			page.url.searchParams.get("q") ?? searchQuery.value,
+			queryParams.q ?? "",
 			words,
 			{
 				sandbox: true,

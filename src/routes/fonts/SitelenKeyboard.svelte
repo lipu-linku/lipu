@@ -16,7 +16,7 @@
 <div transition:slide class="flex flex-wrap gap-1">
 	{#each keys as [word, data] (word)}
 		<Button
-			title={word}
+			title={"title" in data ? data.title : data.label}
 			class="font-sitelen-seli-kiwen text-2xl w-min px-2.5"
 			variant="outline"
 			size="icon"

@@ -1,15 +1,15 @@
 <script lang="ts">
-	import Entry from "../Entry.svelte";
 	import { page } from "$app/state";
-	import { wordSearch } from "$lib/components/search";
+	import logo from "$lib/assets/icon-light.png?url";
+	import { wordSearch } from "$lib/components/search.svelte";
 	import {
 		categories,
 		categoriesSerializer,
 		favorites,
 		onlyFavorites,
-		searchQuery,
+		queryParams,
 	} from "$lib/state.svelte";
-	import logo from "$lib/assets/icon-light.png?url";
+	import Entry from "../Entry.svelte";
 
 	const { data } = $props();
 	const { words, language } = $derived(data);
@@ -21,7 +21,7 @@
 	const wordList = $derived(page.url.searchParams.get("list")?.split(","));
 	const sorted_filtered_dictionary = $derived(
 		wordSearch(
-			page.url.searchParams.get("q") ?? searchQuery.value,
+			queryParams.q ?? "",
 			words,
 			{
 				sandbox: false,
@@ -45,7 +45,7 @@
 	<meta name="og:image" content={logo} />
 </svelte:head>
 
-<main class="mx-auto sm:my-4 space-y-4 sm:min-w-6/10 p-2 sm:p-0">
+<main class="sm:my-4 space-y-4 sm:min-w-6/10 p-2 sm:p-0">
 	{#if hasDisclaimer}
 		<p class="text-center text-balance">
 			The <a href="https://linku.la/wile">2024 Linku usage survey</a> is now open! Please take the survey
