@@ -1,6 +1,5 @@
 import { entries, fromEntries } from "$lib/utils";
 import type { UsageCategory } from "@kulupu-linku/sona/utils";
-import * as devalue from "devalue";
 import { PersistedState } from "runed";
 import { SvelteSet } from "svelte/reactivity";
 import { queryParameters } from "sveltekit-search-params";
