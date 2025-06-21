@@ -37,11 +37,22 @@ export const categories = new PersistedState("categories", defaultCategories, {
 	serializer: categoriesSerializer,
 });
 
-export const favorites = new PersistedState<string[]>("favorites", []);
+export const favorites = new PersistedState<string[]>("favorites", [], {
+	serializer: {
+		deserialize: (list) => list.split(",").filter(Boolean),
+		serialize: (obj) => obj.join(","),
+	},
+});
 
 export const writingSystem = new PersistedState<"sitelen_pona" | "sitelen_sitelen">(
 	"writing_system",
 	"sitelen_pona",
+	{
+		serializer: {
+			deserialize: (s) => s as "sitelen_pona" | "sitelen_sitelen",
+			serialize: (s) => s
+		}
+	}
 );
 
 export const etymologiesEnabled = new PersistedState("etymologies_enabled", true);
