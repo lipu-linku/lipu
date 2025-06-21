@@ -36,7 +36,7 @@
 	<meta name="og:image" content={logo} />
 </svelte:head>
 
-<main class="flex-1 my-4 space-y-4">
+<main class="col-2 flex-1 my-4 space-y-4">
 	<p class="text-center text-balance px-2 mx-auto">
 		The <i>sandbox</i> is a collection of proposed words which are
 		<strong class="md:whitespace-nowrap">not actively in use</strong>.

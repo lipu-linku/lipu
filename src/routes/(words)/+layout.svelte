@@ -4,6 +4,7 @@
 	const { children } = $props();
 </script>
 
+<WordsSearch />
+
 {@render children()}
 
-<WordsSearch />

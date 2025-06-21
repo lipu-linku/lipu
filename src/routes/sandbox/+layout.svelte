@@ -4,6 +4,6 @@
 	const { children } = $props();
 </script>
 
-{@render children?.()}
-
 <SandboxSearch />
+
+{@render children()}

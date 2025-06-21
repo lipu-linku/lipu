@@ -45,7 +45,7 @@
 	<meta name="og:image" content={logo} />
 </svelte:head>
 
-<main class="sm:my-4 space-y-4 sm:min-w-6/10 p-2 sm:p-0">
+<main class="col-2 sm:my-4 space-y-4 sm:min-w-6/10 p-2 sm:p-0">
 	{#if hasDisclaimer}
 		<p class="text-center text-balance">
 			The <a href="https://linku.la/wile">2024 Linku usage survey</a> is now open! Please take the survey

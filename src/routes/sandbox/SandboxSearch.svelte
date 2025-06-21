@@ -46,7 +46,7 @@
 	});
 </script>
 
-<aside class="sticky top-0 end-0 h-dvh px-2 py-4 hidden sm:block">
+<aside class="col-3 row-1 sticky top-0 end-0 h-dvh px-2 py-4 hidden sm:block">
 	<form class="h-full px-2 gap-4 flex flex-col" role="search">
 		{@render inputField()}
 
