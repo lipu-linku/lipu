@@ -111,7 +111,7 @@
 	}
 
 	:root {
-		--color-category-core: oklch(93.29% 0.137 106.54);
+		--color-category-core: light-dark(oklch(88.54% 0.1784 106.54), oklch(93.29% 0.137 106.54));
 		--color-category-common: oklch(61.15% 0.177 30.62);
 		--color-category-uncommon: oklch(56.87% 0.159 351.1);
 		--color-category-obscure: oklch(42.72% 0.249 311.74);

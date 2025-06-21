@@ -38,7 +38,7 @@
 	id={word.id}
 	class="
 	flex-row py-2 relative border-2 transition-colors
-		before:absolute before:inset-y-0 before:w-1 before:rounded-s-md before:bg-(--category-color)
+		before:absolute before:inset-y-0 before:w-1 before:rounded-s-xl before:bg-(--category-color)
 		before:transition-[width] has-[a:hover]:border-(--category-color) has-[a:hover]:before:w-2
 	"
 	style="--category-color: var(--color-category-{word.usage_category})"
