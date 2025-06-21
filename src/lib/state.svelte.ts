@@ -1,7 +1,6 @@
-import { entries, fromEntries } from "$lib/utils";
+import { fromEntries, keys } from "$lib/utils";
 import type { UsageCategory } from "@kulupu-linku/sona/utils";
 import { PersistedState } from "runed";
-import { SvelteSet } from "svelte/reactivity";
 import { queryParameters } from "sveltekit-search-params";
 
 export const queryParams = queryParameters();
@@ -15,20 +14,13 @@ export const defaultCategories: Record<Exclude<UsageCategory, "sandbox">, boolea
 
 export const categoriesSerializer = {
 	deserialize: (list: string) => {
-		const keys = list?.split(",") ?? [];
-		const entries = fromEntries(
-			keys.map((it) => [it as keyof typeof defaultCategories, true] as const),
-		);
+		const enabled = list.split(",").filter(Boolean);
 
-		return {
-			...defaultCategories,
-			...entries,
-		};
+		return fromEntries(keys(defaultCategories).map((k) => [k, enabled.includes(k)]));
 	},
 	serialize: (obj: typeof defaultCategories) =>
-		entries(obj)
-			.filter(([, on]) => on)
-			.map(([key]) => key)
+		keys(obj)
+			.filter((k) => obj[k])
 			.join(","),
 };
 
@@ -49,9 +41,9 @@ export const writingSystem = new PersistedState<"sitelen_pona" | "sitelen_sitele
 	{
 		serializer: {
 			deserialize: (s) => s as "sitelen_pona" | "sitelen_sitelen",
-			serialize: (s) => s
-		}
-	}
+			serialize: (s) => s,
+		},
+	},
 );
 
 export const etymologiesEnabled = new PersistedState("etymologies_enabled", true);
