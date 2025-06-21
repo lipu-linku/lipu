@@ -73,14 +73,14 @@
 <Sheet.Root>
 	<Sheet.Trigger
 		class={cn(
-			buttonVariants({ variant: "outline", size: "icon" }),
-			"fixed sm:hidden z-20 bottom-4 left-16 shadow-2xl",
+			buttonVariants({ variant: "secondary", size: "icon" }),
+			"fixed sm:hidden size-12 z-20 bottom-4 left-18 shadow-2xl",
 		)}
 	>
 		<SearchIcon />
 	</Sheet.Trigger>
 
-	<Sheet.Content side="right">
+	<Sheet.Content side="bottom" class="p-4 pt-12">
 		<form class="h-full px-2 gap-4 flex flex-col" role="search">
 			{@render inputField()}
 
@@ -180,16 +180,12 @@
 					<Checkbox
 						bind:checked={onlyFavorites.current}
 						disabled={favorites.current.length === 0}
-						title={favorites.current.length === 0
-							? "Select at least 1 favorite"
-							: undefined}
+						title={favorites.current.length === 0 ? "Select at least 1 favorite" : undefined}
 						id="only-favorites-checkbox"
 						aria-labelledby="only-favorites-label"
 					/>
 					<Label
-						title={favorites.current.length === 0
-							? "Select at least 1 favorite"
-							: undefined}
+						title={favorites.current.length === 0 ? "Select at least 1 favorite" : undefined}
 						id="only-favorites-label"
 						for="only-favorites-checkbox">Only Show Favorites</Label
 					>

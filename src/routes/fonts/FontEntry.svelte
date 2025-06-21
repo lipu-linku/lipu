@@ -55,7 +55,7 @@
 
 <Card.Root bind:ref={cardElement}>
 	<Card.Header class="relative">
-		<Card.Title class="text-2xl">{font.name}</Card.Title>
+		<Card.Title class="text-2xl max-w-[10ch] sm:max-w-full">{font.name}</Card.Title>
 		<Card.Description>{fontDescription}</Card.Description>
 		<nav class="absolute right-4 flex items-center gap-2">
 			{#if font.links.repo}

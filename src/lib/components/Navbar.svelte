@@ -84,17 +84,23 @@
 <Sheet.Root>
 	<Sheet.Trigger
 		class={cn(
-			buttonVariants({ variant: "outline", size: "icon" }),
-			"fixed z-20 bottom-4 left-4 shadow-2xl sm:hidden",
+			buttonVariants({ variant: "secondary", size: "icon" }),
+			"fixed z-20 bottom-4 left-4 size-12 shadow-2xl sm:hidden",
 		)}
 	>
 		<MenuIcon />
 	</Sheet.Trigger>
+
+	<Sheet.Content class="bg-background/60 backdrop-blur-md p-4" side="bottom">
+		<aside class="h-full flex-col gap-6 flex sm:hidden">
+			{@render sidebar()}
+		</aside>
+	</Sheet.Content>
 </Sheet.Root>
 
 {#snippet sidebar()}
 	<header>
-		<a href="/" class="flex items-center gap-2">
+		<a href="/" class="flex items-center gap-2 px-2 sm:px-0">
 			{#if mode.current === "dark"}
 				<img src={iconDark} alt="Linku's logo" class="size-6" />
 			{:else}
@@ -108,7 +114,7 @@
 		<ul>
 			{#each entries(links) as [id, link] (id)}
 				<li>
-					<Button variant="link" class="w-full justify-start p-0 has-[>svg]:px-0" href={link.href}>
+					<Button variant="link" class="w-full justify-start p-0 sm:has-[>svg]:px-0" href={link.href}>
 						<link.icon />
 						{link.label}
 					</Button>
@@ -117,7 +123,7 @@
 		</ul>
 	</nav>
 
-	<div class="mt-auto flex items-center justify-center gap-2">
+	<div class="mt-auto flex items-center justify-between ps-2 sm:ps-0 gap-2">
 		<Select.Root
 			type="single"
 			bind:value={selectedLang}
@@ -131,20 +137,20 @@
 			}}
 		>
 			<Select.Trigger>
-				<LanguagesIcon aria-label="Languages icon" class="size-4" />
+				<LanguagesIcon aria-label="Languages icon" class="text-4" />
 				<span class="w-16 text-center line-clamp-1 overflow-ellipsis whitespace-nowrap">
 					{languageOptions.get(selectedLang)}
 				</span>
 			</Select.Trigger>
 
-			<Select.Content class="max-h-[80dvh]" side="top">
+			<Select.Content class="max-h-[80dvh] mx-4" side="top">
 				{#each languageOptions as [value, label] (value)}
 					<Select.Item {label} {value}>{label}</Select.Item>
 				{/each}
 			</Select.Content>
 		</Select.Root>
 
-		<Button variant="ghost" size="icon" aria-label="Open theme menu" onclick={toggleMode}>
+		<Button variant="default" size="icon" aria-label="Open theme menu" onclick={toggleMode}>
 			{#if mode.current === "light"}
 				<LightModeIcon />
 			{:else}

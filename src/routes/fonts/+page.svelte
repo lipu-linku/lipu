@@ -1,24 +1,25 @@
 <script lang="ts">
-	import logo from "$lib/assets/icon-light.png?url";
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 	import { Checkbox } from "$lib/components/ui/checkbox";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
 	import { fontSentence } from "$lib/state.svelte";
+	import FontEntry from "./FontEntry.svelte";
+	import SitelenKeyboard from "./SitelenKeyboard.svelte";
+	
+	import logo from "$lib/assets/icon-light.png?url";
 	import KeyboardIcon from "~icons/lucide/keyboard";
 	import KeyboardOffIcon from "~icons/lucide/keyboard-off";
 	import ResetIcon from "~icons/lucide/rotate-cw";
-	import FontEntry from "./FontEntry.svelte";
-	import SitelenKeyboard from "./SitelenKeyboard.svelte";
-
+	
 	const { data } = $props();
 	const { fonts } = $derived(data);
 
 	let ucsur = $state(false);
 	let ligatures = $state(false);
 	let search = $state("");
-	let keyboardOpen = $state(true);
+	let keyboardOpen = $state(false);
 	let fontSentenceInput = $state<HTMLInputElement | null>(null);
 
 	const filtered = $derived(
@@ -33,6 +34,10 @@
 			.filter(([, f]) => (ucsur ? f.ucsur : true))
 			.filter(([, f]) => (ligatures ? f.ligatures : true)),
 	);
+
+	$effect(() => {
+		if (window.matchMedia("(width >= 48rem)").matches) keyboardOpen = true;
+	})
 </script>
 
 <svelte:head>
@@ -43,7 +48,7 @@
 	<meta name="og:image" content={logo} />
 </svelte:head>
 
-<main class="w-full my-4 space-y-2">
+<main class="w-full p-4 space-y-2">
 	<div class="flex items-center gap-2">
 		<Input
 			class="font-sitelen-seli-juniko md:text-2xl"

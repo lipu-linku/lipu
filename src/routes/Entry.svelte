@@ -37,7 +37,7 @@
 <Card.Root
 	id={word.id}
 	class="
-	md:flex-row py-2 relative border-2 transition-colors
+	flex-row py-2 relative border-2 transition-colors
 		before:absolute before:inset-y-0 before:w-1 before:rounded-s-md before:bg-(--category-color)
 		before:transition-[width] has-[a:hover]:border-(--category-color) has-[a:hover]:before:w-2
 	"
@@ -122,7 +122,7 @@
 
 		<div class="flex items-center justify-end flex-wrap">
 			{#if writingSystem.current === "sitelen_pona" && word.representations?.ligatures}
-				<span class="text-center font-sitelen-seli-kiwen">
+				<span class="text-end wrap-anywhere max-w-[10ch] text-wrap font-sitelen-seli-kiwen">
 					{#each word.representations.ligatures.slice(0, 3) as glyph}
 						{glyph}
 					{/each}

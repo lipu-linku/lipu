@@ -1,13 +1,14 @@
 <script lang="ts">
 	import { pushState } from "$app/navigation";
 	import { page } from "$app/state";
-	import { Button } from "$lib/components/ui/button";
+	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 	import { Checkbox } from "$lib/components/ui/checkbox";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
 	import { etymologiesEnabled, favorites, onlyFavorites, queryParams } from "$lib/state.svelte";
 	import { cn } from "$lib/utils";
+	import * as Sheet from "$lib/components/ui/sheet";
 
 	import CheckIcon from "~icons/lucide/check";
 	import LinkIcon from "~icons/lucide/link";
@@ -45,85 +46,112 @@
 	});
 </script>
 
-<svelte:window onkeydown={focusSearch} />
+<aside class="sticky top-0 end-0 h-dvh px-2 py-4 hidden sm:block">
+	<form class="h-full px-2 gap-4 flex flex-col" role="search">
+		{@render inputField()}
 
-<aside class="sticky top-0 end-0 h-dvh px-2 py-4">
-	<form class="h-full px-2 gap-2 flex flex-col" role="search">
-		<div class="flex items-center justify-stretch gap-2">
-			<Input
-				class="bg-background"
-				placeholder="o alasa e nimi"
-				type="search"
-				name="q"
-				required
-				autocapitalize="off"
-				autocomplete="off"
-				bind:value={queryParams.q}
-				id="search-input"
-			/>
-			<Button
-				aria-label="submit search"
-				class="inline-flex"
-				type="submit"
-				variant="outline"
-				size="icon"
-			>
-				<SearchIcon />
-			</Button>
-		</div>
-
-		<Card.Root>
-			<Card.Header>
-				<Card.Title>Search Options</Card.Title>
-			</Card.Header>
-
-			<Card.Content class="flex flex-col gap-4">
-				<div class="grid gap-2">
-					<div class="flex items-center gap-2">
-						<Checkbox
-							bind:checked={etymologiesEnabled.current}
-							id="show-etymologies-checkbox"
-							aria-labelledby="show-etymologies-label"
-						/>
-						<Label id="show-etymologies-label" for="show-etymologies-checkbox">
-							Show Etymologies
-						</Label>
-					</div>
-					<div
-						class={cn(
-							"flex items-center gap-2",
-							favorites.current.length === 0 && "cursor-not-allowed",
-						)}
-					>
-						<Checkbox
-							bind:checked={onlyFavorites.current}
-							disabled={favorites.current.length === 0}
-							title={favorites.current.length === 0 ? "Select at least 1 favorite" : undefined}
-							id="only-favorites-checkbox"
-							aria-labelledby="only-favorites-label"
-						/>
-						<Label
-							title={favorites.current.length === 0 ? "Select at least 1 favorite" : undefined}
-							id="only-favorites-label"
-							for="only-favorites-checkbox">Only Show Favorites</Label
-						>
-					</div>
-				</div>
-			</Card.Content>
-
-			<Card.Footer class="grid grid-rows-2 gap-2">
-				<Button class="gap-0" variant="outline" size="sm" onclick={copyLinkWithParams}>
-					{#snippet children()}
-						{@const Icon = !hasCopied ? LinkIcon : CheckIcon}
-						<Icon aria-hidden class="mr-2 inline size-4" />
-						<span>Copy Permalink</span>
-					{/snippet}
-				</Button>
-				<Button class="gap-0" variant="outline" size="sm" onclick={resetOptions}>
-					<ResetIcon aria-hidden class="mr-2 inline size-4" />
-					<span>Reset Options</span>
-				</Button>
-			</Card.Footer>
-		</Card.Root>
+		{@render filters()}
 	</form>
 </aside>
+
+<Sheet.Root>
+	<Sheet.Trigger
+		class={cn(
+			buttonVariants({ variant: "secondary", size: "icon" }),
+			"fixed sm:hidden size-12 z-20 bottom-4 left-18 shadow-2xl",
+		)}
+	>
+		<SearchIcon />
+	</Sheet.Trigger>
+
+	<Sheet.Content side="bottom" class="p-4 pt-12">
+		<form class="h-full px-2 gap-4 flex flex-col" role="search">
+			{@render inputField()}
+
+			{@render filters()}
+		</form>
+	</Sheet.Content>
+</Sheet.Root>
+
+<svelte:window onkeydown={focusSearch} />
+
+{#snippet inputField()}
+	<div class="flex items-center justify-stretch gap-2">
+		<Input
+			class="bg-background"
+			placeholder="o alasa e nimi"
+			type="search"
+			name="q"
+			required
+			autocapitalize="off"
+			autocomplete="off"
+			bind:value={queryParams.q}
+			id="search-input"
+		/>
+		<Button
+			aria-label="submit search"
+			class="inline-flex"
+			type="submit"
+			variant="outline"
+			size="icon"
+		>
+			<SearchIcon />
+		</Button>
+	</div>
+{/snippet}
+
+{#snippet filters()}
+	<Card.Root>
+		<Card.Header>
+			<Card.Title>Search Options</Card.Title>
+		</Card.Header>
+
+		<Card.Content class="flex flex-col gap-4">
+			<div class="grid gap-2">
+				<div class="flex items-center gap-2">
+					<Checkbox
+						bind:checked={etymologiesEnabled.current}
+						id="show-etymologies-checkbox"
+						aria-labelledby="show-etymologies-label"
+					/>
+					<Label id="show-etymologies-label" for="show-etymologies-checkbox">
+						Show Etymologies
+					</Label>
+				</div>
+				<div
+					class={cn(
+						"flex items-center gap-2",
+						favorites.current.length === 0 && "cursor-not-allowed",
+					)}
+				>
+					<Checkbox
+						bind:checked={onlyFavorites.current}
+						disabled={favorites.current.length === 0}
+						title={favorites.current.length === 0 ? "Select at least 1 favorite" : undefined}
+						id="only-favorites-checkbox"
+						aria-labelledby="only-favorites-label"
+					/>
+					<Label
+						title={favorites.current.length === 0 ? "Select at least 1 favorite" : undefined}
+						id="only-favorites-label"
+						for="only-favorites-checkbox">Only Show Favorites</Label
+					>
+				</div>
+			</div>
+		</Card.Content>
+
+		<Card.Footer class="grid grid-rows-2 gap-2">
+			<Button class="gap-0" variant="outline" size="sm" onclick={copyLinkWithParams}>
+				{#snippet children()}
+					{@const Icon = !hasCopied ? LinkIcon : CheckIcon}
+					<Icon aria-hidden class="mr-2 inline size-4" />
+					<span>Copy Permalink</span>
+				{/snippet}
+			</Button>
+			<Button class="gap-0" variant="outline" size="sm" onclick={resetOptions}>
+				<ResetIcon aria-hidden class="mr-2 inline size-4" />
+				<span>Reset Options</span>
+			</Button>
+		</Card.Footer>
+	</Card.Root>
+{/snippet}

@@ -20,10 +20,10 @@
 	<title>lipu Linku &middot; About Linku</title>
 </svelte:head>
 
-<main class="my-auto flex flex-col items-center justify-center gap-4 min-h-full">
+<main class="py-4 sm:my-auto flex flex-col items-center justify-center gap-4 min-h-full">
 	<h1 class="font-medium text-4xl">About Linku</h1>
 
-	<p class="*:[button]:underline w-65/100 text-center text-balance">
+	<p class="*:[button]:underline px-4 sm:w-65/100 text-center text-balance">
 		Linku is a <button onclick={() => (openAccordion = "dataset")}>dataset</button> with many
 		<button onclick={() => (openAccordion = "translations")}>translations</button>, a
 		<button onclick={() => (openAccordion = "bot")}>Discord bot</button>, a
@@ -49,13 +49,12 @@
 		type="single"
 		bind:value={openAccordion}
 		class="
-		w-65/100 **:[a,button]:cursor-pointer **:[a,button]:not-data-button-root:not-data-accordion-trigger:underline 
+		px-6 w-full sm:w-65/100 **:[a,button]:cursor-pointer **:[a,button]:not-data-button-root:not-data-accordion-trigger:underline 
 		**:data-bits-accordion-content:*:[div]:flex **:data-bits-accordion-content:*:[div]::flex-col
 		**:data-bits-accordion-content:*:[div]:gap-3
 	"
 	>
 		<AccordionItem value="dataset">
-			<!-- these class names disable the rotation on the first icon,  -->
 			<AccordionTrigger>
 				<span class="flex items-center gap-3">
 					<TableIcon /> sona Linku (the dataset)
@@ -292,7 +291,7 @@
 		<DiscordIcon /> kulupu Linku on Discord
 	</Button>
 
-	<p class="w-2/3 text-center text-balance">
+	<p class="px-4 sm:w-2/3 text-center text-balance">
 		Also, check out <a
 			class="underline"
 			href="https://nimi.li"

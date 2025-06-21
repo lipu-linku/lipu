@@ -45,7 +45,7 @@
 	{/each}
 </svelte:head>
 
-<div class="grid sm:grid-cols-[min-content_1fr_fit-content(100%)] justify-center gap-2">
+<div class="grid sm:grid-cols-[min-content_1fr_fit-content(100%)] sm:justify-center gap-2">
 	<Navbar {...data} />
 
 	{@render children()}
@@ -54,7 +54,8 @@
 		<div transition:fly={{ y: 10, duration: 150 }} class="fixed bottom-4 right-4">
 			<Button
 				class="flex items-center gap-2"
-				variant="outline"
+				variant="secondary"
+				size="lg"
 				onclick={() =>
 					window.scrollTo({
 						top: 0,
