@@ -77,7 +77,7 @@
 			"fixed sm:hidden size-12 z-20 bottom-4 left-18 shadow-2xl",
 		)}
 	>
-		<SearchIcon />
+		<SearchIcon class="size-6" />
 	</Sheet.Trigger>
 
 	<Sheet.Content side="bottom" class="p-4 pt-12">

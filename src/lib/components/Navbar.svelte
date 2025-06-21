@@ -84,11 +84,11 @@
 <Sheet.Root>
 	<Sheet.Trigger
 		class={cn(
-			buttonVariants({ variant: "secondary", size: "icon" }),
+			buttonVariants({ size: "icon" }),
 			"fixed z-20 bottom-4 left-4 size-12 shadow-2xl sm:hidden",
 		)}
 	>
-		<MenuIcon />
+		<MenuIcon class="size-6" />
 	</Sheet.Trigger>
 
 	<Sheet.Content class="bg-background/60 backdrop-blur-md p-4" side="bottom">
