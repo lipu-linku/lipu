@@ -140,4 +140,59 @@
 			@apply !hidden;
 		}
 	}
+
+	.markdown-article {
+		.callout {
+			@apply rounded-e-lg border-s-2 py-4 ps-6 text-neutral-200;
+
+			border-color: var(--callout-color);
+			background-color: color-mix(in oklab, var(--callout-color) 40%, transparent);
+
+			&[data-callout="note"] {
+				--callout-color: var(--color-blue-400);
+			}
+
+			&[data-callout="warning"] {
+				--callout-color: var(--color-yellow-300);
+			}
+
+			&[data-callout="error"],
+			&[data-callout="danger"],
+			&[data-callout="caution"] {
+				--callout-color: var(--color-red-300);
+			}
+
+			&[data-callout="tip"] {
+				--callout-color: var(--color-green-300);
+			}
+
+			&[data-collapsible="true"] {
+				@apply transition-[height];
+
+				.callout-title .callout-fold-icon {
+					@apply transition-transform;
+				}
+
+				&:open .callout-title .callout-fold-icon {
+					@apply rotate-180;
+				}
+			}
+
+			.callout-title {
+				@apply flex items-center gap-2 text-xl font-semibold;
+			}
+
+			.callout-content {
+				@apply pt-4 italic;
+			}
+		}
+
+		figure {
+			@apply flex flex-col items-center justify-center gap-2 overflow-x-auto;
+
+			figcaption {
+				@apply text-muted-foreground text-sm italic;
+			}
+		}
+	}
 }
