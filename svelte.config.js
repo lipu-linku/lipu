@@ -18,7 +18,7 @@ const config = {
 	preprocess: [
 		vitePreprocess(),
 		mdsvex({
-			layout: "./src/lib/components/markdown/layout.svelte",
+			layout: "$lib/components/markdown/layout.svelte",
 			highlight: {
 				highlighter: async (code, lang = "text") => {
 					const html = escapeSvelte(
