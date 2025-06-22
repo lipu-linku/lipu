@@ -18,6 +18,7 @@
 	import iconDark from "$lib/assets/icon-dark.png";
 	import iconLight from "$lib/assets/icon-light.png";
 	import { cn, entries } from "$lib/utils";
+	import BookIcon from "~icons/lucide/book-marked";
 	import MenuIcon from "~icons/lucide/menu";
 	import FlaskIcon from "~icons/lucide/flask-conical";
 	import HomeIcon from "~icons/lucide/house";
@@ -68,6 +69,11 @@
 			href: "/tools",
 			label: "Tools",
 			icon: ToolsIcon,
+		},
+		blog: {
+			href: "/blog",
+			label: "Blog",
+			icon: BookIcon,
 		},
 		about: {
 			href: "/about",

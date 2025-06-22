@@ -40,6 +40,10 @@
 	--radius-lg: 0.625rem;
 	--radius-xl: calc(var(--radius-lg) + 4px);
 
+	--font-mono:
+		"JetBrains Mono", "Fira Code", "Cascadia Code", ui-monospace, "SFMono-Regular", "Menlo",
+		"Monaco", "Consolas", "Liberation Mono", "Courier New", monospace;
+
 	--font-sitelen-seli-kiwen: "sitelen seli kiwen mono asuki";
 	--font-sitelen-seli-juniko: var(--font-sans), "sitelen seli kiwen mono juniko";
 	--font-sitelen-seli-kiwen--font-feature-settings: "rand";

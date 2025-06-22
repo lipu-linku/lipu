@@ -27,13 +27,20 @@
 		"formsnap": "2.0.1",
 		"layerchart": "2.0.0-next.23",
 		"lightningcss": "^1.30.1",
+		"mdsvex": "^0.12.3",
 		"mode-watcher": "^1.0.8",
 		"prettier": "^3.5.3",
 		"prettier-plugin-svelte": "^3.4.0",
 		"prettier-plugin-tailwindcss": "^0.6.13",
+		"rehype-callouts": "^2.1.1",
+		"rehype-figure": "^1.0.1",
+		"rehype-slug": "^6.0.0",
+		"remark-emoji": "^5.0.1",
+		"remark-gfm": "^4.0.1",
 		"runed": "^0.29.0",
 		"sharp": "^0.34.2",
 		"sharp-ico": "^0.1.5",
+		"shiki": "^3.7.0",
 		"svelte": "5.34.7",
 		"svelte-check": "^4.2.2",
 		"sveltekit-search-params": "4.0.0-next.0",
@@ -53,5 +60,10 @@
 		"zod": "^3.25.67"
 	},
 	"type": "module",
-	"packageManager": "pnpm@10.12.1"
+	"packageManager": "pnpm@10.12.1",
+	"pnpm": {
+		"onlyBuiltDependencies": [
+			"esbuild"
+		]
+	}
 }
