@@ -78,7 +78,7 @@
 <main class="flex-1 my-4 flex flex-col gap-4 pb-2">
 	<header class="flex-1 flex items-center gap-4">
 		<Button
-			onclick={() => window.history.back()}
+			href={word.usage_category === "sandbox" ? "/sandbox" : "/"}
 			class="justify-self-end"
 			variant="ghost"
 			size="icon"
@@ -376,9 +376,16 @@
 						<GraphIcon />
 					</Button>
 				</Card.Header>
-				<Card.Content class="h-[600px] p-4 px-8">
+				<Card.Content class="max-h-[600px] p-4 px-8">
 					<UsageGraph data={word.usage} />
 				</Card.Content>
+				<Card.Footer>
+					<p class="text-pretty text-sm text-muted-foreground">
+						Before 2022, the survey asked "Do you consider this word real?"; After 2022, the question was changed
+						to "Do you use this word?".
+						Therefore, results before and after 2022, marked by the red line, are not comparable.
+					</p>
+				</Card.Footer>
 			</Card.Root>
 		{/if}
 	</div>
