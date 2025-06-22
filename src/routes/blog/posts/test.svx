@@ -3,7 +3,8 @@ title: Test Post
 subtitle: A longer description of the post
 author: theonlytails
 date: 2025-06-21
-published: false
+# TODO: turn back off when merging
+published: true
 ---
 
 # h1
