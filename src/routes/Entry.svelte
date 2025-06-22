@@ -41,7 +41,8 @@
 		before:absolute before:inset-y-0 before:w-1 before:rounded-s-xl before:bg-(--category-color)
 		before:transition-[width] has-[a:hover]:border-(--category-color) has-[a:hover]:before:w-2
 	"
-	style="--category-color: var(--color-category-{word.usage_category})"
+	style="--category-color: var(--color-category-{word.usage_category});
+		--category-color-foreground: var(--color-category-foreground-{word.usage_category});"
 	data-category={word.usage_category}
 >
 	<a href="/words/{word.id}" class="flex-1 p-0.5">
@@ -57,7 +58,8 @@
 			{/if}
 			<Card.Description>
 				{#if word.usage_category !== "sandbox"}
-					{word.usage_category} · {word.book} ·
+					<span class="text-(--category-color-foreground)">{word.usage_category}</span> · {word.book}
+					·
 					<span title="{usageScore}% of toki pona speakers will recognize this word">
 						{usageScore}%
 					</span>

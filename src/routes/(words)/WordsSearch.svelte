@@ -124,13 +124,22 @@
 			<fieldset class="flex flex-col gap-1">
 				<div class="grid gap-2">
 					{#each keys(categories.current) as category}
-						<div class="flex items-center gap-2">
+						<div
+							class="flex items-center gap-2"
+							style:--category-color="var(--color-category-{category})"
+							style:--category-foreground-color="var(--color-category-foreground-{category})"
+						>
 							<Checkbox
+								class="
+									data-[state=checked]:bg-(--category-color) 
+									not-dark:data-[category=core]:data-[state=checked]:text-primary dark:not-data-[category=core]:data-[state=checked]:text-primary
+									dark:data-[state=checked]:bg-(--category-color) data-[state=checked]:border-(--category-color)/30"
 								bind:checked={categories.current[category]}
 								id="category-checkbox-{category}"
 								aria-labelledby="category-checkbox-{category}-label"
+								data-category={category}
 							/>
-							<Label id="category-checkbox-{category}-label" for="category-checkbox-{category}">
+							<Label class="text-(--category-foreground-color)" id="category-checkbox-{category}-label" for="category-checkbox-{category}">
 								{category}
 							</Label>
 						</div>

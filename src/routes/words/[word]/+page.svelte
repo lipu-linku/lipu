@@ -333,7 +333,11 @@
 					<ul class="flex flex-col justify-center gap-2">
 						<li>
 							<span class="text-muted-foreground">Category:</span>
-							{word.usage_category}
+							<span
+								class="text-(--category-foreground-color)"
+								style:--category-foreground-color="var(--color-category-foreground-{word.usage_category})"
+								>{word.usage_category}</span
+							>
 						</li>
 						<li>
 							<span class="text-muted-foreground">Usage:</span>
@@ -381,9 +385,9 @@
 				</Card.Content>
 				<Card.Footer>
 					<p class="text-pretty text-sm text-muted-foreground">
-						Before 2022, the survey asked "Do you consider this word real?"; After 2022, the question was changed
-						to "Do you use this word?".
-						Therefore, results before and after 2022, marked by the red line, are not comparable.
+						Before 2022, the survey asked "Do you consider this word real?"; After 2022, the
+						question was changed to "Do you use this word?". Therefore, results before and after
+						2022, marked by the red line, are not comparable.
 					</p>
 				</Card.Footer>
 			</Card.Root>

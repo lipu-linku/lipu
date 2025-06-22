@@ -111,11 +111,31 @@
 	}
 
 	:root {
-		--color-category-core: light-dark(oklch(88.54% 0.1784 106.54), oklch(93.29% 0.137 106.54));
+		--color-category-core: light-dark(oklch(0.9329 0.1992 106.54), oklch(93.29% 0.137 106.54));
 		--color-category-common: oklch(61.15% 0.177 30.62);
 		--color-category-uncommon: oklch(56.87% 0.159 351.1);
 		--color-category-obscure: oklch(42.72% 0.249 311.74);
 		--color-category-sandbox: oklch(50.55% 0.052 284.53);
+		--color-category-foreground-core: light-dark(
+			color-mix(in oklab, var(--color-category-core) 50%, black),
+			color-mix(in oklab, var(--color-category-core) 90%, white)
+		); 
+		--color-category-foreground-common: light-dark(
+			color-mix(in oklab, var(--color-category-common) 70%, black),
+			color-mix(in oklab, var(--color-category-common) 80%, white)
+		);
+		--color-category-foreground-uncommon: light-dark(
+			color-mix(in oklab, var(--color-category-uncommon) 80%, black),
+			color-mix(in oklab, var(--color-category-uncommon) 60%, white)
+		);
+		--color-category-foreground-obscure: light-dark(
+			color-mix(in oklab, var(--color-category-obscure) 90%, black),
+			color-mix(in oklab, var(--color-category-obscure) 60%, white)
+		); 
+		--color-category-foreground-sandbox: light-dark(
+			color-mix(in oklab, var(--color-category-sandbox) 90%, black),
+			color-mix(in oklab, var(--color-category-sandbox) 80%, white)
+		); 
 	}
 
 	.light {
