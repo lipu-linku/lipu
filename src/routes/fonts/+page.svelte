@@ -89,7 +89,8 @@
 		{/each}
 	</ul>
 </main>
-
+<!-- TODO: Work on the fonts search more, it needs attention -->
+<!-- 
 <aside class="sticky min-w-1/5 top-0 end-0 h-dvh px-2 py-4">
 	<Card.Root class="h-full">
 		<Card.Header>
@@ -118,4 +119,4 @@
 			</div>
 		</Card.Content>
 	</Card.Root>
-</aside>
+</aside> -->

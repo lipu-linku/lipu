@@ -124,7 +124,9 @@
 
 		<div class="flex items-center justify-end flex-wrap">
 			{#if writingSystem.current === "sitelen_pona" && word.representations?.ligatures}
-				<span class="text-end wrap-anywhere max-w-[10ch] text-wrap font-sitelen-seli-kiwen">
+				<span
+					class="text-end wrap-anywhere max-w-[10ch] text-wrap font-sitelen-seli-kiwen [text-box:trim-both_cap_alphabetic]"
+				>
 					{#each word.representations.ligatures.slice(0, 3) as glyph}
 						{glyph}
 					{/each}

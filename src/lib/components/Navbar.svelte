@@ -77,7 +77,7 @@
 	} as const;
 </script>
 
-<aside class="sticky top-0 start-0 h-dvh px-4 py-5 flex-col gap-6 hidden sm:flex">
+<aside class="sticky top-0 start-0 h-dvh px-4 py-5 flex-col gap-6 hidden md:flex">
 	{@render sidebar()}
 </aside>
 
@@ -85,14 +85,14 @@
 	<Sheet.Trigger
 		class={cn(
 			buttonVariants({ size: "icon" }),
-			"fixed z-20 bottom-4 left-4 size-12 shadow-2xl sm:hidden",
+			"fixed z-20 bottom-4 left-4 size-12 shadow-2xl md:hidden",
 		)}
 	>
 		<MenuIcon class="size-6" />
 	</Sheet.Trigger>
 
 	<Sheet.Content class="bg-background/60 backdrop-blur-md p-4" side="bottom">
-		<aside class="h-full flex-col gap-6 flex sm:hidden">
+		<aside class="h-full flex-col gap-6 flex md:hidden">
 			{@render sidebar()}
 		</aside>
 	</Sheet.Content>
@@ -100,7 +100,7 @@
 
 {#snippet sidebar()}
 	<header>
-		<a href="/" class="flex items-center gap-2 px-2 sm:px-0">
+		<a href="/" class="flex items-center gap-2 px-2 md:px-0">
 			{#if mode.current === "dark"}
 				<img src={iconDark} alt="Linku's logo" class="size-6" />
 			{:else}
@@ -114,7 +114,11 @@
 		<ul>
 			{#each entries(links) as [id, link] (id)}
 				<li>
-					<Button variant="link" class="w-full justify-start p-0 sm:has-[>svg]:px-0" href={link.href}>
+					<Button
+						variant="link"
+						class="w-full justify-start p-0 md:has-[>svg]:px-0"
+						href={link.href}
+					>
 						<link.icon />
 						{link.label}
 					</Button>
@@ -123,7 +127,7 @@
 		</ul>
 	</nav>
 
-	<div class="mt-auto flex items-center justify-between ps-2 sm:ps-0 gap-2">
+	<div class="mt-auto flex items-center justify-between ps-2 md:ps-0 gap-2">
 		<Select.Root
 			type="single"
 			bind:value={selectedLang}

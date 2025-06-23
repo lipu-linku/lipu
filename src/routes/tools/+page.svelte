@@ -11,7 +11,7 @@
 </svelte:head>
 
 <main
-	class="w-full p-4 grid grid-cols-1 sm:grid-cols-3 auto-rows-min supports-[grid-template-rows:masonry]:grid-rows-[masonry] gap-4"
+	class="w-full p-4 grid grid-cols-1 md:grid-cols-3 auto-rows-min supports-[grid-template-rows:masonry]:grid-rows-[masonry] gap-4"
 >
 	<Numbers />
 

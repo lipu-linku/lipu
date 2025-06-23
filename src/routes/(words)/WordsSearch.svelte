@@ -62,7 +62,7 @@
 
 <svelte:window onkeydown={focusSearch} />
 
-<aside class="col-3 row-1 sticky top-0 end-0 h-dvh px-2 py-4 hidden sm:block">
+<aside class="col-3 row-1 sticky top-0 end-0 h-dvh px-2 py-4 hidden md:block">
 	<form action="/" class="h-full px-2 gap-4 flex flex-col" role="search">
 		{@render inputField()}
 
@@ -74,7 +74,7 @@
 	<Sheet.Trigger
 		class={cn(
 			buttonVariants({ variant: "secondary", size: "icon" }),
-			"fixed sm:hidden size-12 z-20 bottom-4 left-18 shadow-2xl",
+			"fixed md:hidden size-12 z-20 bottom-4 left-18 shadow-2xl",
 		)}
 	>
 		<SearchIcon class="size-6" />
@@ -139,7 +139,11 @@
 								aria-labelledby="category-checkbox-{category}-label"
 								data-category={category}
 							/>
-							<Label class="text-(--category-foreground-color)" id="category-checkbox-{category}-label" for="category-checkbox-{category}">
+							<Label
+								class="text-(--category-foreground-color)"
+								id="category-checkbox-{category}-label"
+								for="category-checkbox-{category}"
+							>
 								{category}
 							</Label>
 						</div>
@@ -196,7 +200,7 @@
 					<Label
 						title={favorites.current.length === 0 ? "Select at least 1 favorite" : undefined}
 						id="only-favorites-label"
-						for="only-favorites-checkbox">Only Show Favorites</Label
+						for="only-favorites-checkbox">Only Favorites</Label
 					>
 				</div>
 			</div>

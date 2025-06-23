@@ -15,7 +15,7 @@
 
 <div
 	transition:slide
-	class="sm:p-1 grid grid-rows-[repeat(auto-fit,minmax(2.25rem,1fr))] grid-cols-[repeat(auto-fit,minmax(2.25rem,1fr))] gap-1.5"
+	class="md:p-1 grid grid-rows-[repeat(auto-fit,minmax(2.25rem,1fr))] grid-cols-[repeat(auto-fit,minmax(2.25rem,1fr))] gap-1.5"
 >
 	{#each keys as [word, data] (word)}
 		<Button
