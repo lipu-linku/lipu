@@ -25,6 +25,8 @@
 		},
 	);
 
+	let malformed = $state(false);
+
 	const lastUpdatedDate = $derived(
 		font.last_updated
 			? Intl.DateTimeFormat("en", { month: "long", year: "numeric" }).format(
@@ -46,14 +48,20 @@
 	const loadFont = async () => {
 		const fontFace = new FontFace(
 			font.name,
-			`url(https://raw.githubusercontent.com/lipu-linku/ijo/main/nasinsitelen/${font.filename})`,
+			`url(https://raw.githubusercontent.com/lipu-linku/ijo/main/nasinsitelen/${encodeURIComponent(font.filename)})`,
 		);
-		await fontFace.load();
-		document.fonts.add(fontFace);
+
+		try {
+			await fontFace.load();
+			document.fonts.add(fontFace);
+		} catch (e) {
+			console.error(e);
+			malformed = true;
+		}
 	};
 </script>
 
-<Card.Root bind:ref={cardElement}>
+<Card.Root bind:ref={cardElement} class={[malformed && "hidden"]}>
 	<Card.Header class="relative">
 		<Card.Title class="text-2xl max-w-[10ch] md:max-w-full">{font.name}</Card.Title>
 		<Card.Description>{fontDescription}</Card.Description>

@@ -81,7 +81,8 @@
 		<SitelenKeyboard bind:value={fontSentence.current} bind:input={fontSentenceInput} />
 	{/if}
 
-	<ul class="flex flex-col gap-2">
+	<!-- that's a fancier space-y-2 that ignores hidden font cards -->
+	<ul class="flex flex-col *:not-last:not-has-[&.hidden]:mb-2">
 		{#each filtered as [id, font] (id)}
 			<li>
 				<FontEntry {font} />
