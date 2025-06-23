@@ -111,7 +111,7 @@
 	}
 
 	:root {
-		--color-category-core: light-dark(oklch(0.9329 0.1992 106.54), oklch(93.29% 0.137 106.54));
+		--color-category-core: light-dark(oklch(0.7878 0.1516 88.71), oklch(93.29% 0.137 106.54));
 		--color-category-common: oklch(61.15% 0.177 30.62);
 		--color-category-uncommon: oklch(56.87% 0.159 351.1);
 		--color-category-obscure: oklch(42.72% 0.249 311.74);
@@ -134,7 +134,7 @@
 		); 
 		--color-category-foreground-sandbox: light-dark(
 			color-mix(in oklab, var(--color-category-sandbox) 90%, black),
-			color-mix(in oklab, var(--color-category-sandbox) 80%, white)
+			color-mix(in oklab, var(--color-category-sandbox) 50%, white)
 		); 
 	}
 
