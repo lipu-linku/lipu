@@ -48,7 +48,7 @@
 	const loadFont = async () => {
 		const fontFace = new FontFace(
 			font.name,
-			`url(https://raw.githubusercontent.com/lipu-linku/ijo/main/nasinsitelen/${encodeURIComponent(font.filename)})`,
+			`url("https://raw.githubusercontent.com/lipu-linku/ijo/main/nasinsitelen/${encodeURIComponent(font.filename)}")`,
 		);
 
 		try {
