@@ -143,12 +143,10 @@
 							ku definitions
 							<Tooltip.Provider>
 								<Tooltip.Root>
-									<Tooltip.Trigger
-										class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
-									>
-										<InfoIcon class="size-4 " />
+									<Tooltip.Trigger class={buttonVariants({ variant: "ghost", size: "icon" })}>
+										<InfoIcon class="size-4" />
 									</Tooltip.Trigger>
-									<Tooltip.Content class="max-w-[min(55ch,80%)]">
+									<Tooltip.Content class="text-center">
 										Each ku definition is assigned a frequency index from ½ to 5, which describes
 										how commonly it was translated that way in the toki pona community, according to
 										a survey.
@@ -195,12 +193,10 @@
 								Semantic space by lipamanka
 								<Tooltip.Provider>
 									<Tooltip.Root>
-										<Tooltip.Trigger
-											class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
-										>
-											<InfoIcon class="size-4 " />
+										<Tooltip.Trigger class={buttonVariants({ variant: "ghost", size: "icon" })}>
+											<InfoIcon class="size-4" />
 										</Tooltip.Trigger>
-										<Tooltip.Content class="max-w-[min(55ch,80%)]">
+										<Tooltip.Content>
 											This information is sourced from <a
 												class="underline"
 												href={word.resources.lipamanka_semantic}
