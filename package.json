@@ -49,5 +49,5 @@
 		"workbox-window": "^7.3.0"
 	},
 	"type": "module",
-	"packageManager": "pnpm@9.14.1"
+	"packageManager": "pnpm@10.13.1"
 }
