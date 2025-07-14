@@ -36,8 +36,8 @@
 	<meta name="og:image" content={logo} />
 </svelte:head>
 
-<main class="col-2 flex-1 my-4 space-y-4">
-	<p class="text-center text-balance px-2 mx-auto">
+<main class="col-2 md:my-4 space-y-4 md:min-w-6/10 p-2 md:p-0">
+	<p class="text-center not-supports-[text-wrap:pretty]:text-balance text-pretty px-2 mx-auto">
 		The <i>sandbox</i> is a collection of proposed words which are
 		<strong class="md:whitespace-nowrap">not actively in use</strong>.
 		<br />
@@ -52,7 +52,7 @@
 		<span class="md:whitespace-nowrap">Toki Pona</span>. A lot are one-off jokes, created and
 		abandoned immediately.
 	</p>
-	<ul class="flex flex-col items-stretch gap-2 mx-auto max-w-[min(95vw,1000px)]">
+	<ul class="flex flex-col items-stretch gap-2">
 		{#each sorted_filtered_dictionary as word (word.id)}
 			<li>
 				<Entry {language} {word} />

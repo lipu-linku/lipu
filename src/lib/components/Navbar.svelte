@@ -91,7 +91,7 @@
 		<MenuIcon class="size-6" />
 	</Sheet.Trigger>
 
-	<Sheet.Content class="bg-background/60 backdrop-blur-md p-4" side="bottom">
+	<Sheet.Content class="bg-background/60 backdrop-blur-md p-4 data-[state=open]:duration-300" side="bottom">
 		<aside class="h-full flex-col gap-6 flex md:hidden">
 			{@render sidebar()}
 		</aside>
