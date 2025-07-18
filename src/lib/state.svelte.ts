@@ -1,12 +1,9 @@
-import { browser } from "$app/environment";
-import { entries, fromEntries } from "$lib/utils";
+import { fromEntries, keys } from "$lib/utils";
 import type { UsageCategory } from "@kulupu-linku/sona/utils";
-import { persisted, type Serializer } from "./storage.svelte";
-import { SvelteSet } from "svelte/reactivity";
+import { PersistedState } from "runed";
+import { queryParameters } from "sveltekit-search-params";
 
-export const searchQuery = $state({
-	value: browser ? (new URLSearchParams(window.location.search).get("q") ?? "") : "",
-});
+export const queryParams = queryParameters();
 
 export const defaultCategories: Record<Exclude<UsageCategory, "sandbox">, boolean> = {
 	core: true,
@@ -15,41 +12,41 @@ export const defaultCategories: Record<Exclude<UsageCategory, "sandbox">, boolea
 	obscure: false,
 };
 
-export const categoriesSerializer: Serializer<typeof defaultCategories> = {
-	parse: (list) => {
-		const keys = list.split(",");
-		const entries = fromEntries(
-			keys.map((it) => [it as keyof typeof defaultCategories, true] as const),
-		);
+export const categoriesSerializer = {
+	deserialize: (list: string) => {
+		const enabled = list.split(",").filter(Boolean);
 
-		return {
-			...defaultCategories,
-			...entries,
-		};
+		return fromEntries(keys(defaultCategories).map((k) => [k, enabled.includes(k)]));
 	},
-	stringify: (obj) =>
-		entries(obj)
-			.filter(([, on]) => on)
-			.map(([key]) => key)
+	serialize: (obj: typeof defaultCategories) =>
+		keys(obj)
+			.filter((k) => obj[k])
 			.join(","),
 };
 
-export const categories = persisted("categories", defaultCategories, categoriesSerializer);
-
-export const favorites = persisted("favorites", new SvelteSet<string>(), {
-	parse: (text) => {
-		const noPadding = /,*(.*),*/.exec(text)?.[1] ?? "";
-		return new SvelteSet(noPadding !== "" ? noPadding.split(",") : []);
-	},
-	stringify: (obj) => [...(obj?.values() ?? [])].join(","),
+export const categories = new PersistedState("categories", defaultCategories, {
+	serializer: categoriesSerializer,
 });
 
-export const writingSystem = persisted<"sitelen_pona" | "sitelen_sitelen">(
+export const favorites = new PersistedState<string[]>("favorites", [], {
+	serializer: {
+		deserialize: (list) => list.split(",").filter(Boolean),
+		serialize: (obj) => obj.join(","),
+	},
+});
+
+export const writingSystem = new PersistedState<"sitelen_pona" | "sitelen_sitelen">(
 	"writing_system",
 	"sitelen_pona",
+	{
+		serializer: {
+			deserialize: (s) => s as "sitelen_pona" | "sitelen_sitelen",
+			serialize: (s) => s,
+		},
+	},
 );
 
-export const etymologiesEnabled = persisted("etymologies_enabled", true);
-export const onlyFavorites = persisted("only_favorites", false);
+export const etymologiesEnabled = new PersistedState("etymologies_enabled", true);
+export const onlyFavorites = new PersistedState("only_favorites", false);
 
-export const fontSentence = persisted("font_sentence", "jan li pana e moku tawa sina");
+export const fontSentence = new PersistedState("font_sentence", "󱦀󱥾󱤧󱦅󱤉󱦁 · jan li pana e moku tawa sina");

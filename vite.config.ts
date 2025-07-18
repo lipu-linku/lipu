@@ -1,4 +1,5 @@
 import { sveltekit } from "@sveltejs/kit/vite";
+import tailwindcss from "@tailwindcss/vite";
 import { SvelteKitPWA } from "@vite-pwa/sveltekit";
 import Icons from "unplugin-icons/vite";
 import { defineConfig } from "vite";
@@ -6,6 +7,7 @@ import { defineConfig } from "vite";
 export default defineConfig({
 	plugins: [
 		sveltekit(),
+		tailwindcss(),
 		Icons({
 			compiler: "svelte",
 			defaultClass: "icon",
@@ -51,7 +53,7 @@ export default defineConfig({
 			},
 		}),
 	],
-	build: {
-		cssMinify: "lightningcss",
-	},
+	experimental: {
+		enableNativePlugin: true,
+	}
 });

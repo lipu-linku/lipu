@@ -1,12 +1,6 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button";
-	import {
-		Card,
-		CardContent,
-		CardDescription,
-		CardHeader,
-		CardTitle,
-	} from "$lib/components/ui/card";
+	import * as Card from "$lib/components/ui/card";
 	import { fontSentence } from "$lib/state.svelte";
 	import type { Font } from "@kulupu-linku/sona";
 	import { useIntersectionObserver } from "runed";
@@ -31,6 +25,8 @@
 		},
 	);
 
+	let malformed = $state(false);
+
 	const lastUpdatedDate = $derived(
 		font.last_updated
 			? Intl.DateTimeFormat("en", { month: "long", year: "numeric" }).format(
@@ -40,7 +36,11 @@
 	);
 
 	const fontDescription = $derived(
-		[`Created by ${font.creator}`, `Updated on ${lastUpdatedDate}`, `Licensed as ${font.license}`]
+		[
+			`Created by ${font.creator.join(", ")}`,
+			`Updated on ${lastUpdatedDate}`,
+			`Licensed as ${font.license}`,
+		]
 			.filter((s) => !s.includes("undefined"))
 			.join(" · "),
 	);
@@ -48,18 +48,24 @@
 	const loadFont = async () => {
 		const fontFace = new FontFace(
 			font.name,
-			`url(https://raw.githubusercontent.com/lipu-linku/ijo/main/nasinsitelen/${font.filename})`,
+			`url("https://raw.githubusercontent.com/lipu-linku/ijo/main/nasinsitelen/${encodeURIComponent(font.filename)}")`,
 		);
-		await fontFace.load();
-		document.fonts.add(fontFace);
+
+		try {
+			await fontFace.load();
+			document.fonts.add(fontFace);
+		} catch (e) {
+			console.error(e);
+			malformed = true;
+		}
 	};
 </script>
 
-<Card bind:ref={cardElement}>
-	<CardHeader class="relative">
-		<CardTitle>{font.name}</CardTitle>
-		<CardDescription>{fontDescription}</CardDescription>
-		<nav class="absolute top-2 right-4 flex items-center gap-2">
+<Card.Root bind:ref={cardElement} class={[malformed && "hidden"]}>
+	<Card.Header class="relative">
+		<Card.Title class="text-2xl max-w-[10ch] md:max-w-full">{font.name}</Card.Title>
+		<Card.Description>{fontDescription}</Card.Description>
+		<nav class="absolute right-4 flex items-center gap-2">
 			{#if font.links.repo}
 				<Button
 					variant="outline"
@@ -86,16 +92,16 @@
 				<DownloadIcon />
 			</Button>
 		</nav>
-	</CardHeader>
+	</Card.Header>
 
-	<CardContent class="text-3xl">
+	<Card.Content class="text-3xl">
 		{#if intersecting}
 			{#await loadFont()}
 				Loading...
 			{:then}
 				<span transition:fly={{ y: 10, duration: 200 }} style="font-family: '{font.name}'">
-					{#if fontSentence.value.match(/[\u{F1900}-\u{F19FF}]/gu)}{/if}
-					{fontSentence.value.trim()}
+					{#if fontSentence.current.match(/[\u{F1900}-\u{F19FF}]/gu)}{/if}
+					{fontSentence.current.trim()}
 				</span>
 			{:catch}
 				The font failed to load.
@@ -103,5 +109,5 @@
 		{:else}
 			Loading...
 		{/if}
-	</CardContent>
-</Card>
+	</Card.Content>
+</Card.Root>

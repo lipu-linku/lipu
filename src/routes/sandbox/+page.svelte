@@ -1,19 +1,17 @@
 <script lang="ts">
-	import Entry from "../Entry.svelte";
-
-	import autoAnimate from "@formkit/auto-animate";
-	import { page } from "$app/stores";
-	import { wordSearch } from "$lib/components/search";
-	import { favorites, onlyFavorites, searchQuery } from "$lib/state.svelte";
+	import { page } from "$app/state";
 	import logo from "$lib/assets/icon-light.png?url";
+	import { wordSearch } from "$lib/components/search.svelte";
+	import { favorites, onlyFavorites, queryParams } from "$lib/state.svelte";
+	import Entry from "../Entry.svelte";
 
 	const { data } = $props();
 	const { words, language } = $derived(data);
 
-	const wordList = $derived($page.url.searchParams.get("list")?.split(","));
+	const wordList = $derived(page.url.searchParams.get("list")?.split(","));
 	const sorted_filtered_dictionary = $derived(
 		wordSearch(
-			$page.url.searchParams.get("q") ?? searchQuery.value,
+			queryParams.q ?? "",
 			words,
 			{
 				sandbox: true,
@@ -22,8 +20,8 @@
 				uncommon: false,
 				obscure: false,
 			},
-			favorites.value,
-			onlyFavorites.value,
+			favorites.current,
+			onlyFavorites.current,
 			wordList,
 			language.id,
 		),
@@ -38,8 +36,8 @@
 	<meta name="og:image" content={logo} />
 </svelte:head>
 
-<main class="flex-1 my-4 space-y-4">
-	<p class="text-center text-balance px-2 mx-auto">
+<main class="col-2 md:my-4 space-y-4 md:min-w-6/10 p-2 md:p-0">
+	<p class="text-center not-supports-[text-wrap:pretty]:text-balance text-pretty px-2 mx-auto">
 		The <i>sandbox</i> is a collection of proposed words which are
 		<strong class="md:whitespace-nowrap">not actively in use</strong>.
 		<br />
@@ -54,7 +52,7 @@
 		<span class="md:whitespace-nowrap">Toki Pona</span>. A lot are one-off jokes, created and
 		abandoned immediately.
 	</p>
-	<ul use:autoAnimate class="flex flex-col items-stretch gap-2 mx-auto max-w-[min(95vw,1000px)]">
+	<ul class="flex flex-col items-stretch gap-2">
 		{#each sorted_filtered_dictionary as word (word.id)}
 			<li>
 				<Entry {language} {word} />

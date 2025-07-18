@@ -1,26 +1,23 @@
 <script lang="ts">
+	import { page } from "$app/state";
 	import AudioButton from "$lib/components/AudioButton.svelte";
 	import Collapsible from "$lib/components/Collapsible.svelte";
-	import Navbar from "$lib/components/Navbar.svelte";
-	import WordsSearch from "../../(words)/WordsSearch.svelte";
-	import UsageGraph from "./UsageGraph.svelte";
-
 	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import * as Tooltip from "$lib/components/ui/tooltip";
-
-	import { page } from "$app/stores";
 	import { getTranslatedData } from "@kulupu-linku/sona/utils";
-
-	import { cn } from "$lib/utils";
 	import BackIcon from "~icons/lucide/arrow-left";
+	import CodeIcon from "~icons/lucide/code-xml";
 	import CopyIcon from "~icons/lucide/copy";
 	import InfoIcon from "~icons/lucide/info";
+	import GraphIcon from "~icons/lucide/line-chart";
 	import ShareButton from "~icons/lucide/share-2";
+	import WordsSearch from "../../(words)/WordsSearch.svelte";
+	import UsageGraph from "./UsageGraph.svelte";
 
 	const { data } = $props();
-	const { word, language, languages } = $derived(data);
+	const { word, language } = $derived(data);
 
 	const usageScore = $derived(Object.values(word.usage).at(-1) ?? 0);
 	const definition = $derived(getTranslatedData(word, "definition", language.id));
@@ -78,23 +75,29 @@
 	/>
 </svelte:head>
 
-<Navbar {language} {languages}>
-	<WordsSearch class="hidden md:flex" />
-</Navbar>
-
-<WordsSearch
-	class="flex sticky z-50 top-0 border-b border-border/40 bg-background/95 p-4 backdrop-blur supports-[backdrop-filter]:bg-background/60 md:hidden"
-/>
-
-<main class="flex-1 max-w-screen-2xl 2xl:mx-auto flex flex-col gap-4 p-4 pb-2">
+<main class="flex-1 my-4 flex flex-col gap-4 pb-2">
 	<header class="flex-1 flex items-center gap-4">
-		<Button onclick={() => window.history.back()} class="justify-self-end" variant="ghost" size="icon">
+		<Button
+			href={word.usage_category === "sandbox" ? "/sandbox" : "/"}
+			class="justify-self-end"
+			variant="ghost"
+			size="icon"
+		>
 			<BackIcon />
 		</Button>
 
 		<h1 class="font-semibold text-4xl align-middle">{word.word}</h1>
 
 		<div class="ml-auto flex items-center gap-2">
+			<Button
+				href="https://github.com/lipu-linku/sona/blob/main/words/metadata/{word.id}.toml"
+				variant="outline"
+				size="icon"
+				target="_blank"
+				rel="noopener noreferrer"
+			>
+				<CodeIcon />
+			</Button>
 			{#if word.audio}
 				<AudioButton audio={word.audio} />
 			{/if}
@@ -106,13 +109,13 @@
 					<DropdownMenu.Label>Share word</DropdownMenu.Label>
 					<DropdownMenu.Separator />
 
-					<DropdownMenu.Item onclick={() => navigator.clipboard.writeText($page.url.toString())}>
+					<DropdownMenu.Item onclick={() => navigator.clipboard.writeText(page.url.toString())}>
 						<CopyIcon class="inline mr-2 size-4" />
 						Copy URL
 					</DropdownMenu.Item>
 
 					<DropdownMenu.Item onclick={copyCodepoint}>
-						<span class="text-2xl -ml-1 mr-2 font-sitelen-pona">sitelen-pona</span>
+						<span class="text-2xl -ml-1 mr-2 font-sitelen-seli-kiwen">sitelen-pona</span>
 						sitelen pona
 					</DropdownMenu.Item>
 				</DropdownMenu.Content>
@@ -120,15 +123,10 @@
 		</div>
 	</header>
 
-	<div
-		class={cn(
-			"flex-1 grid grid-cols-3 max-md:flex max-md:flex-col gap-2 justify-stretch",
-			!hasRepresentations && "grid-cols-2",
-		)}
-	>
-		<Card.Root>
+	<div class="flex-1 grid grid-cols-2 auto-rows-min gap-2">
+		<Card.Root class="col-span-2">
 			<Card.Header>
-				<Card.Title class="text-2xl" level={2}>Meaning</Card.Title>
+				<Card.Title class="text-2xl"><h2>Meaning</h2></Card.Title>
 			</Card.Header>
 			<Card.Content class="flex flex-col gap-3">
 				<div class="flex flex-col justify-center gap-2">
@@ -145,12 +143,10 @@
 							ku definitions
 							<Tooltip.Provider>
 								<Tooltip.Root>
-									<Tooltip.Trigger
-										class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
-									>
-										<InfoIcon class="size-4 " />
+									<Tooltip.Trigger class={buttonVariants({ variant: "ghost", size: "icon" })}>
+										<InfoIcon class="size-4" />
 									</Tooltip.Trigger>
-									<Tooltip.Content class="max-w-[min(55ch,80%)]">
+									<Tooltip.Content class="text-center">
 										Each ku definition is assigned a frequency index from ½ to 5, which describes
 										how commonly it was translated that way in the toki pona community, according to
 										a survey.
@@ -186,8 +182,10 @@
 						.then((text) => {
 							const doc = document.createElement("html");
 							doc.innerHTML = text;
-							const el = doc.querySelector(`details > summary#${id} + p`);
-							if (el) return el.textContent ?? "";
+							const el = doc.querySelectorAll(`details > summary#${id} ~ p`);
+							if (el.length > 0) return [...el]
+									.reduce((acc, it) => acc + "\n\n" + it.textContent, "")
+									.trim();
 							else throw new Error(`Could not find a semantic space definition for ${id}`);
 						}) then semantic}
 						<div class="flex flex-col justify-center gap-2">
@@ -195,15 +193,13 @@
 								Semantic space by lipamanka
 								<Tooltip.Provider>
 									<Tooltip.Root>
-										<Tooltip.Trigger
-											class="grid place-items-center hover:bg-accent hover:text-accent-foreground p-2 rounded-md transition-colors"
-										>
-											<InfoIcon class="size-4 " />
+										<Tooltip.Trigger class={buttonVariants({ variant: "ghost", size: "icon" })}>
+											<InfoIcon class="size-4" />
 										</Tooltip.Trigger>
-										<Tooltip.Content class="max-w-[min(55ch,80%)]">
+										<Tooltip.Content>
 											This information is sourced from <a
 												class="underline"
-												href="https://lipamanka.gay/essays/dictionary"
+												href={word.resources.lipamanka_semantic}
 												target="_blank"
 												rel="noopener noreferrer"
 											>
@@ -214,7 +210,7 @@
 								</Tooltip.Provider>
 							</h3>
 
-							<Collapsible separator=" " content={semantic} />
+							<Collapsible class="whitespace-pre-line" separator=" " content={semantic} />
 						</div>
 					{/await}
 				{/if}
@@ -224,14 +220,14 @@
 		{#if hasRepresentations}
 			<Card.Root>
 				<Card.Header>
-					<Card.Title class="text-2xl" level={2}>Usage</Card.Title>
+					<Card.Title class="text-2xl"><h2>Usage</h2></Card.Title>
 				</Card.Header>
 				<Card.Content class="flex flex-col gap-3">
 					{#if word.representations?.ligatures && word.representations?.ligatures?.length > 0}
 						<div class="flex flex-col justify-center gap-2">
 							<h3 class="font-medium text-xl">sitelen pona</h3>
 							<p>
-								<span class="text-7xl font-sitelen-pona">
+								<span class="text-7xl font-sitelen-seli-kiwen">
 									{word.representations?.ligatures?.join(" ")}
 								</span>
 							</p>
@@ -247,7 +243,7 @@
 							<img
 								src={word.representations.sitelen_sitelen}
 								alt="{word.word} in sitelen sitelen format"
-								class="dark:invert size-16 m-2"
+								class="grayscale dark:invert size-16 m-2"
 							/>
 						</div>
 					{/if}
@@ -290,7 +286,7 @@
 
 		<Card.Root>
 			<Card.Header>
-				<Card.Title class="text-2xl" level={2}>More Info</Card.Title>
+				<Card.Title class="text-2xl"><h2>More Info</h2></Card.Title>
 			</Card.Header>
 			<Card.Content class="flex flex-col gap-3">
 				{#if commentary}
@@ -333,7 +329,11 @@
 					<ul class="flex flex-col justify-center gap-2">
 						<li>
 							<span class="text-muted-foreground">Category:</span>
-							{word.usage_category}
+							<span
+								class="text-(--category-foreground-color)"
+								style:--category-foreground-color="var(--color-category-foreground-{word.usage_category})"
+								>{word.usage_category}</span
+							>
 						</li>
 						<li>
 							<span class="text-muted-foreground">Usage:</span>
@@ -362,14 +362,33 @@
 		</Card.Root>
 
 		{#if Object.keys(word.usage).length > 1}
-			<Card.Root class="col-span-3">
-				<Card.Header>
-					<Card.Title class="text-2xl" level={2}>Usage Trend</Card.Title>
+			<Card.Root class="col-span-2">
+				<Card.Header class="flex flex-row justify-between">
+					<Card.Title class="text-2xl"><h2>Usage Trend</h2></Card.Title>
+
+					<Button
+						variant="outline"
+						size="icon"
+						href="https://ilo.muni.la/?query={word.word}"
+						target="_blank"
+						rel="noopener noreferrer"
+					>
+						<GraphIcon />
+					</Button>
 				</Card.Header>
-				<Card.Content class="h-[600px] p-4 px-8">
+				<Card.Content class="max-h-[600px] p-4 px-8">
 					<UsageGraph data={word.usage} />
 				</Card.Content>
+				<Card.Footer>
+					<p class="text-pretty text-sm text-muted-foreground">
+						Before 2022, the survey asked "Do you consider this word real?"; After 2022, the
+						question was changed to "Do you use this word?". Therefore, results before and after
+						2022, marked by the red line, are not comparable.
+					</p>
+				</Card.Footer>
 			</Card.Root>
 		{/if}
 	</div>
 </main>
+
+<WordsSearch />

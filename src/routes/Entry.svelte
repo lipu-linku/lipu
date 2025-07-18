@@ -1,11 +1,10 @@
 <script lang="ts">
-	import { etymologiesEnabled, favorites, writingSystem } from "$lib/state.svelte";
-	import type { Language, LocalizedWord } from "@kulupu-linku/sona";
-	import { getTranslatedData, type UsageCategory } from "@kulupu-linku/sona/utils";
-
 	import AudioButton from "$lib/components/AudioButton.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
+	import { etymologiesEnabled, favorites, onlyFavorites, writingSystem } from "$lib/state.svelte";
+	import type { Language, LocalizedWord } from "@kulupu-linku/sona";
+	import { getTranslatedData } from "@kulupu-linku/sona/utils";
 
 	import UnfavoriteIcon from "~icons/material-symbols/favorite";
 	import FavoriteIcon from "~icons/material-symbols/favorite-outline";
@@ -33,24 +32,18 @@
 				return undefined;
 		}
 	});
-
-	const categoryColors = {
-		core: "oklch(93.29% 0.137 106.54)",
-		common: "oklch(61.15% 0.177 30.62)",
-		uncommon: "oklch(56.87% 0.159 351.1)",
-		obscure: "oklch(42.72% 0.249 311.74)",
-		sandbox: "oklch(50.55% 0.052 284.53)",
-	} as const satisfies Record<UsageCategory, string>;
 </script>
 
 <Card.Root
 	id={word.id}
 	class="
-		relative flex-1 w-auto flex justify-between border-2 transition-colors
-		before:absolute before:inset-y-0 before:w-1 before:rounded-s-md before:bg-[--category-color]
-		before:transition-[width] has-[a:hover]:border-[--category-color] has-[a:hover]:before:w-2
+	flex-row py-2 relative border-2 transition-colors
+		before:absolute before:inset-y-0 before:w-1 before:rounded-s-xl before:bg-(--category-color)
+		before:transition-[width] has-[a:hover]:border-(--category-color) has-[a:hover]:before:w-2
 	"
-	style="--category-color: {categoryColors[word.usage_category]}"
+	style="--category-color: var(--color-category-{word.usage_category});
+		--category-color-foreground: var(--color-category-foreground-{word.usage_category});"
+	data-category={word.usage_category}
 >
 	<a href="/words/{word.id}" class="flex-1 p-0.5">
 		<Card.Header class="space-y-1 p-4 pl-6">
@@ -65,7 +58,8 @@
 			{/if}
 			<Card.Description>
 				{#if word.usage_category !== "sandbox"}
-					{word.usage_category} · {word.book} ·
+					<span class="text-(--category-color-foreground)">{word.usage_category}</span> · {word.book}
+					·
 					<span title="{usageScore}% of toki pona speakers will recognize this word">
 						{usageScore}%
 					</span>
@@ -79,7 +73,7 @@
 						.join(" · ")}
 				{/if}
 			</Card.Description>
-			{#if etymologiesEnabled.value && word.etymology.length > 0 && etymology.length > 0}
+			{#if etymologiesEnabled.current && word.etymology.length > 0 && etymology.length > 0}
 				<Card.Description>
 					{@const etymString = word.etymology
 						.map((etym, i) => {
@@ -109,15 +103,18 @@
 			{/if}
 
 			<Button
+				onclick={() => {
+					const index = favorites.current.findIndex((w) => w === word.id);
+					if (index === -1) favorites.current.push(word.id);
+					else favorites.current.splice(index);
+
+					if (onlyFavorites.current && favorites.current.length === 0)
+						onlyFavorites.current = false;
+				}}
 				variant="outline"
 				size="icon"
-				onclick={() => {
-					favorites.value.has(word.id)
-						? favorites.value.delete(word.id)
-						: favorites.value.add(word.id);
-				}}
 			>
-				{#if !favorites.value.has(word.id)}
+				{#if !favorites.current.includes(word.id)}
 					<FavoriteIcon />
 				{:else}
 					<UnfavoriteIcon />
@@ -126,15 +123,19 @@
 		</div>
 
 		<div class="flex items-center justify-end flex-wrap">
-			{#if writingSystem.value === "sitelen_pona" && word.representations?.ligatures}
-				{#each word.representations.ligatures.slice(0, 3) as glyph}
-					<span class="text-center font-sitelen-pona">{glyph}</span>
-				{/each}
-			{:else if writingSystem.value === "sitelen_sitelen" && word.representations?.sitelen_sitelen}
+			{#if writingSystem.current === "sitelen_pona" && word.representations?.ligatures}
+				<span
+					class="text-end wrap-anywhere max-w-[10ch] text-wrap font-sitelen-seli-kiwen [text-box:trim-both_cap_alphabetic]"
+				>
+					{#each word.representations.ligatures.slice(0, 3) as glyph}
+						{glyph}
+					{/each}
+				</span>
+			{:else if writingSystem.current === "sitelen_sitelen" && word.representations?.sitelen_sitelen}
 				<img
 					src={word.representations.sitelen_sitelen}
 					alt="{word.word} in sitelen sitelen format"
-					class="size-16 dark:invert"
+					class="size-16 grayscale dark:invert"
 					loading="lazy"
 				/>
 			{:else}

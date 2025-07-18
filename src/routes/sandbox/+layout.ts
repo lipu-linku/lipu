@@ -1,5 +1,5 @@
-import type { LayoutLoad } from "./$types";
 import { client } from "@kulupu-linku/sona/client";
+import type { LayoutLoad } from "./$types";
 
 export const load: LayoutLoad = async ({ parent, fetch }) => {
 	const { languages, language } = await parent();
