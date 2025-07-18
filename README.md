@@ -12,8 +12,8 @@ Built using [SvelteKit](https://kit.svelte.dev/), hosted on [Cloudflare](https:/
 
 Requirements:
 
-- [Node.js](https://nodejs.org/) 18+ (v20 is recommended!)
-- [pnpm](https://pnpm.io/) v8
+- [Node.js](https://nodejs.org/) 22+ (v24 is recommended!)
+- [pnpm](https://pnpm.io/) v10
 - A GitHub account (of course)
 
 1. [Fork](https://github.com/lipu-linku/lipu/fork) the repo.

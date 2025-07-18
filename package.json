@@ -27,7 +27,7 @@
 		"d3-scale": "^4.0.2",
 		"fastest-levenshtein": "^1.0.16",
 		"formsnap": "2.0.1",
-		"layerchart": "2.0.0-next.23",
+		"layerchart": "2.0.0-next.30",
 		"lightningcss": "^1.30.1",
 		"mode-watcher": "^1.1.0",
 		"prettier": "^3.6.2",
@@ -36,7 +36,7 @@
 		"runed": "^0.31.0",
 		"sharp": "^0.34.3",
 		"sharp-ico": "^0.1.5",
-		"svelte": "5.36.7",
+		"svelte": "5.36.8",
 		"svelte-check": "^4.3.0",
 		"sveltekit-search-params": "4.0.0-next.0",
 		"sveltekit-superforms": "^2.27.1",
@@ -55,5 +55,5 @@
 		"zod": "^4.0.5"
 	},
 	"type": "module",
-	"packageManager": "pnpm@10.12.1"
+	"packageManager": "pnpm@10.13.1"
 }
