@@ -40,8 +40,9 @@ export const writingSystem = new PersistedState<"sitelen_pona" | "sitelen_sitele
 	"sitelen_pona",
 	{
 		serializer: {
-			deserialize: (s) => s as "sitelen_pona" | "sitelen_sitelen",
-			serialize: (s) => s,
+			deserialize: (s) =>
+				s.replace(/^"+/g, "").replace(/"+$/g, "") as "sitelen_pona" | "sitelen_sitelen",
+			serialize: (s) => s.replace(/^"+/g, "").replace(/"+$/g, ""),
 		},
 	},
 );
@@ -49,4 +50,7 @@ export const writingSystem = new PersistedState<"sitelen_pona" | "sitelen_sitele
 export const etymologiesEnabled = new PersistedState("etymologies_enabled", true);
 export const onlyFavorites = new PersistedState("only_favorites", false);
 
-export const fontSentence = new PersistedState("font_sentence", "󱦀󱥾󱤧󱦅󱤉󱦁 · jan li pana e moku tawa sina");
+export const fontSentence = new PersistedState(
+	"font_sentence",
+	"󱦀󱥾󱤧󱦅󱤉󱦁 · jan li pana e moku tawa sina",
+);
