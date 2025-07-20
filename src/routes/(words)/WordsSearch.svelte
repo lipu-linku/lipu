@@ -99,6 +99,7 @@
 			required
 			autocapitalize="off"
 			autocomplete="off"
+			autofocus
 			bind:value={queryParams.q}
 			id="search-input"
 		/>
