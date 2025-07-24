@@ -16,8 +16,13 @@
 
 	const { word, language }: Props = $props();
 
-	const definition = $derived(getTranslatedData(word, "definition", language.id));
-	const etymology = $derived(getTranslatedData(word, "etymology", language.id));
+	const hasTranslation = $derived(word.translations[language.id] !== undefined);
+	const definition = $derived(
+		hasTranslation ? getTranslatedData(word, "definition", language.id) : undefined,
+	);
+	const etymology = $derived(
+		hasTranslation ? getTranslatedData(word, "etymology", language.id) : [],
+	);
 	const usageScore = $derived(Object.values(word.usage).at(-1) ?? 0);
 
 	const bookName = $derived.by(() => {
@@ -49,7 +54,11 @@
 		<Card.Header class="space-y-1 p-4 pl-6">
 			<Card.Title class="text-2xl leading-8">{word.word}</Card.Title>
 			<Card.Description dir={language.direction} class="text-[1rem] text-foreground">
-				{definition}
+				{#if definition}
+					{definition}
+				{:else}
+					<span class="text-muted">No definition available</span>
+				{/if}
 			</Card.Description>
 			{#if word.see_also.length > 0}
 				<Card.Description>
@@ -79,10 +88,10 @@
 						.map((etym, i) => {
 							const local_etym = etymology[i];
 							return (
-								local_etym.language +
+								(local_etym?.language ? local_etym.language : "?") +
 								(etym.word ? `: ${etym.word}` : "") +
 								(etym.alt ? ` (${etym.alt})` : "") +
-								(local_etym.definition ? ` - ${local_etym.definition}` : "")
+								(local_etym?.definition ? ` - ${local_etym.definition}` : "")
 							);
 						})
 						.join("; ")}
