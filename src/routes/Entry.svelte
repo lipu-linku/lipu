@@ -88,7 +88,7 @@
 						.map((etym, i) => {
 							const local_etym = etymology[i];
 							return (
-								(local_etym?.language ? local_etym.language : "?") +
+								(local_etym?.language ? local_etym.language : "unknown") +
 								(etym.word ? `: ${etym.word}` : "") +
 								(etym.alt ? ` (${etym.alt})` : "") +
 								(local_etym?.definition ? ` - ${local_etym.definition}` : "")
