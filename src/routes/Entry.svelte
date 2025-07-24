@@ -57,7 +57,7 @@
 				{#if definition}
 					{definition}
 				{:else}
-					<span class="text-muted">No definition available</span>
+					<span class="text-muted-foreground italic">no definition available</span>
 				{/if}
 			</Card.Description>
 			{#if word.see_also.length > 0}
