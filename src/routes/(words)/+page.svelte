@@ -47,7 +47,7 @@
 
 <main class="flex-1 col-2 md:my-4 space-y-4 md:min-w-6/10 p-2 md:p-0">
 	{#if hasDisclaimer}
-		<p class="text-center text-balance">
+		<p class="text-center text-balance **:[a]:underline">
 			The <a href="https://linku.la/wile">2025 Linku usage survey</a> and <a href="https://linku.la/wile-glyphs">glyphs survey</a> are now open! Please take the surveys
 			to help improve the dictionary and keep it up to date!
 		</p>
