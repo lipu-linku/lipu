@@ -27,7 +27,9 @@
 	const focusSearch = (e: KeyboardEvent) => {
 		if (e.key === "/" && document.activeElement?.id !== "search-input") {
 			e.preventDefault();
-			document.getElementById("search-input")!.focus();
+			let si = document.getElementById("search-input")!;
+			si.focus()
+			si.select();
 		}
 	};
 
@@ -55,9 +57,23 @@
 		pushState(page.url, {});
 	};
 
+	let defaultDebounceMS = 500;
+	let targetMS = $state(defaultDebounceMS);
+	let tempQuery = $state('');
 	$effect(() => {
+		if (targetMS > 0) {
+			const debounceInterval = setTimeout(() => {
+				queryParams.q = tempQuery;
+			}, targetMS);
+		}
 		if (queryParams.q === "") clearQuery();
 	});
+
+	const renewDebounceTimer = (newTargetMS) => {
+		if (newTargetMS > 0) {
+			targetMS = newTargetMS;
+		}
+	}
 </script>
 
 <svelte:window onkeydown={focusSearch} />
@@ -99,7 +115,8 @@
 			required
 			autocapitalize="off"
 			autocomplete="off"
-			bind:value={queryParams.q}
+			on:input={() => renewDebounceTimer(defaultDebounceMS)}
+			bind:value={tempQuery}
 			id="search-input"
 		/>
 		<Button
