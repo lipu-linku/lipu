@@ -23,13 +23,14 @@
 	import LinkIcon from "~icons/lucide/link";
 	import SearchIcon from "~icons/lucide/search";
 	import ResetIcon from "~icons/lucide/undo-2";
+	import { useDebounce } from "runed";
 
 	const focusSearch = (e: KeyboardEvent) => {
 		if (e.key === "/" && document.activeElement?.id !== "search-input") {
 			e.preventDefault();
-			let si = document.getElementById("search-input")!;
-			si.focus()
-			si.select();
+			document.getElementById("search-input")!.focus();
+			let input = document.activeElement as HTMLTextAreaElement;
+			input ? input.select() : null;
 		}
 	};
 
@@ -57,23 +58,27 @@
 		pushState(page.url, {});
 	};
 
-	let defaultDebounceMS = 500;
-	let targetMS = $state(defaultDebounceMS);
-	let tempQuery = $state('');
+	// this is a temporary state for the search input form.
+	let tempSearch: string = $state("");
+
+	// when tempSearch changes, this will be run as an effect.
+	// with useDebounce it will wait until typing stops.
+	const updateQuery = (search: string) => {
+		queryParams.q = search;
+	}
+
 	$effect(() => {
-		if (targetMS > 0) {
-			const debounceInterval = setTimeout(() => {
-				queryParams.q = tempQuery;
-			}, targetMS);
+		// with this pattern, every time tempSearch is changed,
+		// the old debounce is overwritten and a new one is run.
+		// that way, only after the timer is fully able to complete
+		// will the query parameters be set to the search value.
+		if (tempSearch) {
+			const debounce = useDebounce(updateQuery, 500);
+			debounce(tempSearch);
 		}
+
 		if (queryParams.q === "") clearQuery();
 	});
-
-	const renewDebounceTimer = (newTargetMS) => {
-		if (newTargetMS > 0) {
-			targetMS = newTargetMS;
-		}
-	}
 </script>
 
 <svelte:window onkeydown={focusSearch} />
@@ -112,11 +117,9 @@
 			placeholder="o alasa e nimi"
 			type="search"
 			name="q"
-			required
 			autocapitalize="off"
 			autocomplete="off"
-			on:input={() => renewDebounceTimer(defaultDebounceMS)}
-			bind:value={tempQuery}
+			bind:value={tempSearch}
 			id="search-input"
 		/>
 		<Button
