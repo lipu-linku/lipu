@@ -14,11 +14,14 @@
 	import LinkIcon from "~icons/lucide/link";
 	import SearchIcon from "~icons/lucide/search";
 	import ResetIcon from "~icons/lucide/undo-2";
+	import { useDebounce } from "runed";
 
 	const focusSearch = (e: KeyboardEvent) => {
 		if (e.key === "/" && document.activeElement?.id !== "search-input") {
 			e.preventDefault();
 			document.getElementById("search-input")!.focus();
+			let input = document.activeElement as HTMLInputElement;
+			input?.select();
 		}
 	};
 
@@ -41,7 +44,14 @@
 		pushState(page.url, {});
 	};
 
+	// this is a temporary state for the search input form.
+	let searchBuffer: string = $state(`${queryParams.q ? queryParams.q : ""}`);
 	$effect(() => {
+		// every time searchBuffer is changed, debounce is rerun.
+		// only updates query after timer is able to complete.
+		const debounce = useDebounce((search: string) => { queryParams.q = search; }, 350);
+		debounce(searchBuffer);
+
 		if (queryParams.q === "") clearQuery();
 	});
 </script>
@@ -85,7 +95,7 @@
 			required
 			autocapitalize="off"
 			autocomplete="off"
-			bind:value={queryParams.q}
+			bind:value={searchBuffer}
 			id="search-input"
 		/>
 		<Button
