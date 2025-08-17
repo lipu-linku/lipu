@@ -115,6 +115,7 @@
 			placeholder="o alasa e nimi"
 			type="search"
 			name="q"
+			required
 			autocapitalize="off"
 			autocomplete="off"
 			bind:value={tempSearch}
