@@ -59,7 +59,7 @@
 	};
 
 	// this is a temporary state for the search input form.
-	let tempSearch: string = $state(`${queryParams.q}`);
+	let tempSearch: string = $state(`${queryParams.q ? queryParams.q : ""}`);
 
 	// when tempSearch changes, this will be run as an effect.
 	// with useDebounce it will wait until typing stops.
@@ -72,7 +72,7 @@
 		// the old debounce is overwritten and a new one is run.
 		// that way, only after the timer is fully able to complete
 		// will the query parameters be set to the search value.
-		const debounce = useDebounce(updateQuery, 500);
+		const debounce = useDebounce(updateQuery, 350);
 		debounce(tempSearch);
 
 		if (queryParams.q === "") clearQuery();
@@ -116,6 +116,7 @@
 			type="search"
 			name="q"
 			required
+			autofocus
 			autocapitalize="off"
 			autocomplete="off"
 			bind:value={tempSearch}
