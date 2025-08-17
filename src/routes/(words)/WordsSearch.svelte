@@ -29,8 +29,8 @@
 		if (e.key === "/" && document.activeElement?.id !== "search-input") {
 			e.preventDefault();
 			document.getElementById("search-input")!.focus();
-			let input = document.activeElement as HTMLTextAreaElement;
-			input ? input.select() : null;
+			let input = document.activeElement as HTMLInputElement;
+			input?.select();
 		}
 	};
 
