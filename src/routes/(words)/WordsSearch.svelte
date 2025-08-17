@@ -59,7 +59,7 @@
 	};
 
 	// this is a temporary state for the search input form.
-	let tempSearch: string = $state("");
+	let tempSearch: string = $state(`${queryParams.q}`);
 
 	// when tempSearch changes, this will be run as an effect.
 	// with useDebounce it will wait until typing stops.
@@ -72,10 +72,8 @@
 		// the old debounce is overwritten and a new one is run.
 		// that way, only after the timer is fully able to complete
 		// will the query parameters be set to the search value.
-		if (tempSearch) {
-			const debounce = useDebounce(updateQuery, 500);
-			debounce(tempSearch);
-		}
+		const debounce = useDebounce(updateQuery, 500);
+		debounce(tempSearch);
 
 		if (queryParams.q === "") clearQuery();
 	});
