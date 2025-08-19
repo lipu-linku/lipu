@@ -106,7 +106,7 @@
 				onclick={() => {
 					const index = favorites.current.findIndex((w) => w === word.id);
 					if (index === -1) favorites.current.push(word.id);
-					else favorites.current.splice(index);
+					else favorites.current.splice(index, 1);
 
 					if (onlyFavorites.current && favorites.current.length === 0)
 						onlyFavorites.current = false;

@@ -45,23 +45,27 @@ export const wordSearch = (
 
 	const filtered = initialFilteredWords.filter((w) => scoreFilter(w));
 	const scored = filtered.map(
-		(w) => [w, wordDataScore(w, query, language, favorites.includes(w.id))] as const,
+		(word) =>
+			({
+				word,
+				score: wordDataScore(word, query, language),
+				isFavorite: favorites.includes(word.id),
+			} as const),
 	);
-	const sorted = scored.sort(([, a], [, b]) => b - a);
-	const onlyWords = sorted.map(([w]) => w);
+	const sorted = scored.sort((a, b) => {
+		if (a.isFavorite && !b.isFavorite) return -1;
+		if (!a.isFavorite && b.isFavorite) return 1;
+		if (a.score !== b.score) return b.score - a.score;
+		return a.word.word.toLowerCase().localeCompare(b.word.word.toLowerCase());
+	});
+	const onlyWords = sorted.map((s) => s.word);
 
 	return onlyWords;
 };
 
-const wordDataScore = (
-	word: LocalizedWord,
-	query: string,
-	language: string,
-	isFavorite: boolean,
-) => {
+const wordDataScore = (word: LocalizedWord, query: string, language: string) => {
 	let score = 0;
 
-	score += isFavorite ? Infinity : 0;
 	score += wordScore(word.word, query) * 100;
 	score += dataScore(getTranslatedData(word, "definition", language), query) * 50;
 	score += dataScore(word.ku_data ? Object.keys(word.ku_data).join(", ") : "", query) * 40;
