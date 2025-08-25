@@ -36,7 +36,7 @@
 		"runed": "^0.31.0",
 		"sharp": "^0.34.3",
 		"sharp-ico": "^0.1.5",
-		"svelte": "5.38.2",
+		"svelte": "5.38.3",
 		"svelte-check": "^4.3.0",
 		"sveltekit-search-params": "4.0.0-next.0",
 		"sveltekit-superforms": "^2.27.1",
