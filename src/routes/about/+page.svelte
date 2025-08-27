@@ -300,7 +300,7 @@
 		>, a third party frontend for sona Linku created by ijo Tani, and
 		<a
 			class="underline"
-			href="https://lipamanka.gay/essays/dictionary/"
+			href="https://lipamanka.gay/essays/dictionary"
 			target="_blank"
 			rel="noopener noreferrer">lipamanka's dictionary</a
 		>, which defines words based on their semantic space.
