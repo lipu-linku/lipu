@@ -27,8 +27,8 @@ export const wordSearch = (
 
 	if (query === "")
 		return initialFilteredWords.sort((a, b) => {
-			if (favorites.includes(a.id)) return -1;
-			if (favorites.includes(b.id)) return 1;
+			if (a.isFavorite && !b.isFavorite) return -1;
+			if (!a.isFavorite && b.isFavorite) return 1;
 			return a.word.toLowerCase().localeCompare(b.word.toLowerCase());
 		});
 
