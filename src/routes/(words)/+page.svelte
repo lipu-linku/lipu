@@ -14,7 +14,7 @@
 	const { data } = $props();
 	const { words, language } = $derived(data);
 
-	const hasDisclaimer = true;
+	const hasDisclaimer = new Date() < new Date("2025-09-12");
 
 	const categoriesParam = $derived(page.url.searchParams.get("categories"));
 
