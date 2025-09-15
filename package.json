@@ -55,5 +55,5 @@
 		"zod": "^4.1.1"
 	},
 	"type": "module",
-	"packageManager": "pnpm@10.16.0"
+	"packageManager": "pnpm@10.16.1"
 }
