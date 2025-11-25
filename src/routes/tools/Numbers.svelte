@@ -21,6 +21,7 @@
 		if (from < 0 || !Number.isInteger(from))
 			return { type: "err", message: `${from} cannot be represented using this system!` };
 		if (from === 0) return { type: "ok", value: "ala" };
+		if (from >= 1e5) return { type: "err", message: `${from} is too large in this system!` };
 
 		const words = {
 			ale: 100,
