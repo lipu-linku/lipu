@@ -269,13 +269,13 @@
 				</p>
 
 				<Button
-					href="https://github.com/lipu-linku/ijo/blob/main/survey/2024/README.md"
+					href="https://github.com/lipu-linku/ijo/blob/main/survey/2025/README.md"
 					target="_blank"
 					rel="noopener noreferrer"
 					class="whitespace-nowrap"
 					variant="secondary"
 				>
-					See the 2024 Word Survey results here!
+					See the 2025 Word Survey results here!
 				</Button>
 			</AccordionContent>
 		</AccordionItem>
