@@ -7,9 +7,12 @@ export const load: PageLoad = async ({ params: { word }, parent, fetch }) => {
 	const { language } = await parent();
 
 	const sona = client({ fetch });
+
+	// NOTE: work around null translations
+	const langParam = language.id === "en" ? "en" : `${language.id},en`;
 	const words = {
-		...(await sona.v1.sandbox.$get({ query: { lang: language.id } }).then((r) => r.json())),
-		...(await sona.v1.words.$get({ query: { lang: language.id } }).then((r) => r.json())),
+		...(await sona.v1.sandbox.$get({ query: { lang: langParam } }).then((r) => r.json())),
+		...(await sona.v1.words.$get({ query: { lang: langParam } }).then((r) => r.json())),
 	};
 
 	const wordData = words[word];

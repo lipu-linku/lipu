@@ -6,7 +6,6 @@
 	import * as Card from "$lib/components/ui/card";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import * as Tooltip from "$lib/components/ui/tooltip";
-	import { getTranslatedData } from "@kulupu-linku/sona/v1/utils";
 	import BackIcon from "~icons/lucide/arrow-left";
 	import CodeIcon from "~icons/lucide/code-xml";
 	import CopyIcon from "~icons/lucide/copy";
@@ -15,15 +14,16 @@
 	import ShareButton from "~icons/lucide/share-2";
 	import WordsSearch from "../../(words)/WordsSearch.svelte";
 	import UsageGraph from "./UsageGraph.svelte";
+	import { getTranslatedFallback } from "$lib/utils";
 
 	const { data } = $props();
 	const { word, language } = $derived(data);
 
 	const usageScore = $derived(Object.values(word.usage).at(-1) ?? 0);
-	const definition = $derived(getTranslatedData(word, "definition", language.id));
-	const commentary = $derived(getTranslatedData(word, "commentary", language.id));
-	const etymology = $derived(getTranslatedData(word, "etymology", language.id));
-	const sitelenPonaEtymology = $derived(getTranslatedData(word, "sp_etymology", language.id));
+	const definition = $derived(getTranslatedFallback(word, "definition", language.id));
+	const commentary = $derived(getTranslatedFallback(word, "commentary", language.id));
+	const etymology = $derived(getTranslatedFallback(word, "etymology", language.id));
+	const sitelenPonaEtymology = $derived(getTranslatedFallback(word, "sp_etymology", language.id));
 
 	const hasRepresentations = $derived(
 		word.representations &&

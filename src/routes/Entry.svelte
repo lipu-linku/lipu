@@ -3,8 +3,8 @@
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 	import { etymologiesEnabled, favorites, onlyFavorites, writingSystem } from "$lib/state.svelte";
+	import { getTranslatedFallback } from "$lib/utils";
 	import type { Language, LocalizedWord } from "@kulupu-linku/sona/v1";
-	import { getTranslatedData } from "@kulupu-linku/sona/v1/utils";
 
 	import UnfavoriteIcon from "~icons/material-symbols/favorite";
 	import FavoriteIcon from "~icons/material-symbols/favorite-outline";
@@ -16,8 +16,10 @@
 
 	const { word, language }: Props = $props();
 
-	const definition = $derived(getTranslatedData(word, "definition", language.id));
-	const etymology = $derived(getTranslatedData(word, "etymology", language.id));
+	// will be fixed in v2
+	const definition = $derived(getTranslatedFallback(word, "definition", language.id));
+	const etymology = $derived(getTranslatedFallback(word, "etymology", language.id));
+
 	const usageScore = $derived(Object.values(word.usage).at(-1) ?? 0);
 
 	const bookName = $derived.by(() => {

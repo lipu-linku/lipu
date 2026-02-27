@@ -1,6 +1,6 @@
-import { fuzzyMatch, normalize } from "$lib/utils";
+import { fuzzyMatch, getTranslatedFallback, normalize } from "$lib/utils";
 import type { Language, LocalizedWord, Words } from "@kulupu-linku/sona/v1";
-import { getTranslatedData, type UsageCategory } from "@kulupu-linku/sona/v1/utils";
+import { type UsageCategory } from "@kulupu-linku/sona/v1/utils";
 import { distance } from "fastest-levenshtein";
 import type { SvelteSet } from "svelte/reactivity";
 
@@ -35,12 +35,12 @@ export const wordSearch = (
 	const scoreFilter = (word: LocalizedWord) =>
 		Boolean(
 			wordScore(word.word, query) ||
-			dataScore(getTranslatedData(word, "definition", language), query) ||
+			dataScore(getTranslatedFallback(word, "definition", language), query) ||
 			dataScore(word.ku_data ? Object.keys(word.ku_data).join(", ") : "", query) ||
-			dataScore(getTranslatedData(word, "etymology", language).join(", "), query) ||
+			dataScore(getTranslatedFallback(word, "etymology", language).join(", "), query) ||
 			dataScore(word.source_language, query) ||
 			dataScore(word.creator.join(", "), query) ||
-			dataScore(getTranslatedData(word, "commentary", language), query),
+			dataScore(getTranslatedFallback(word, "commentary", language), query),
 		);
 
 	const filtered = initialFilteredWords.filter((w) => scoreFilter(w));
@@ -67,12 +67,12 @@ const wordDataScore = (word: LocalizedWord, query: string, language: string) => 
 	let score = 0;
 
 	score += wordScore(word.word, query) * 100;
-	score += dataScore(getTranslatedData(word, "definition", language), query) * 50;
+	score += dataScore(getTranslatedFallback(word, "definition", language), query) * 50;
 	score += dataScore(word.ku_data ? Object.keys(word.ku_data).join(", ") : "", query) * 40;
-	score += dataScore(getTranslatedData(word, "etymology", language).join(", "), query) * 30;
+	score += dataScore(getTranslatedFallback(word, "etymology", language).join(", "), query) * 30;
 	score += dataScore(word.source_language, query) * 20;
 	score += dataScore(word.creator.join(", "), query) * 10;
-	score += dataScore(getTranslatedData(word, "commentary", language), query) * 5;
+	score += dataScore(getTranslatedFallback(word, "commentary", language), query) * 5;
 
 	return score;
 };

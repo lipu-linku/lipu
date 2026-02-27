@@ -1,5 +1,11 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
+import {
+	getTranslatedData,
+	type WordTranslation,
+	type WordTranslations,
+} from "@kulupu-linku/sona/v1/utils";
+import type { Word } from "@kulupu-linku/sona/v1";
 
 export function keys<T extends object>(o: T): (keyof T)[] {
 	return Object.keys(o) as (keyof T)[];
@@ -47,6 +53,10 @@ export const fuzzyMatch = (text: string, query: string) => {
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
+}
+
+export function getTranslatedFallback(word: any, field: string, langcode: string) {
+	return getTranslatedData(word, field, langcode) || getTranslatedData(word, field, "en");
 }
 
 export type WithoutChild<T> = T extends { child?: any } ? Omit<T, "child"> : T;

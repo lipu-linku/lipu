@@ -7,11 +7,13 @@ import type { RequestHandler } from "./$types";
 export const GET: RequestHandler = async ({ url, fetch }) => {
 	const query = url.searchParams.get("q")!;
 	const lang = url.searchParams.get("lang") ?? "en";
+	const langParam = lang === "en" ? "en" : `${lang},en`;
+
 	const words = await client({ fetch })
-		.v1.words.$get({ query: { lang } })
+		.v1.words.$get({ query: { lang: langParam } })
 		.then((r) => r.json());
 	const sandbox = await client({ fetch })
-		.v1.sandbox.$get({ query: { lang } })
+		.v1.sandbox.$get({ query: { lang: langParam } })
 		.then((r) => r.json());
 
 	const results = wordSearch(
