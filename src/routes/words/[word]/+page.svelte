@@ -6,7 +6,7 @@
 	import * as Card from "$lib/components/ui/card";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import * as Tooltip from "$lib/components/ui/tooltip";
-	import { getTranslatedData } from "@kulupu-linku/sona/utils";
+	import { getTranslatedData } from "@kulupu-linku/sona/v1/utils";
 	import BackIcon from "~icons/lucide/arrow-left";
 	import CodeIcon from "~icons/lucide/code-xml";
 	import CopyIcon from "~icons/lucide/copy";

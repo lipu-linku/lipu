@@ -1,6 +1,6 @@
 import { fuzzyMatch, normalize } from "$lib/utils";
-import type { Language, LocalizedWord, Words } from "@kulupu-linku/sona";
-import { getTranslatedData, type UsageCategory } from "@kulupu-linku/sona/utils";
+import type { Language, LocalizedWord, Words } from "@kulupu-linku/sona/v1";
+import { getTranslatedData, type UsageCategory } from "@kulupu-linku/sona/v1/utils";
 import { distance } from "fastest-levenshtein";
 import type { SvelteSet } from "svelte/reactivity";
 
@@ -35,12 +35,12 @@ export const wordSearch = (
 	const scoreFilter = (word: LocalizedWord) =>
 		Boolean(
 			wordScore(word.word, query) ||
-				dataScore(getTranslatedData(word, "definition", language), query) ||
-				dataScore(word.ku_data ? Object.keys(word.ku_data).join(", ") : "", query) ||
-				dataScore(getTranslatedData(word, "etymology", language).join(", "), query) ||
-				dataScore(word.source_language, query) ||
-				dataScore(word.creator.join(", "), query) ||
-				dataScore(getTranslatedData(word, "commentary", language), query),
+			dataScore(getTranslatedData(word, "definition", language), query) ||
+			dataScore(word.ku_data ? Object.keys(word.ku_data).join(", ") : "", query) ||
+			dataScore(getTranslatedData(word, "etymology", language).join(", "), query) ||
+			dataScore(word.source_language, query) ||
+			dataScore(word.creator.join(", "), query) ||
+			dataScore(getTranslatedData(word, "commentary", language), query),
 		);
 
 	const filtered = initialFilteredWords.filter((w) => scoreFilter(w));
@@ -50,7 +50,7 @@ export const wordSearch = (
 				word,
 				score: wordDataScore(word, query, language),
 				isFavorite: favorites.includes(word.id),
-			} as const),
+			}) as const,
 	);
 	const sorted = scored.sort((a, b) => {
 		if (a.isFavorite && !b.isFavorite) return -1;

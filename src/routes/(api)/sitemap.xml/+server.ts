@@ -1,5 +1,5 @@
 import { keys } from "$lib/utils";
-import { client } from "@kulupu-linku/sona/client";
+import { client } from "@kulupu-linku/sona/v1/client";
 import type { RequestHandler } from "./$types";
 
 export const GET = (async ({ fetch }) => {

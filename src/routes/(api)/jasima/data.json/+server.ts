@@ -1,4 +1,4 @@
-import { client } from "@kulupu-linku/sona/client";
+import { client } from "@kulupu-linku/sona/v1/client";
 import { json } from "@sveltejs/kit";
 import type { RequestHandler } from "./$types";
 

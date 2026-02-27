@@ -1,4 +1,4 @@
-import { client } from "@kulupu-linku/sona/client";
+import { client } from "@kulupu-linku/sona/v1/client";
 import type { LayoutLoad } from "./$types";
 
 export const load: LayoutLoad = async ({ parent, fetch }) => {

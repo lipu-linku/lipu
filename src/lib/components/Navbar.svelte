@@ -12,7 +12,7 @@
 <script lang="ts">
 	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import * as Select from "$lib/components/ui/select";
-	import type { Language, Languages } from "@kulupu-linku/sona";
+	import type { Language, Languages } from "@kulupu-linku/sona/v1";
 	import { mode, toggleMode } from "mode-watcher";
 
 	import iconDark from "$lib/assets/icon-dark.png";
@@ -91,7 +91,10 @@
 		<MenuIcon class="size-6" />
 	</Sheet.Trigger>
 
-	<Sheet.Content class="bg-background/60 backdrop-blur-md p-4 data-[state=open]:duration-300" side="bottom">
+	<Sheet.Content
+		class="bg-background/60 backdrop-blur-md p-4 data-[state=open]:duration-300"
+		side="bottom"
+	>
 		<aside class="h-full flex-col gap-6 flex md:hidden">
 			{@render sidebar()}
 		</aside>

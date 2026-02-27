@@ -1,4 +1,4 @@
-import { client } from "@kulupu-linku/sona/client";
+import { client } from "@kulupu-linku/sona/v1/client";
 
 export const load = async ({ parent, fetch }) => {
 	const { language } = await parent();

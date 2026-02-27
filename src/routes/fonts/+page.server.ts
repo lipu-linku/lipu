@@ -1,5 +1,5 @@
 import { entries } from "$lib/utils";
-import { client } from "@kulupu-linku/sona/client";
+import { client } from "@kulupu-linku/sona/v1/client";
 import type { PageServerLoad } from "./$types";
 
 const openLicenses = ["GPL", "MIT", "OFL", "CC"];

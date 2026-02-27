@@ -1,5 +1,5 @@
 import { fromEntries, keys } from "$lib/utils";
-import type { UsageCategory } from "@kulupu-linku/sona/utils";
+import type { UsageCategory } from "@kulupu-linku/sona/v1/utils";
 import { PersistedState } from "runed";
 import { queryParameters } from "sveltekit-search-params";
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Chart from "$lib/components/ui/chart";
-	import type { Word } from "@kulupu-linku/sona";
-	import type { UsageCategory } from "@kulupu-linku/sona/utils";
+	import type { Word } from "@kulupu-linku/sona/v1";
+	import type { UsageCategory } from "@kulupu-linku/sona/v1/utils";
 	import { Highlight, LineChart, Points, Rule } from "layerchart";
 	import { scaleThreshold } from "d3-scale";
 

@@ -2,7 +2,7 @@
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 	import { fontSentence } from "$lib/state.svelte";
-	import type { Font } from "@kulupu-linku/sona";
+	import type { Font } from "@kulupu-linku/sona/v1";
 	import { useIntersectionObserver } from "runed";
 	import { fly } from "svelte/transition";
 
@@ -88,7 +88,12 @@
 					<WebIcon />
 				</Button>
 			{/if}
-			<Button variant="outline" size="icon" href="https://raw.githubusercontent.com/lipu-linku/ijo/main/nasinsitelen/{font.filename}" download>
+			<Button
+				variant="outline"
+				size="icon"
+				href="https://raw.githubusercontent.com/lipu-linku/ijo/main/nasinsitelen/{font.filename}"
+				download
+			>
 				<DownloadIcon />
 			</Button>
 		</nav>

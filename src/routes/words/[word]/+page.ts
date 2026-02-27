@@ -1,4 +1,4 @@
-import { client } from "@kulupu-linku/sona/client";
+import { client } from "@kulupu-linku/sona/v1/client";
 import { error } from "@sveltejs/kit";
 import { distance } from "fastest-levenshtein";
 import type { PageLoad } from "./$types";

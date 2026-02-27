@@ -1,5 +1,5 @@
 import { browser } from "$app/environment";
-import { client } from "@kulupu-linku/sona/client";
+import { client } from "@kulupu-linku/sona/v1/client";
 import { error } from "@sveltejs/kit";
 import type { LayoutLoad } from "./$types";
 

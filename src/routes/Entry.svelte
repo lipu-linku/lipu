@@ -3,8 +3,8 @@
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 	import { etymologiesEnabled, favorites, onlyFavorites, writingSystem } from "$lib/state.svelte";
-	import type { Language, LocalizedWord } from "@kulupu-linku/sona";
-	import { getTranslatedData } from "@kulupu-linku/sona/utils";
+	import type { Language, LocalizedWord } from "@kulupu-linku/sona/v1";
+	import { getTranslatedData } from "@kulupu-linku/sona/v1/utils";
 
 	import UnfavoriteIcon from "~icons/material-symbols/favorite";
 	import FavoriteIcon from "~icons/material-symbols/favorite-outline";
