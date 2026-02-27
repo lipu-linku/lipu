@@ -56,7 +56,9 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export function getTranslatedFallback(word: any, field: string, langcode: string) {
-	return getTranslatedData(word, field, langcode) || getTranslatedData(word, field, "en");
+	let eng = getTranslatedData(word, field, "en");
+	let result = (word ? getTranslatedData(word, field, langcode) : eng) || eng;
+	return result;
 }
 
 export type WithoutChild<T> = T extends { child?: any } ? Omit<T, "child"> : T;

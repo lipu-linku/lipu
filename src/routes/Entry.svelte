@@ -80,12 +80,15 @@
 					{@const etymString = word.etymology
 						.map((etym, i) => {
 							const local_etym = etymology[i];
-							return (
-								local_etym.language +
-								(etym.word ? `: ${etym.word}` : "") +
-								(etym.alt ? ` (${etym.alt})` : "") +
-								(local_etym.definition ? ` - ${local_etym.definition}` : "")
-							);
+							// NOTE: isv_c has misaligned etyms. this skips them.
+							if (local_etym) {
+								return (
+									local_etym.language +
+									(etym.word ? `: ${etym.word}` : "") +
+									(etym.alt ? ` (${etym.alt})` : "") +
+									(local_etym.definition ? ` - ${local_etym.definition}` : "")
+								);
+							}
 						})
 						.join("; ")}
 					<span dir={language.direction} class="text-start">
