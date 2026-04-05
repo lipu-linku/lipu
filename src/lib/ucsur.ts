@@ -144,6 +144,7 @@ export const ucsur_map = {
 	apeja: { label: "apeja", codepoint: "\u{f19a1}" },
 	majuna: { label: "majuna", codepoint: "\u{f19a2}" },
 	powe: { label: "powe", codepoint: "\u{f19a3}" },
+	su: { label: "su", codepoint: "\u{f19a6}" },
 	"[": { label: "[", codepoint: "\u{f1990}" },
 	"]": { label: "]", codepoint: "\u{f1991}" },
 	"&": { label: "nimi&sin", title: "Combining", codepoint: "\u200D" }, // this is just a ZWJ
