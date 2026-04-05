@@ -1,15 +1,17 @@
 <script lang="ts">
+	import { page } from "$app/state";
 	import * as Chart from "$lib/components/ui/chart";
-	import type { Word } from "@kulupu-linku/sona/v1";
-	import type { UsageCategory } from "@kulupu-linku/sona/v1/utils";
-	import { Highlight, LineChart, Points, Rule } from "layerchart";
+	import type { Word } from "@kulupu-linku/sona/v2";
+	import type { UsageCategory } from "@kulupu-linku/sona/v2/utils";
 	import { scaleThreshold } from "d3-scale";
+	import { Highlight, LineChart, Points, Rule } from "layerchart";
 
 	interface Props {
 		data: Word["usage"];
 	}
 
 	const { data }: Props = $props();
+	const locale = $derived(page.data.locale);
 
 	const usageToCategory = (usage: number): UsageCategory => {
 		if (usage >= 90) return "core";
@@ -37,7 +39,7 @@
 	} satisfies Chart.ChartConfig;
 </script>
 
-<Chart.Container {config}>
+<Chart.Container {config} class="min-h-100">
 	<LineChart
 		data={plots}
 		x="date"
@@ -57,7 +59,7 @@
 		props={{
 			highlight: { lines: true },
 			xAxis: {
-				format: (d: Date) => d.toLocaleDateString("en", { month: "short", year: "2-digit" }),
+				format: (d: Date) => d.toLocaleDateString(locale, { month: "2-digit", year: "2-digit" }),
 			},
 			yAxis: {
 				format: (d) => `${d}%`,
@@ -69,35 +71,40 @@
 		{/snippet}
 		{#snippet tooltip()}
 			<Chart.Tooltip nameKey="usage" indicator="line">
-				{#snippet formatter({ item, value, name })}
+				{#snippet formatter({ item, value })}
+					{@const dateLabel = // @ts-expect-error
+						item.label?.toLocaleDateString(locale, { month: "long", year: "numeric" })}
 					<div
-						style="--color-bg: {item.payload?.color}; --color-border: {item.payload?.color};"
-						class="border-(--color-border) bg-(--color-bg) shrink-0 rounded-[2px] h-full w-1"
+						class="h-full w-1 shrink-0 rounded-xs border-3 border-(--color-border) bg-(--color-bg)"
+						style:--color-bg={item.payload?.color}
+						style:--color-border={item.payload?.color}
 					></div>
-					<div class="flex flex-1 items-center gap-3 shrink-0 justify-between leading-none">
+					<div class="flex flex-1 shrink-0 items-center justify-between gap-3 leading-none">
 						<div class="grid gap-1.5">
 							<div class="font-medium">
-								{// @ts-ignore
-								item.label?.toLocaleDateString("en", { month: "long", year: "numeric" })}
+								{dateLabel}
 							</div>
 							<span class="text-muted-foreground"
 								>{config[usageToCategory(value as number)].label}</span
 							>
 						</div>
-						<span class="text-foreground font-mono font-medium tabular-nums">
+						<span class="font-mono font-medium text-foreground tabular-nums">
 							{value}%
 						</span>
 					</div>
 				{/snippet}
 			</Chart.Tooltip>
 		{/snippet}
+
 		{#snippet points()}
 			<Points r={8} class="stroke-muted-foreground" />
 		{/snippet}
+
 		{#snippet rule()}
+			<!-- The cutoff date where the question in the survey changed -->
 			<Rule
 				x={new Date(2021, 11, 31)}
-				class="stroke-2 stroke-destructive [stroke-dasharray:4] [stroke-linecap:round]"
+				class="stroke-destructive stroke-2 [stroke-dasharray:4] [stroke-linecap:round]"
 			/>
 		{/snippet}
 	</LineChart>

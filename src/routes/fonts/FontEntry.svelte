@@ -1,11 +1,11 @@
 <script lang="ts">
+	import { page } from "$app/state";
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 	import { fontSentence } from "$lib/state.svelte";
-	import type { Font } from "@kulupu-linku/sona/v1";
+	import type { Font } from "@kulupu-linku/sona/v2";
 	import { useIntersectionObserver } from "runed";
 	import { fly } from "svelte/transition";
-
 	import DownloadIcon from "~icons/lucide/download";
 	import RepoIcon from "~icons/lucide/file-code";
 	import WebIcon from "~icons/lucide/globe";
@@ -26,10 +26,11 @@
 	);
 
 	let malformed = $state(false);
+	const locale = $derived(page.data.locale);
 
 	const lastUpdatedDate = $derived(
 		font.last_updated
-			? Intl.DateTimeFormat("en", { month: "long", year: "numeric" }).format(
+			? Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }).format(
 					new Date(font.last_updated),
 				)
 			: undefined,
@@ -37,7 +38,7 @@
 
 	const fontDescription = $derived(
 		[
-			`Created by ${font.creator.join(", ")}`,
+			`Created by ${new Intl.ListFormat(locale).format(font.author)}`,
 			`Updated on ${lastUpdatedDate}`,
 			`Licensed as ${font.license}`,
 		]
@@ -63,9 +64,9 @@
 
 <Card.Root bind:ref={cardElement} class={[malformed && "hidden"]}>
 	<Card.Header class="relative">
-		<Card.Title class="text-2xl max-w-[10ch] md:max-w-full">{font.name}</Card.Title>
+		<Card.Title class="max-w-[10ch] text-2xl md:max-w-full">{font.name}</Card.Title>
 		<Card.Description>{fontDescription}</Card.Description>
-		<nav class="absolute right-4 flex items-center gap-2">
+		<nav class="absolute inset-e-4 flex items-center gap-2">
 			{#if font.links.repo}
 				<Button
 					variant="outline"

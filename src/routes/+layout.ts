@@ -1,43 +1,26 @@
 import { browser } from "$app/environment";
-import { client } from "@kulupu-linku/sona/v1/client";
-import { error } from "@sveltejs/kit";
+import { getLocale } from "$lib/remote/lang.remote";
+
 import type { LayoutLoad } from "./$types";
 
-export const load: LayoutLoad = async ({ url, fetch }) => {
-	const param = url.searchParams.get("lang");
+export const load = (async ({ data }) => {
+	if (!browser) return { locale: data.locale };
+	const storedLocale = localStorage.getItem("lang");
+	const locale =
+		(storedLocale !== undefined && storedLocale !== null
+			? await getLocale(storedLocale)
+			: undefined) ??
+		(await resolveLocaleFromNavigator()) ??
+		data.locale;
 
-	const localKey =
-		param ??
-		(browser
-			? (localStorage.getItem("lang") ?? (navigator.language || navigator.languages[0]))
-			: "en");
+	return { locale };
+}) satisfies LayoutLoad;
 
-	let currentLanguage;
-
-	const localLanguage = await client({ fetch }).v1.languages[":language"].$get({
-		param: { language: localKey },
-	});
-
-	if (localLanguage.ok) {
-		currentLanguage = (await localLanguage.json()).data;
-	} else {
-		console.error((await localLanguage.json()).message);
-
-		const english = await client({ fetch }).v1.languages[":language"].$get({
-			param: { language: "en" },
-		});
-
-		if (!english.ok) error(400, `Could not recover from wrong language code: ${localLanguage}`);
-
-		currentLanguage = (await english.json()).data;
+async function resolveLocaleFromNavigator() {
+	for (const preferredLocale of navigator.languages) {
+		try {
+			return await getLocale(preferredLocale);
+		} catch {}
 	}
-
-	if (browser && !localStorage.getItem("lang")) localStorage.setItem("lang", currentLanguage.id);
-
-	return {
-		languages: await client({ fetch })
-			.v1.languages.$get()
-			.then((r) => r.json()),
-		language: currentLanguage,
-	};
-};
+	return undefined;
+}

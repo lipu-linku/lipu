@@ -10,49 +10,43 @@
 </script>
 
 <script lang="ts">
-	import { Button, buttonVariants } from "$lib/components/ui/button";
-	import * as Select from "$lib/components/ui/select";
-	import type { Language, Languages } from "@kulupu-linku/sona/v1";
-	import { mode, toggleMode } from "mode-watcher";
-
+	import { invalidateAll } from "$app/navigation";
+	import { page } from "$app/state";
 	import iconDark from "$lib/assets/icon-dark.png";
 	import iconLight from "$lib/assets/icon-light.png";
+	import { Button, buttonVariants } from "$lib/components/ui/button";
+	import * as Select from "$lib/components/ui/select";
+	import * as Sheet from "$lib/components/ui/sheet";
+	import { getLocales, updateLocale } from "$lib/remote/lang.remote";
 	import { cn, entries } from "$lib/utils";
-	import MenuIcon from "~icons/lucide/menu";
+	import { mode, toggleMode } from "mode-watcher";
+	import { SvelteMap } from "svelte/reactivity";
+	import DictionaryIcon from "~icons/lucide/book-text";
 	import FlaskIcon from "~icons/lucide/flask-conical";
-	import HomeIcon from "~icons/lucide/house";
 	import InfoIcon from "~icons/lucide/info";
 	import LanguagesIcon from "~icons/lucide/languages";
+	import MenuIcon from "~icons/lucide/menu";
 	import DarkModeIcon from "~icons/lucide/moon";
 	import LightModeIcon from "~icons/lucide/sun";
 	import FontsIcon from "~icons/mdi/format-font";
 	import ToolsIcon from "~icons/mdi/wrench-outline";
 
-	import { goto } from "$app/navigation";
-	import { page } from "$app/state";
-	import * as Sheet from "$lib/components/ui/sheet";
+	const locales = await getLocales();
+	const locale = $derived(page.data.locale.id ?? "en");
 
-	interface Props {
-		languages: Languages;
-		language: Language;
-	}
-
-	const { languages, language }: Props = $props();
-
-	const languageOptions = $derived(
-		new Map(
-			Object.entries(languages).map(
-				([id, lang]) => [id, lang.name.endonym ?? lang.name.en] as const,
+	const localeOptions = $derived(
+		new SvelteMap(
+			Object.entries(locales).map(
+				([id, locale]) => [id, locale.name.endonym ?? locale.name.en] as const,
 			),
 		),
 	);
-	let selectedLang = $state(language.id);
 
 	const links: Record<string, NavbarLink> = {
 		home: {
 			href: "/",
-			label: "Home",
-			icon: HomeIcon,
+			label: "Dictionary",
+			icon: DictionaryIcon,
 		},
 		sandbox: {
 			href: "/sandbox",
@@ -75,9 +69,15 @@
 			icon: InfoIcon,
 		},
 	} as const;
+
+	const setLocale = async (value: string) => {
+		localStorage.setItem("lang", value);
+		await updateLocale(value);
+		await invalidateAll();
+	};
 </script>
 
-<aside class="sticky top-0 start-0 h-dvh px-4 py-5 flex-col gap-6 hidden md:flex">
+<aside class="sticky inset-s-0 inset-bs-0 hidden h-dvh flex-col gap-6 px-4 py-5 md:flex">
 	{@render sidebar()}
 </aside>
 
@@ -85,17 +85,17 @@
 	<Sheet.Trigger
 		class={cn(
 			buttonVariants({ size: "icon" }),
-			"fixed z-20 bottom-4 left-4 size-12 shadow-2xl md:hidden",
+			"fixed inset-s-4 inset-be-4 z-20 size-12 shadow-2xl md:hidden",
 		)}
 	>
 		<MenuIcon class="size-6" />
 	</Sheet.Trigger>
 
 	<Sheet.Content
-		class="bg-background/60 backdrop-blur-md p-4 data-[state=open]:duration-300"
+		class="bg-background/60 p-4 backdrop-blur-md data-[state=open]:duration-300"
 		side="bottom"
 	>
-		<aside class="h-full flex-col gap-6 flex md:hidden">
+		<aside class="flex h-full flex-col gap-6 md:hidden">
 			{@render sidebar()}
 		</aside>
 	</Sheet.Content>
@@ -109,7 +109,7 @@
 			{:else}
 				<img src={iconLight} alt="Linku's logo" class="size-6" />
 			{/if}
-			<span class="font-bold inline-block">lipu Linku</span>
+			<span class="inline-block font-bold">lipu Linku</span>
 		</a>
 	</header>
 
@@ -130,28 +130,17 @@
 		</ul>
 	</nav>
 
-	<div class="mt-auto flex items-center justify-between ps-2 md:ps-0 gap-2">
-		<Select.Root
-			type="single"
-			bind:value={selectedLang}
-			onValueChange={(item) => {
-				if (item) {
-					localStorage.setItem("lang", item);
-					const url = new URL(page.url);
-					url.searchParams.set("lang", item);
-					goto(url);
-				}
-			}}
-		>
+	<div class="mt-auto flex items-center justify-between gap-2 ps-2 md:ps-0">
+		<Select.Root type="single" bind:value={() => locale, setLocale}>
 			<Select.Trigger>
 				<LanguagesIcon aria-label="Languages icon" class="text-4" />
-				<span class="w-16 text-center line-clamp-1 overflow-ellipsis whitespace-nowrap">
-					{languageOptions.get(selectedLang)}
+				<span class="line-clamp-1 w-16 text-center text-ellipsis whitespace-nowrap">
+					{localeOptions.get(locale)}
 				</span>
 			</Select.Trigger>
 
-			<Select.Content class="max-h-[80dvh] mx-4" side="top">
-				{#each languageOptions as [value, label] (value)}
+			<Select.Content class="mx-4 max-h-[80dvh]" side="top">
+				{#each localeOptions as [value, label] (value)}
 					<Select.Item {label} {value}>{label}</Select.Item>
 				{/each}
 			</Select.Content>

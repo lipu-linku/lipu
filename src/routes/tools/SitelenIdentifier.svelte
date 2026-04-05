@@ -113,7 +113,9 @@
 <Card.Root>
 	<Card.Header>
 		<div class="flex items-center space-x-1.5">
-			<Card.Title id="sp-identifier" class="text-2xl me-auto"><h2>Sitelen Pona Identifier</h2></Card.Title>
+			<Card.Title id="sp-identifier" class="me-auto text-2xl"
+				><h2>Sitelen Pona Identifier</h2></Card.Title
+			>
 
 			<Button
 				variant="ghost"
@@ -162,7 +164,7 @@
 		<div class="grid grid-cols-5 place-content-center gap-3">
 			{#each selected as word}
 				{@const [id, glyph] = Array.isArray(word) ? word : [word, word]}
-				<Button class="flex-col gap-1 h-fit" href="/words/{id}" variant="ghost">
+				<Button class="h-fit flex-col gap-1" href="/words/{id}" variant="ghost">
 					<span>{id}</span>
 					<span class="font-sitelen-seli-kiwen text-3xl">{glyph}</span>
 				</Button>

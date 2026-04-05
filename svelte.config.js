@@ -10,6 +10,17 @@ const config = {
 		serviceWorker: {
 			register: false,
 		},
+		experimental: {
+			remoteFunctions: true,
+		},
+		alias: {
+			$locales: "src/locales",
+		},
+	},
+	compilerOptions: {
+		experimental: {
+			async: true,
+		},
 	},
 };
 

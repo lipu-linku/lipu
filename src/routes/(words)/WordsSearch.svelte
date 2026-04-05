@@ -7,23 +7,36 @@
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
 	import * as RadioGroup from "$lib/components/ui/radio-group";
+	import * as Select from "$lib/components/ui/select";
 	import * as Sheet from "$lib/components/ui/sheet";
 	import {
 		categories,
-		categoriesSerializer,
+		categoriesCodec,
 		defaultCategories,
+		displayMethod,
 		etymologiesEnabled,
-		favorites,
-		onlyFavorites,
-		queryParams,
+		queryParamsSchema,
+		sortingDirection,
+		sortingMethod,
 		writingSystem,
 	} from "$lib/state.svelte";
 	import { cn, keys } from "$lib/utils";
+	import { useSearchParams } from "runed/kit";
+	import type { Component } from "svelte";
+	import NumberDescendingIcon from "~icons/lucide/arrow-down-1-0";
+	import DescendingIcon from "~icons/lucide/arrow-down-wide-narrow";
+	import AlphabetDescendingIcon from "~icons/lucide/arrow-down-z-a";
+	import NumberAscendingIcon from "~icons/lucide/arrow-up-1-0";
+	import AscendingIcon from "~icons/lucide/arrow-up-narrow-wide";
+	import AlphabetAscendingIcon from "~icons/lucide/arrow-up-z-a";
 	import CheckIcon from "~icons/lucide/check";
+	import GridIcon from "~icons/lucide/layout-grid";
 	import LinkIcon from "~icons/lucide/link";
+	import ListIcon from "~icons/lucide/list";
 	import SearchIcon from "~icons/lucide/search";
 	import ResetIcon from "~icons/lucide/undo-2";
-	import { useDebounce } from "runed";
+
+	const params = useSearchParams(queryParamsSchema);
 
 	const focusSearch = (e: KeyboardEvent) => {
 		if (e.key === "/" && document.activeElement?.id !== "search-input") {
@@ -37,8 +50,9 @@
 	let hasCopied = $state(false);
 	const copyLinkWithParams = () => {
 		const url = new URL(page.url);
-		url.searchParams.set("categories", JSON.stringify(categories.current));
-		url.searchParams.set("q", queryParams.q ?? "");
+		url.searchParams.set("categories", categoriesCodec.encode(categories.current) ?? "");
+		url.searchParams.set("sort", params.sort ?? "alphabetical");
+		url.searchParams.set("reverse", params.reverse ? "true" : "false");
 
 		navigator.clipboard.writeText(url.toString());
 		hasCopied = true;
@@ -46,34 +60,57 @@
 	};
 
 	const clearQuery = () => {
-		queryParams.q = null;
+		params.q = "";
+		params.set("categories", defaultCategories);
 	};
 
 	const resetOptions = () => {
 		clearQuery();
 		categories.current = defaultCategories;
-		onlyFavorites.current = false;
 
 		page.url.searchParams.forEach((v, k, params) => params.delete(k, v));
 		pushState(page.url, {});
 	};
 
-	// this is a temporary state for the search input form.
-	let searchBuffer: string = $state(`${queryParams.q ? queryParams.q : ""}`);
-	$effect(() => {
-		// every time searchBuffer is changed, debounce is rerun.
-		// only updates query after timer is able to complete.
-		const debounce = useDebounce((search: string) => { queryParams.q = search; }, 350);
-		debounce(searchBuffer);
+	const sortingOptions = {
+		alphabetical: {
+			label: "Alphabetical",
+			ascending_icon: AlphabetAscendingIcon,
+			descending_icon: AlphabetDescendingIcon,
+		},
+		usage: {
+			label: "Usage",
+			ascending_icon: NumberAscendingIcon,
+			descending_icon: NumberDescendingIcon,
+		},
+	} as const satisfies Record<
+		typeof sortingMethod.current,
+		{ label: string; descending_icon: Component; ascending_icon: Component }
+	>;
 
-		if (queryParams.q === "") clearQuery();
-	});
+	const CurrentSortIcon = $derived(
+		sortingOptions[sortingMethod.current][
+			sortingDirection.current === "ascending" ? "ascending_icon" : "descending_icon"
+		],
+	);
+
+	const sortDirectionOptions = {
+		ascending: { label: "Ascending", icon: AscendingIcon },
+		descending: { label: "Descending", icon: DescendingIcon },
+	} as const satisfies Record<typeof sortingDirection.current, { label: string; icon: Component }>;
+	const currentSortDir = $derived(sortDirectionOptions[sortingDirection.current]);
+
+	const displayOptions = {
+		grid: { label: "Grid", icon: GridIcon },
+		compact: { label: "Compact", icon: ListIcon },
+	} as const satisfies Record<typeof displayMethod.current, { label: string; icon: Component }>;
+	const currentDisplay = $derived(displayOptions[displayMethod.current]);
 </script>
 
 <svelte:window onkeydown={focusSearch} />
 
-<aside class="col-3 row-1 sticky top-0 end-0 h-dvh px-2 py-4 hidden md:block">
-	<form action="/" class="h-full px-2 gap-4 flex flex-col" role="search">
+<aside class="sticky inset-e-0 inset-bs-0 col-3 row-1 hidden h-dvh px-2 py-4 md:block">
+	<form action="/" class="flex h-full flex-col gap-4 px-2" role="search">
 		{@render inputField()}
 
 		{@render filters()}
@@ -84,14 +121,14 @@
 	<Sheet.Trigger
 		class={cn(
 			buttonVariants({ variant: "secondary", size: "icon" }),
-			"fixed md:hidden size-12 z-20 bottom-4 left-18 shadow-2xl",
+			"fixed inset-s-18 inset-be-4 z-20 size-12 shadow-2xl md:hidden",
 		)}
 	>
 		<SearchIcon class="size-6" />
 	</Sheet.Trigger>
 
 	<Sheet.Content side="bottom" class="p-4 pt-12">
-		<form class="h-full px-2 gap-4 flex flex-col" role="search">
+		<form class="flex h-full flex-col gap-4 px-2" role="search">
 			{@render inputField()}
 
 			{@render filters()}
@@ -100,7 +137,7 @@
 </Sheet.Root>
 
 {#snippet inputField()}
-	<div class="flex items-center justify-stretch gap-2">
+	<search class="flex items-center justify-stretch gap-2">
 		<Input
 			class="bg-background"
 			placeholder="o alasa e nimi"
@@ -109,7 +146,7 @@
 			required
 			autocapitalize="off"
 			autocomplete="off"
-			bind:value={searchBuffer}
+			bind:value={() => params.q, (val) => (params.q = val)}
 			id="search-input"
 		/>
 		<Button
@@ -121,7 +158,7 @@
 		>
 			<SearchIcon />
 		</Button>
-	</div>
+	</search>
 {/snippet}
 
 {#snippet filters()}
@@ -131,6 +168,20 @@
 		</Card.Header>
 
 		<Card.Content class="flex flex-col gap-4">
+			<Select.Root type="single" bind:value={displayMethod.current}>
+				<Select.Trigger
+					class={[buttonVariants({ variant: "outline", size: "sm" }), "w-full justify-between"]}
+				>
+					<currentDisplay.icon />
+					{currentDisplay.label}
+				</Select.Trigger>
+				<Select.Content>
+					{#each Object.entries(displayOptions) as [method, { label, icon: Icon }] (method)}
+						<Select.Item value={method}><Icon /> {label}</Select.Item>
+					{/each}
+				</Select.Content>
+			</Select.Root>
+
 			<fieldset class="flex flex-col gap-1">
 				<div class="grid gap-2">
 					{#each keys(categories.current) as category}
@@ -141,9 +192,9 @@
 						>
 							<Checkbox
 								class="
-									data-[state=checked]:bg-(--category-color) 
-									not-dark:data-[category=core]:data-[state=checked]:text-primary dark:not-data-[category=core]:data-[state=checked]:text-primary
-									dark:data-[state=checked]:bg-(--category-color) data-[state=checked]:border-(--category-color)/30"
+									data-[state=checked]:border-(--category-color)/30 
+									data-[state=checked]:bg-(--category-color) not-dark:data-[category=core]:data-[state=checked]:text-primary
+									dark:data-[state=checked]:bg-(--category-color) dark:not-data-[category=core]:data-[state=checked]:text-primary"
 								bind:checked={categories.current[category]}
 								id="category-checkbox-{category}"
 								aria-labelledby="category-checkbox-{category}-label"
@@ -184,35 +235,43 @@
 			</RadioGroup.Root>
 
 			<div class="grid gap-2">
-				<div class="flex items-center gap-2">
-					<Checkbox
-						bind:checked={etymologiesEnabled.current}
-						id="show-etymologies-checkbox"
-						aria-labelledby="show-etymologies-label"
-					/>
-					<Label id="show-etymologies-label" for="show-etymologies-checkbox">
-						Show Etymologies
-					</Label>
-				</div>
-				<div
-					class={cn(
-						"flex items-center gap-2",
-						Object.keys(favorites.current).length === 0 && "cursor-not-allowed",
-					)}
-				>
-					<Checkbox
-						bind:checked={onlyFavorites.current}
-						disabled={favorites.current.length === 0}
-						title={favorites.current.length === 0 ? "Select at least 1 favorite" : undefined}
-						id="only-favorites-checkbox"
-						aria-labelledby="only-favorites-label"
-					/>
-					<Label
-						title={favorites.current.length === 0 ? "Select at least 1 favorite" : undefined}
-						id="only-favorites-label"
-						for="only-favorites-checkbox">Only Favorites</Label
+				<Select.Root type="single" bind:value={sortingMethod.current}>
+					<Select.Trigger
+						class={[buttonVariants({ variant: "outline", size: "sm" }), "w-full justify-between"]}
 					>
-				</div>
+						<CurrentSortIcon />
+						{sortingOptions[sortingMethod.current].label}
+					</Select.Trigger>
+					<Select.Content>
+						{#each Object.entries(sortingOptions) as [method, { label, ascending_icon, descending_icon }] (method)}
+							{@const Icon =
+								sortingDirection.current === "ascending" ? ascending_icon : descending_icon}
+							<Select.Item value={method}><Icon /> {label}</Select.Item>
+						{/each}
+					</Select.Content>
+				</Select.Root>
+				<Select.Root type="single" bind:value={sortingDirection.current}>
+					<Select.Trigger
+						class={[buttonVariants({ variant: "outline", size: "sm" }), "w-full justify-between"]}
+					>
+						<currentSortDir.icon />
+						{currentSortDir.label}
+					</Select.Trigger>
+					<Select.Content>
+						{#each Object.entries(sortDirectionOptions) as [direction, { label, icon: Icon }] (direction)}
+							<Select.Item value={direction}><Icon /> {label}</Select.Item>
+						{/each}
+					</Select.Content>
+				</Select.Root>
+			</div>
+
+			<div class="flex items-center gap-2">
+				<Checkbox
+					bind:checked={etymologiesEnabled.current}
+					id="show-etymologies-checkbox"
+					aria-labelledby="show-etymologies-label"
+				/>
+				<Label id="show-etymologies-label" for="show-etymologies-checkbox">Show Etymologies</Label>
 			</div>
 		</Card.Content>
 
@@ -230,10 +289,6 @@
 			</Button>
 		</Card.Footer>
 
-		<input
-			type="hidden"
-			name="categories"
-			value={categoriesSerializer.serialize(categories.current)}
-		/>
+		<input type="hidden" name="categories" value={categoriesCodec.encode(categories.current)} />
 	</Card.Root>
 {/snippet}

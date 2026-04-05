@@ -1,20 +1,21 @@
 <script lang="ts">
-	import { pushState } from "$app/navigation";
 	import { page } from "$app/state";
 	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 	import { Checkbox } from "$lib/components/ui/checkbox";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
-	import { etymologiesEnabled, favorites, onlyFavorites, queryParams } from "$lib/state.svelte";
-	import { cn } from "$lib/utils";
 	import * as Sheet from "$lib/components/ui/sheet";
-
+	import { etymologiesEnabled, queryParamsSchema } from "$lib/state.svelte";
+	import { cn } from "$lib/utils";
+	import { useDebounce } from "runed";
+	import { useSearchParams } from "runed/kit";
 	import CheckIcon from "~icons/lucide/check";
 	import LinkIcon from "~icons/lucide/link";
 	import SearchIcon from "~icons/lucide/search";
 	import ResetIcon from "~icons/lucide/undo-2";
-	import { useDebounce } from "runed";
+
+	const params = useSearchParams(queryParamsSchema);
 
 	const focusSearch = (e: KeyboardEvent) => {
 		if (e.key === "/" && document.activeElement?.id !== "search-input") {
@@ -32,32 +33,15 @@
 		setTimeout(() => (hasCopied = false), 2.5 * 1000);
 	};
 
-	const clearQuery = () => {
-		queryParams.q = null;
-	};
-
-	const resetOptions = () => {
-		clearQuery();
-		onlyFavorites.current = false;
-
-		page.url.searchParams.forEach((v, k, params) => params.delete(k, v));
-		pushState(page.url, {});
-	};
-
-	// this is a temporary state for the search input form.
-	let searchBuffer: string = $state(`${queryParams.q ? queryParams.q : ""}`);
-	$effect(() => {
-		// every time searchBuffer is changed, debounce is rerun.
-		// only updates query after timer is able to complete.
-		const debounce = useDebounce((search: string) => { queryParams.q = search; }, 350);
-		debounce(searchBuffer);
-
-		if (queryParams.q === "") clearQuery();
-	});
+	// every time searchBuffer is changed, debounce is rerun.
+	// only updates query after timer is able to complete.
+	const debounce = useDebounce((search: string) => {
+		params.q = search;
+	}, 350);
 </script>
 
-<aside class="col-3 row-1 sticky top-0 end-0 h-dvh px-2 py-4 hidden md:block">
-	<form action="/sandbox" class="h-full px-2 gap-4 flex flex-col" role="search">
+<aside class="sticky inset-e-0 inset-bs-0 col-3 row-1 hidden h-dvh px-2 py-4 md:block">
+	<form action="/sandbox" class="flex h-full flex-col gap-4 px-2" role="search">
 		{@render inputField()}
 
 		{@render filters()}
@@ -68,14 +52,14 @@
 	<Sheet.Trigger
 		class={cn(
 			buttonVariants({ variant: "secondary", size: "icon" }),
-			"fixed md:hidden size-12 z-20 bottom-4 left-18 shadow-2xl",
+			"fixed inset-s-18 inset-be-4 z-20 size-12 shadow-2xl md:hidden",
 		)}
 	>
 		<SearchIcon class="size-6" />
 	</Sheet.Trigger>
 
 	<Sheet.Content side="bottom" class="p-4 pt-12">
-		<form class="h-full px-2 gap-4 flex flex-col" role="search">
+		<form class="flex h-full flex-col gap-4 px-2" role="search">
 			{@render inputField()}
 
 			{@render filters()}
@@ -95,7 +79,7 @@
 			required
 			autocapitalize="off"
 			autocomplete="off"
-			bind:value={searchBuffer}
+			bind:value={() => params.q ?? "", debounce}
 			id="search-input"
 		/>
 		<Button
@@ -117,36 +101,13 @@
 		</Card.Header>
 
 		<Card.Content class="flex flex-col gap-4">
-			<div class="grid gap-2">
-				<div class="flex items-center gap-2">
-					<Checkbox
-						bind:checked={etymologiesEnabled.current}
-						id="show-etymologies-checkbox"
-						aria-labelledby="show-etymologies-label"
-					/>
-					<Label id="show-etymologies-label" for="show-etymologies-checkbox">
-						Show Etymologies
-					</Label>
-				</div>
-				<div
-					class={cn(
-						"flex items-center gap-2",
-						favorites.current.length === 0 && "cursor-not-allowed",
-					)}
-				>
-					<Checkbox
-						bind:checked={onlyFavorites.current}
-						disabled={favorites.current.length === 0}
-						title={favorites.current.length === 0 ? "Select at least 1 favorite" : undefined}
-						id="only-favorites-checkbox"
-						aria-labelledby="only-favorites-label"
-					/>
-					<Label
-						title={favorites.current.length === 0 ? "Select at least 1 favorite" : undefined}
-						id="only-favorites-label"
-						for="only-favorites-checkbox">Only Favorites</Label
-					>
-				</div>
+			<div class="flex items-center gap-2">
+				<Checkbox
+					bind:checked={etymologiesEnabled.current}
+					id="show-etymologies-checkbox"
+					aria-labelledby="show-etymologies-label"
+				/>
+				<Label id="show-etymologies-label" for="show-etymologies-checkbox">Show Etymologies</Label>
 			</div>
 		</Card.Content>
 
@@ -158,7 +119,7 @@
 					<span>Copy Permalink</span>
 				{/snippet}
 			</Button>
-			<Button class="gap-0" variant="outline" size="sm" onclick={resetOptions}>
+			<Button class="gap-0" variant="outline" size="sm" onclick={() => params.reset()}>
 				<ResetIcon aria-hidden class="mr-2 inline size-4" />
 				<span>Reset Options</span>
 			</Button>

@@ -1,4 +1,5 @@
 import logo from "$lib/assets/icon-light.png?url";
+
 import type { RequestHandler } from "./$types";
 
 export const GET: RequestHandler = async ({ url }) => {

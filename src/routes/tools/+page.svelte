@@ -9,7 +9,7 @@
 </svelte:head>
 
 <main
-	class="w-full p-4 grid md:grid-cols-[repeat(auto-fit,minmax(250px,1fr))] grid-cols-1 auto-rows-min supports-[grid-template-rows:masonry]:grid-rows-[masonry] gap-4"
+	class="grid w-full auto-rows-min grid-cols-1 gap-4 p-4 supports-[grid-template-rows:masonry]:grid-rows-[masonry] md:grid-cols-[repeat(auto-fit,minmax(250px,1fr))]"
 >
 	<Numbers />
 

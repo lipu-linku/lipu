@@ -1,11 +1,6 @@
+import { getTranslatedData } from "@kulupu-linku/sona/v2/utils";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import {
-	getTranslatedData,
-	type WordTranslation,
-	type WordTranslations,
-} from "@kulupu-linku/sona/v1/utils";
-import type { Word } from "@kulupu-linku/sona/v1";
 
 export function keys<T extends object>(o: T): (keyof T)[] {
 	return Object.keys(o) as (keyof T)[];
@@ -32,24 +27,6 @@ export function mapValues<K extends PropertyKey, V, R>(
 ): Record<K, R> {
 	return fromEntries(entries(obj).map(([k, v]) => [k, func(v)]));
 }
-
-export const normalize = (str: string) =>
-	str
-		.normalize("NFD")
-		.replace(/[\u0300-\u036f]/g, "")
-		.toLocaleLowerCase()
-		.trim();
-
-export const fuzzyMatch = (text: string, query: string) => {
-	let lastMatch = -1;
-	for (const char of query) {
-		lastMatch = text.indexOf(char, lastMatch + 1);
-		if (lastMatch === -1) {
-			return false;
-		}
-	}
-	return true;
-};
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));

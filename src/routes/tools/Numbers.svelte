@@ -4,7 +4,6 @@
 	import { Input } from "$lib/components/ui/input";
 	import * as Select from "$lib/components/ui/select";
 	import { PersistedState } from "runed";
-
 	import CopyIcon from "~icons/lucide/copy";
 	import InfoIcon from "~icons/lucide/info";
 
@@ -148,7 +147,7 @@
 <Card.Root>
 	<Card.Header>
 		<div class="flex items-center space-x-1.5">
-			<Card.Title id="numbers" class="text-2xl me-auto"><h2>Number Converter</h2></Card.Title>
+			<Card.Title id="numbers" class="me-auto text-2xl"><h2>Number Converter</h2></Card.Title>
 
 			<Button
 				variant="ghost"

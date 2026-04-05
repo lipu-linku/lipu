@@ -20,10 +20,10 @@
 	<title>lipu Linku &middot; About Linku</title>
 </svelte:head>
 
-<main class="py-4 md:my-auto flex flex-col items-center justify-center gap-4 min-h-full">
-	<h1 class="font-medium text-4xl">About Linku</h1>
+<main class="flex min-h-full flex-col items-center justify-center gap-4 py-4 md:my-auto">
+	<h1 class="text-4xl font-medium">About Linku</h1>
 
-	<p class="*:[button]:underline px-4 md:w-[max(65%,600px)] text-center text-balance">
+	<p class="px-4 text-center text-balance md:w-[max(65%,600px)] *:[button]:underline">
 		Linku is a <button onclick={() => (openAccordion = "dataset")}>dataset</button> with many
 		<button onclick={() => (openAccordion = "translations")}>translations</button>, a
 		<button onclick={() => (openAccordion = "bot")}>Discord bot</button>, a
@@ -49,8 +49,8 @@
 		type="single"
 		bind:value={openAccordion}
 		class="
-		px-6 w-full md:w-[max(65%,600px)] **:[a,button]:cursor-pointer **:[a,button]:not-data-button-root:not-data-accordion-trigger:underline 
-		**:data-bits-accordion-content:*:[div]:flex **:data-bits-accordion-content:*:[div]::flex-col
+		**:data-bits-accordion-content:*:[div]::flex-col w-full px-6 md:w-[max(65%,600px)] **:[a,button]:cursor-pointer 
+		**:[a,button]:not-data-button-root:not-data-accordion-trigger:underline **:data-bits-accordion-content:*:[div]:flex
 		**:data-bits-accordion-content:*:[div]:gap-3
 	"
 	>
@@ -101,7 +101,7 @@
 				</span>
 			</AccordionTrigger>
 			<AccordionContent
-				class="*:[div]:space-y-4 **:[code]:border **:[code]:border-border **:[code]:px-1 **:[code]:rounded-sm"
+				class="**:[code]:rounded-sm **:[code]:border **:[code]:border-border **:[code]:px-1 *:[div]:space-y-4"
 			>
 				<p>
 					The bot is for requesting and receiving Linku data without leaving discord, with a couple
@@ -291,7 +291,7 @@
 		<DiscordIcon /> kulupu Linku on Discord
 	</Button>
 
-	<p class="px-4 md:w-[max(65%,600px)] text-center text-balance">
+	<p class="px-4 text-center text-balance md:w-[max(65%,600px)]">
 		Also, check out <a
 			class="underline"
 			href="https://nimi.li"

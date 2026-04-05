@@ -2,17 +2,17 @@
 	import { page } from "$app/state";
 	import Navbar from "$lib/components/Navbar.svelte";
 	import { Button } from "$lib/components/ui/button";
-	import { pwaAssetsHead } from "virtual:pwa-assets/head";
-	import { pwaInfo } from "virtual:pwa-info";
-	import { useRegisterSW } from "virtual:pwa-register/svelte";
 	import { ModeWatcher } from "mode-watcher";
 	import { outerHeight, scrollY } from "svelte/reactivity/window";
 	import { fly } from "svelte/transition";
+	import { pwaAssetsHead } from "virtual:pwa-assets/head";
+	import { pwaInfo } from "virtual:pwa-info";
+	import { useRegisterSW } from "virtual:pwa-register/svelte";
 
-	import UpArrowIcon from "~icons/lucide/arrow-up";
 	import "../app.css";
+	import UpArrowIcon from "~icons/lucide/arrow-up";
 
-	const { children, data } = $props();
+	const { children } = $props();
 
 	const webManifest = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : "");
 
@@ -46,14 +46,14 @@
 </svelte:head>
 
 <div
-	class="mx-auto max-w-[min(2000px,100dvw)] flex md:grid md:grid-rows-1 md:grid-cols-[min-content_1fr_min-content] md:justify-center gap-2"
+	class="mx-auto flex max-w-[min(2000px,100dvw)] gap-2 md:grid md:grid-cols-[min-content_1fr_min-content] md:grid-rows-1 md:justify-center"
 >
-	<Navbar {...data} />
+	<Navbar />
 
 	{@render children()}
 
 	{#if !page.params?.word && (scrollY.current ?? 0) > 1.05 * (outerHeight.current ?? 0)}
-		<div transition:fly={{ y: 10, duration: 150 }} class="fixed bottom-4 right-4">
+		<div transition:fly={{ y: 10, duration: 150 }} class="fixed inset-e-4 inset-be-4">
 			<Button
 				class="flex items-center gap-2"
 				variant="secondary"

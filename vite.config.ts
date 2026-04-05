@@ -53,7 +53,4 @@ export default defineConfig({
 			},
 		}),
 	],
-	experimental: {
-		enableNativePlugin: true,
-	}
 });

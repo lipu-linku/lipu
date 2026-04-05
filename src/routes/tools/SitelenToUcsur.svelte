@@ -4,7 +4,6 @@
 	import { Textarea } from "$lib/components/ui/textarea";
 	import { ucsur_map } from "$lib/ucsur";
 	import { PersistedState } from "runed";
-
 	import CopyIcon from "~icons/lucide/copy";
 	import InfoIcon from "~icons/lucide/info";
 
@@ -35,7 +34,7 @@
 <Card.Root>
 	<Card.Header>
 		<div class="flex items-center space-x-1.5">
-			<Card.Title id="sp-to-ucsur" class="text-2xl me-auto"><h2>UCSUR Converter</h2></Card.Title>
+			<Card.Title id="sp-to-ucsur" class="me-auto text-2xl"><h2>UCSUR Converter</h2></Card.Title>
 
 			<Button
 				variant="ghost"
@@ -61,11 +60,11 @@
 		</Card.Description>
 	</Card.Header>
 
-	<Card.Content class="h-max flex flex-col gap-4">
+	<Card.Content class="flex h-max flex-col gap-4">
 		<Textarea bind:value={value.current} placeholder="tomo lipu lon seme" />
 
 		<span
-			class="whitespace-pre-line min-h-9 inline-block data-ok:font-sitelen-seli-kiwen text-2xl"
+			class="inline-block min-h-9 text-2xl whitespace-pre-line data-ok:font-sitelen-seli-kiwen"
 			data-ok={result.type === "ok" || undefined}
 		>
 			{result.type === "ok" ? result.value : result.message}

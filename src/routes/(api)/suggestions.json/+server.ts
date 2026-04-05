@@ -1,36 +1,12 @@
-import { wordSearch } from "$lib/components/search.svelte";
-import { client } from "@kulupu-linku/sona/v1/client";
+import { wordSearch } from "$lib/remote/search.remote";
 import { json } from "@sveltejs/kit";
-import { SvelteSet } from "svelte/reactivity";
+
 import type { RequestHandler } from "./$types";
 
-export const GET: RequestHandler = async ({ url, fetch }) => {
+export const GET: RequestHandler = async ({ url, locals }) => {
 	const query = url.searchParams.get("q")!;
-	const lang = url.searchParams.get("lang") ?? "en";
-	const langParam = lang === "en" ? "en" : `${lang},en`;
 
-	const words = await client({ fetch })
-		.v1.words.$get({ query: { lang: langParam } })
-		.then((r) => r.json());
-	const sandbox = await client({ fetch })
-		.v1.sandbox.$get({ query: { lang: langParam } })
-		.then((r) => r.json());
-
-	const results = wordSearch(
-		query,
-		{ ...sandbox, ...words },
-		{
-			core: true,
-			common: true,
-			uncommon: true,
-			obscure: false,
-			sandbox: false,
-		},
-		new SvelteSet(),
-		false,
-		undefined,
-		lang,
-	);
+	const results = await wordSearch({ locale: locals.locale.id, query });
 
 	return json([query, results.map((it) => it.id)], {
 		headers: {

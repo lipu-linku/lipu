@@ -42,6 +42,7 @@
 
 	--font-sitelen-seli-kiwen: "sitelen seli kiwen mono asuki";
 	--font-sitelen-seli-juniko: var(--font-sans), "sitelen seli kiwen mono juniko";
+	--font-sitelen-sitelen-open: "sitelen sitelen open";
 	--font-sitelen-seli-kiwen--font-feature-settings: "rand";
 	--font-sitelen-seli-juniko--font-feature-settings: "rand";
 
@@ -103,6 +104,11 @@
 		font-weight: 400;
 		src: url("https://raw.githubusercontent.com/lipu-linku/ijo/main/nasinsitelen/sitelenselikiwenmonojuniko.ttf");
 	}
+
+	@font-face {
+		font-family: "sitelen sitelen open";
+		src: url("https://raw.githubusercontent.com/lipu-linku/ijo/main/nasinsitelen/sitelen-sitelen-open.ttf");
+	}
 }
 
 @layer base {
@@ -119,7 +125,7 @@
 		--color-category-foreground-core: light-dark(
 			color-mix(in oklab, var(--color-category-core) 50%, black),
 			color-mix(in oklab, var(--color-category-core) 90%, white)
-		); 
+		);
 		--color-category-foreground-common: light-dark(
 			color-mix(in oklab, var(--color-category-common) 70%, black),
 			color-mix(in oklab, var(--color-category-common) 80%, white)
@@ -131,11 +137,11 @@
 		--color-category-foreground-obscure: light-dark(
 			color-mix(in oklab, var(--color-category-obscure) 90%, black),
 			color-mix(in oklab, var(--color-category-obscure) 60%, white)
-		); 
+		);
 		--color-category-foreground-sandbox: light-dark(
 			color-mix(in oklab, var(--color-category-sandbox) 90%, black),
 			color-mix(in oklab, var(--color-category-sandbox) 50%, white)
-		); 
+		);
 	}
 
 	.light {
@@ -146,14 +152,14 @@
 	}
 
 	body {
-		@apply bg-background text-foreground min-h-dvh scroll-smooth;
+		@apply min-h-dvh scroll-smooth bg-background text-foreground;
 		scrollbar-gutter: stable;
 	}
 
 	input[type="search"] {
 		&::-webkit-search-cancel-button,
 		&::-webkit-calendar-picker-indicator {
-			@apply !hidden;
+			@apply hidden!;
 		}
 	}
 }

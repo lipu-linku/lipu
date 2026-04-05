@@ -1,20 +1,17 @@
 <script lang="ts">
-	import { Button } from "$lib/components/ui/button";
-	import * as Card from "$lib/components/ui/card";
-	import { Checkbox } from "$lib/components/ui/checkbox";
-	import { Input } from "$lib/components/ui/input";
-	import { Label } from "$lib/components/ui/label";
-	import { fontSentence } from "$lib/state.svelte";
-	import FontEntry from "./FontEntry.svelte";
-	import SitelenKeyboard from "./SitelenKeyboard.svelte";
-	
 	import logo from "$lib/assets/icon-light.png?url";
+	import { Button } from "$lib/components/ui/button";
+	import { Input } from "$lib/components/ui/input";
+	import { getFonts } from "$lib/remote/fonts.remote";
+	import { fontSentence } from "$lib/state.svelte";
 	import KeyboardIcon from "~icons/lucide/keyboard";
 	import KeyboardOffIcon from "~icons/lucide/keyboard-off";
 	import ResetIcon from "~icons/lucide/rotate-cw";
-	
-	const { data } = $props();
-	const { fonts } = $derived(data);
+
+	import FontEntry from "./FontEntry.svelte";
+	import SitelenKeyboard from "./SitelenKeyboard.svelte";
+
+	const fonts = await getFonts();
 
 	let ucsur = $state(false);
 	let ligatures = $state(false);
@@ -28,7 +25,7 @@
 				search
 					? f.name.includes(search) ||
 						f.filename.includes(search) ||
-						f.creator.join(" ").includes(search)
+						f.author.some((it) => it.includes(search))
 					: true,
 			)
 			.filter(([, f]) => (ucsur ? f.ucsur : true))
@@ -37,7 +34,7 @@
 
 	$effect(() => {
 		if (window.matchMedia("(width >= 48rem)").matches) keyboardOpen = true;
-	})
+	});
 </script>
 
 <svelte:head>
@@ -48,7 +45,7 @@
 	<meta name="og:image" content={logo} />
 </svelte:head>
 
-<main class="w-full p-4 space-y-2">
+<main class="w-full space-y-2 p-4">
 	<div class="flex items-center gap-2">
 		<Input
 			class="font-sitelen-seli-juniko md:text-2xl"
@@ -92,7 +89,7 @@
 </main>
 <!-- TODO: Work on the fonts search more, it needs attention -->
 <!-- 
-<aside class="sticky min-w-1/5 top-0 end-0 h-dvh px-2 py-4">
+<aside class="sticky min-w-1/5 inset-bs-0 end-0 h-dvh px-2 py-4">
 	<Card.Root class="h-full">
 		<Card.Header>
 			<Card.Title class="text-xl">Font Display Settings</Card.Title>
