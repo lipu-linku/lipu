@@ -1,7 +1,7 @@
 <script lang="ts">
 	import * as Chart from "$lib/components/ui/chart";
-	import type { Word } from "@kulupu-linku/sona/v1";
-	import type { UsageCategory } from "@kulupu-linku/sona/v1/utils";
+	import type { Word } from "@kulupu-linku/sona/v2";
+	import type { UsageCategory } from "@kulupu-linku/sona/v2/utils";
 	import { Highlight, LineChart, Points, Rule } from "layerchart";
 	import { scaleThreshold } from "d3-scale";
 
@@ -57,7 +57,7 @@
 		props={{
 			highlight: { lines: true },
 			xAxis: {
-				format: (d: Date) => d.toLocaleDateString("en", { month: "short", year: "2-digit" }),
+				format: (d: Date) => d.toLocaleDateString("en", { month: "2-digit", year: "2-digit" }),
 			},
 			yAxis: {
 				format: (d) => `${d}%`,
@@ -72,12 +72,12 @@
 				{#snippet formatter({ item, value, name })}
 					<div
 						style="--color-bg: {item.payload?.color}; --color-border: {item.payload?.color};"
-						class="border-(--color-border) bg-(--color-bg) shrink-0 rounded-[2px] h-full w-1"
+						class="border-(--color-border) bg-(--color-bg) shrink-0 rounded-xs h-full w-1"
 					></div>
 					<div class="flex flex-1 items-center gap-3 shrink-0 justify-between leading-none">
 						<div class="grid gap-1.5">
 							<div class="font-medium">
-								{// @ts-ignore
+								{// @ts-expect-error
 								item.label?.toLocaleDateString("en", { month: "long", year: "numeric" })}
 							</div>
 							<span class="text-muted-foreground"

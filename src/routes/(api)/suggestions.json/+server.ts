@@ -1,5 +1,5 @@
-import { wordSearch } from "$lib/components/search.svelte";
-import { client } from "@kulupu-linku/sona/v1/client";
+import { wordSearch } from "$lib/remote/search.remote";
+import { client } from "@kulupu-linku/sona/v2/client";
 import { json } from "@sveltejs/kit";
 import { SvelteSet } from "svelte/reactivity";
 import type { RequestHandler } from "./$types";
@@ -16,21 +16,10 @@ export const GET: RequestHandler = async ({ url, fetch }) => {
 		.v1.sandbox.$get({ query: { lang: langParam } })
 		.then((r) => r.json());
 
-	const results = wordSearch(
+	const results = await wordSearch({
 		query,
-		{ ...sandbox, ...words },
-		{
-			core: true,
-			common: true,
-			uncommon: true,
-			obscure: false,
-			sandbox: false,
-		},
-		new SvelteSet(),
-		false,
-		undefined,
 		lang,
-	);
+	});
 
 	return json([query, results.map((it) => it.id)], {
 		headers: {

@@ -1,9 +1,64 @@
+import { browser } from "$app/environment";
 import { fromEntries, keys } from "$lib/utils";
-import type { UsageCategory } from "@kulupu-linku/sona/v1/utils";
+import type { UsageCategory } from "@kulupu-linku/sona/v2/utils";
 import { PersistedState } from "runed";
-import { queryParameters } from "sveltekit-search-params";
+import { createSearchParamsSchema, useSearchParams, type ReturnUseSearchParams } from "runed/kit";
+import { createContext } from "svelte";
+import * as z from "zod";
 
-export const queryParams = queryParameters();
+export const language = new PersistedState(
+	"lang",
+	browser ? navigator.language || navigator.languages[0] : "en",
+	{
+		serializer: {
+			serialize: (value) => value,
+			deserialize: (value) => value,
+		},
+	},
+);
+
+export const dir = new PersistedState<"ltr" | "rtl">("dir", "ltr");
+
+export const categoriesCodec = z.codec(
+	z.string().optional(),
+	z.object({
+		core: z.boolean().default(true),
+		common: z.boolean().default(true),
+		uncommon: z.boolean().default(false),
+		obscure: z.boolean().default(false),
+	}),
+	{
+		decode: (list) => {
+			if (!list) return {};
+			const enabled = list.split(",").filter(Boolean);
+
+			return fromEntries(keys(defaultCategories).map((k) => [k, enabled.includes(k)]));
+		},
+		encode: (obj) =>
+			obj
+				? keys(obj)
+						.filter((k) => obj[k])
+						.join(",")
+				: undefined,
+	},
+);
+
+export const queryParamsSchema = createSearchParamsSchema({
+	q: { type: "string", default: "" },
+	categories: {
+		type: "object",
+		objectType: {
+			core: true,
+			common: true,
+			uncommon: false,
+			obscure: false,
+		},
+	},
+	list: { type: "array", arrayType: "string", default: [] },
+	lang: { type: "string" },
+	sort: { type: "string" },
+	reverse: { type: "boolean" },
+});
 
 export const defaultCategories: Record<Exclude<UsageCategory, "sandbox">, boolean> = {
 	core: true,
@@ -12,20 +67,11 @@ export const defaultCategories: Record<Exclude<UsageCategory, "sandbox">, boolea
 	obscure: false,
 };
 
-export const categoriesSerializer = {
-	deserialize: (list: string) => {
-		const enabled = list.split(",").filter(Boolean);
-
-		return fromEntries(keys(defaultCategories).map((k) => [k, enabled.includes(k)]));
-	},
-	serialize: (obj: typeof defaultCategories) =>
-		keys(obj)
-			.filter((k) => obj[k])
-			.join(","),
-};
-
 export const categories = new PersistedState("categories", defaultCategories, {
-	serializer: categoriesSerializer,
+	serializer: {
+		deserialize: categoriesCodec.decode,
+		serialize: (val) => categoriesCodec.encode(val) ?? "{}",
+	},
 });
 
 export const favorites = new PersistedState<string[]>("favorites", [], {

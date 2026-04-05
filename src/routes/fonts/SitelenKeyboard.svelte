@@ -5,7 +5,7 @@
 
 	type Props = {
 		value: string;
-		input: HTMLInputElement | null;
+		input: HTMLInputElement | undefined;
 	};
 
 	let { value = $bindable(""), input = $bindable() }: Props = $props();

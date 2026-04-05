@@ -6,24 +6,24 @@
 	import * as Card from "$lib/components/ui/card";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
 	import * as Tooltip from "$lib/components/ui/tooltip";
+	import { getWord } from "$lib/remote/words.remote";
+	import { dir, language } from "$lib/state.svelte";
+	import UsageGraph from "./UsageGraph.svelte";
+
 	import BackIcon from "~icons/lucide/arrow-left";
 	import CodeIcon from "~icons/lucide/code-xml";
 	import CopyIcon from "~icons/lucide/copy";
 	import InfoIcon from "~icons/lucide/info";
 	import GraphIcon from "~icons/lucide/line-chart";
 	import ShareButton from "~icons/lucide/share-2";
-	import WordsSearch from "../../(words)/WordsSearch.svelte";
-	import UsageGraph from "./UsageGraph.svelte";
-	import { getTranslatedFallback } from "$lib/utils";
 
-	const { data } = $props();
-	const { word, language } = $derived(data);
+	const { params } = $props();
+	const word = $derived(await getWord({ word: params.word, lang: language.current }));
 
 	const usageScore = $derived(Object.values(word.usage).at(-1) ?? 0);
-	const definition = $derived(getTranslatedFallback(word, "definition", language.id));
-	const commentary = $derived(getTranslatedFallback(word, "commentary", language.id));
-	const etymology = $derived(getTranslatedFallback(word, "etymology", language.id));
-	const sitelenPonaEtymology = $derived(getTranslatedFallback(word, "sp_etymology", language.id));
+
+	const { definition, commentary, etymology } = $derived(word.translations);
+	const sitelenPonaEtymology = $derived(word);
 
 	const hasRepresentations = $derived(
 		word.representations &&
@@ -36,16 +36,17 @@
 
 	const pu_verbatim = $derived(
 		word.pu_verbatim?.[
-			language.id in word.pu_verbatim
-				? (language.id as keyof (typeof word)["pu_verbatim"])
+			language.current in word.pu_verbatim
+				? (language.current as keyof (typeof word)["pu_verbatim"])
 				: ("en" as const)
 		],
 	);
 
-	const listFormat = $derived(
-		new Intl.ListFormat(Intl.ListFormat.supportedLocalesOf([language.locale, "en"]), {
-			style: "short",
-		}),
+	const listFormat = new Intl.ListFormat(
+		Intl.ListFormat.supportedLocalesOf([language.current, "en"]),
+		{
+			style: "narrow",
+		},
 	);
 
 	const usageToIndex = (usage: number) => {
@@ -131,7 +132,7 @@
 			<Card.Content class="flex flex-col gap-3">
 				<div class="flex flex-col justify-center gap-2">
 					<h3 class="font-medium text-xl">Common Definition</h3>
-					<p dir={language.direction}>{definition}</p>
+					<p dir={dir.current}>{definition}</p>
 				</div>
 
 				{#if word.ku_data}
@@ -232,7 +233,7 @@
 								</span>
 							</p>
 							{#if sitelenPonaEtymology}
-								<p dir={language.direction}>{sitelenPonaEtymology}</p>
+								<p dir={dir.current}>{sitelenPonaEtymology}</p>
 							{/if}
 						</div>
 					{/if}
@@ -291,35 +292,28 @@
 			<Card.Content class="flex flex-col gap-3">
 				{#if commentary}
 					<h3 class="font-medium text-xl">Commentary</h3>
-					<p dir={language.direction}>{commentary}</p>
+					<p dir={dir.current}>{commentary}</p>
 				{/if}
 
-				{#if etymology.length > 0 || word.creator || word.coined_year || word.coined_era}
+				{#if etymology || word.author || word.creation_date || word.coined_era}
 					<div class="flex flex-col justify-center gap-2">
 						<h3 class="font-medium text-xl">Origin</h3>
 						<ul class="flex flex-col justify-center gap-2">
-							{#if word.etymology.length > 0 && etymology.length > 0}
-								{#each word.etymology as etym, i}
-									{@const local_etym = etymology[i]}
-									{#if local_etym}
-										<li dir={language.direction} class="text-start">
-											{local_etym.language}{etym.word ? `: ${etym.word}` : ""}{etym.alt
-												? ` (${etym.alt})`
-												: ""}{local_etym.definition ? `; ${local_etym.definition}` : ""}
-										</li>
-									{/if}
-								{/each}
-							{/if}
-							{#if word.creator}
-								<li>
-									<span class="text-muted-foreground">Created by: </span>
-									{listFormat.format(word.creator)}
+							{#if etymology}
+								<li dir={dir.current} class="text-start">
+									{etymology}
 								</li>
 							{/if}
-							{#if word.coined_year || word.coined_era}
+							{#if word.author}
+								<li>
+									<span class="text-muted-foreground">Created by: </span>
+									{listFormat.format(word.author)}
+								</li>
+							{/if}
+							{#if word.creation_date || word.coined_era}
 								<li>
 									<span class="text-muted-foreground">Coined in:</span>
-									{[word.coined_year, word.coined_era].filter(Boolean).join(", ")}
+									{[word.creation_date, word.coined_era].filter(Boolean).join(", ")}
 								</li>
 							{/if}
 						</ul>
@@ -378,7 +372,7 @@
 						<GraphIcon />
 					</Button>
 				</Card.Header>
-				<Card.Content class="max-h-[600px] p-4 px-8">
+				<Card.Content class="max-h-150 p-4 px-8">
 					<UsageGraph data={word.usage} />
 				</Card.Content>
 				<Card.Footer>
@@ -392,5 +386,3 @@
 		{/if}
 	</div>
 </main>
-
-<WordsSearch />

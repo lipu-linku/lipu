@@ -1,40 +1,21 @@
 <script lang="ts">
-	import { page } from "$app/state";
+	import { browser } from "$app/environment";
 	import logo from "$lib/assets/icon-light.png?url";
-	import { wordSearch } from "$lib/components/search.svelte";
+	import { wordSearch } from "$lib/remote/search.remote";
 	import {
 		categories,
-		categoriesSerializer,
 		favorites,
+		language,
 		onlyFavorites,
-		queryParams,
+		queryParamsSchema,
 	} from "$lib/state.svelte";
+	import { useSearchParams } from "runed/kit";
 	import Entry from "../Entry.svelte";
-
-	const { data } = $props();
-	const { words, language } = $derived(data);
+	import { Spinner } from "$lib/components/ui/spinner";
 
 	const hasDisclaimer = new Date() < new Date("2025-09-12");
 
-	const categoriesParam = $derived(page.url.searchParams.get("categories"));
-
-	const wordList = $derived(page.url.searchParams.get("list")?.split(","));
-	const sorted_filtered_dictionary = $derived(
-		wordSearch(
-			queryParams.q ?? "",
-			words,
-			{
-				sandbox: false,
-				...(categoriesParam
-					? categoriesSerializer.deserialize(categoriesParam)
-					: categories.current),
-			},
-			favorites.current,
-			onlyFavorites.current,
-			wordList,
-			language.id,
-		),
-	);
+	const params = useSearchParams(queryParamsSchema);
 </script>
 
 <svelte:head>
@@ -48,8 +29,9 @@
 <main class="flex-1 col-2 md:my-4 space-y-4 md:min-w-6/10 p-2 md:p-0">
 	{#if hasDisclaimer}
 		<p class="text-center text-balance **:[a]:underline">
-			The <a href="https://linku.la/wile">2025 Linku usage survey</a> and <a href="https://linku.la/wile-glyphs">glyphs survey</a> are now open! Please take the surveys
-			to help improve the dictionary and keep it up to date!
+			The <a href="https://linku.la/wile">2025 Linku usage survey</a> and
+			<a href="https://linku.la/wile-glyphs">glyphs survey</a> are now open! Please take the surveys to
+			help improve the dictionary and keep it up to date!
 		</p>
 	{/if}
 	{#if categories.current.obscure}
@@ -58,11 +40,28 @@
 			you learn the language.
 		</p>
 	{/if}
-	<ul class="flex flex-col items-stretch gap-2">
-		{#each sorted_filtered_dictionary as word (word.id)}
-			<li>
-				<Entry {language} {word} />
-			</li>
-		{/each}
-	</ul>
+	<svelte:boundary>
+		{@const sorted_filtered_dictionary = await wordSearch({
+			query: params.q,
+			lang: language.current,
+			categories: categories.current,
+			favorites: favorites.current,
+			list: params.list,
+			onlyFavorites: onlyFavorites.current,
+		})}
+
+		<ul class="grid grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-4">
+			{#each sorted_filtered_dictionary as word (word.id)}
+				<li>
+					<Entry {word} />
+				</li>
+			{/each}
+		</ul>
+
+		{#snippet pending()}
+			<div class="grid h-full place-content-center">
+				<Spinner class="size-40" />
+			</div>
+		{/snippet}
+	</svelte:boundary>
 </main>

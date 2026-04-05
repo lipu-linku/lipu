@@ -119,7 +119,7 @@
 		--color-category-foreground-core: light-dark(
 			color-mix(in oklab, var(--color-category-core) 50%, black),
 			color-mix(in oklab, var(--color-category-core) 90%, white)
-		); 
+		);
 		--color-category-foreground-common: light-dark(
 			color-mix(in oklab, var(--color-category-common) 70%, black),
 			color-mix(in oklab, var(--color-category-common) 80%, white)
@@ -131,11 +131,11 @@
 		--color-category-foreground-obscure: light-dark(
 			color-mix(in oklab, var(--color-category-obscure) 90%, black),
 			color-mix(in oklab, var(--color-category-obscure) 60%, white)
-		); 
+		);
 		--color-category-foreground-sandbox: light-dark(
 			color-mix(in oklab, var(--color-category-sandbox) 90%, black),
 			color-mix(in oklab, var(--color-category-sandbox) 50%, white)
-		); 
+		);
 	}
 
 	.light {

@@ -12,15 +12,16 @@
 <script lang="ts">
 	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import * as Select from "$lib/components/ui/select";
-	import type { Language, Languages } from "@kulupu-linku/sona/v1";
 	import { mode, toggleMode } from "mode-watcher";
+	import { languages } from "$lib/remote/lang.remote";
+	import { language } from "$lib/state.svelte";
 
 	import iconDark from "$lib/assets/icon-dark.png";
 	import iconLight from "$lib/assets/icon-light.png";
 	import { cn, entries } from "$lib/utils";
 	import MenuIcon from "~icons/lucide/menu";
 	import FlaskIcon from "~icons/lucide/flask-conical";
-	import HomeIcon from "~icons/lucide/house";
+	import DictionaryIcon from "~icons/lucide/book-text";
 	import InfoIcon from "~icons/lucide/info";
 	import LanguagesIcon from "~icons/lucide/languages";
 	import DarkModeIcon from "~icons/lucide/moon";
@@ -28,31 +29,21 @@
 	import FontsIcon from "~icons/mdi/format-font";
 	import ToolsIcon from "~icons/mdi/wrench-outline";
 
-	import { goto } from "$app/navigation";
-	import { page } from "$app/state";
 	import * as Sheet from "$lib/components/ui/sheet";
 
-	interface Props {
-		languages: Languages;
-		language: Language;
-	}
-
-	const { languages, language }: Props = $props();
+	const langs = await languages();
 
 	const languageOptions = $derived(
 		new Map(
-			Object.entries(languages).map(
-				([id, lang]) => [id, lang.name.endonym ?? lang.name.en] as const,
-			),
+			Object.entries(langs).map(([id, lang]) => [id, lang.name.endonym ?? lang.name.en] as const),
 		),
 	);
-	let selectedLang = $state(language.id);
 
 	const links: Record<string, NavbarLink> = {
 		home: {
 			href: "/",
-			label: "Home",
-			icon: HomeIcon,
+			label: "Dictionary",
+			icon: DictionaryIcon,
 		},
 		sandbox: {
 			href: "/sandbox",
@@ -77,7 +68,7 @@
 	} as const;
 </script>
 
-<aside class="sticky top-0 start-0 h-dvh px-4 py-5 flex-col gap-6 hidden md:flex">
+<aside class="sticky inset-bs-0 inset-s-0 h-dvh px-4 py-5 flex-col gap-6 hidden md:flex">
 	{@render sidebar()}
 </aside>
 
@@ -85,7 +76,7 @@
 	<Sheet.Trigger
 		class={cn(
 			buttonVariants({ size: "icon" }),
-			"fixed z-20 bottom-4 left-4 size-12 shadow-2xl md:hidden",
+			"fixed z-20 inset-be-4 inset-s-4 size-12 shadow-2xl md:hidden",
 		)}
 	>
 		<MenuIcon class="size-6" />
@@ -133,20 +124,12 @@
 	<div class="mt-auto flex items-center justify-between ps-2 md:ps-0 gap-2">
 		<Select.Root
 			type="single"
-			bind:value={selectedLang}
-			onValueChange={(item) => {
-				if (item) {
-					localStorage.setItem("lang", item);
-					const url = new URL(page.url);
-					url.searchParams.set("lang", item);
-					goto(url);
-				}
-			}}
+			bind:value={() => language.current, (val) => (language.current = val)}
 		>
 			<Select.Trigger>
 				<LanguagesIcon aria-label="Languages icon" class="text-4" />
 				<span class="w-16 text-center line-clamp-1 overflow-ellipsis whitespace-nowrap">
-					{languageOptions.get(selectedLang)}
+					{languageOptions.get(language.current)}
 				</span>
 			</Select.Trigger>
 

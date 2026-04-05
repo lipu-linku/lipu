@@ -23,7 +23,7 @@ export type TooltipPayload = ExtractSnippetParams<
 export function getPayloadConfigFromPayload(
 	config: ChartConfig,
 	payload: TooltipPayload,
-	key: string
+	key: string,
 ) {
 	if (typeof payload !== "object" || payload === null) return undefined;
 

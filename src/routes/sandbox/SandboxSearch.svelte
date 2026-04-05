@@ -1,20 +1,27 @@
 <script lang="ts">
-	import { pushState } from "$app/navigation";
 	import { page } from "$app/state";
 	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
 	import { Checkbox } from "$lib/components/ui/checkbox";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
-	import { etymologiesEnabled, favorites, onlyFavorites, queryParams } from "$lib/state.svelte";
-	import { cn } from "$lib/utils";
 	import * as Sheet from "$lib/components/ui/sheet";
+	import {
+		etymologiesEnabled,
+		favorites,
+		onlyFavorites,
+		queryParamsSchema
+	} from "$lib/state.svelte";
+	import { cn } from "$lib/utils";
 
+	import { useDebounce } from "runed";
+	import { useSearchParams } from "runed/kit";
 	import CheckIcon from "~icons/lucide/check";
 	import LinkIcon from "~icons/lucide/link";
 	import SearchIcon from "~icons/lucide/search";
 	import ResetIcon from "~icons/lucide/undo-2";
-	import { useDebounce } from "runed";
+
+	const params = useSearchParams(queryParamsSchema);
 
 	const focusSearch = (e: KeyboardEvent) => {
 		if (e.key === "/" && document.activeElement?.id !== "search-input") {
@@ -33,30 +40,24 @@
 	};
 
 	const clearQuery = () => {
-		queryParams.q = null;
+		params.q = "";
 	};
 
 	const resetOptions = () => {
 		clearQuery();
 		onlyFavorites.current = false;
 
-		page.url.searchParams.forEach((v, k, params) => params.delete(k, v));
-		pushState(page.url, {});
+		params.reset();
 	};
 
-	// this is a temporary state for the search input form.
-	let searchBuffer: string = $state(`${queryParams.q ? queryParams.q : ""}`);
-	$effect(() => {
-		// every time searchBuffer is changed, debounce is rerun.
-		// only updates query after timer is able to complete.
-		const debounce = useDebounce((search: string) => { queryParams.q = search; }, 350);
-		debounce(searchBuffer);
-
-		if (queryParams.q === "") clearQuery();
-	});
+	// every time searchBuffer is changed, debounce is rerun.
+	// only updates query after timer is able to complete.
+	const debounce = useDebounce((search: string) => {
+		params.q = search;
+	}, 350);
 </script>
 
-<aside class="col-3 row-1 sticky top-0 end-0 h-dvh px-2 py-4 hidden md:block">
+<aside class="col-3 row-1 sticky inset-bs-0 inset-e-0 h-dvh px-2 py-4 hidden md:block">
 	<form action="/sandbox" class="h-full px-2 gap-4 flex flex-col" role="search">
 		{@render inputField()}
 
@@ -68,7 +69,7 @@
 	<Sheet.Trigger
 		class={cn(
 			buttonVariants({ variant: "secondary", size: "icon" }),
-			"fixed md:hidden size-12 z-20 bottom-4 left-18 shadow-2xl",
+			"fixed md:hidden size-12 z-20 inset-be-4 inset-s-18 shadow-2xl",
 		)}
 	>
 		<SearchIcon class="size-6" />
@@ -95,7 +96,7 @@
 			required
 			autocapitalize="off"
 			autocomplete="off"
-			bind:value={searchBuffer}
+			bind:value={() => params.q ?? "", (val) => debounce(val)}
 			id="search-input"
 		/>
 		<Button

@@ -10,20 +10,22 @@
 	import * as Sheet from "$lib/components/ui/sheet";
 	import {
 		categories,
-		categoriesSerializer,
+		categoriesCodec,
 		defaultCategories,
 		etymologiesEnabled,
 		favorites,
 		onlyFavorites,
-		queryParams,
+		queryParamsSchema,
 		writingSystem,
 	} from "$lib/state.svelte";
 	import { cn, keys } from "$lib/utils";
+	import { useSearchParams } from "runed/kit";
 	import CheckIcon from "~icons/lucide/check";
 	import LinkIcon from "~icons/lucide/link";
 	import SearchIcon from "~icons/lucide/search";
 	import ResetIcon from "~icons/lucide/undo-2";
-	import { useDebounce } from "runed";
+
+	const params = useSearchParams(queryParamsSchema);
 
 	const focusSearch = (e: KeyboardEvent) => {
 		if (e.key === "/" && document.activeElement?.id !== "search-input") {
@@ -37,8 +39,9 @@
 	let hasCopied = $state(false);
 	const copyLinkWithParams = () => {
 		const url = new URL(page.url);
-		url.searchParams.set("categories", JSON.stringify(categories.current));
-		url.searchParams.set("q", queryParams.q ?? "");
+		url.searchParams.set("categories", categoriesCodec.encode(categories.current) ?? "");
+		url.searchParams.set("sort", params.sort ?? "alphabetical");
+		url.searchParams.set("reverse", params.reverse ? "true" : "false");
 
 		navigator.clipboard.writeText(url.toString());
 		hasCopied = true;
@@ -46,7 +49,8 @@
 	};
 
 	const clearQuery = () => {
-		queryParams.q = null;
+		params.q = "";
+		params.set("categories", defaultCategories);
 	};
 
 	const resetOptions = () => {
@@ -57,22 +61,11 @@
 		page.url.searchParams.forEach((v, k, params) => params.delete(k, v));
 		pushState(page.url, {});
 	};
-
-	// this is a temporary state for the search input form.
-	let searchBuffer: string = $state(`${queryParams.q ? queryParams.q : ""}`);
-	$effect(() => {
-		// every time searchBuffer is changed, debounce is rerun.
-		// only updates query after timer is able to complete.
-		const debounce = useDebounce((search: string) => { queryParams.q = search; }, 350);
-		debounce(searchBuffer);
-
-		if (queryParams.q === "") clearQuery();
-	});
 </script>
 
 <svelte:window onkeydown={focusSearch} />
 
-<aside class="col-3 row-1 sticky top-0 end-0 h-dvh px-2 py-4 hidden md:block">
+<aside class="col-3 row-1 sticky inset-bs-0 inset-e-0 h-dvh px-2 py-4 hidden md:block">
 	<form action="/" class="h-full px-2 gap-4 flex flex-col" role="search">
 		{@render inputField()}
 
@@ -84,7 +77,7 @@
 	<Sheet.Trigger
 		class={cn(
 			buttonVariants({ variant: "secondary", size: "icon" }),
-			"fixed md:hidden size-12 z-20 bottom-4 left-18 shadow-2xl",
+			"fixed md:hidden size-12 z-20 inset-be-4 inset-s-18 shadow-2xl",
 		)}
 	>
 		<SearchIcon class="size-6" />
@@ -100,7 +93,7 @@
 </Sheet.Root>
 
 {#snippet inputField()}
-	<div class="flex items-center justify-stretch gap-2">
+	<search class="flex items-center justify-stretch gap-2">
 		<Input
 			class="bg-background"
 			placeholder="o alasa e nimi"
@@ -109,7 +102,7 @@
 			required
 			autocapitalize="off"
 			autocomplete="off"
-			bind:value={searchBuffer}
+			bind:value={() => params.q, (val) => (params.q = val)}
 			id="search-input"
 		/>
 		<Button
@@ -121,7 +114,7 @@
 		>
 			<SearchIcon />
 		</Button>
-	</div>
+	</search>
 {/snippet}
 
 {#snippet filters()}
@@ -230,10 +223,6 @@
 			</Button>
 		</Card.Footer>
 
-		<input
-			type="hidden"
-			name="categories"
-			value={categoriesSerializer.serialize(categories.current)}
-		/>
+		<input type="hidden" name="categories" value={categoriesCodec.encode(categories.current)} />
 	</Card.Root>
 {/snippet}

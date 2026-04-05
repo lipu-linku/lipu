@@ -2,24 +2,25 @@
 	import AudioButton from "$lib/components/AudioButton.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
-	import { etymologiesEnabled, favorites, onlyFavorites, writingSystem } from "$lib/state.svelte";
-	import { getTranslatedFallback } from "$lib/utils";
-	import type { Language, LocalizedWord } from "@kulupu-linku/sona/v1";
+	import {
+		dir,
+		etymologiesEnabled,
+		favorites,
+		onlyFavorites,
+		writingSystem,
+	} from "$lib/state.svelte";
+	import type { Word } from "@kulupu-linku/sona";
 
 	import UnfavoriteIcon from "~icons/material-symbols/favorite";
 	import FavoriteIcon from "~icons/material-symbols/favorite-outline";
 
 	interface Props {
-		word: LocalizedWord;
-		language: Language;
+		word: Word;
 	}
 
-	const { word, language }: Props = $props();
+	const { word }: Props = $props();
 
-	// will be fixed in v2
-	const definition = $derived(getTranslatedFallback(word, "definition", language.id));
-	const etymology = $derived(getTranslatedFallback(word, "etymology", language.id));
-
+	const { definition, etymology } = $derived(word.translations);
 	const usageScore = $derived(Object.values(word.usage).at(-1) ?? 0);
 
 	const bookName = $derived.by(() => {
@@ -39,9 +40,9 @@
 <Card.Root
 	id={word.id}
 	class="
-	flex-row py-2 relative border-2 transition-colors
-		before:absolute before:inset-y-0 before:w-1 before:rounded-s-xl before:bg-(--category-color)
-		before:transition-[width] has-[a:hover]:border-(--category-color) has-[a:hover]:before:w-2
+	flex-row py-2 h-full relative border-2 transition-colors
+		before:absolute before:inset-bs-0 before:size-6 before:rounded-tl-[calc(var(--radius-xl)-2px)] before:rounded-br-3xl before:bg-(--category-color)
+		before:transition-transform has-[a:hover]:border-(--category-color)
 	"
 	style="--category-color: var(--color-category-{word.usage_category});
 		--category-color-foreground: var(--color-category-foreground-{word.usage_category});"
@@ -50,7 +51,7 @@
 	<a href="/words/{word.id}" class="flex-1 p-0.5">
 		<Card.Header class="space-y-1 p-4 pl-6">
 			<Card.Title class="text-2xl leading-8">{word.word}</Card.Title>
-			<Card.Description dir={language.direction} class="text-[1rem] text-foreground">
+			<Card.Description dir={dir.current} class="text-[1rem] text-foreground">
 				{definition}
 			</Card.Description>
 			{#if word.see_also.length > 0}
@@ -67,41 +68,25 @@
 					</span>
 				{:else}
 					{[
-						word.creator.length > 0 ? word.creator.join(", ") : undefined,
-						word.coined_year,
+						word.author.length > 0 ? word.author.join(", ") : undefined,
+						word.creation_date,
 						bookName,
 					]
 						.filter(Boolean)
 						.join(" · ")}
 				{/if}
 			</Card.Description>
-			{#if etymologiesEnabled.current && word.etymology.length > 0 && etymology.length > 0}
+			{#if etymologiesEnabled.current}
 				<Card.Description>
-					{@const etymString = word.etymology
-						.map((etym, i) => {
-							const local_etym = etymology[i];
-							// NOTE: isv_c has misaligned etyms. this skips them.
-							if (local_etym) {
-								return (
-									local_etym.language +
-									(etym.word ? `: ${etym.word}` : "") +
-									(etym.alt ? ` (${etym.alt})` : "") +
-									(local_etym.definition ? ` - ${local_etym.definition}` : "")
-								);
-							}
-						})
-						.join("; ")}
-					<span dir={language.direction} class="text-start">
-						{etymString}
+					<span dir={dir.current} class="text-start">
+						{etymology}
 					</span>
 				</Card.Description>
 			{/if}
 		</Card.Header>
 	</a>
 
-	<Card.Content
-		class="flex flex-col items-end justify-between gap-1 p-4 text-6xl max-md:flex-col-reverse md:gap-4"
-	>
+	<Card.Content class="flex flex-col items-end gap-1 p-4 text-6xl max-md:flex-col-reverse md:gap-4">
 		<div class="flex items-center gap-2">
 			{#if word.audio.length > 0}
 				<AudioButton audio={word.audio} />

@@ -33,7 +33,7 @@
 		hideIndicator?: boolean;
 		labelClassName?: string;
 		labelFormatter?: // eslint-disable-next-line @typescript-eslint/no-explicit-any
-		((value: any, payload: TooltipPayload[]) => string | number | Snippet) | null;
+			((value: any, payload: TooltipPayload[]) => string | number | Snippet) | null;
 		formatter?: Snippet<
 			[
 				{
@@ -87,7 +87,7 @@
 	<div
 		class={cn(
 			"border-border/50 bg-background grid min-w-[9rem] items-start gap-1.5 rounded-lg border px-2.5 py-1.5 text-xs shadow-xl",
-			className
+			className,
 		)}
 		{...restProps}
 	>
@@ -102,7 +102,7 @@
 				<div
 					class={cn(
 						"[&>svg]:text-muted-foreground flex w-full flex-wrap items-stretch gap-2 [&>svg]:size-2.5",
-						indicator === "dot" && "items-center"
+						indicator === "dot" && "items-center",
 					)}
 				>
 					{#if formatter && item.value !== undefined && item.name}
@@ -119,22 +119,18 @@
 						{:else if !hideIndicator}
 							<div
 								style="--color-bg: {indicatorColor}; --color-border: {indicatorColor};"
-								class={cn(
-									"border-(--color-border) bg-(--color-bg) shrink-0 rounded-[2px]",
-									{
-										"size-2.5": indicator === "dot",
-										"h-full w-1": indicator === "line",
-										"w-0 border-[1.5px] border-dashed bg-transparent":
-											indicator === "dashed",
-										"my-0.5": nestLabel && indicator === "dashed",
-									}
-								)}
+								class={cn("border-(--color-border) bg-(--color-bg) shrink-0 rounded-[2px]", {
+									"size-2.5": indicator === "dot",
+									"h-full w-1": indicator === "line",
+									"w-0 border-[1.5px] border-dashed bg-transparent": indicator === "dashed",
+									"my-0.5": nestLabel && indicator === "dashed",
+								})}
 							></div>
 						{/if}
 						<div
 							class={cn(
 								"flex flex-1 shrink-0 justify-between leading-none",
-								nestLabel ? "items-end" : "items-center"
+								nestLabel ? "items-end" : "items-center",
 							)}
 						>
 							<div class="grid gap-1.5">

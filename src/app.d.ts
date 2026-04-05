@@ -3,7 +3,7 @@
 /// <reference types="vite-plugin-pwa/info" />
 /// <reference types="vite-plugin-pwa/pwa-assets" />
 
-import type { Words } from "@kulupu-linku/sona/v1";
+import type { Words } from "@kulupu-linku/sona/v2";
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -12,7 +12,6 @@ declare global {
 		interface Error {
 			closest?: string[];
 		}
-		// interface Locals {}
 		// interface PageData {}
 		// interface Platform {}
 		interface PageState {

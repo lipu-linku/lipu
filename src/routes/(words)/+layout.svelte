@@ -7,4 +7,3 @@
 <WordsSearch />
 
 {@render children()}
-

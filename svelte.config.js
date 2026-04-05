@@ -10,6 +10,14 @@ const config = {
 		serviceWorker: {
 			register: false,
 		},
+		experimental: {
+			remoteFunctions: true,
+		},
+	},
+	compilerOptions: {
+		experimental: {
+			async: true,
+		},
 	},
 };
 

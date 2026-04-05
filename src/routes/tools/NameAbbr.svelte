@@ -35,7 +35,7 @@
 <Card.Root>
 	<Card.Header class="pt-4">
 		<div class="flex items-center space-x-1.5">
-			<Card.Title id="sp-to-ucsur" class="me-auto" level={2}>UCSUR Converter</Card.Title>
+			<Card.Title id="sp-to-ucsur" class="text-2xl me-auto"><h2>UCSUR Converter</h2></Card.Title>
 
 			<Button
 				variant="ghost"

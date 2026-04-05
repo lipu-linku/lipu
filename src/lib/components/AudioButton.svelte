@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button";
-	import type { WordAudio } from "@kulupu-linku/sona/v1";
+	import type { WordAudio } from "@kulupu-linku/sona/v2";
 	import SpeakerIcon from "~icons/lucide/volume-2";
 
 	interface Props {
