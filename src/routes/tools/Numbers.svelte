@@ -71,7 +71,7 @@
 		let [int, frac] = from.toString().split(".") as [string, string?];
 
 		if (int.length % 2 === 1) int = "0" + int;
-		if (frac && frac.length % 2 === 1) frac = "0" + frac;
+		if (frac && frac.length % 2 === 1) frac = frac + "0";
 
 		const intWords = sectionWords(int);
 		if (intWords.type === "err") return intWords;
