@@ -146,13 +146,14 @@ export const ucsur_map = {
 	powe: { label: "powe", codepoint: "\u{f19a3}" },
 	"[": { label: "[", codepoint: "\u{f1990}" },
 	"]": { label: "]", codepoint: "\u{f1991}" },
-	"-": { label: "nimi-sin", title: "Combining", codepoint: "\u200D" }, // this is just a ZWJ
-	"^": { label: "nimi^sin", title: "Stacking", codepoint: "\u{f1995}" },
-	"*": { label: "nimi*sin", title: "Scaling", codepoint: "\u{f1996}" },
+	"&": { label: "nimi&sin", title: "Combining", codepoint: "\u200D" }, // this is just a ZWJ
+	"-": { label: "nimi-sin", title: "Stacking", codepoint: "\u{f1995}" },
+	"+": { label: "nimi+sin", title: "Scaling", codepoint: "\u{f1996}" },
 	"(": { label: "open sinpin", codepoint: "\u{f1997}" },
 	")": { label: "pini sinpin", codepoint: "\u{f1998}" },
 	"{": { label: "open monsi", codepoint: "\u{f199a}" },
 	"}": { label: "pini monsi", codepoint: "\u{f199b}" },
-	".": { label: "..", title: "·", codepoint: "\u{f199c}" },
-	":": { label: "::", title: ":", codepoint: "\u{f199d}" },
+	".": { label: ".", title: "·", codepoint: "." },
+	":": { label: ":", title: ":", codepoint: "\u{f199d}" },
+	",": { label: ",", title: "combining tally mark", codepoint: "\u{f199e}" },
 } satisfies Record<string, Codepoint>;
