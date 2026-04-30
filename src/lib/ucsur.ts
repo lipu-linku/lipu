@@ -1,4 +1,4 @@
-export type Codepoint = { label: string; codepoint: string; title?: string };
+export type Codepoint = { label: string; codepoint: string; title?: string, noSpaceBefore?: boolean, noSpaceAfter?: boolean };
 
 export const ucsur_map = {
 	a: { label: "a", codepoint: "\u{f1900}" },
@@ -145,16 +145,16 @@ export const ucsur_map = {
 	majuna: { label: "majuna", codepoint: "\u{f19a2}" },
 	powe: { label: "powe", codepoint: "\u{f19a3}" },
 	su: { label: "su", codepoint: "\u{f19a6}" },
-	"[": { label: "[", codepoint: "\u{f1990}" },
-	"]": { label: "]", codepoint: "\u{f1991}" },
-	"&": { label: "nimi&sin", title: "Combining", codepoint: "\u200D" }, // this is just a ZWJ
-	"-": { label: "nimi-sin", title: "Stacking", codepoint: "\u{f1995}" },
-	"+": { label: "nimi+sin", title: "Scaling", codepoint: "\u{f1996}" },
-	"(": { label: "open sinpin", codepoint: "\u{f1997}" },
-	")": { label: "pini sinpin", codepoint: "\u{f1998}" },
-	"{": { label: "open monsi", codepoint: "\u{f199a}" },
-	"}": { label: "pini monsi", codepoint: "\u{f199b}" },
-	".": { label: ".", title: "·", codepoint: "." },
-	":": { label: ":", title: ":", codepoint: "\u{f199d}" },
-	",": { label: ",", title: "combining tally mark", codepoint: "\u{f199e}" },
+	"[": { label: "[", codepoint: "\u{f1990}", noSpaceAfter: true },
+	"]": { label: "]", codepoint: "\u{f1991}", noSpaceBefore: true },
+	"&": { label: "nimi&sin", title: "Combining", codepoint: "\u200D", noSpaceBefore: true, noSpaceAfter: true }, // this is just a ZWJ
+	"-": { label: "nimi-sin", title: "Stacking", codepoint: "\u{f1995}", noSpaceBefore: true, noSpaceAfter: true },
+	"+": { label: "nimi+sin", title: "Scaling", codepoint: "\u{f1996}", noSpaceBefore: true, noSpaceAfter: true },
+	"(": { label: "open sinpin", codepoint: "\u{f1997}", noSpaceBefore: true, noSpaceAfter: true },
+	")": { label: "pini sinpin", codepoint: "\u{f1998}", noSpaceBefore: true },
+	"{": { label: "open monsi", codepoint: "\u{f199a}", noSpaceAfter: true },
+	"}": { label: "pini monsi", codepoint: "\u{f199b}", noSpaceBefore: true, noSpaceAfter: true},
+	".": { label: ".", title: "·", codepoint: ".", noSpaceBefore: true },
+	":": { label: ":", title: ":", codepoint: "\u{f199d}", noSpaceBefore: true },
+	",": { label: ",", title: "combining tally mark", codepoint: "\u{f199e}", noSpaceBefore: true },
 } satisfies Record<string, Codepoint>;

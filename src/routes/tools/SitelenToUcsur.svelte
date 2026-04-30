@@ -17,10 +17,32 @@
 
 	let value = new PersistedState("tools-sp-ucsur-value", "");
 
-	const wordsByLength = Object.entries(ucsur_map).toSorted(([a], [b]) => b.length - a.length);
+	const codepointsMap = Object.fromEntries(Object.entries(ucsur_map).map(([word, {codepoint}]) => [codepoint, word]));
+	const wordsByLength = Object.keys(ucsur_map).toSorted((a, b) => b.length - a.length);
+	const codepoints = Object.keys(codepointsMap);
+	const regex = new RegExp(`(?:(${wordsByLength.map(RegExp.escape).join('|')})) ?|(${codepoints.join('|')})`, 'g');
 	function converter(from: string): ConverterResult {
-		wordsByLength.forEach(([word, { codepoint }]) => {
-			from = from.replaceAll(word, codepoint);
+		from = from.replaceAll(regex, (match, word, codepoint, index) => {
+			if (Object.hasOwn(ucsur_map, word))
+				return ucsur_map[word].codepoint;
+			if (Object.hasOwn(codepointsMap, codepoint)) {
+				let word = codepointsMap[codepoint];
+				let spaceBefore = !ucsur_map[word].noSpaceBefore;
+
+				let lastCodepoint = from.codePointAt(index-1);
+				if (lastCodepoint >= 0xdc00 && lastCodepoint < 0xe000) lastCodepoint = from.codePointAt(index-2)
+				if (lastCodepoint !== undefined) lastCodepoint = String.fromCodePoint(lastCodepoint);
+				let spaceAfterLast = false;
+				if (Object.hasOwn(codepointsMap, lastCodepoint)) {
+					let lastWord = codepointsMap[lastCodepoint]
+					spaceAfterLast = !ucsur_map[lastWord].noSpaceAfter;
+				}
+
+				if (spaceBefore && spaceAfterLast)
+					return ' ' + word;
+				return word;
+			}
+			return match;
 		});
 
 		return {
@@ -62,10 +84,10 @@
 	</Card.Header>
 
 	<Card.Content class="h-max flex flex-col gap-4">
-		<Textarea bind:value={value.current} placeholder="tomo lipu lon seme" />
+		<Textarea class="font-sitelen-seli-juniko" bind:value={value.current} placeholder="tomo lipu lon seme" />
 
 		<span
-			class="whitespace-pre-line min-h-9 inline-block data-ok:font-sitelen-seli-kiwen text-2xl"
+			class="whitespace-pre-line min-h-9 inline-block data-ok:font-sitelen-seli-juniko text-base"
 			data-ok={result.type === "ok" || undefined}
 		>
 			{result.type === "ok" ? result.value : result.message}
