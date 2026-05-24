@@ -7,19 +7,19 @@ import z from "zod";
 const localeSchema = z.string().optional();
 
 export const getWords = query(localeSchema, async (locale) => {
-	const { fetch, locals } = getRequestEvent();
+	const { platform, locals } = getRequestEvent();
 	const localeId = locale ?? locals.locale.id;
 
-	return await client({ fetch })
+	return await client({ fetch: platform?.env.SONA_API.fetch })
 		.v2.words.$get({ query: { lang: localeId } })
 		.then((r) => r.json());
 });
 
 export const getSandbox = query(localeSchema, async (locale) => {
-	const { fetch, locals } = getRequestEvent();
+	const { platform, locals } = getRequestEvent();
 	const localeId = locale ?? locals.locale.id;
 
-	return await client({ fetch })
+	return await client({ fetch: platform?.env.SONA_API.fetch })
 		.v2.sandbox.words.$get({ query: { lang: localeId } })
 		.then((r) => r.json());
 });

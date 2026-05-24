@@ -14,7 +14,8 @@
 		"generate-pwa-assets": "pwa-assets-generator"
 	},
 	"devDependencies": {
-		"@iconify/json": "^2.2.477",
+		"@cloudflare/workers-types": "^4.20260523.1",
+		"@iconify/json": "^2.2.478",
 		"@kulupu-linku/sona": "^2.1.3",
 		"@lingui/detect-locale": "^6.1.0",
 		"@sveltejs/adapter-cloudflare": "^7.2.8",

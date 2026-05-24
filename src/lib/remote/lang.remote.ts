@@ -4,16 +4,16 @@ import { error } from "@sveltejs/kit";
 import * as z from "zod";
 
 export const getLocales = query(async () => {
-	const { fetch } = getRequestEvent();
+	const { platform } = getRequestEvent();
 
-	return await client({ fetch })
+	return await client({ fetch: platform?.env.SONA_API.fetch })
 		.v2.languages.$get()
 		.then((r) => r.json());
 });
 
 export const getLocale = query(z.string(), async (locale) => {
-	const { fetch } = getRequestEvent();
-	const res = await client({ fetch }).v2.languages[":language"].$get({
+	const { platform } = getRequestEvent();
+	const res = await client({ fetch: platform?.env.SONA_API.fetch }).v2.languages[":language"].$get({
 		param: { language: locale },
 	});
 

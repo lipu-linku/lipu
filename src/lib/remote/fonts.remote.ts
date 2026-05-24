@@ -1,4 +1,5 @@
 import { getRequestEvent, query } from "$app/server";
+import { env } from "$env/dynamic/private";
 import { entries } from "$lib/utils";
 import { client } from "@kulupu-linku/sona/v2/client";
 import { error } from "@sveltejs/kit";
@@ -7,10 +8,10 @@ import { z } from "zod";
 const openLicenses = ["GPL", "MIT", "OFL", "CC"];
 
 export const getFonts = query(async () => {
-	const { fetch } = getRequestEvent();
+	const { platform } = getRequestEvent();
 
 	return entries(
-		await client({ fetch })
+		await client({ fetch: platform?.env.SONA_API.fetch })
 			.v2.fonts.$get()
 			.then((r) => r.json()),
 	).filter(([, it]) => openLicenses.some((l) => it.license.startsWith(l)));

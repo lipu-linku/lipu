@@ -3,6 +3,7 @@
 /// <reference types="vite-plugin-pwa/info" />
 /// <reference types="vite-plugin-pwa/pwa-assets" />
 
+import type { Fetcher, Service } from "@cloudflare/workers-types";
 import type { Words, Language } from "@kulupu-linku/sona/v2";
 
 // See https://kit.svelte.dev/docs/types#app
@@ -18,7 +19,12 @@ declare global {
 		interface PageData {
 			locale: Language;
 		}
-		// interface Platform {}
+		interface Platform {
+			env: {
+				SONA_API: Service;
+				ASSETS: Fetcher;
+			};
+		}
 		interface PageState {
 			words?: Words;
 		}
