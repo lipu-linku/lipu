@@ -1,8 +1,7 @@
 <script lang="ts">
-	import { page } from "$app/state";
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
-	import { fontSentence } from "$lib/state.svelte";
+	import { fontSentence, lang } from "$lib/state.svelte";
 	import type { Font } from "@kulupu-linku/sona/v2";
 	import { useIntersectionObserver } from "runed";
 	import { fly } from "svelte/transition";
@@ -26,11 +25,10 @@
 	);
 
 	let malformed = $state(false);
-	const locale = $derived(page.data.locale);
 
 	const lastUpdatedDate = $derived(
 		font.last_updated
-			? Intl.DateTimeFormat(locale, { month: "long", year: "numeric" }).format(
+			? Intl.DateTimeFormat(lang.current, { month: "long", year: "numeric" }).format(
 					new Date(font.last_updated),
 				)
 			: undefined,
@@ -38,7 +36,7 @@
 
 	const fontDescription = $derived(
 		[
-			`Created by ${new Intl.ListFormat(locale).format(font.author)}`,
+			`Created by ${new Intl.ListFormat(lang.current).format(font.author)}`,
 			`Updated on ${lastUpdatedDate}`,
 			`Licensed as ${font.license}`,
 		]

@@ -1,5 +1,5 @@
-import type { LayoutServerLoad } from "./$types";
-
-export const load = (({ locals }) => {
-	return { locale: locals.locale };
-}) satisfies LayoutServerLoad;
+export const load = ({ locals }) => {
+  return {
+    lang: locals.locale
+  }
+}

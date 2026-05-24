@@ -2,20 +2,23 @@
 	import { page } from "$app/state";
 	import Navbar from "$lib/components/Navbar.svelte";
 	import { Button } from "$lib/components/ui/button";
+	import { lang } from "$lib/state.svelte";
 	import { ModeWatcher } from "mode-watcher";
 	import { outerHeight, scrollY } from "svelte/reactivity/window";
 	import { fly } from "svelte/transition";
 	import { pwaAssetsHead } from "virtual:pwa-assets/head";
 	import { pwaInfo } from "virtual:pwa-info";
-	import { useRegisterSW } from "virtual:pwa-register/svelte";
 
 	import "../app.css";
+	import { useRegisterSW } from "virtual:pwa-register/svelte";
 	import UpArrowIcon from "~icons/lucide/arrow-up";
 
-	const { children } = $props();
+	const { data, children } = $props();
+
+	// svelte-ignore state_referenced_locally
+	lang.current = data.lang.id;
 
 	const webManifest = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : "");
-
 	useRegisterSW({
 		immediate: true,
 		onRegistered(r) {

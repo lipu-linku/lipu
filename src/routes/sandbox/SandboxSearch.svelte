@@ -5,17 +5,67 @@
 	import { Checkbox } from "$lib/components/ui/checkbox";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
+	import * as Select from "$lib/components/ui/select";
 	import * as Sheet from "$lib/components/ui/sheet";
-	import { etymologiesEnabled, queryParamsSchema } from "$lib/state.svelte";
+	import {
+		displayMethod,
+		etymologiesEnabled,
+		queryParamsSchema,
+		sortingDirection,
+		sortingMethod,
+	} from "$lib/state.svelte";
 	import { cn } from "$lib/utils";
 	import { useDebounce } from "runed";
 	import { useSearchParams } from "runed/kit";
+	import type { Component } from "svelte";
+	import NumberDescendingIcon from "~icons/lucide/arrow-down-1-0";
+	import DescendingIcon from "~icons/lucide/arrow-down-wide-narrow";
+	import AlphabetDescendingIcon from "~icons/lucide/arrow-down-z-a";
+	import NumberAscendingIcon from "~icons/lucide/arrow-up-1-0";
+	import AscendingIcon from "~icons/lucide/arrow-up-narrow-wide";
+	import AlphabetAscendingIcon from "~icons/lucide/arrow-up-z-a";
 	import CheckIcon from "~icons/lucide/check";
+	import GridIcon from "~icons/lucide/layout-grid";
 	import LinkIcon from "~icons/lucide/link";
+	import ListIcon from "~icons/lucide/list";
 	import SearchIcon from "~icons/lucide/search";
 	import ResetIcon from "~icons/lucide/undo-2";
 
 	const params = useSearchParams(queryParamsSchema);
+
+	const displayOptions = {
+		grid: { label: "Grid", icon: GridIcon },
+		compact: { label: "Compact", icon: ListIcon },
+	} as const satisfies Record<typeof displayMethod.current, { label: string; icon: Component }>;
+	const currentDisplay = $derived(displayOptions[displayMethod.current]);
+
+	const sortingOptions = {
+		alphabetical: {
+			label: "Alphabetical",
+			ascending_icon: AlphabetAscendingIcon,
+			descending_icon: AlphabetDescendingIcon,
+		},
+		usage: {
+			label: "Usage",
+			ascending_icon: NumberAscendingIcon,
+			descending_icon: NumberDescendingIcon,
+		},
+	} as const satisfies Record<
+		typeof sortingMethod.current,
+		{ label: string; descending_icon: Component; ascending_icon: Component }
+	>;
+
+	const CurrentSortIcon = $derived(
+		sortingOptions[sortingMethod.current][
+			sortingDirection.current === "ascending" ? "ascending_icon" : "descending_icon"
+		],
+	);
+
+	const sortDirectionOptions = {
+		ascending: { label: "Ascending", icon: AscendingIcon },
+		descending: { label: "Descending", icon: DescendingIcon },
+	} as const satisfies Record<typeof sortingDirection.current, { label: string; icon: Component }>;
+	const currentSortDir = $derived(sortDirectionOptions[sortingDirection.current]);
 
 	const focusSearch = (e: KeyboardEvent) => {
 		if (e.key === "/" && document.activeElement?.id !== "search-input") {
@@ -101,6 +151,51 @@
 		</Card.Header>
 
 		<Card.Content class="flex flex-col gap-4">
+			<Select.Root type="single" bind:value={displayMethod.current}>
+				<Select.Trigger
+					class={[buttonVariants({ variant: "outline", size: "sm" }), "w-full justify-between"]}
+				>
+					<currentDisplay.icon />
+					{currentDisplay.label}
+				</Select.Trigger>
+				<Select.Content>
+					{#each Object.entries(displayOptions) as [method, { label, icon: Icon }] (method)}
+						<Select.Item value={method}><Icon /> {label}</Select.Item>
+					{/each}
+				</Select.Content>
+			</Select.Root>
+
+			<div class="grid gap-2">
+				<Select.Root type="single" bind:value={sortingMethod.current}>
+					<Select.Trigger
+						class={[buttonVariants({ variant: "outline", size: "sm" }), "w-full justify-between"]}
+					>
+						<CurrentSortIcon />
+						{sortingOptions[sortingMethod.current].label}
+					</Select.Trigger>
+					<Select.Content>
+						{#each Object.entries(sortingOptions) as [method, { label, ascending_icon, descending_icon }] (method)}
+							{@const Icon =
+								sortingDirection.current === "ascending" ? ascending_icon : descending_icon}
+							<Select.Item value={method}><Icon /> {label}</Select.Item>
+						{/each}
+					</Select.Content>
+				</Select.Root>
+				<Select.Root type="single" bind:value={sortingDirection.current}>
+					<Select.Trigger
+						class={[buttonVariants({ variant: "outline", size: "sm" }), "w-full justify-between"]}
+					>
+						<currentSortDir.icon />
+						{currentSortDir.label}
+					</Select.Trigger>
+					<Select.Content>
+						{#each Object.entries(sortDirectionOptions) as [direction, { label, icon: Icon }] (direction)}
+							<Select.Item value={direction}><Icon /> {label}</Select.Item>
+						{/each}
+					</Select.Content>
+				</Select.Root>
+			</div>
+
 			<div class="flex items-center gap-2">
 				<Checkbox
 					bind:checked={etymologiesEnabled.current}

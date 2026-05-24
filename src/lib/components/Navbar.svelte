@@ -10,14 +10,13 @@
 </script>
 
 <script lang="ts">
-	import { invalidateAll } from "$app/navigation";
-	import { page } from "$app/state";
 	import iconDark from "$lib/assets/icon-dark.png";
 	import iconLight from "$lib/assets/icon-light.png";
 	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import * as Select from "$lib/components/ui/select";
 	import * as Sheet from "$lib/components/ui/sheet";
 	import { getLocales, updateLocale } from "$lib/remote/lang.remote";
+	import { lang } from "$lib/state.svelte";
 	import { cn, entries } from "$lib/utils";
 	import { mode, toggleMode } from "mode-watcher";
 	import { SvelteMap } from "svelte/reactivity";
@@ -32,7 +31,6 @@
 	import ToolsIcon from "~icons/mdi/wrench-outline";
 
 	const locales = await getLocales();
-	const locale = $derived(page.data.locale.id ?? "en");
 
 	const localeOptions = $derived(
 		new SvelteMap(
@@ -71,9 +69,8 @@
 	} as const;
 
 	const setLocale = async (value: string) => {
-		localStorage.setItem("lang", value);
 		await updateLocale(value);
-		await invalidateAll();
+		lang.current = value;
 	};
 </script>
 
@@ -131,11 +128,11 @@
 	</nav>
 
 	<div class="mt-auto flex items-center justify-between gap-2 ps-2 md:ps-0">
-		<Select.Root type="single" bind:value={() => locale, setLocale}>
+		<Select.Root type="single" bind:value={() => lang.current, setLocale}>
 			<Select.Trigger>
 				<LanguagesIcon aria-label="Languages icon" class="text-4" />
 				<span class="line-clamp-1 w-16 text-center text-ellipsis whitespace-nowrap">
-					{localeOptions.get(locale)}
+					{localeOptions.get(lang.current)}
 				</span>
 			</Select.Trigger>
 

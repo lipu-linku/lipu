@@ -1,9 +1,8 @@
-import { command, getRequestEvent, query, requested } from "$app/server";
+import { command, getRequestEvent, query } from "$app/server";
 import { client } from "@kulupu-linku/sona/v2/client";
 import { error } from "@sveltejs/kit";
 import * as z from "zod";
 
-import { getWords } from "./words.remote";
 
 export const getLocales = query(async () => {
 	const { fetch } = getRequestEvent();

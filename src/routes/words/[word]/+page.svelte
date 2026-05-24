@@ -18,10 +18,10 @@
 
 	import GlyphCard from "./GlyphCard.svelte";
 	import UsageGraph from "./UsageGraph.svelte";
+  import { lang } from "$lib/state.svelte";
 
 	const { params } = $props();
-	const locale = $derived(page.data.locale);
-	const word = $derived(await getWord({ word: params.word, locale: locale.id }));
+	const word = $derived(await getWord({ word: params.word, locale: lang.current }));
 
 	const usageScore = $derived(Object.values(word.usage).at(-1) ?? 0);
 
@@ -37,14 +37,14 @@
 
 	const pu_verbatim = $derived(
 		word.pu_verbatim?.[
-			locale.id in word.pu_verbatim
-				? (locale as keyof (typeof word)["pu_verbatim"])
+			lang.current in word.pu_verbatim
+				? (lang.current as keyof (typeof word)["pu_verbatim"])
 				: ("en" as const)
 		],
 	);
 
 	const listFormat = $derived(
-		new Intl.ListFormat(Intl.ListFormat.supportedLocalesOf([locale.id, "en"]), {
+		new Intl.ListFormat(Intl.ListFormat.supportedLocalesOf([lang.current, "en"]), {
 			style: "narrow",
 		}),
 	);

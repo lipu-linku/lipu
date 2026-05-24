@@ -4,6 +4,8 @@ import { PersistedState } from "runed";
 import { createSearchParamsSchema } from "runed/kit";
 import * as z from "zod";
 
+export const lang = $state({ current: "en" });
+
 export const categoriesCodec = z.codec(
 	z.string().optional(),
 	z.object({

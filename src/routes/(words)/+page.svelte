@@ -1,11 +1,10 @@
 <script lang="ts">
-	import { page } from "$app/state";
 	import logo from "$lib/assets/icon-light.png?url";
-	import { Spinner } from "$lib/components/ui/spinner";
 	import { wordSearch } from "$lib/remote/search.remote";
 	import {
 		categories,
 		displayMethod,
+		lang,
 		queryParamsSchema,
 		sortingDirection,
 		sortingMethod,
@@ -17,7 +16,17 @@
 	const hasDisclaimer = new Date() < new Date("2025-09-12");
 
 	const params = useSearchParams(queryParamsSchema);
-	const locale = $derived(page.data.locale.id);
+
+	const sorted_filtered_dictionary = $derived(
+		await wordSearch({
+			locale: lang.current,
+			query: params.q,
+			categories: categories.current,
+			list: params.list,
+			sorting: sortingMethod.current,
+			direction: sortingDirection.current,
+		}),
+	);
 </script>
 
 <svelte:head>
@@ -42,31 +51,15 @@
 			you learn the language.
 		</p>
 	{/if}
-	<svelte:boundary>
-		{@const sorted_filtered_dictionary = await wordSearch({
-			locale,
-			query: params.q,
-			categories: categories.current,
-			list: params.list,
-			sorting: sortingMethod.current,
-			direction: sortingDirection.current,
-		})}
 
-		<ul
-			class="group grid grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-4 data-[display=compact]:grid-cols-[1lh_min-content_min-content_1fr]"
-			data-display={displayMethod.current}
-		>
-			{#each sorted_filtered_dictionary as word (word.id)}
-				<li class="grid grid-cols-subgrid group-data-[display=compact]:col-span-4">
-					<Entry {word} />
-				</li>
-			{/each}
-		</ul>
-
-		{#snippet pending()}
-			<div class="grid h-full place-content-center">
-				<Spinner class="size-40" />
-			</div>
-		{/snippet}
-	</svelte:boundary>
+	<ul
+		class="group grid grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-4 data-[display=compact]:grid-cols-[min-content_1lh_min-content_1fr]"
+		data-display={displayMethod.current}
+	>
+		{#each sorted_filtered_dictionary as word (word.id)}
+			<li class="grid grid-cols-subgrid group-data-[display=compact]:col-span-4">
+				<Entry {word} />
+			</li>
+		{/each}
+	</ul>
 </main>

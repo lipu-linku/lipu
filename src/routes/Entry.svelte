@@ -98,10 +98,17 @@
 	</a>
 {:else}
 	<div class="col-span-4 grid grid-cols-subgrid place-content-center items-center">
+		<a
+			href={resolve("/words/[word]", { word: word.id })}
+			class="col-1 origin-right text-end text-lg font-semibold transition-transform duration-100 hover:scale-110"
+		>
+			{word.word}
+		</a>
+
 		{#if (writingSystem.current === "sitelen_pona" && word.primary_glyph_id) || (writingSystem.current === "sitelen_sitelen" && word.representations?.sitelen_sitelen)}
 			<span
 				class={[
-					"text-3xl [text-box:trim-both_cap_alphabetic]",
+					"col-2 text-3xl [text-box:trim-both_cap_alphabetic]",
 					writingSystem.current === "sitelen_pona" &&
 						word.primary_glyph_id &&
 						"font-sitelen-seli-kiwen",
@@ -112,13 +119,6 @@
 				>{word.word}
 			</span>
 		{/if}
-
-		<a
-			href={resolve("/words/[word]", { word: word.id })}
-			class="col-2 origin-left text-lg font-semibold transition-transform duration-100 hover:scale-110"
-		>
-			{word.word}
-		</a>
 
 		<span
 			class="col-3 text-(--category-color)"
