@@ -3,7 +3,6 @@ import { client } from "@kulupu-linku/sona/v2/client";
 import { error } from "@sveltejs/kit";
 import * as z from "zod";
 
-
 export const getLocales = query(async () => {
 	const { fetch } = getRequestEvent();
 

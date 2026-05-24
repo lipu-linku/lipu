@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { page } from "$app/state";
 	import logo from "$lib/assets/icon-light.png?url";
-	import { Spinner } from "$lib/components/ui/spinner";
 	import { wordSearch } from "$lib/remote/search.remote";
 	import {
 		displayMethod,

@@ -8,6 +8,12 @@ export const handle = (async ({ event, resolve }) => {
 		(await resolveLocaleFromAcceptLanguage(event.request.headers.get("accept-language"))) ??
 		(await getLocale("en"));
 
+	event.cookies.set("lang", locale.id, {
+		path: "/",
+		maxAge: 60 * 60 * 24 * 365,
+		sameSite: "lax",
+	});
+
 	event.locals.locale = locale;
 
 	return await resolve(event);

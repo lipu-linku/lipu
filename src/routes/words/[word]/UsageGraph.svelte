@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { page } from "$app/state";
 	import * as Chart from "$lib/components/ui/chart";
+	import { lang } from "$lib/state.svelte";
 	import type { Word } from "@kulupu-linku/sona/v2";
 	import type { UsageCategory } from "@kulupu-linku/sona/v2/utils";
 	import { scaleThreshold } from "d3-scale";
@@ -11,7 +12,6 @@
 	}
 
 	const { data }: Props = $props();
-	const locale = $derived(page.data.locale);
 
 	const usageToCategory = (usage: number): UsageCategory => {
 		if (usage >= 90) return "core";
@@ -59,7 +59,8 @@
 		props={{
 			highlight: { lines: true },
 			xAxis: {
-				format: (d: Date) => d.toLocaleDateString(locale, { month: "2-digit", year: "2-digit" }),
+				format: (d: Date) =>
+					d.toLocaleDateString(lang.current, { month: "2-digit", year: "2-digit" }),
 			},
 			yAxis: {
 				format: (d) => `${d}%`,
