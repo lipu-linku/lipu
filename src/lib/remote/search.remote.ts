@@ -70,7 +70,7 @@ export const wordSearch = query(
 		minisearch.addAll(initialFilteredWords);
 		const scored = minisearch
 			.search(new_query)
-			.map((it) => ({ ...initialFilteredWords[it.id], score: it.score }));
+			.map((it) => ({ ...words[it.id], score: it.score }));
 
 		const sorted = scored.sort((a, b) =>
 			a.score !== b.score ? b.score - a.score : sortWords(sorting, direction, a, b),

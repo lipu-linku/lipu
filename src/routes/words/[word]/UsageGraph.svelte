@@ -1,5 +1,4 @@
 <script lang="ts">
-	import { page } from "$app/state";
 	import * as Chart from "$lib/components/ui/chart";
 	import { lang } from "$lib/state.svelte";
 	import type { Word } from "@kulupu-linku/sona/v2";
@@ -7,11 +6,7 @@
 	import { scaleThreshold } from "d3-scale";
 	import { Highlight, LineChart, Points, Rule } from "layerchart";
 
-	interface Props {
-		data: Word["usage"];
-	}
-
-	const { data }: Props = $props();
+	const { data }: { data: Word["usage"] } = $props();
 
 	const usageToCategory = (usage: number): UsageCategory => {
 		if (usage >= 90) return "core";
@@ -39,7 +34,7 @@
 	} satisfies Chart.ChartConfig;
 </script>
 
-<Chart.Container {config} class="min-h-100">
+<Chart.Container {config} class="max-h-[90dvh] min-h-full">
 	<LineChart
 		data={plots}
 		x="date"
@@ -74,7 +69,7 @@
 			<Chart.Tooltip nameKey="usage" indicator="line">
 				{#snippet formatter({ item, value })}
 					{@const dateLabel = // @ts-expect-error
-						item.label?.toLocaleDateString(locale, { month: "long", year: "numeric" })}
+						item.label?.toLocaleDateString(lang.current, { month: "long", year: "numeric" })}
 					<div
 						class="h-full w-1 shrink-0 rounded-xs border-3 border-(--color-border) bg-(--color-bg)"
 						style:--color-bg={item.payload?.color}
@@ -98,7 +93,7 @@
 		{/snippet}
 
 		{#snippet points()}
-			<Points r={8} class="stroke-muted-foreground" />
+			<Points class="stroke-muted-foreground md:[r:8px]" />
 		{/snippet}
 
 		{#snippet rule()}

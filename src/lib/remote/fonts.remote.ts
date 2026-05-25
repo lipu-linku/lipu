@@ -8,10 +8,10 @@ import { z } from "zod";
 const openLicenses = ["GPL", "MIT", "OFL", "CC"];
 
 export const getFonts = query(async () => {
-	const { platform } = getRequestEvent();
+	const { fetch } = getRequestEvent();
 
 	return entries(
-		await client({ fetch: platform?.env.SONA_API.fetch })
+		await client({ fetch })
 			.v2.fonts.$get()
 			.then((r) => r.json()),
 	).filter(([, it]) => openLicenses.some((l) => it.license.startsWith(l)));

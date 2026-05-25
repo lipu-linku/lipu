@@ -8,6 +8,7 @@
 	import * as Tooltip from "$lib/components/ui/tooltip";
 	import { getGlyph } from "$lib/remote/glyphs.remote";
 	import { getWord } from "$lib/remote/words.remote";
+	import { lang } from "$lib/state.svelte";
 	import { cn } from "$lib/utils";
 	import BackIcon from "~icons/lucide/arrow-left";
 	import CodeIcon from "~icons/lucide/code-xml";
@@ -18,7 +19,6 @@
 
 	import GlyphCard from "./GlyphCard.svelte";
 	import UsageGraph from "./UsageGraph.svelte";
-  import { lang } from "$lib/state.svelte";
 
 	const { params } = $props();
 	const word = $derived(await getWord({ word: params.word, locale: lang.current }));
@@ -76,8 +76,8 @@
 	/>
 </svelte:head>
 
-<main class="my-4 grid flex-1 grid-cols-2 gap-4 pb-2">
-	<header class="col-span-2 flex items-center gap-4">
+<main class="my-4 grid flex-1 grid-cols-1 gap-4 px-2 md:px-0 pb-2 md:grid-cols-2">
+	<header class="flex items-center gap-4 md:col-span-2">
 		<Button
 			href={word.usage_category === "sandbox" ? "/sandbox" : "/"}
 			class="justify-self-end"
@@ -124,7 +124,21 @@
 		</div>
 	</header>
 
-	<Card.Root class={cn("col-span-2", !hasRepresentations && "col-span-1")}>
+	{@render meaningCard()}
+
+	{#if hasRepresentations}
+		{@render representationsCard()}
+	{/if}
+
+	{@render infoCard()}
+
+	{#if Object.keys(word.usage).length > 1}
+		{@render graphCard()}
+	{/if}
+</main>
+
+{#snippet meaningCard()}
+	<Card.Root class={cn("md:col-span-2", !hasRepresentations && "col-span-1")}>
 		<Card.Header>
 			<Card.Title class="text-2xl"><h2>Meaning</h2></Card.Title>
 		</Card.Header>
@@ -216,86 +230,84 @@
 			{/if}
 		</Card.Content>
 	</Card.Root>
+{/snippet}
 
-	{#if hasRepresentations}
-		<Card.Root>
-			<Card.Header>
-				<Card.Title class="text-2xl"><h2>Usage</h2></Card.Title>
-			</Card.Header>
-			<Card.Content class="grid grid-cols-3 place-items-start gap-x-3">
-				{#if word.glyph_ids.length > 0}
-					{@const glyphs = (
-						await Promise.all(word.glyph_ids.map(async (glyph) => await getGlyph(glyph)))
-					).sort((a, b) => {
-						if (a.primary) return -1;
-						if (b.primary) return 1;
-						return a.id.localeCompare(b.id);
-					})}
+{#snippet representationsCard()}
+	<Card.Root>
+		<Card.Header>
+			<Card.Title class="text-2xl"><h2>Usage</h2></Card.Title>
+		</Card.Header>
+		<Card.Content class="grid grid-rows-2 gap-3">
+			{#if word.glyph_ids.length > 0}
+				{@const glyphs = (
+					await Promise.all(word.glyph_ids.map(async (glyph) => await getGlyph(glyph)))
+				).sort((a, b) => {
+					if (a.primary) return -1;
+					if (b.primary) return 1;
+					return a.id.localeCompare(b.id);
+				})}
 
-					<div class="grid">
-						<h3 class="text-xl font-medium">sitelen pona</h3>
-						<ul class="my-2 grid grid-cols-[repeat(auto-fill,minmax(--spacing(16),1fr))] gap-4">
-							{#each glyphs as glyph (glyph.id)}
-								<GlyphCard {glyph} {listFormat} />
-							{/each}
-						</ul>
-					</div>
-				{/if}
+				<div class="col-span-2 grid">
+					<h3 class="text-xl font-medium">sitelen pona</h3>
+					<ul class="my-2 grid grid-cols-[repeat(auto-fill,minmax(--spacing(16),1fr))] gap-4">
+						{#each glyphs as glyph (glyph.id)}
+							<GlyphCard {glyph} {listFormat} />
+						{/each}
+					</ul>
+				</div>
+			{/if}
 
-				{#if word.representations?.sitelen_sitelen}
-					<div class="grid">
-						<h3 class="text-xl font-medium">sitelen sitelen</h3>
-						<img
-							src={word.representations.sitelen_sitelen}
-							alt="{word.word} in sitelen sitelen format"
-							class="m-2 size-16 grayscale dark:invert"
-						/>
-					</div>
-				{/if}
+			{#if word.representations?.sitelen_sitelen}
+				<div class="grid">
+					<h3 class="text-xl font-medium">sitelen sitelen</h3>
+					<span class="font-sitelen-sitelen-open text-6xl">{word.word}</span>
+				</div>
+			{/if}
 
-				{#if word.representations?.ucsur}
-					<div class="grid">
-						<h3 class="flex items-center gap-2 text-xl font-medium">
-							<span>UCSUR Codepoint</span>
-							<a
-								class="transition-colorsx grid place-items-center rounded-md p-2 hover:bg-accent hover:text-accent-foreground"
-								href="https://www.kreativekorp.com/ucsur/charts/sitelen.html"
-								target="_blank"
-							>
-								<InfoIcon class="size-4 align-middle" />
-							</a>
-						</h3>
+			{#if word.representations?.ucsur}
+				<div class="flex flex-col">
+					<h3 class="flex items-center gap-2 text-xl font-medium">
+						<span>UCSUR Codepoint</span>
+						<a
+							class="transition-colorsx grid place-items-center rounded-md p-2 hover:bg-accent hover:text-accent-foreground"
+							href="https://www.kreativekorp.com/ucsur/charts/sitelen.html"
+							target="_blank"
+						>
+							<InfoIcon class="size-4 align-middle" />
+						</a>
+					</h3>
 
-						<p class="flex items-center gap-2">
-							{word.representations.ucsur}
-							<Button class="h-fit p-1" variant="ghost" onclick={copyCodepoint}>
-								<CopyIcon />
-							</Button>
-						</p>
-					</div>
-				{/if}
+					<p class="flex items-center gap-2">
+						{word.representations.ucsur}
+						<Button class="p-1" variant="ghost" size="icon" onclick={copyCodepoint}>
+							<CopyIcon />
+						</Button>
+					</p>
+				</div>
+			{/if}
 
-				<!-- TODO: find a good way to lazy load the word's luka pona sign by name -->
-				<!-- {#if word.luka_pona}
-					<div class="flex flex-col justify-center gap-2">
-						<h3 class="font-medium text-xl">luka pona</h3>
-						<video class="rounded-md" controls muted playsinline preload="metadata">
-							<source src={word.luka_pona.mp4} type="video/mp4" />
-							<source src={word.luka_pona.gif} type="video/gif" />
-						</video>
-					</div>
-				{/if} -->
-			</Card.Content>
-		</Card.Root>
-	{/if}
+			<!-- TODO: find a good way to lazy load the word's luka pona sign by name -->
+			<!-- {#if word.luka_pona}
+						<div class="flex flex-col justify-center gap-2">
+							<h3 class="font-medium text-xl">luka pona</h3>
+							<video class="rounded-md" controls muted playsinline preload="metadata">
+								<source src={word.luka_pona.mp4} type="video/mp4" />
+								<source src={word.luka_pona.gif} type="video/gif" />
+							</video>
+						</div>
+					{/if} -->
+		</Card.Content>
+	</Card.Root>
+{/snippet}
 
+{#snippet infoCard()}
 	<Card.Root>
 		<Card.Header>
 			<Card.Title class="text-2xl"><h2>More Info</h2></Card.Title>
 		</Card.Header>
-		<Card.Content class="grid grid-cols-4 grid-rows-[min-content_1fr] gap-x-6 gap-y-2">
+		<Card.Content class="grid grid-cols-2 md:grid-cols-4 grid-rows-[min-content_1fr] gap-x-6 gap-y-2">
 			{#if commentary}
-				<div class="row-span-2 grid grid-rows-subgrid place-items-start">
+				<div class="row-span-2 col-span-full grid grid-rows-subgrid place-items-start">
 					<h3 class="text-xl font-medium">Commentary</h3>
 					<p>{commentary}</p>
 				</div>
@@ -347,31 +359,28 @@
 							{word.book}
 						</li>
 					{/if}
+					{#if word.see_also.length > 0}
+						<li>
+							<span class="text-muted-foreground">See Also:</span>
+							<ul class="inline-flex flex-wrap items-center gap-2">
+								{#each word.see_also as other}
+									<li>
+										<Button href="/words/{other}" variant="outline" size="sm" class="px-2">
+											{other}
+										</Button>
+									</li>
+								{/each}
+							</ul>
+						</li>
+					{/if}
 				</ul>
 			</div>
-
-			{#if word.see_also.length > 0}
-				<div class="row-span-2 grid grid-rows-subgrid place-items-start">
-					<h3 class="text-xl font-medium">See also</h3>
-					<ul class="flex flex-wrap items-center gap-2">
-						{#each word.see_also as other}
-							<li>
-								<Button href="/words/{other}" variant="outline" size="sm">{other}</Button>
-							</li>
-						{/each}
-					</ul>
-				</div>
-			{/if}
 		</Card.Content>
 	</Card.Root>
-
-	{#if Object.keys(word.usage).length > 1}
-		{@render graphCard()}
-	{/if}
-</main>
+{/snippet}
 
 {#snippet graphCard()}
-	<Card.Root class="col-span-2">
+	<Card.Root class="md:col-span-2">
 		<Card.Header class="flex flex-row justify-between">
 			<Card.Title class="text-2xl"><h2>Usage Trend</h2></Card.Title>
 
@@ -385,7 +394,7 @@
 				<GraphIcon />
 			</Button>
 		</Card.Header>
-		<Card.Content class="min-h-100 p-4 px-8">
+		<Card.Content class="p-4 md:px-8">
 			<UsageGraph data={word.usage} />
 		</Card.Content>
 		{#if Object.keys(word.usage).some((date) => new Date(date) < new Date("2022-01-01"))}

@@ -3,6 +3,7 @@
 	import Navbar from "$lib/components/Navbar.svelte";
 	import { Button } from "$lib/components/ui/button";
 	import { lang } from "$lib/state.svelte";
+	import anchorPolyfill from "@oddbird/css-anchor-positioning/fn";
 	import { ModeWatcher } from "mode-watcher";
 	import { outerHeight, scrollY } from "svelte/reactivity/window";
 	import { fly } from "svelte/transition";
@@ -32,6 +33,12 @@
 		onRegisterError(error) {
 			console.log("SW registration error", error);
 		},
+	});
+
+	$effect(() => {
+		if (!("anchorName" in document.documentElement.style)) {
+			anchorPolyfill();
+		}
 	});
 </script>
 
