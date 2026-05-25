@@ -19,22 +19,8 @@ export const getSandboxGlyphs = query(async () => {
 		.then((r) => r.json());
 });
 
-export const getGlyph = query(z.string(), async (glyph) => {
-	const { fetch, locals } = getRequestEvent();
+export const getGlyph = query.batch(z.string(), async (_glyphs) => {
+	const list = { ...(await getGlyphs()), ...(await getSandboxGlyphs()) };
 
-	const res = await client({ fetch }).v2.glyphs[":glyph"].$get({
-		param: { glyph },
-		query: { lang: locals.locale.id },
-	});
-
-	if (res.ok) return (await res.json()).data;
-
-	const sandbox = await client({ fetch }).v2.sandbox.glyphs[":glyph"].$get({
-		param: { glyph },
-		query: { lang: locals.locale.id },
-	});
-
-	if (sandbox.ok) return (await sandbox.json()).data;
-
-	error(404, `Glyph ${glyph} not found`);
+	return (glyph) => list[glyph] ?? error(404, `Glyph ${glyph} not found`);
 });

@@ -25,30 +25,32 @@ export const getSandbox = query(localeSchema, async (locale) => {
 		.then((r) => r.json());
 });
 
-export const getWord = query(
+export const getWord = query.batch(
 	z.object({
 		word: z.string(),
 		locale: localeSchema,
 	}),
-	async ({ word, locale }) => {
-		const words = { ...(await getWords(locale)), ...(await getSandbox(locale)) };
+	async (_data) => {
+		const words = { ...(await getWords(_data[0].locale)), ...(await getSandbox(_data[0].locale)) };
 
-		const foundWord = words[word];
-		if (foundWord) return foundWord;
+		return ({ word }) => {
+			const foundWord = words[word];
+			if (foundWord) return foundWord;
 
-		const closest = Object.keys(words)
-			.map((key) => ({ key, distance: distance(key, word) }))
-			.filter(({ key, distance }) => distance < 3 || key.startsWith(word))
-			.sort((a, b) => a.distance - b.distance)
-			.slice(0, 15)
-			.map(({ key }) => key);
+			const closest = Object.keys(words)
+				.map((key) => ({ key, distance: distance(key, word) }))
+				.filter(({ key, distance }) => distance < 3 || key.startsWith(word))
+				.sort((a, b) => a.distance - b.distance)
+				.slice(0, 15)
+				.map(({ key }) => key);
 
-		// long queries should display less results
-		if (word.length >= 10) closest.pop();
+			// long queries should display less results
+			if (word.length >= 10) closest.pop();
 
-		// prioritize kijetesantakalu for long queries
-		if (word.length >= 15) closest.push("kijetesantakalu");
+			// prioritize kijetesantakalu for long queries
+			if (word.length >= 15) closest.push("kijetesantakalu");
 
-		error(404, { message: `Word ${word} not found!`, closest });
+			error(404, { message: `Word ${word} not found!`, closest });
+		};
 	},
 );
