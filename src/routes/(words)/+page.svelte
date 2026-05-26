@@ -1,14 +1,8 @@
 <script lang="ts">
 	import logo from "$lib/assets/icon-light.png?url";
-	import { wordSearch } from "$lib/remote/search.remote";
-	import {
-		categories,
-		displayMethod,
-		lang,
-		queryParamsSchema,
-		sortingDirection,
-		sortingMethod,
-	} from "$lib/state.svelte";
+	import { WordSearch } from "$lib/remote/search.svelte";
+	import { getWords } from "$lib/remote/words.remote";
+	import { categories, displayMethod, lang, queryParamsSchema } from "$lib/state.svelte";
 	import { useSearchParams } from "runed/kit";
 
 	import Entry from "../Entry.svelte";
@@ -16,16 +10,10 @@
 	const hasDisclaimer = new Date() < new Date("2025-09-12");
 
 	const params = useSearchParams(queryParamsSchema);
-
-	const sorted_filtered_dictionary = $derived(
-		await wordSearch({
-			locale: lang.current,
-			query: params.q,
-			categories: categories.current,
-			list: params.list,
-			sorting: sortingMethod.current,
-			direction: sortingDirection.current,
-		}),
+	const words = $derived(await getWords(lang.current));
+	const search = new WordSearch(
+		() => words,
+		() => params.q,
 	);
 </script>
 
@@ -56,7 +44,7 @@
 		class="group grid grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-4 data-[display=compact]:grid-cols-[min-content_1lh_min-content_1fr]"
 		data-display={displayMethod.current}
 	>
-		{#each sorted_filtered_dictionary as word (word.id)}
+		{#each search.results as word (word.id)}
 			<li class="grid grid-cols-subgrid group-data-[display=compact]:col-span-4">
 				<Entry {word} />
 			</li>

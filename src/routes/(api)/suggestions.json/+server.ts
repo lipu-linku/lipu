@@ -1,4 +1,5 @@
-import { wordSearch } from "$lib/remote/search.remote";
+import { searchWords } from "$lib/remote/search.svelte";
+import { getWords } from "$lib/remote/words.remote";
 import { json } from "@sveltejs/kit";
 
 import type { RequestHandler } from "./$types";
@@ -6,7 +7,8 @@ import type { RequestHandler } from "./$types";
 export const GET: RequestHandler = async ({ url, locals }) => {
 	const query = url.searchParams.get("q")!;
 
-	const results = await wordSearch({ locale: locals.locale.id, query });
+	const words = await getWords(locals.locale.id);
+	const results = searchWords(words, query);
 
 	return json([query, results.map((it) => it.id)], {
 		headers: {

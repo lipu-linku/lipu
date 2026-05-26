@@ -1,9 +1,9 @@
 <script lang="ts">
-	import SandboxSearch from "./SandboxSearch.svelte";
+	import WordsSearch from "$lib/components/WordsSearch.svelte";
 
 	const { children } = $props();
 </script>
 
-<SandboxSearch />
+<WordsSearch sandbox />
 
 {@render children()}

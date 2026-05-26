@@ -36,7 +36,10 @@
 	import SearchIcon from "~icons/lucide/search";
 	import ResetIcon from "~icons/lucide/undo-2";
 
-	const params = useSearchParams(queryParamsSchema);
+	let { sandbox = false } = $props();
+
+	const params = useSearchParams(queryParamsSchema, { debounce: 150 });
+	$effect(() => () => params.cleanup());
 
 	const focusSearch = (e: KeyboardEvent) => {
 		if (e.key === "/" && document.activeElement?.id !== "search-input") {
@@ -50,25 +53,16 @@
 	let hasCopied = $state(false);
 	const copyLinkWithParams = () => {
 		const url = new URL(page.url);
-		url.searchParams.set("categories", categoriesCodec.encode(categories.current) ?? "");
-		url.searchParams.set("sort", params.sort ?? "alphabetical");
-		url.searchParams.set("reverse", params.reverse ? "true" : "false");
 
 		navigator.clipboard.writeText(url.toString());
 		hasCopied = true;
 		setTimeout(() => (hasCopied = false), 2.5 * 1000);
 	};
 
-	const clearQuery = () => {
-		params.q = "";
-		params.set("categories", defaultCategories);
-	};
-
 	const resetOptions = () => {
-		clearQuery();
+		params.reset();
 		categories.current = defaultCategories;
 
-		page.url.searchParams.forEach((v, k, params) => params.delete(k, v));
 		pushState(page.url, {});
 	};
 
@@ -137,7 +131,7 @@
 </Sheet.Root>
 
 {#snippet inputField()}
-	<search class="flex items-center justify-stretch gap-2">
+	<search>
 		<Input
 			class="bg-background"
 			placeholder="o alasa e nimi"
@@ -146,18 +140,9 @@
 			required
 			autocapitalize="off"
 			autocomplete="off"
-			bind:value={() => params.q, (val) => (params.q = val)}
+			bind:value={params.q}
 			id="search-input"
 		/>
-		<Button
-			aria-label="submit search"
-			class="inline-flex"
-			type="submit"
-			variant="outline"
-			size="icon"
-		>
-			<SearchIcon />
-		</Button>
 	</search>
 {/snippet}
 
@@ -182,57 +167,61 @@
 				</Select.Content>
 			</Select.Root>
 
-			<fieldset class="flex flex-col gap-1">
-				<div class="grid gap-2">
-					{#each keys(categories.current) as category}
-						<div
-							class="flex items-center gap-2"
-							style:--category-color="var(--color-category-{category})"
-							style:--category-foreground-color="var(--color-category-foreground-{category})"
-						>
-							<Checkbox
-								class="
-									data-[state=checked]:border-(--category-color)/30 
-									data-[state=checked]:bg-(--category-color) not-dark:data-[category=core]:data-[state=checked]:text-primary
-									dark:data-[state=checked]:bg-(--category-color) dark:not-data-[category=core]:data-[state=checked]:text-primary"
-								bind:checked={categories.current[category]}
-								id="category-checkbox-{category}"
-								aria-labelledby="category-checkbox-{category}-label"
-								data-category={category}
-							/>
-							<Label
-								class="text-(--category-foreground-color)"
-								id="category-checkbox-{category}-label"
-								for="category-checkbox-{category}"
+			{#if !sandbox}
+				<fieldset class="flex flex-col gap-1">
+					<div class="grid gap-2">
+						{#each keys(categories.current) as category}
+							<div
+								class="flex items-center gap-2"
+								style:--category-color="var(--color-category-{category})"
+								style:--category-foreground-color="var(--color-category-foreground-{category})"
 							>
-								{category}
-							</Label>
-						</div>
-					{/each}
-				</div>
-			</fieldset>
+								<Checkbox
+									class="
+									data-[state=checked]:border-(--category-color)/30 
+									data-[state=checked]:bg-(--category-color)!
+									data-[state=checked]:data-[category=core]:text-primary!"
+									bind:checked={categories.current[category]}
+									id="category-checkbox-{category}"
+									aria-labelledby="category-checkbox-{category}-label"
+									data-category={category}
+								/>
+								<Label
+									class="text-(--category-foreground-color)"
+									id="category-checkbox-{category}-label"
+									for="category-checkbox-{category}"
+								>
+									{category}
+								</Label>
+							</div>
+						{/each}
+					</div>
+				</fieldset>
+			{/if}
 
-			<RadioGroup.Root
-				class={page.route.id === "/words/[word]" ? "pointer-events-none opacity-50" : undefined}
-				bind:value={writingSystem.current}
-			>
-				<div class="flex items-center gap-2">
-					<RadioGroup.Item
-						disabled={page.route.id === "/words/[word]"}
-						value="sitelen_pona"
-						id="sitelen-pona-radio"
-					/>
-					<Label for="sitelen-pona-radio">sitelen pona</Label>
-				</div>
-				<div class="flex items-center gap-2">
-					<RadioGroup.Item
-						disabled={page.route.id === "/words/[word]"}
-						value="sitelen_sitelen"
-						id="sitelen-sitelen-radio"
-					/>
-					<Label for="sitelen-sitelen-radio">sitelen sitelen</Label>
-				</div>
-			</RadioGroup.Root>
+			{#if !sandbox}
+				<RadioGroup.Root
+					class={page.route.id === "/words/[word]" ? "pointer-events-none opacity-50" : undefined}
+					bind:value={writingSystem.current}
+				>
+					<div class="flex items-center gap-2">
+						<RadioGroup.Item
+							disabled={page.route.id === "/words/[word]"}
+							value="sitelen_pona"
+							id="sitelen-pona-radio"
+						/>
+						<Label for="sitelen-pona-radio">sitelen pona</Label>
+					</div>
+					<div class="flex items-center gap-2">
+						<RadioGroup.Item
+							disabled={page.route.id === "/words/[word]"}
+							value="sitelen_sitelen"
+							id="sitelen-sitelen-radio"
+						/>
+						<Label for="sitelen-sitelen-radio">sitelen sitelen</Label>
+					</div>
+				</RadioGroup.Root>
+			{/if}
 
 			<div class="grid gap-2">
 				<Select.Root type="single" bind:value={sortingMethod.current}>

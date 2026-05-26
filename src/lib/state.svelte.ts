@@ -32,18 +32,6 @@ export const categoriesCodec = z.codec(
 
 export const queryParamsSchema = createSearchParamsSchema({
 	q: { type: "string", default: "" },
-	categories: {
-		type: "object",
-		objectType: {
-			core: true,
-			common: true,
-			uncommon: false,
-			obscure: false,
-		},
-	},
-	list: { type: "array", arrayType: "string", default: [] },
-	sort: { type: "string" },
-	reverse: { type: "boolean" },
 });
 
 export const displayMethod = new PersistedState<"grid" | "compact">("display_method", "grid");
