@@ -95,7 +95,7 @@ export class WordSearch {
 
 	results = $derived.by(() => {
 		const q = normalizeQuery(this.#q());
-		if (q === "") return [...this.#filtered].sort(sortWords);
+		if (q === "") return this.#filtered.toSorted(sortWords);
 
 		const wordsMap = this.#words();
 		return this.#index
