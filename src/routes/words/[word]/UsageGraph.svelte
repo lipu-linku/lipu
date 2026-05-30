@@ -16,6 +16,8 @@
 		return "sandbox";
 	};
 
+	const categoryColor = (v: number) => `var(--color-category-${usageToCategory(v)})`;
+
 	const plots = $derived(
 		Object.entries(data).map(([date, v]) => ({
 			date: new Date(date),
@@ -23,6 +25,17 @@
 			color: `var(--color-${usageToCategory(v)})`,
 		})),
 	);
+
+	const segments = $derived(
+		plots.slice(0, -1).map((from, i) => {
+			const to = plots[i + 1];
+			return { from, to, fromColor: categoryColor(from.value), toColor: categoryColor(to.value) };
+		}),
+	);
+
+	// Intermediate stops to approximate an oklch gradient inside an SVG linearGradient
+	// (SVG gradients don't natively interpolate in oklch, so we precompute stops via color-mix).
+	const gradientStops = Array.from({ length: 11 }, (_, k) => k / 10);
 
 	const config = {
 		usage: { label: "Usage", color: "" },
@@ -65,11 +78,48 @@
 		{#snippet belowMarks()}
 			<Highlight lines={{ class: "stroke-muted" }} />
 		{/snippet}
+
+		{#snippet marks({ context })}
+			<defs>
+				{#each segments as seg, i (i)}
+					{@const x1 = context.xScale(seg.from.date)}
+					{@const y1 = context.yScale(seg.from.value)}
+					{@const x2 = context.xScale(seg.to.date)}
+					{@const y2 = context.yScale(seg.to.value)}
+					<linearGradient
+						id="usage-gradient-{i}"
+						gradientUnits="userSpaceOnUse"
+						{x1}
+						{y1}
+						{x2}
+						{y2}
+					>
+						{#each gradientStops as t}
+							<stop
+								offset="{t * 100}%"
+								stop-color="color-mix(in oklch, {seg.fromColor}, {seg.toColor} {t * 100}%)"
+							/>
+						{/each}
+					</linearGradient>
+				{/each}
+			</defs>
+			{#each segments as seg, i (i)}
+				<line
+					x1={context.xScale(seg.from.date)}
+					y1={context.yScale(seg.from.value)}
+					x2={context.xScale(seg.to.date)}
+					y2={context.yScale(seg.to.value)}
+					stroke="url(#usage-gradient-{i})"
+					stroke-width="2"
+					stroke-linecap="round"
+				/>
+			{/each}
+		{/snippet}
 		{#snippet tooltip()}
 			<Chart.Tooltip nameKey="usage" indicator="line">
 				{#snippet formatter({ item, value })}
-					{@const dateLabel = // @ts-expect-error
-						item.label?.toLocaleDateString(lang.current, { month: "long", year: "numeric" })}
+					{const dateLabel = // @ts-expect-error
+						$derived(item.label?.toLocaleDateString(lang.current, { month: "long", year: "numeric" }))}
 					<div
 						class="h-full w-1 shrink-0 rounded-xs border-3 border-(--color-border) bg-(--color-bg)"
 						style:--color-bg={item.payload?.color}
