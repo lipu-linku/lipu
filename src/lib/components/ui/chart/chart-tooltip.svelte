@@ -87,7 +87,7 @@
 <TooltipPrimitive.Root variant="none">
 	<div
 		class={cn(
-			"grid min-w-[9rem] items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl",
+			"grid min-w-36 items-start gap-1.5 rounded-lg border border-border/50 bg-background px-2.5 py-1.5 text-xs shadow-xl",
 			className,
 		)}
 		{...restProps}
@@ -97,9 +97,9 @@
 		{/if}
 		<div class="grid gap-1.5">
 			{#each tooltipCtx.payload as item, i (item.key + i)}
-				{@const key = `${nameKey || item.key || item.name || "value"}`}
-				{@const itemConfig = getPayloadConfigFromPayload(chart.config, item, key)}
-				{@const indicatorColor = color || item.payload?.color || item.color}
+				{const key = $derived(`${nameKey || item.key || item.name || "value"}`)}
+				{const itemConfig = $derived(getPayloadConfigFromPayload(chart.config, item, key))}
+				{const indicatorColor = $derived(color || item.payload?.color || item.color)}
 				<div
 					class={cn(
 						"flex w-full flex-wrap items-stretch gap-2 [&>svg]:size-2.5 [&>svg]:text-muted-foreground",

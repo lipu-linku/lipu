@@ -163,7 +163,7 @@
 
 		<div class="grid grid-cols-5 place-content-center gap-3">
 			{#each selected as word}
-				{@const [id, glyph] = Array.isArray(word) ? word : [word, word]}
+				{const [id, glyph] = Array.isArray(word) ? word : [word, word]}
 				<Button class="h-fit flex-col gap-1" href="/words/{id}" variant="ghost">
 					<span>{id}</span>
 					<span class="font-sitelen-seli-kiwen text-3xl">{glyph}</span>

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import logo from "$lib/assets/icon-light.png?url";
-	import { WordSearch } from "$lib/remote/search.svelte";
+	import { WordSearch } from "$lib/search.svelte";
 	import { getSandbox } from "$lib/remote/words.remote";
 	import { displayMethod, lang, queryParamsSchema } from "$lib/state.svelte";
 	import { useSearchParams } from "runed/kit";

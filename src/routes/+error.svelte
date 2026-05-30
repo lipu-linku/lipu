@@ -8,10 +8,9 @@
 	<p class="text-xl">{page.error?.message}</p>
 
 	{#if page.error?.closest}
-		{@const closest = page.error.closest}
 		<p>Did you mean:</p>
 		<ul class="flex flex-wrap items-center justify-center gap-2">
-			{#each closest as word}
+			{#each page.error.closest as word}
 				<li>
 					<Button size="sm" variant="outline" href="/words/{word}">{word}</Button>
 				</li>

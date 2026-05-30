@@ -149,9 +149,9 @@
 			</div>
 
 			{#if word.ku_data}
-				{@const kuString = Object.entries(word.ku_data).map(
+				{const kuString = $derived(Object.entries(word.ku_data).map(
 					([def, usage]) => def + usageToIndex(usage),
-				)}
+				))}
 				<div class="flex flex-col justify-center gap-2">
 					<h3 class="flex items-center gap-2 text-xl font-medium">
 						ku definitions
@@ -178,7 +178,7 @@
 					<h3 class="text-xl font-medium">pu definition</h3>
 					<ul>
 						{#each pu_verbatim.split("\n") as line}
-							{@const [partOfSpeech, ...definition] = line.split(" ")}
+							{const [partOfSpeech, ...definition] = $derived(line.split(" "))}
 
 							<li>
 								<span class="text-muted-foreground">{partOfSpeech}</span>
@@ -190,7 +190,7 @@
 			{/if}
 
 			{#if word.resources?.lipamanka_semantic}
-				{@const [url, id] = word.resources.lipamanka_semantic.split("#")}
+				{const [url, id] = $derived(word.resources.lipamanka_semantic.split("#"))}
 				{#await fetch(url)
 					.then((r) => r.text())
 					.then((text) => {
@@ -239,13 +239,13 @@
 		</Card.Header>
 		<Card.Content class="grid grid-rows-2 gap-3">
 			{#if word.glyph_ids.length > 0}
-				{@const glyphs = (
+				{const glyphs = $derived((
 					await Promise.all(word.glyph_ids.map(async (glyph) => await getGlyph(glyph)))
 				).sort((a, b) => {
 					if (a.primary) return -1;
 					if (b.primary) return 1;
 					return a.id.localeCompare(b.id);
-				})}
+				}))}
 
 				<div class="col-span-2 grid">
 					<h3 class="text-xl font-medium">sitelen pona</h3>

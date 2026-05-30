@@ -3,3 +3,5 @@ allowBuilds:
   sharp: true
   workerd: true
   '@tailwindcss/oxide': true
+minimumReleaseAgeExclude:
+  - svelte@5.56.0
