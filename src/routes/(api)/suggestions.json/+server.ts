@@ -1,4 +1,4 @@
-import { searchWords } from "$lib/remote/search.svelte";
+import { searchWords } from "$lib/search.svelte";
 import { getWords } from "$lib/remote/words.remote";
 import { json } from "@sveltejs/kit";
 

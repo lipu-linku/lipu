@@ -1,6 +1,6 @@
 <script lang="ts">
 	import logo from "$lib/assets/icon-light.png?url";
-	import { WordSearch } from "$lib/remote/search.svelte";
+	import { WordSearch } from "$lib/search.svelte";
 	import { getWords } from "$lib/remote/words.remote";
 	import { categories, displayMethod, lang, queryParamsSchema } from "$lib/state.svelte";
 	import { useSearchParams } from "runed/kit";
@@ -41,7 +41,7 @@
 	{/if}
 
 	<ul
-		class="group grid grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-4 data-[display=compact]:grid-cols-[min-content_1lh_min-content_1fr]"
+		class="group grid grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-2 md:gap-4 data-[display=compact]:grid-cols-[min-content_min-content_min-content_1fr]"
 		data-display={displayMethod.current}
 	>
 		{#each search.results as word (word.id)}

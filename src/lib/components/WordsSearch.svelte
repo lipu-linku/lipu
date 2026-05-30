@@ -6,14 +6,11 @@
 	import { Checkbox } from "$lib/components/ui/checkbox";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
-	import * as RadioGroup from "$lib/components/ui/radio-group";
 	import * as Select from "$lib/components/ui/select";
-	import * as Sheet from "$lib/components/ui/sheet";
+	import Switch from "$lib/components/ui/switch/switch.svelte";
 	import {
 		categories,
-		categoriesCodec,
 		defaultCategories,
-		displayMethod,
 		etymologiesEnabled,
 		queryParamsSchema,
 		sortingDirection,
@@ -29,12 +26,9 @@
 	import NumberAscendingIcon from "~icons/lucide/arrow-up-1-0";
 	import AscendingIcon from "~icons/lucide/arrow-up-narrow-wide";
 	import AlphabetAscendingIcon from "~icons/lucide/arrow-up-z-a";
-	import CheckIcon from "~icons/lucide/check";
-	import GridIcon from "~icons/lucide/layout-grid";
-	import LinkIcon from "~icons/lucide/link";
-	import ListIcon from "~icons/lucide/list";
-	import SearchIcon from "~icons/lucide/search";
+	import SettingsIcon from "~icons/lucide/settings-2";
 	import ResetIcon from "~icons/lucide/undo-2";
+	import CloseIcon from "~icons/lucide/x";
 
 	let { sandbox = false } = $props();
 
@@ -49,16 +43,6 @@
 			input?.select();
 		}
 	};
-
-	let hasCopied = $state(false);
-	const copyLinkWithParams = () => {
-		const url = new URL(page.url);
-
-		navigator.clipboard.writeText(url.toString());
-		hasCopied = true;
-		setTimeout(() => (hasCopied = false), 2.5 * 1000);
-	};
-
 	const resetOptions = () => {
 		params.reset();
 		categories.current = defaultCategories;
@@ -93,191 +77,169 @@
 		descending: { label: "Descending", icon: DescendingIcon },
 	} as const satisfies Record<typeof sortingDirection.current, { label: string; icon: Component }>;
 	const currentSortDir = $derived(sortDirectionOptions[sortingDirection.current]);
-
-	const displayOptions = {
-		grid: { label: "Grid", icon: GridIcon },
-		compact: { label: "Compact", icon: ListIcon },
-	} as const satisfies Record<typeof displayMethod.current, { label: string; icon: Component }>;
-	const currentDisplay = $derived(displayOptions[displayMethod.current]);
 </script>
 
 <svelte:window onkeydown={focusSearch} />
 
-<aside class="sticky inset-e-0 inset-bs-0 col-3 row-1 hidden h-dvh px-2 py-4 md:block">
+<search class="sticky inset-e-0 inset-bs-0 col-3 row-1 hidden h-dvh px-2 py-4 md:block">
 	<form action="/" class="flex h-full flex-col gap-4 px-2" role="search">
 		{@render inputField()}
 
-		{@render filters()}
+		<Card.Root>
+			<Card.Header>
+				<Card.Title>Search Options</Card.Title>
+			</Card.Header>
+
+			<Card.Content class="flex flex-col gap-4">
+				{@render filters()}
+			</Card.Content>
+
+			<Card.Footer class="grid grid-rows-2 gap-2">
+				{@render actionButtons()}
+			</Card.Footer>
+		</Card.Root>
 	</form>
-</aside>
+</search>
 
-<Sheet.Root>
-	<Sheet.Trigger
-		class={cn(
-			buttonVariants({ variant: "secondary", size: "icon" }),
-			"fixed inset-s-18 inset-be-4 z-20 size-12 shadow-2xl md:hidden",
-		)}
+<search class="fixed inset-s-18 inset-be-4 z-20 flex items-center gap-2 md:hidden">
+	{@render inputField("h-12 dark:bg-secondary")}
+
+	<Button
+		command="show-modal"
+		commandfor="words-search-options"
+		variant="secondary"
+		size="icon"
+		class="size-12 shadow-2xl"
 	>
-		<SearchIcon class="size-6" />
-	</Sheet.Trigger>
+		<SettingsIcon class="size-6" />
+	</Button>
 
-	<Sheet.Content side="bottom" class="p-4 pt-12">
-		<form class="flex h-full flex-col gap-4 px-2" role="search">
-			{@render inputField()}
-
+	<dialog
+		id="words-search-options"
+		closedby="any"
+		class="fixed inset-bs-[unset] w-full max-w-full translate-0 flex-col gap-2 border-bs bg-background/80 p-4 backdrop-blur-lg transition-[translate,display,overlay] duration-200 open:flex open:translate-0 open:starting:translate-y-full"
+	>
+		<header class="flex items-center justify-between">
+			<h1 class="text-xl">Search Options</h1>
+			<Button command="close" commandfor="words-search-options" variant="ghost" size="icon"
+				><CloseIcon /></Button
+			>
+		</header>
+		<form class="flex h-full flex-col gap-4 pbs-0" role="search">
 			{@render filters()}
+			{@render actionButtons()}
 		</form>
-	</Sheet.Content>
-</Sheet.Root>
+	</dialog>
+</search>
 
-{#snippet inputField()}
-	<search>
-		<Input
-			class="bg-background"
-			placeholder="o alasa e nimi"
-			type="search"
-			name="q"
-			required
-			autocapitalize="off"
-			autocomplete="off"
-			bind:value={params.q}
-			id="search-input"
-		/>
-	</search>
+{#snippet inputField(className?: string)}
+	<Input
+		class={cn("bg-background", className)}
+		placeholder="o alasa e nimi"
+		type="search"
+		name="q"
+		required
+		autocapitalize="off"
+		autocomplete="off"
+		bind:value={params.q}
+		id="search-input"
+	/>
 {/snippet}
 
 {#snippet filters()}
-	<Card.Root>
-		<Card.Header>
-			<Card.Title>Search Options</Card.Title>
-		</Card.Header>
-
-		<Card.Content class="flex flex-col gap-4">
-			<Select.Root type="single" bind:value={displayMethod.current}>
-				<Select.Trigger
-					class={[buttonVariants({ variant: "outline", size: "sm" }), "w-full justify-between"]}
-				>
-					<currentDisplay.icon />
-					{currentDisplay.label}
-				</Select.Trigger>
-				<Select.Content>
-					{#each Object.entries(displayOptions) as [method, { label, icon: Icon }] (method)}
-						<Select.Item value={method}><Icon /> {label}</Select.Item>
-					{/each}
-				</Select.Content>
-			</Select.Root>
-
-			{#if !sandbox}
-				<fieldset class="flex flex-col gap-1">
-					<div class="grid gap-2">
-						{#each keys(categories.current) as category}
-							<div
-								class="flex items-center gap-2"
-								style:--category-color="var(--color-category-{category})"
-								style:--category-foreground-color="var(--color-category-foreground-{category})"
-							>
-								<Checkbox
-									class="
+	{#if !sandbox}
+		<fieldset class="flex flex-col gap-1">
+			<div class="grid gap-2">
+				{#each keys(categories.current) as category}
+					<div
+						class="flex items-center gap-2"
+						style:--category-color="var(--color-category-{category})"
+						style:--category-foreground-color="var(--color-category-foreground-{category})"
+					>
+						<Checkbox
+							class="
 									data-[state=checked]:border-(--category-color)/30 
 									data-[state=checked]:bg-(--category-color)!
 									data-[state=checked]:data-[category=core]:text-primary!"
-									bind:checked={categories.current[category]}
-									id="category-checkbox-{category}"
-									aria-labelledby="category-checkbox-{category}-label"
-									data-category={category}
-								/>
-								<Label
-									class="text-(--category-foreground-color)"
-									id="category-checkbox-{category}-label"
-									for="category-checkbox-{category}"
-								>
-									{category}
-								</Label>
-							</div>
-						{/each}
-					</div>
-				</fieldset>
-			{/if}
-
-			{#if !sandbox}
-				<RadioGroup.Root
-					class={page.route.id === "/words/[word]" ? "pointer-events-none opacity-50" : undefined}
-					bind:value={writingSystem.current}
-				>
-					<div class="flex items-center gap-2">
-						<RadioGroup.Item
-							disabled={page.route.id === "/words/[word]"}
-							value="sitelen_pona"
-							id="sitelen-pona-radio"
+							bind:checked={categories.current[category]}
+							id="category-checkbox-{category}"
+							aria-labelledby="category-checkbox-{category}-label"
+							data-category={category}
 						/>
-						<Label for="sitelen-pona-radio">sitelen pona</Label>
+						<Label
+							class="text-(--category-foreground-color)"
+							id="category-checkbox-{category}-label"
+							for="category-checkbox-{category}"
+						>
+							{category}
+						</Label>
 					</div>
-					<div class="flex items-center gap-2">
-						<RadioGroup.Item
-							disabled={page.route.id === "/words/[word]"}
-							value="sitelen_sitelen"
-							id="sitelen-sitelen-radio"
-						/>
-						<Label for="sitelen-sitelen-radio">sitelen sitelen</Label>
-					</div>
-				</RadioGroup.Root>
-			{/if}
-
-			<div class="grid gap-2">
-				<Select.Root type="single" bind:value={sortingMethod.current}>
-					<Select.Trigger
-						class={[buttonVariants({ variant: "outline", size: "sm" }), "w-full justify-between"]}
-					>
-						<CurrentSortIcon />
-						{sortingOptions[sortingMethod.current].label}
-					</Select.Trigger>
-					<Select.Content>
-						{#each Object.entries(sortingOptions) as [method, { label, ascending_icon, descending_icon }] (method)}
-							{@const Icon =
-								sortingDirection.current === "ascending" ? ascending_icon : descending_icon}
-							<Select.Item value={method}><Icon /> {label}</Select.Item>
-						{/each}
-					</Select.Content>
-				</Select.Root>
-				<Select.Root type="single" bind:value={sortingDirection.current}>
-					<Select.Trigger
-						class={[buttonVariants({ variant: "outline", size: "sm" }), "w-full justify-between"]}
-					>
-						<currentSortDir.icon />
-						{currentSortDir.label}
-					</Select.Trigger>
-					<Select.Content>
-						{#each Object.entries(sortDirectionOptions) as [direction, { label, icon: Icon }] (direction)}
-							<Select.Item value={direction}><Icon /> {label}</Select.Item>
-						{/each}
-					</Select.Content>
-				</Select.Root>
+				{/each}
 			</div>
+		</fieldset>
+	{/if}
 
-			<div class="flex items-center gap-2">
-				<Checkbox
-					bind:checked={etymologiesEnabled.current}
-					id="show-etymologies-checkbox"
-					aria-labelledby="show-etymologies-label"
-				/>
-				<Label id="show-etymologies-label" for="show-etymologies-checkbox">Show Etymologies</Label>
-			</div>
-		</Card.Content>
+	{#if !sandbox}
+		<div class="flex items-center justify-center gap-4">
+			<Label for="writing-system-switch" class="font-sitelen-seli-kiwen text-3xl"
+				>sitelen+pona</Label
+			>
+			<Switch
+				id="writing-system-switch"
+				bind:checked={
+					() => writingSystem.current === "sitelen_sitelen",
+					(val) => (writingSystem.current = val ? "sitelen_sitelen" : "sitelen_pona")
+				}
+			/>
+			<Label for="writing-system-switch" class="font-sitelen-sitelen-open text-3xl"
+				>sitelen suwi</Label
+			>
+		</div>
+	{/if}
 
-		<Card.Footer class="grid grid-rows-2 gap-2">
-			<Button class="gap-0" variant="outline" size="sm" onclick={copyLinkWithParams}>
-				{#snippet children()}
-					{@const Icon = !hasCopied ? LinkIcon : CheckIcon}
-					<Icon aria-hidden class="mr-2 inline size-4" />
-					<span>Copy Permalink</span>
-				{/snippet}
-			</Button>
-			<Button class="gap-0" variant="outline" size="sm" onclick={resetOptions}>
-				<ResetIcon aria-hidden class="mr-2 inline size-4" />
-				<span>Reset Options</span>
-			</Button>
-		</Card.Footer>
+	<div class="grid gap-2">
+		<Select.Root type="single" bind:value={sortingMethod.current}>
+			<Select.Trigger
+				class={[buttonVariants({ variant: "outline", size: "sm" }), "w-full justify-between"]}
+			>
+				<CurrentSortIcon />
+				{sortingOptions[sortingMethod.current].label}
+			</Select.Trigger>
+			<Select.Content>
+				{#each Object.entries(sortingOptions) as [method, { label, ascending_icon, descending_icon }] (method)}
+					{const Icon = $derived(sortingDirection.current === "ascending" ? ascending_icon : descending_icon)}
+					<Select.Item value={method}><Icon /> {label}</Select.Item>
+				{/each}
+			</Select.Content>
+		</Select.Root>
+		<Select.Root type="single" bind:value={sortingDirection.current}>
+			<Select.Trigger
+				class={[buttonVariants({ variant: "outline", size: "sm" }), "w-full justify-between"]}
+			>
+				<currentSortDir.icon />
+				{currentSortDir.label}
+			</Select.Trigger>
+			<Select.Content>
+				{#each Object.entries(sortDirectionOptions) as [direction, { label, icon: Icon }] (direction)}
+					<Select.Item value={direction}><Icon /> {label}</Select.Item>
+				{/each}
+			</Select.Content>
+		</Select.Root>
+	</div>
 
-		<input type="hidden" name="categories" value={categoriesCodec.encode(categories.current)} />
-	</Card.Root>
+	<div class="flex items-center gap-2">
+		<Switch
+			bind:checked={etymologiesEnabled.current}
+			id="show-etymologies-checkbox"
+			aria-labelledby="show-etymologies-label"
+		/>
+		<Label id="show-etymologies-label" for="show-etymologies-checkbox">Etymologies</Label>
+	</div>
+{/snippet}
+
+{#snippet actionButtons()}
+	<Button class="gap-0" variant="outline" size="sm" onclick={resetOptions}>
+		<ResetIcon aria-hidden class="mr-2 inline size-4" />
+		<span>Reset</span>
+	</Button>
 {/snippet}

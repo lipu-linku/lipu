@@ -72,7 +72,7 @@ export const sortingDirection = new PersistedState<"descending" | "ascending">(
 	"ascending",
 );
 
-export const etymologiesEnabled = new PersistedState("etymologies_enabled", true);
+export const etymologiesEnabled = new PersistedState("etymologies_enabled", false);
 
 export const fontSentence = new PersistedState(
 	"font_sentence",

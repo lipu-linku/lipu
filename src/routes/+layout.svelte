@@ -56,7 +56,7 @@
 </svelte:head>
 
 <div
-	class="mx-auto flex max-w-[min(2000px,100dvw)] gap-2 md:grid md:grid-cols-[min-content_1fr_min-content] md:grid-rows-1 md:justify-center"
+	class="mx-auto flex max-w-[min(2000px,100dvw)] gap-2 md:grid md:grid-cols-[min-content_1fr_fit-content(100%)] md:grid-rows-1 md:justify-center"
 >
 	<Navbar />
 

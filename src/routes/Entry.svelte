@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { resolve } from "$app/paths";
 	import * as Card from "$lib/components/ui/card";
-	import { getGlyph } from "$lib/remote/glyphs.remote";
 	import { displayMethod, etymologiesEnabled, writingSystem } from "$lib/state.svelte";
 	import type { Word } from "@kulupu-linku/sona";
 
@@ -10,23 +9,8 @@
 	}
 
 	const { word }: Props = $props();
-	const glyph = $derived(word.primary_glyph_id ? await getGlyph(word.primary_glyph_id) : undefined);
-
 	const { definition, etymology } = $derived(word.translations);
 	const usageScore = $derived(Object.values(word.usage).at(-1) ?? 0);
-
-	const bookName = $derived.by(() => {
-		switch (word.book) {
-			case "pu":
-				return "nimi pu";
-			case "ku suli":
-				return "nimi ku suli";
-			case "ku lili":
-				return "nimi ku pi suli ala";
-			case "none":
-				return undefined;
-		}
-	});
 </script>
 
 {#if displayMethod.current === "grid"}
@@ -45,48 +29,35 @@
 	>
 		<Card.Header class="flex w-full items-end justify-between pe-4">
 			<Card.Title class="text-2xl leading-8">{word.word}</Card.Title>
-			<div class="flex flex-wrap items-center justify-end">
-				{#if writingSystem.current === "sitelen_pona" && glyph}
-					<img
-						src={glyph.svg}
-						alt="primary glyph for {word.word}"
-						class="size-10 dark:invert"
-						loading="lazy"
-					/>
-				{:else if writingSystem.current === "sitelen_sitelen" && word.representations?.sitelen_sitelen}
-					<span class="font-sitelen-sitelen-open">{word.word}</span>
-				{/if}
-			</div>
+			{@render glyph()}
 		</Card.Header>
 
-		<Card.Content class="flex h-full flex-col justify-end">
+		<Card.Content class="flex h-full flex-col justify-end gap-1">
 			<Card.Description
 				class="h-full text-[1rem] text-balance text-foreground supports-[text-wrap:pretty]:text-pretty"
 			>
 				{definition}
 			</Card.Description>
-			{#if word.see_also.length > 0}
-				<Card.Description>
-					See also: {word.see_also.join(", ")}
-				</Card.Description>
-			{/if}
-			<Card.Description>
-				{#if word.usage_category !== "sandbox"}
-					<span class="text-(--category-color-foreground)">{word.usage_category}</span> · {word.book}
-					·
-					<span title="{usageScore}% of toki pona speakers will recognize this word">
-						{usageScore}%
-					</span>
-				{:else}
-					{[
-						word.author.length > 0 ? word.author.join(", ") : undefined,
-						word.creation_date,
-						bookName,
-					]
-						.filter(Boolean)
-						.join(" · ")}
+
+			<Card.Description class="flex items-center justify-between">
+				<span>
+					{#if word.usage_category !== "sandbox"}
+						<span class="text-(--category-color-foreground)">{word.usage_category}</span> · {word.book}
+						·
+						<span title="{usageScore}% of toki pona speakers will recognize this word">
+							{usageScore}%
+						</span>
+					{:else}
+						{[word.author.length > 0 ? word.author.join(", ") : undefined, word.creation_date]
+							.filter(Boolean)
+							.join(" · ")}
+					{/if}
+				</span>
+				{#if word.see_also.length > 0}
+					<span class="self-end">See: {word.see_also.join(", ")}</span>
 				{/if}
 			</Card.Description>
+
 			{#if etymologiesEnabled.current}
 				<Card.Description>
 					<span class="text-start">
@@ -105,20 +76,7 @@
 			{word.word}
 		</a>
 
-		{#if (writingSystem.current === "sitelen_pona" && word.primary_glyph_id) || (writingSystem.current === "sitelen_sitelen" && word.representations?.sitelen_sitelen)}
-			<span
-				class={[
-					"col-2 text-3xl [text-box:trim-both_cap_alphabetic]",
-					writingSystem.current === "sitelen_pona" &&
-						word.primary_glyph_id &&
-						"font-sitelen-seli-kiwen",
-					writingSystem.current === "sitelen_sitelen" &&
-						word.representations?.sitelen_sitelen &&
-						"font-sitelen-sitelen-open",
-				]}
-				>{word.word}
-			</span>
-		{/if}
+		{@render glyph()}
 
 		<span
 			class="col-3 text-(--category-color)"
@@ -130,3 +88,20 @@
 		<span class="col-4">{word.translations.definition}</span>
 	</div>
 {/if}
+
+{#snippet glyph()}
+	{#if (writingSystem.current === "sitelen_pona" && word.primary_glyph_id) || (writingSystem.current === "sitelen_sitelen" && word.representations?.sitelen_sitelen)}
+		<span
+			class={[
+				"col-2 text-4xl [text-box:trim-both_cap_alphabetic]",
+				writingSystem.current === "sitelen_pona" &&
+					word.primary_glyph_id &&
+					"font-sitelen-seli-kiwen",
+				writingSystem.current === "sitelen_sitelen" &&
+					word.representations?.sitelen_sitelen &&
+					"font-sitelen-sitelen-open",
+			]}
+			>{word.word}
+		</span>
+	{/if}
+{/snippet}
