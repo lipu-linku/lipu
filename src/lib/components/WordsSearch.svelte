@@ -19,7 +19,7 @@
 	} from "$lib/state.svelte";
 	import { cn, keys } from "$lib/utils";
 	import { useSearchParams } from "runed/kit";
-	import type { Component } from "svelte";
+	import { onDestroy, type Component } from "svelte";
 	import NumberDescendingIcon from "~icons/lucide/arrow-down-1-0";
 	import DescendingIcon from "~icons/lucide/arrow-down-wide-narrow";
 	import AlphabetDescendingIcon from "~icons/lucide/arrow-down-z-a";
@@ -30,10 +30,12 @@
 	import ResetIcon from "~icons/lucide/undo-2";
 	import CloseIcon from "~icons/lucide/x";
 
+	import { Toggle } from "./ui/toggle";
+
 	let { sandbox = false } = $props();
 
 	const params = useSearchParams(queryParamsSchema, { debounce: 150 });
-	$effect(() => () => params.cleanup());
+	onDestroy(() => params.cleanup());
 
 	const focusSearch = (e: KeyboardEvent) => {
 		if (e.key === "/" && document.activeElement?.id !== "search-input") {
@@ -92,11 +94,9 @@
 
 			<Card.Content class="flex flex-col gap-4">
 				{@render filters()}
-			</Card.Content>
 
-			<Card.Footer class="grid grid-rows-2 gap-2">
 				{@render actionButtons()}
-			</Card.Footer>
+			</Card.Content>
 		</Card.Root>
 	</form>
 </search>
@@ -148,39 +148,32 @@
 
 {#snippet filters()}
 	{#if !sandbox}
-		<fieldset class="flex flex-col gap-1">
-			<div class="grid gap-2">
-				{#each keys(categories.current) as category}
-					<div
-						class="flex items-center gap-2"
-						style:--category-color="var(--color-category-{category})"
-						style:--category-foreground-color="var(--color-category-foreground-{category})"
+		<fieldset class="grid grid-cols-2 gap-2">
+			{#each keys(categories.current) as category}
+				<div
+					class="flex items-center gap-2"
+					style:--category-color="var(--color-category-{category})"
+					style:--category-foreground-color="var(--color-category-foreground-{category})"
+				>
+					<Toggle
+						class="
+							w-full
+							data-[state=on]:border-(--category-color)/30
+							data-[state=on]:bg-(--category-color)!
+							data-[state=on]:data-[category=core]:text-primary!"
+						variant="outline"
+						bind:pressed={categories.current[category]}
+						data-category={category}
 					>
-						<Checkbox
-							class="
-									data-[state=checked]:border-(--category-color)/30 
-									data-[state=checked]:bg-(--category-color)!
-									data-[state=checked]:data-[category=core]:text-primary!"
-							bind:checked={categories.current[category]}
-							id="category-checkbox-{category}"
-							aria-labelledby="category-checkbox-{category}-label"
-							data-category={category}
-						/>
-						<Label
-							class="text-(--category-foreground-color)"
-							id="category-checkbox-{category}-label"
-							for="category-checkbox-{category}"
-						>
-							{category}
-						</Label>
-					</div>
-				{/each}
-			</div>
+						{category}
+					</Toggle>
+				</div>
+			{/each}
 		</fieldset>
 	{/if}
 
 	{#if !sandbox}
-		<div class="flex items-center justify-center gap-4">
+		<div class="flex flex-wrap items-center justify-center gap-4">
 			<Label for="writing-system-switch" class="font-sitelen-seli-kiwen text-3xl"
 				>sitelen+pona</Label
 			>
@@ -207,8 +200,10 @@
 			</Select.Trigger>
 			<Select.Content>
 				{#each Object.entries(sortingOptions) as [method, { label, ascending_icon, descending_icon }] (method)}
-					{const Icon = $derived(sortingDirection.current === "ascending" ? ascending_icon : descending_icon)}
-					<Select.Item value={method}><Icon /> {label}</Select.Item>
+					{const Icon = $derived(
+						sortingDirection.current === "ascending" ? ascending_icon : descending_icon,
+					)}
+					<Select.Item value={method} {label}><Icon /> {label}</Select.Item>
 				{/each}
 			</Select.Content>
 		</Select.Root>
@@ -221,13 +216,13 @@
 			</Select.Trigger>
 			<Select.Content>
 				{#each Object.entries(sortDirectionOptions) as [direction, { label, icon: Icon }] (direction)}
-					<Select.Item value={direction}><Icon /> {label}</Select.Item>
+					<Select.Item value={direction} {label}><Icon /> {label}</Select.Item>
 				{/each}
 			</Select.Content>
 		</Select.Root>
 	</div>
 
-	<div class="flex items-center gap-2">
+	<div class="flex items-center justify-center gap-2">
 		<Switch
 			bind:checked={etymologiesEnabled.current}
 			id="show-etymologies-checkbox"

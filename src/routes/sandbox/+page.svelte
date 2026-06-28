@@ -1,12 +1,13 @@
 <script lang="ts">
 	import logo from "$lib/assets/icon-light.png?url";
-	import { WordSearch } from "$lib/search.svelte";
 	import { getSandbox } from "$lib/remote/words.remote";
-	import { displayMethod, lang, queryParamsSchema } from "$lib/state.svelte";
+	import { WordSearch } from "$lib/search.svelte";
+	import { displayMethod, queryParamsSchema, useLocale } from "$lib/state.svelte";
 	import { useSearchParams } from "runed/kit";
 
 	import Entry from "../Entry.svelte";
 
+	const lang = useLocale();
 	const params = useSearchParams(queryParamsSchema);
 	const words = $derived(await getSandbox(lang.current));
 	const search = new WordSearch(

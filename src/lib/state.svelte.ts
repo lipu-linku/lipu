@@ -2,9 +2,22 @@ import { fromEntries, keys } from "$lib/utils";
 import type { UsageCategory } from "@kulupu-linku/sona/v2/utils";
 import { PersistedState } from "runed";
 import { createSearchParamsSchema } from "runed/kit";
+import { createContext } from "svelte";
 import * as z from "zod";
 
-export const lang = $state({ current: "en" });
+export class LocaleState {
+	current = $state("en");
+
+	constructor(initial: string) {
+		this.current = initial;
+	}
+}
+
+/**
+ *
+ * The active locale provided by the root layout.
+ */
+export const [useLocale, setLocaleContext] = createContext<LocaleState>();
 
 export const categoriesCodec = z.codec(
 	z.string().optional(),

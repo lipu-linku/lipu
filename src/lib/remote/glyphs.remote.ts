@@ -7,7 +7,7 @@ export const getGlyphs = query(async () => {
 	const { fetch, locals } = getRequestEvent();
 
 	return await client({ fetch })
-		.v2.glyphs.$get({ query: { lang: locals.locale.id } })
+		.v2.glyphs.$get({ query: { lang: locals.locale } })
 		.then((r) => r.json());
 });
 
@@ -15,7 +15,7 @@ export const getSandboxGlyphs = query(async () => {
 	const { fetch, locals } = getRequestEvent();
 
 	return await client({ fetch })
-		.v2.sandbox.glyphs.$get({ query: { lang: locals.locale.id } })
+		.v2.sandbox.glyphs.$get({ query: { lang: locals.locale } })
 		.then((r) => r.json());
 });
 

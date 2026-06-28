@@ -1,14 +1,15 @@
 <script lang="ts">
 	import logo from "$lib/assets/icon-light.png?url";
-	import { WordSearch } from "$lib/search.svelte";
 	import { getWords } from "$lib/remote/words.remote";
-	import { categories, displayMethod, lang, queryParamsSchema } from "$lib/state.svelte";
+	import { WordSearch } from "$lib/search.svelte";
+	import { categories, displayMethod, queryParamsSchema, useLocale } from "$lib/state.svelte";
 	import { useSearchParams } from "runed/kit";
 
 	import Entry from "../Entry.svelte";
 
 	const hasDisclaimer = new Date() < new Date("2025-09-12");
 
+	const lang = useLocale();
 	const params = useSearchParams(queryParamsSchema);
 	const words = $derived(await getWords(lang.current));
 	const search = new WordSearch(
@@ -33,15 +34,9 @@
 			help improve the dictionary and keep it up to date!
 		</p>
 	{/if}
-	{#if categories.current.obscure}
-		<p class="text-center text-balance">
-			Most speakers don't use or understand obscure words. If you're a beginner, they will not help
-			you learn the language.
-		</p>
-	{/if}
 
 	<ul
-		class="group grid grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-2 md:gap-4 data-[display=compact]:grid-cols-[min-content_min-content_min-content_1fr]"
+		class="group grid grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-2 data-[display=compact]:grid-cols-[min-content_min-content_min-content_1fr] md:gap-4"
 		data-display={displayMethod.current}
 	>
 		{#each search.results as word (word.id)}

@@ -8,7 +8,7 @@ const localeSchema = z.string().optional();
 
 export const getWords = query(localeSchema, async (locale) => {
 	const { fetch, locals } = getRequestEvent();
-	const localeId = locale ?? locals.locale.id;
+	const localeId = locale ?? locals.locale;
 
 	return await client({ fetch })
 		.v2.words.$get({ query: { lang: localeId } })
@@ -18,7 +18,7 @@ export const getWords = query(localeSchema, async (locale) => {
 export const getSandbox = query(localeSchema, async (locale) => {
 	const { fetch, locals } = getRequestEvent();
 
-	const localeId = locale ?? locals.locale.id;
+	const localeId = locale ?? locals.locale;
 
 	return await client({ fetch })
 		.v2.sandbox.words.$get({ query: { lang: localeId } })

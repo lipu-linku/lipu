@@ -1,12 +1,14 @@
 <script lang="ts">
 	import * as Chart from "$lib/components/ui/chart";
-	import { lang } from "$lib/state.svelte";
+	import { useLocale } from "$lib/state.svelte";
 	import type { Word } from "@kulupu-linku/sona/v2";
 	import type { UsageCategory } from "@kulupu-linku/sona/v2/utils";
 	import { scaleThreshold } from "d3-scale";
 	import { Highlight, LineChart, Points, Rule } from "layerchart";
 
 	const { data }: { data: Word["usage"] } = $props();
+
+	const lang = useLocale();
 
 	const usageToCategory = (usage: number): UsageCategory => {
 		if (usage >= 90) return "core";
@@ -119,7 +121,9 @@
 			<Chart.Tooltip nameKey="usage" indicator="line">
 				{#snippet formatter({ item, value })}
 					{const dateLabel = // @ts-expect-error
-						$derived(item.label?.toLocaleDateString(lang.current, { month: "long", year: "numeric" }))}
+						$derived(
+							item.label?.toLocaleDateString(lang.current, { month: "long", year: "numeric" }),
+						)}
 					<div
 						class="h-full w-1 shrink-0 rounded-xs border-3 border-(--color-border) bg-(--color-bg)"
 						style:--color-bg={item.payload?.color}

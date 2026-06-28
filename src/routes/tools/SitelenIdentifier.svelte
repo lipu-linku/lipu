@@ -169,7 +169,7 @@
 					<span class="font-sitelen-seli-kiwen text-3xl">{glyph}</span>
 				</Button>
 			{:else}
-				<span class="col-span-full text-muted-foreground text-center">No results!</span>
+				<span class="col-span-full text-center text-muted-foreground">No results!</span>
 			{/each}
 		</div>
 	</Card.Content>

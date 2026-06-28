@@ -2,7 +2,7 @@
 	import { page } from "$app/state";
 	import Navbar from "$lib/components/Navbar.svelte";
 	import { Button } from "$lib/components/ui/button";
-	import { lang } from "$lib/state.svelte";
+	import { setLocaleContext, LocaleState } from "$lib/state.svelte";
 	import anchorPolyfill from "@oddbird/css-anchor-positioning/fn";
 	import { ModeWatcher } from "mode-watcher";
 	import { outerHeight, scrollY } from "svelte/reactivity/window";
@@ -16,8 +16,10 @@
 
 	const { data, children } = $props();
 
+	// Seed the per-request locale from server-negotiated data so SSR and the
+	// initial client render agree, and switching it later stays client-side.
 	// svelte-ignore state_referenced_locally
-	lang.current = data.lang.id;
+	setLocaleContext(new LocaleState(data.locale));
 
 	const webManifest = $derived(pwaInfo ? pwaInfo.webManifest.linkTag : "");
 	useRegisterSW({
@@ -56,7 +58,7 @@
 </svelte:head>
 
 <div
-	class="mx-auto flex max-w-[min(2000px,100dvw)] gap-2 md:grid md:grid-cols-[min-content_1fr_fit-content(100%)] md:grid-rows-1 md:justify-center"
+	class="mx-auto flex max-w-[min(2000px,100dvw)] gap-2 md:grid md:grid-cols-[min-content_minmax(0,4fr)_minmax(0,1fr)] md:grid-rows-1 md:justify-center"
 >
 	<Navbar />
 

@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
-	import { fontSentence, lang } from "$lib/state.svelte";
+	import { fontSentence, useLocale } from "$lib/state.svelte";
 	import type { Font } from "@kulupu-linku/sona/v2";
 	import { useIntersectionObserver } from "runed";
 	import { fly } from "svelte/transition";
@@ -14,6 +14,8 @@
 	}
 
 	const { font }: Props = $props();
+
+	const lang = useLocale();
 
 	let cardElement = $state<HTMLDivElement | null>(null);
 	let intersecting = $state(false);

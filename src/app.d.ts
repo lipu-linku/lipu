@@ -4,7 +4,7 @@
 /// <reference types="vite-plugin-pwa/pwa-assets" />
 
 import type { Fetcher, Service } from "@cloudflare/workers-types";
-import type { Words, Language } from "@kulupu-linku/sona/v2";
+import type { Words } from "@kulupu-linku/sona/v2";
 
 // See https://kit.svelte.dev/docs/types#app
 // for information about these interfaces
@@ -14,10 +14,10 @@ declare global {
 			closest?: string[];
 		}
 		interface Locals {
-			locale: Language;
+			locale: string;
 		}
 		interface PageData {
-			locale: Language;
+			locale: string;
 		}
 		interface Platform {
 			env: {

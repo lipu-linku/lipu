@@ -16,7 +16,7 @@
 	import * as Select from "$lib/components/ui/select";
 	import * as Sheet from "$lib/components/ui/sheet";
 	import { getLocales, updateLocale } from "$lib/remote/lang.remote";
-	import { displayMethod, lang } from "$lib/state.svelte";
+	import { displayMethod, useLocale } from "$lib/state.svelte";
 	import { cn, entries } from "$lib/utils";
 	import { mode, toggleMode } from "mode-watcher";
 	import { SvelteMap } from "svelte/reactivity";
@@ -31,6 +31,8 @@
 	import LightModeIcon from "~icons/lucide/sun";
 	import FontsIcon from "~icons/mdi/format-font";
 	import ToolsIcon from "~icons/mdi/wrench-outline";
+
+	const lang = useLocale();
 
 	const locales = await getLocales();
 
@@ -71,8 +73,10 @@
 	} as const;
 
 	const setLocale = async (value: string) => {
-		await updateLocale(value);
+		// Update the reactive locale first so the UI and data queries switch
+		// immediately, then persist the choice to the cookie for future SSR.
 		lang.current = value;
+		await updateLocale(value);
 	};
 
 	const displayOptions = {
@@ -143,7 +147,7 @@
 			</Select.Trigger>
 			<Select.Content>
 				{#each Object.entries(displayOptions) as [method, { label, icon: Icon }] (method)}
-					<Select.Item value={method}><Icon /> {label}</Select.Item>
+					<Select.Item value={method} {label}><Icon /> {label}</Select.Item>
 				{/each}
 			</Select.Content>
 		</Select.Root>

@@ -11,8 +11,3 @@ traces.enabled = true
 [assets]
 binding = "ASSETS"
 directory = ".svelte-kit/cloudflare"
-
-# [[services]]
-# binding = "SONA_API"
-# service = "sona-api"
-# remote = true

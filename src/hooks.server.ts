@@ -1,31 +1,29 @@
-import { getLocale } from "$lib/remote/lang.remote";
+import { getAvailableLocaleIds, negotiateLocale } from "$lib/server/locale";
 import type { Handle } from "@sveltejs/kit";
 
-export const handle = (async ({ event, resolve }) => {
-	const cookieLocale = event.cookies.get("lang");
-	const locale =
-		((cookieLocale && (await getLocale(cookieLocale))) || undefined) ??
-		(await resolveLocaleFromAcceptLanguage(event.request.headers.get("accept-language"))) ??
-		(await getLocale("en"));
+const LOCALE_COOKIE_MAX_AGE = 60 * 60 * 24 * 365;
 
-	event.cookies.set("lang", locale.id, {
-		path: "/",
-		maxAge: 60 * 60 * 24 * 365,
-		sameSite: "lax",
+export const handle = (async ({ event, resolve }) => {
+	const available = await getAvailableLocaleIds(event.fetch);
+	const cookieLocale = event.cookies.get("lang");
+
+	const locale = negotiateLocale({
+		available,
+		cookie: cookieLocale,
+		acceptLanguage: event.request.headers.get("accept-language"),
 	});
+
+	// Only write the cookie when it doesn't already match, so we don't reset its
+	// expiry (and emit a Set-Cookie) on every single request.
+	if (cookieLocale !== locale) {
+		event.cookies.set("lang", locale, {
+			path: "/",
+			maxAge: LOCALE_COOKIE_MAX_AGE,
+			sameSite: "lax",
+		});
+	}
 
 	event.locals.locale = locale;
 
 	return await resolve(event);
 }) satisfies Handle;
-
-async function resolveLocaleFromAcceptLanguage(header: string | null) {
-	if (!header) return undefined;
-	const candidates = header.split(",").map((s) => s.split(";")[0]!.trim());
-	for (const candidate of candidates) {
-		try {
-			return await getLocale(candidate);
-		} catch {}
-	}
-	return undefined;
-}

@@ -8,7 +8,7 @@
 	import * as Tooltip from "$lib/components/ui/tooltip";
 	import { getGlyph } from "$lib/remote/glyphs.remote";
 	import { getWord } from "$lib/remote/words.remote";
-	import { lang } from "$lib/state.svelte";
+	import { useLocale } from "$lib/state.svelte";
 	import { cn } from "$lib/utils";
 	import BackIcon from "~icons/lucide/arrow-left";
 	import CodeIcon from "~icons/lucide/code-xml";
@@ -21,6 +21,7 @@
 	import UsageGraph from "./UsageGraph.svelte";
 
 	const { params } = $props();
+	const lang = useLocale();
 	const word = $derived(await getWord({ word: params.word, locale: lang.current }));
 
 	const usageScore = $derived(Object.values(word.usage).at(-1) ?? 0);
@@ -76,7 +77,7 @@
 	/>
 </svelte:head>
 
-<main class="my-4 grid flex-1 grid-cols-1 gap-4 px-2 md:px-0 pb-2 md:grid-cols-2">
+<main class="my-4 grid flex-1 grid-cols-1 gap-4 px-2 pb-2 md:grid-cols-2 md:px-0">
 	<header class="flex items-center gap-4 md:col-span-2">
 		<Button
 			href={word.usage_category === "sandbox" ? "/sandbox" : "/"}
@@ -149,9 +150,9 @@
 			</div>
 
 			{#if word.ku_data}
-				{const kuString = $derived(Object.entries(word.ku_data).map(
-					([def, usage]) => def + usageToIndex(usage),
-				))}
+				{const kuString = $derived(
+					Object.entries(word.ku_data).map(([def, usage]) => def + usageToIndex(usage)),
+				)}
 				<div class="flex flex-col justify-center gap-2">
 					<h3 class="flex items-center gap-2 text-xl font-medium">
 						ku definitions
@@ -239,13 +240,15 @@
 		</Card.Header>
 		<Card.Content class="grid grid-rows-2 gap-3">
 			{#if word.glyph_ids.length > 0}
-				{const glyphs = $derived((
-					await Promise.all(word.glyph_ids.map(async (glyph) => await getGlyph(glyph)))
-				).sort((a, b) => {
-					if (a.primary) return -1;
-					if (b.primary) return 1;
-					return a.id.localeCompare(b.id);
-				}))}
+				{const glyphs = $derived(
+					(await Promise.all(word.glyph_ids.map(async (glyph) => await getGlyph(glyph)))).sort(
+						(a, b) => {
+							if (a.primary) return -1;
+							if (b.primary) return 1;
+							return a.id.localeCompare(b.id);
+						},
+					),
+				)}
 
 				<div class="col-span-2 grid">
 					<h3 class="text-xl font-medium">sitelen pona</h3>
@@ -305,9 +308,11 @@
 		<Card.Header>
 			<Card.Title class="text-2xl"><h2>More Info</h2></Card.Title>
 		</Card.Header>
-		<Card.Content class="grid grid-cols-2 md:grid-cols-4 grid-rows-[min-content_1fr] gap-x-6 gap-y-2">
+		<Card.Content
+			class="grid grid-cols-2 grid-rows-[min-content_1fr] gap-x-6 gap-y-2 md:grid-cols-4"
+		>
 			{#if commentary}
-				<div class="row-span-2 col-span-full grid grid-rows-subgrid place-items-start">
+				<div class="col-span-full row-span-2 grid grid-rows-subgrid place-items-start">
 					<h3 class="text-xl font-medium">Commentary</h3>
 					<p>{commentary}</p>
 				</div>
