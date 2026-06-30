@@ -83,10 +83,10 @@
 	</Card.Header>
 
 	<Card.Content class="flex h-max flex-col gap-4">
-		<Textarea bind:value={value.current} placeholder="tomo lipu lon seme" />
+		<Textarea class="font-sitelen-seli-juniko" bind:value={value.current} placeholder="tomo lipu lon seme" />
 
 		<span
-			class="inline-block min-h-9 text-2xl whitespace-pre-line data-ok:font-sitelen-seli-kiwen"
+			class="inline-block min-h-9 text-base whitespace-pre-line data-ok:font-sitelen-seli-juniko"
 			data-ok={result.type === "ok" || undefined}
 		>
 			{result.type === "ok" ? result.value : result.message}
