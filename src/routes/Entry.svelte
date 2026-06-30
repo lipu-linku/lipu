@@ -68,10 +68,12 @@
 		</Card.Content>
 	</a>
 {:else}
-	<div class="col-span-4 grid grid-cols-subgrid place-content-center items-center">
+	<div
+		class="col-span-4 grid grid-cols-subgrid grid-rows-subgrid place-content-center items-center max-md:row-span-2"
+	>
 		<a
 			href={resolve("/words/[word]", { word: word.id })}
-			class="col-1 origin-right text-end text-lg font-semibold transition-transform duration-100 hover:scale-110"
+			class="col-span-2 col-start-2 origin-right text-lg font-semibold transition-transform duration-100 hover:scale-110 md:col-1 md:text-end"
 		>
 			{word.word}
 		</a>
@@ -79,13 +81,13 @@
 		{@render glyph()}
 
 		<span
-			class="col-3 text-(--category-color)"
+			class="col-4 row-1 text-end md:text-start text-(--category-color) md:col-3"
 			style:--category-color="var(--color-category-{word.usage_category})"
 		>
 			{word.usage_category}
 		</span>
 
-		<span class="col-4">{word.translations.definition}</span>
+		<span class="col-span-full row-2 md:col-4">{word.translations.definition}</span>
 	</div>
 {/if}
 
@@ -93,7 +95,7 @@
 	{#if (writingSystem.current === "sitelen_pona" && word.primary_glyph_id) || (writingSystem.current === "sitelen_sitelen" && word.representations?.sitelen_sitelen)}
 		<span
 			class={[
-				"col-2 text-4xl [text-box:trim-both_cap_alphabetic]",
+				"col-1 row-1 text-4xl [text-box:trim-both_cap_alphabetic] md:col-2",
 				writingSystem.current === "sitelen_pona" &&
 					word.primary_glyph_id &&
 					"font-sitelen-seli-kiwen",

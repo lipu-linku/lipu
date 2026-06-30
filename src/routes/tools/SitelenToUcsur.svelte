@@ -16,37 +16,41 @@
 
 	let value = new PersistedState("tools-sp-ucsur-value", "");
 
-	const codepointsMap = Object.fromEntries(Object.entries(ucsur_map).map(([word, {codepoint}]) => [codepoint, word]));
+	const codepointsMap = Object.fromEntries(
+		Object.entries(ucsur_map).map(([word, { codepoint }]) => [codepoint, word]),
+	);
 	const wordsByLength = Object.keys(ucsur_map).toSorted((a, b) => b.length - a.length);
 	const codepoints = Object.keys(codepointsMap);
-	const regex = new RegExp(`(?:(${wordsByLength.map(RegExp.escape).join('|')})) ?|(${codepoints.join('|')})`, 'g');
+	const regex = new RegExp(
+		`(?:(${wordsByLength.map(RegExp.escape).join("|")})) ?|(${codepoints.join("|")})`,
+		"g",
+	);
 	function converter(from: string): ConverterResult {
-		from = from.replaceAll(regex, (match, word, codepoint, index) => {
-			if (Object.hasOwn(ucsur_map, word))
-				return ucsur_map[word].codepoint;
-			if (Object.hasOwn(codepointsMap, codepoint)) {
-				let word = codepointsMap[codepoint];
-				let spaceBefore = !ucsur_map[word].noSpaceBefore;
-
-				let lastCodepoint = from.codePointAt(index-1);
-				if (lastCodepoint >= 0xdc00 && lastCodepoint < 0xe000) lastCodepoint = from.codePointAt(index-2)
-				if (lastCodepoint !== undefined) lastCodepoint = String.fromCodePoint(lastCodepoint);
-				let spaceAfterLast = false;
-				if (Object.hasOwn(codepointsMap, lastCodepoint)) {
-					let lastWord = codepointsMap[lastCodepoint]
-					spaceAfterLast = !ucsur_map[lastWord].noSpaceAfter;
-				}
-
-				if (spaceBefore && spaceAfterLast)
-					return ' ' + word;
-				return word;
-			}
-			return match;
-		});
-
 		return {
 			type: "ok",
-			value: from,
+			value: from.replaceAll(regex, (match, word: string, codepoint: string, offset) => {
+				if (Object.hasOwn(ucsur_map, word)) return ucsur_map[word].codepoint;
+
+				if (Object.hasOwn(codepointsMap, codepoint)) {
+					let word = codepointsMap[codepoint];
+					let spaceBefore = !ucsur_map[word].noSpaceBefore;
+
+					let lastCodepoint = from.codePointAt(offset - 1);
+					if (lastCodepoint && lastCodepoint >= 0xdc00 && lastCodepoint < 0xe000)
+						lastCodepoint = from.codePointAt(offset - 2);
+					
+					let lastChar = String.fromCodePoint(lastCodepoint ?? 0);
+					let spaceAfterLast = false;
+					if (Object.hasOwn(codepointsMap, lastChar)) {
+						let lastWord = codepointsMap[lastChar];
+						spaceAfterLast = !ucsur_map[lastWord].noSpaceAfter;
+					}
+
+					if (spaceBefore && spaceAfterLast) return " " + word;
+					return word;
+				}
+				return match;
+			}),
 		};
 	}
 
@@ -83,7 +87,11 @@
 	</Card.Header>
 
 	<Card.Content class="flex h-max flex-col gap-4">
-		<Textarea class="font-sitelen-seli-juniko" bind:value={value.current} placeholder="tomo lipu lon seme" />
+		<Textarea
+			class="font-sitelen-seli-juniko"
+			bind:value={value.current}
+			placeholder="tomo lipu lon seme"
+		/>
 
 		<span
 			class="inline-block min-h-9 text-base whitespace-pre-line data-ok:font-sitelen-seli-juniko"

@@ -238,7 +238,7 @@
 		<Card.Header>
 			<Card.Title class="text-2xl"><h2>Usage</h2></Card.Title>
 		</Card.Header>
-		<Card.Content class="grid grid-rows-2 gap-3">
+		<Card.Content class="flex flex-col gap-3">
 			{#if word.glyph_ids.length > 0}
 				{const glyphs = $derived(
 					(await Promise.all(word.glyph_ids.map(async (glyph) => await getGlyph(glyph)))).sort(
@@ -250,7 +250,7 @@
 					),
 				)}
 
-				<div class="col-span-2 grid">
+				<div class="grid">
 					<h3 class="text-xl font-medium">sitelen pona</h3>
 					<ul class="my-2 grid grid-cols-[repeat(auto-fill,minmax(--spacing(16),1fr))] gap-4">
 						{#each glyphs as glyph (glyph.id)}
@@ -309,7 +309,7 @@
 			<Card.Title class="text-2xl"><h2>More Info</h2></Card.Title>
 		</Card.Header>
 		<Card.Content
-			class="grid grid-cols-2 grid-rows-[min-content_1fr] gap-x-6 gap-y-2 md:grid-cols-4"
+			class="grid grid-cols-2 grid-rows-[min-content_1fr] gap-x-6 gap-y-2 md:grid-cols-1 lg:grid-cols-2"
 		>
 			{#if commentary}
 				<div class="col-span-full row-span-2 grid grid-rows-subgrid place-items-start">

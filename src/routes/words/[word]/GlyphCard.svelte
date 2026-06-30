@@ -46,7 +46,10 @@
 		<Card.Title class="flex items-center justify-between text-lg font-medium text-balance">
 			{listFormat.format(glyph.translations.names)}
 			{#if glyph.primary}
-				<StarIcon class="size-1lh inline align-text-top" />
+				<div class="flex flex-col items-center">
+					<StarIcon class="size-6 inline align-text-top" />
+					<span class="text-xs">Primary</span>
+				</div>
 			{/if}
 		</Card.Title>
 	</Card.Header>
@@ -73,7 +76,7 @@
 				style:--category-color="var(--color-category-foreground-{glyph.usage_category})"
 				>{glyph.usage_category}</span
 			>
-			({usage}%)
+			{#if usage}({usage}%){/if}
 		</p>
 	</Card.Content>
 </Card.Root>

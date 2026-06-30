@@ -10,11 +10,19 @@
 
 	const lang = useLocale();
 
+	// The horizontal threshold lines: each `y` is the lower bound where its
+	// category begins, so the line doubles as a boundary marker for that category.
+	const categoryRules = [
+		{ y: 5, category: "obscure" },
+		{ y: 30, category: "uncommon" },
+		{ y: 60, category: "common" },
+		{ y: 90, category: "core" },
+	] as const;
+
 	const usageToCategory = (usage: number): UsageCategory => {
-		if (usage >= 90) return "core";
-		if (usage >= 60) return "common";
-		if (usage >= 30) return "uncommon";
-		if (usage >= 5) return "obscure";
+		for (const { y, category } of categoryRules.toSorted((a, b) => b.y - a.y)) {
+			if (usage >= y) return category;
+		}
 		return "sandbox";
 	};
 
@@ -54,6 +62,7 @@
 		data={plots}
 		x="date"
 		y="value"
+		xNice
 		yDomain={[0, 100]}
 		padding={{ left: 16 }}
 		c="value"
@@ -68,6 +77,7 @@
 		]}
 		props={{
 			highlight: { lines: true },
+			grid: { yTicks: 10 },
 			xAxis: {
 				format: (d: Date) =>
 					d.toLocaleDateString(lang.current, { month: "2-digit", year: "2-digit" }),
@@ -117,13 +127,14 @@
 				/>
 			{/each}
 		{/snippet}
+
 		{#snippet tooltip()}
 			<Chart.Tooltip nameKey="usage" indicator="line">
 				{#snippet formatter({ item, value })}
-					{const dateLabel = // @ts-expect-error
-						$derived(
-							item.label?.toLocaleDateString(lang.current, { month: "long", year: "numeric" }),
-						)}
+					{const dateLabel = $derived(
+						// @ts-expect-error
+						item.label?.toLocaleDateString(lang.current, { month: "long", year: "numeric" }),
+					)}
 					<div
 						class="h-full w-1 shrink-0 rounded-xs border-3 border-(--color-border) bg-(--color-bg)"
 						style:--color-bg={item.payload?.color}
@@ -150,12 +161,40 @@
 			<Points class="stroke-muted-foreground md:[r:8px]" />
 		{/snippet}
 
-		{#snippet rule()}
+		{#snippet highlight({ context })}
+			{#if context.tooltip.data}
+				<Highlight lines points={{ fill: categoryColor(context.y(context.tooltip.data)) }} />
+			{/if}
+		{/snippet}
+
+		{#snippet rule({ context })}
 			<!-- The cutoff date where the question in the survey changed -->
 			<Rule
 				x={new Date(2021, 11, 31)}
-				class="stroke-destructive stroke-2 [stroke-dasharray:4] [stroke-linecap:round]"
+				stroke="var(--color-destructive)"
+				strokeWidth={2}
+				stroke-dasharray={4}
+				stroke-linecap="round"
 			/>
+
+			{#each categoryRules as { y, category } (category)}
+				<Rule
+					{y}
+					stroke="var(--color-category-{category})"
+					stroke-opacity={0.5}
+					strokeWidth={2}
+					stroke-linecap="round"
+				/>
+				<text
+					x={context.width}
+					y={context.yScale(y) - 4}
+					text-anchor="end"
+					class="text-xs font-medium"
+					fill="var(--color-category-foreground-{category})"
+				>
+					{config[category].label}
+				</text>
+			{/each}
 		{/snippet}
 	</LineChart>
 </Chart.Container>

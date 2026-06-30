@@ -3,7 +3,6 @@
 	import { page } from "$app/state";
 	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import * as Card from "$lib/components/ui/card";
-	import { Checkbox } from "$lib/components/ui/checkbox";
 	import { Input } from "$lib/components/ui/input";
 	import { Label } from "$lib/components/ui/label";
 	import * as Select from "$lib/components/ui/select";
@@ -83,7 +82,7 @@
 
 <svelte:window onkeydown={focusSearch} />
 
-<search class="sticky inset-e-0 inset-bs-0 col-3 row-1 hidden h-dvh px-2 py-4 md:block">
+<search class="sticky inset-e-0 inset-bs-0 col-3 row-1 hidden h-dvh px-2 py-4 xl:block">
 	<form action="/" class="flex h-full flex-col gap-4 px-2" role="search">
 		{@render inputField()}
 
@@ -101,7 +100,9 @@
 	</form>
 </search>
 
-<search class="fixed inset-s-18 inset-be-4 z-20 flex items-center gap-2 md:hidden">
+<search
+	class="fixed inset-s-18 inset-e-4 inset-be-4 z-20 flex items-center gap-2 md:inset-s-auto md:inset-e-4 xl:hidden"
+>
 	{@render inputField("h-12 dark:bg-secondary")}
 
 	<Button
@@ -173,7 +174,7 @@
 	{/if}
 
 	{#if !sandbox}
-		<div class="flex flex-wrap items-center justify-center gap-4">
+		<div class="flex flex-col items-center justify-center gap-4 md:flex-row">
 			<Label for="writing-system-switch" class="font-sitelen-seli-kiwen text-3xl"
 				>sitelen+pona</Label
 			>

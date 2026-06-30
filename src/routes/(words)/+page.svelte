@@ -36,11 +36,11 @@
 	{/if}
 
 	<ul
-		class="group grid grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] gap-2 data-[display=compact]:grid-cols-[min-content_min-content_min-content_1fr] md:gap-4"
+		class="group grid grid-cols-[repeat(auto-fill,minmax(min(300px,100%),1fr))] md:pe-2 data-[display=compact]:grid-cols-[min-content_min-content_min-content_1fr] gap-4"
 		data-display={displayMethod.current}
 	>
 		{#each search.results as word (word.id)}
-			<li class="grid grid-cols-subgrid group-data-[display=compact]:col-span-4">
+			<li class="grid grid-cols-subgrid group-data-[display=compact]:col-span-4 max-md:group-data-[display=compact]:grid-rows-[min-content_1fr]">
 				<Entry {word} />
 			</li>
 		{/each}

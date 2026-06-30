@@ -14,10 +14,9 @@
 	import iconLight from "$lib/assets/icon-light.png";
 	import { Button, buttonVariants } from "$lib/components/ui/button";
 	import * as Select from "$lib/components/ui/select";
-	import * as Sheet from "$lib/components/ui/sheet";
 	import { getLocales, updateLocale } from "$lib/remote/lang.remote";
 	import { displayMethod, useLocale } from "$lib/state.svelte";
-	import { cn, entries } from "$lib/utils";
+	import { entries } from "$lib/utils";
 	import { mode, toggleMode } from "mode-watcher";
 	import { SvelteMap } from "svelte/reactivity";
 	import DictionaryIcon from "~icons/lucide/book-text";

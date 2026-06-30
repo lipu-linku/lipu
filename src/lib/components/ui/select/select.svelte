@@ -27,7 +27,7 @@
 		{disabled}
 		{value}
 		onchange={(e) => (value = e.currentTarget.value)}
-		class={cn(selectTriggerBaseClass, ctx.triggerClass)}
+		class={cn(selectTriggerBaseClass, "py-0", ctx.triggerClass)}
 	>
 		{@render children?.()}
 	</select>
