@@ -16,10 +16,32 @@
 
 	let value = new PersistedState("tools-sp-ucsur-value", "");
 
-	const wordsByLength = Object.entries(ucsur_map).toSorted(([a], [b]) => b.length - a.length);
+	const codepointsMap = Object.fromEntries(Object.entries(ucsur_map).map(([word, {codepoint}]) => [codepoint, word]));
+	const wordsByLength = Object.keys(ucsur_map).toSorted((a, b) => b.length - a.length);
+	const codepoints = Object.keys(codepointsMap);
+	const regex = new RegExp(`(?:(${wordsByLength.map(RegExp.escape).join('|')})) ?|(${codepoints.join('|')})`, 'g');
 	function converter(from: string): ConverterResult {
-		wordsByLength.forEach(([word, { codepoint }]) => {
-			from = from.replaceAll(word, codepoint);
+		from = from.replaceAll(regex, (match, word, codepoint, index) => {
+			if (Object.hasOwn(ucsur_map, word))
+				return ucsur_map[word].codepoint;
+			if (Object.hasOwn(codepointsMap, codepoint)) {
+				let word = codepointsMap[codepoint];
+				let spaceBefore = !ucsur_map[word].noSpaceBefore;
+
+				let lastCodepoint = from.codePointAt(index-1);
+				if (lastCodepoint >= 0xdc00 && lastCodepoint < 0xe000) lastCodepoint = from.codePointAt(index-2)
+				if (lastCodepoint !== undefined) lastCodepoint = String.fromCodePoint(lastCodepoint);
+				let spaceAfterLast = false;
+				if (Object.hasOwn(codepointsMap, lastCodepoint)) {
+					let lastWord = codepointsMap[lastCodepoint]
+					spaceAfterLast = !ucsur_map[lastWord].noSpaceAfter;
+				}
+
+				if (spaceBefore && spaceAfterLast)
+					return ' ' + word;
+				return word;
+			}
+			return match;
 		});
 
 		return {
