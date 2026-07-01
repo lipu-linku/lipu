@@ -30,8 +30,8 @@
 
 	const hasRepresentations = $derived(
 		word.glyph_ids.length ||
-			word.representations.sitelen_emosi ||
-			word.representations.sitelen_jelo?.length ||
+			// word.representations.sitelen_emosi ||
+			// word.representations.sitelen_jelo?.length ||
 			word.representations.sitelen_sitelen ||
 			word.representations.ucsur,
 	);
