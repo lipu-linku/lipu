@@ -4,7 +4,7 @@
 	import type { Word } from "@kulupu-linku/sona/v2";
 	import type { UsageCategory } from "@kulupu-linku/sona/v2/utils";
 	import { scaleThreshold } from "d3-scale";
-	import { Highlight, LineChart, Points, Rule } from "layerchart";
+	import { Highlight, LineChart, Points, Rule, Text } from "layerchart";
 
 	const { data }: { data: Word["usage"] } = $props();
 
@@ -185,15 +185,14 @@
 					strokeWidth={2}
 					stroke-linecap="round"
 				/>
-				<text
+				<Text
 					x={context.width}
 					y={context.yScale(y) - 4}
-					text-anchor="end"
+					value={config[category].label}
+					textAnchor="end"
 					class="text-xs font-medium"
 					fill="var(--color-category-foreground-{category})"
-				>
-					{config[category].label}
-				</text>
+				/>
 			{/each}
 		{/snippet}
 	</LineChart>
