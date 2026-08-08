@@ -8,3 +8,5 @@ export const load: PageServerLoad = async () => {
     `https://docs.google.com/forms/d/e/1FAIpQLSevT-ypyq_yG_db7Kor9CIrq0clnY8KHzL7mpviBDMbz_3djw/viewform`,
   );
 };
+
+// tap
