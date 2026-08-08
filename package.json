@@ -33,7 +33,7 @@
 		"d3-scale": "^4.0.2",
 		"fastest-levenshtein": "^1.0.16",
 		"formsnap": "^2.0.1",
-		"layerchart": "^1.0.13",
+		"layerchart": "2.0.0-next.40",
 		"lightningcss": "^1.33.0",
 		"minisearch": "^7.2.0",
 		"mode-watcher": "^1.1.0",
